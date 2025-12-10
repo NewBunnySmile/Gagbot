@@ -1,6 +1,6 @@
 const fs = require('fs');
 const path = require('path');
-const { messageSend } = require(`./../functions/messagefunctions.js`)
+const { messageSend, messageSendDev } = require(`./../functions/messagefunctions.js`)
 
 const assignGag = (userID, gagtype = "ball") => {
     if (process.gags == undefined) { process.gags = {} }
@@ -30,9 +30,16 @@ const garbleMessage = async (msg) => {
             if (commandFiles.includes(process.gags[`<@${msg.author.id}>`] + ".js")) {
                 let gaggarble = require(path.join(commandsPath, `${process.gags[`<@${msg.author.id}>`]}.js`))
                 let garbledtext = gaggarble.garbleText(msg.content);
-                let sentmessage = messageSend(garbledtext, msg.member.displayAvatarURL(), msg.member.displayName).then(() => {
-                    msg.delete();
-                })
+                if (msg.channel.id == process.env.CHANNELIDDEV) {
+                    let sentmessage = messageSendDev(garbledtext, msg.member.displayAvatarURL(), msg.member.displayName).then(() => {
+                        msg.delete();
+                    })
+                }
+                else {
+                    let sentmessage = messageSend(garbledtext, msg.member.displayAvatarURL(), msg.member.displayName).then(() => {
+                        msg.delete();
+                    })
+                }
             }
         }
     }

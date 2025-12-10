@@ -37,7 +37,7 @@ client.on("clientReady", async () => {
 client.on("messageCreate", async (msg) => {
     // This is called when a message is received.
     try {
-        if ((msg.channel.id != process.env.CHANNELID) || (msg.webhookId) || (msg.author.bot) || (msg.embeds)) { return }
+        if (((msg.channel.id != process.env.CHANNELID) && (msg.channel.id != process.env.CHANNELIDDEV)) || (msg.webhookId) || (msg.author.bot) || (msg.embeds)) { return }
         //console.log(msg.member.displayAvatarURL())
         //console.log(msg.member.displayName)
         garbleMessage(msg);
@@ -49,7 +49,7 @@ client.on("messageCreate", async (msg) => {
 
 client.on('interactionCreate', async (interaction) => {
     try {
-        if (interaction.channel.id != process.env.CHANNELID) { 
+        if ((interaction.channel.id != process.env.CHANNELID) && (interaction.channel.id != process.env.CHANNELIDDEV)) { 
             interaction.reply({ content: `Please use these commands over in <#${process.env.CHANNELID}>.`, flags: discord.MessageFlags.Ephemeral })
             return;
         }
