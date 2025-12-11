@@ -37,7 +37,13 @@ client.on("clientReady", async () => {
 client.on("messageCreate", async (msg) => {
     // This is called when a message is received.
     try {
-        if (((msg.channel.id != process.env.CHANNELID) && (msg.channel.id != process.env.CHANNELIDDEV)) || (msg.webhookId) || (msg.author.bot) || (msg.embeds)) { return }
+        console.log(msg)
+        console.log(`${(msg.channel.id != process.env.CHANNELID)}`)
+        console.log(`${msg.webhookId}`)
+        console.log(`${msg.author.bot}`)
+        console.log(`${msg.stickers?.first()}`)
+        console.log(`${msg.attachments?.first()}`)
+        if ((msg.channel.id != process.env.CHANNELID) || (msg.webhookId) || (msg.author.bot) || (msg.stickers?.first()) || (msg.attachments?.first())) { return }
         //console.log(msg.member.displayAvatarURL())
         //console.log(msg.member.displayName)
         garbleMessage(msg);
