@@ -3,82 +3,11 @@
  * ~ DollLia
  ***************************/
 
-// Object storing a one-to-one character mapping for lowercase only.
-// > Code handles changing cases so we don't need to handle 'a' and 'A' separately here.
-const highSecGagCharMap = new Map([
-    ['a',"h"],
-    ['b',"b"],
-    ['c',"g"],
-    ['d',"d"],
-    ['e',"m"],
-    ['f',"f"],
-    ['g',"g"],
-    ['h',"h"],
-    ['i',"hm"],       // Unique two-char case
-    ['j',"j"],
-    ['k',"g"],
-    ['l',"l"],
-    ['m',"m"],
-    ['n',"n"],
-    ['o',"h"],
-    ['p',"p"],
-    ['q',"g"],
-    ['r',"r"],
-    ['s',"f"],
-    ['t',"t"],
-    ['u',"h"],
-    ['v',"v"],
-    ['w',"w"],
-    ['x',"m"],
-    ['y',"n"],
-    ['z',"m"],
-]);
-
-// RegExp for isolating sections of a message that must be gagged.
-// > NOTE -  Must double backslashes when putting your regexp into JavaScript, if it's a string.
-///const regexOLD = /\*{1}(\*{2})?([^\*]|\*{2})+\*/g
-const regex = /\*{1}(\*{2})?([^\*]|\*{2})+\*|[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)|https?\:\/\//g
-
-const garbleText = (text, intensity) => {
-
-    let output = "";
-    let deepCopy = text.split()[0]
-
-    // Find matches using regex and use them to split the string
-    let found = deepCopy.match(regex)
-    //[...deepCopy.match(regex)]//text.match(regex);
-
-    startindex = 0;
-    for(const x in found){
-
-        /// Split the text on the token
-        // > NOTE - Split doesn't work if we have duplicates
-        //segment = deepCopy.split(found[x],2)
-
-        index = deepCopy.indexOf(found[x])           // Get the index
-        //console.log(index)
-
-        output += index == 0 ? "" : garbleTextSegment(deepCopy.substring(0,index));
-        output += found[x]
-
-        //console.log(output)
-        //console.log("SEG: " + segment)
-
-        // Garble whatever preceeds the found segment
-        //output += garbleTextSegment(segment[0])
-
-        // Work on the rest of the string
-        deepCopy = deepCopy.substring(index+found[x].length)
-    }
-    // Garble everything after the final token
-    output += garbleTextSegment(deepCopy)
-
-    // Garble only valid text segments.
-    return output;
-}
+// Character maps stored in an array in a separate file for code cleanliness
+const {ballGagCharMaps} = require('./ball/ballCharMap.js')
 
 // Helper function to garble a text segment.
-const garbleTextSegment = (text) => {
+const garbleText = (text, intensity) => {
 
     //console.log("Text Seg: " + text)
 
@@ -98,8 +27,9 @@ const garbleTextSegment = (text) => {
         // Test for uppercase.
         let isUppercase = (char != char.toLowerCase())
 
-        // Get the new character using the above map.
-        let newChar = highSecGagCharMap.get(char.toLowerCase());
+        // Get the new character using the array of character maps.
+        // 10 intensities, only five maps.
+        let newChar = ballGagCharMaps[(Math.ceil(intensity / 2) - 1)].get(char.toLowerCase());
 
         // Edit the text if we are not escaped 
         if(newChar){ //(!escapedText && newChar){
@@ -119,7 +49,7 @@ const garbleTextSegment = (text) => {
 
 
 exports.garbleText = garbleText;
-exports.choicename = "High-Security Ball Gag"
+exports.choicename = "Ball Gag"
 
 
 
@@ -147,3 +77,22 @@ exports.choicename = "High-Security Ball Gag"
 // let testMsg4 = "Meow"
 // console.log("Original: " + testMsg4)
 // console.log("Garbled:  " + garbleText(testMsg4))
+
+
+// Test Gag Intensities
+// let intensityTestMsg = "This unit is a good doll, and will wear all possible ball gags for Mistress."
+// let intensityTestMsg2 = "The quick brown fox jumped over the lazy dog."
+
+// console.log(`Original:     ${intensityTestMsg}\n`)
+// console.log(`Intensity 1-2:   ${garbleText(intensityTestMsg, 1)}`)
+// console.log(`Intensity 3-4:   ${garbleText(intensityTestMsg, 3)}`)
+// console.log(`Intensity 5-6:   ${garbleText(intensityTestMsg, 5)}`)
+// console.log(`Intensity 7-8:   ${garbleText(intensityTestMsg, 7)}`)
+// console.log(`Intensity 9-10:  ${garbleText(intensityTestMsg, 9)}`)
+
+// console.log(`\nOriginal:     ${intensityTestMsg2}\n`)
+// console.log(`Intensity 1-2:   ${garbleText(intensityTestMsg2, 2)}`)
+// console.log(`Intensity 3-4:   ${garbleText(intensityTestMsg2, 4)}`)
+// console.log(`Intensity 5-6:   ${garbleText(intensityTestMsg2, 6)}`)
+// console.log(`Intensity 7-8:   ${garbleText(intensityTestMsg2, 8)}`)
+// console.log(`Intensity 9-10:  ${garbleText(intensityTestMsg2, 10)}`)
