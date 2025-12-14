@@ -25,6 +25,7 @@ module.exports = {
 			.setRequired(true)
 		),
     async execute(interaction) {
+		console.log("It got called")
 		setPronouns(interaction.user, interaction.options.getUser('pronouns'))
 		interaction.reply({ content: `Your pronouns have been set to ${interaction.options.getUser('pronouns')}`, flags: MessageFlags.Ephemeral })
     }

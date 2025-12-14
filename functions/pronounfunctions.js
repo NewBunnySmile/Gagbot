@@ -71,11 +71,14 @@ const getPronouns = (user, form) => {
 }
 
 const setPronouns = (user, pronouns) => {
+
+    console.log("IT GOT CALLED")
+
     if (process.pronouns == undefined) { process.pronouns = {} }
 
     process[user] = pronounsMap.get(pronouns);
 
-    fs.writeFileSync(`./userpronouns.txt`, JSON.stringify(process.pronouns));
+    fs.writeFileSync(`${process.GagbotSavedFileDirectory}/pronounsusers.txt`, JSON.stringify(process.pronouns));
 }
 
 
