@@ -1,6 +1,7 @@
 const { SlashCommandBuilder, MessageFlags } = require('discord.js');
 const { calculateTimeout } = require("./../functions/timefunctions.js")
 const { getHeavy, removeHeavy, convertheavy } = require('./../functions/heavyfunctions.js')
+const { getPronouns } = require('./../functions/pronounfunctions.js')
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -15,15 +16,15 @@ module.exports = {
         let heavyuser = interaction.options.getUser('user')
         if (getHeavy(interaction.user.id)) {
             if (interaction.user == heavyuser) {
-                interaction.reply(`${interaction.user} wiggles in their ${getHeavy(interaction.user.id).type}, but obviously they're *very* helpless and can't get far with taking it off on their own!`)
+                interaction.reply(`${interaction.user} wiggles in ${getPronouns(interaction.user.id, "possessiveDeterminer")} ${getHeavy(interaction.user.id).type}, but obviously ${getPronouns(interaction.user.id, "subjectIs")} *very* helpless and can't get far with taking it off on ${getPronouns(interaction.user.id, "possessiveDeterminer")} own!`)
             }
             else {
-                interaction.reply(`${interaction.user} wiggles in their ${getHeavy(interaction.user.id).type}, wanting to help ${heavyuser} out, but can't with their useless arms and hands!`)
+                interaction.reply(`${interaction.user} wiggles in ${getPronouns(interaction.user.id, "possessiveDeterminer")} ${getHeavy(interaction.user.id).type}, wanting to help ${heavyuser} out, but can't with ${getPronouns(interaction.user.id, "possessiveDeterminer")} useless arms and hands!`)
             }
         }
         else {
             if (getHeavy(heavyuser.id)) {
-                interaction.reply(`${interaction.user} helps ${heavyuser} out of their ${getHeavy(heavyuser.id).type}! They stretch their arms and sigh with gratitude!`)
+                interaction.reply(`${interaction.user} helps ${heavyuser} out of ${getPronouns(heavyuser.id, "possessiveDeterminer")} ${getHeavy(heavyuser.id).type}! ${getPronouns(heavyuser.id, "subject", true)} stretch${getPronouns(heavyuser.id, "subject") != "they" ? "es" : ""} ${getPronouns(heavyuser.id, "possessiveDeterminer")} arms and sigh${getPronouns(heavyuser.id, "subject") != "they" ? "s" : ""} with gratitude!`)
                 removeHeavy(heavyuser.id)
             }
             else {

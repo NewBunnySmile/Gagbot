@@ -2,6 +2,7 @@ const { SlashCommandBuilder, MessageFlags } = require('discord.js');
 const { getChastity, assignChastity } = require('./../functions/vibefunctions.js')
 const { calculateTimeout } = require("./../functions/timefunctions.js")
 const { getHeavy } = require('./../functions/heavyfunctions.js')
+const { getPronouns } = require('./../functions/pronounfunctions.js')
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -21,11 +22,11 @@ module.exports = {
         // Check if the wearer is in an armbinder - if they are, block them. 
         if (getHeavy(interaction.user.id)) {
             if (getChastity(interaction.user.id)) {
-                interaction.reply(`${interaction.user} squirms in their ${getHeavy(interaction.user.id).type}, trying to adjust their chastity belt, but it's futile!`)
+                interaction.reply(`${interaction.user} squirms in ${getPronouns(interaction.user.id, "possessiveDeterminer")} ${getHeavy(interaction.user.id).type}, trying to adjust ${getPronouns(interaction.user.id, "possessiveDeterminer")} chastity belt, but it's futile!`)
             }
             else {
                 // User is in some form of heavy bondage and cannot put on a chastity belt
-                interaction.reply(`${interaction.user} squirms in their ${getHeavy(interaction.user.id).type}, trying to put on a chastity belt, but can't!`)
+                interaction.reply(`${interaction.user} squirms in ${getPronouns(interaction.user.id, "possessiveDeterminer")} ${getHeavy(interaction.user.id).type}, trying to put on a chastity belt, but can't!`)
             }
         }
         else if (getChastity(interaction.user.id)?.keyholder) {

@@ -2,6 +2,7 @@ const { SlashCommandBuilder, MessageFlags } = require('discord.js');
 const { assignMitten, getMitten } = require('./../functions/gagfunctions.js')
 const { calculateTimeout } = require("./../functions/timefunctions.js")
 const { getHeavy } = require('./../functions/heavyfunctions.js')
+const { getPronouns } = require('./../functions/pronounfunctions.js')
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -17,14 +18,14 @@ module.exports = {
         )*/,
     async execute(interaction) {
         if (getHeavy(interaction.user.id)) {
-            interaction.reply(`${interaction.user} nuzzles a pair of mittens, but can't put them on because of their ${getHeavy(interaction.user.id).type}.`)
+            interaction.reply(`${interaction.user} nuzzles a pair of mittens, but can't put them on because of ${getPronouns(interaction.user.id, "possessiveDeterminer")} ${getHeavy(interaction.user.id).type}.`)
         }
 		else if (getMitten(interaction.user)) {
             interaction.reply({ content: `You are already wearing mittens!`, flags: MessageFlags.Ephemeral })
         }
         else {
             assignMitten(interaction.user);
-            interaction.reply(`${interaction.user} puts on a pair of mittens with a pair of padlocks. They'll be unable to remove their gag!`)
+            interaction.reply(`${interaction.user} puts on a pair of mittens with a pair of padlocks. ${getPronouns(interaction.user.id, "subjectWill", true)} be unable to remove ${getPronouns(interaction.user.id, "possessiveDeterminer")} gag!`)
         }
     }
 }

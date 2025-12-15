@@ -1,6 +1,7 @@
 const { SlashCommandBuilder, MessageFlags } = require('discord.js');
 const { getChastity, getVibe, removeVibe } = require('./../functions/vibefunctions.js')
 const { getHeavy } = require('./../functions/heavyfunctions.js')
+const { getPronouns } = require('./../functions/pronounfunctions.js')
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -15,7 +16,7 @@ module.exports = {
         if (getHeavy(interaction.user.id)) {
             if (vibeuser == interaction.user) {
                 if (getChastity(vibeuser.id)) {
-                    interaction.reply(`${interaction.user} tries to knock their vibrator off with their thighs, but can't because their arms are useless from the ${getHeavy(interaction.user.id).type}. Well, and their chastity belt of course!`)
+                    interaction.reply(`${interaction.user} tries to knock ${getPronouns(interaction.user.id, "possessiveDeterminer")} vibrator off with ${getPronouns(interaction.user.id, "possessiveDeterminer")} thighs, but can't because ${getPronouns(interaction.user.id, "possessiveDeterminer")} arms are useless from the ${getHeavy(interaction.user.id).type}. Well, and ${getPronouns(interaction.user.id, "possessiveDeterminer")} chastity belt of course!`)
                 }
                 else {
                     interaction.reply(`${interaction.user}'s ${getHeavy(interaction.user.id).type} prevents them from dexterously reaching the vibrator taped to them!`)
@@ -23,10 +24,10 @@ module.exports = {
             }
             else {
                 if (getChastity(vibeuser.id)) {
-                    interaction.reply(`${interaction.user} uses their nose to try to shift the vibrator off of ${vibeuser} because of their ${getHeavy(interaction.user.id).type}, but is immediately stopped by the metal shield protecting it!`)
+                    interaction.reply(`${interaction.user} uses ${getPronouns(interaction.user.id, "possessiveDeterminer")} nose to try to shift the vibrator off of ${vibeuser} because of ${getPronouns(interaction.user.id, "possessiveDeterminer")} ${getHeavy(interaction.user.id).type}, but is immediately stopped by the metal shield protecting it!`)
                 }
                 else {
-                    interaction.reply(`${interaction.user} uses their nose to try to shift the vibrator off of ${vibeuser} because of their ${getHeavy(interaction.user.id).type}. The move failed!`)
+                    interaction.reply(`${interaction.user} uses ${getPronouns(interaction.user.id, "possessiveDeterminer")} nose to try to shift the vibrator off of ${vibeuser} because of ${getPronouns(interaction.user.id, "possessiveDeterminer")} ${getHeavy(interaction.user.id).type}. The move failed!`)
                 }
             }
         }
@@ -38,7 +39,7 @@ module.exports = {
                     // User tries to modify their own vibe settings while in chastity
                     if (getVibe(vibeuser.id)) {
                         // User already has a vibrator on
-                        interaction.reply(`${interaction.user} unlocks their belt, removing the vibrator and then locks it back up!`)
+                        interaction.reply(`${interaction.user} unlocks ${getPronouns(interaction.user.id, "possessiveDeterminer")} belt, removing the vibrator and then locks it back up!`)
                         removeVibe(vibeuser.id)
                     }
                     else {
@@ -63,7 +64,7 @@ module.exports = {
                     // User tries to modify their own vibe settings while in chastity
                     if (getVibe(vibeuser.id)) {
                         // User already has a vibrator on
-                        interaction.reply(`${interaction.user} claws at their belt, desperately trying to take out the teasing vibrator, but can't!`)
+                        interaction.reply(`${interaction.user} claws at ${getPronouns(interaction.user.id, "possessiveDeterminer")} belt, desperately trying to take out the teasing vibrator, but can't!`)
                     }
                     else {
                         interaction.reply({ content: `You don't have a vibrator on!`, flags: MessageFlags.Ephemeral })
@@ -81,7 +82,7 @@ module.exports = {
                 // User tries to modify their own vibe settings
                 if (getVibe(vibeuser.id)) {
                     // User already has a vibrator on
-                    interaction.reply(`${interaction.user} takes their vibrator out!`)
+                    interaction.reply(`${interaction.user} takes ${getPronouns(interaction.user.id, "possessiveDeterminer")} vibrator out!`)
                     removeVibe(vibeuser.id)
                 }
                 else {

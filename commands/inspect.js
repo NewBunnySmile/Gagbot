@@ -3,6 +3,7 @@ const { getMitten, getGag, convertGagText, getGagIntensity } = require('./../fun
 const { getChastity, getVibe } = require('./../functions/vibefunctions.js')
 const { getCollar } = require('./../functions/collarfunctions.js')
 const { getHeavy } = require('./../functions/heavyfunctions.js')
+const { getPronouns } = require('./../functions/pronounfunctions.js')
 
 module.exports = {
 	data: new SlashCommandBuilder()
