@@ -8,7 +8,7 @@ const assignCollar = (user, keyholder, only) => {
         keyholder: keyholder,
         keyholder_only: only
     }
-    fs.writeFileSync(`./collarusers.txt`, JSON.stringify(process.collar));
+    fs.writeFileSync(`${process.GagbotSavedFileDirectory}/collarusers.txt`, JSON.stringify(process.collar));
 }
 
 const getCollar = (user) => {
@@ -19,9 +19,21 @@ const getCollar = (user) => {
 const removeCollar = (user) => {
     if (process.collar == undefined) { process.collar = {} }
     delete process.collar[user];
-    fs.writeFileSync(`./collarusers.txt`, JSON.stringify(process.collar));
+    fs.writeFileSync(`${process.GagbotSavedFileDirectory}/collarusers.txt`, JSON.stringify(process.collar));
+}
+
+const getCollarKeys = (user) => {
+    if (process.collar == undefined) { process.collar = {} }
+    let keysheld = [];
+    Object.keys(process.collar).forEach((k) => {
+        if (process.collar[k].keyholder == user) {
+            keysheld.push(k)
+        }
+    })
+    return keysheld
 }
 
 exports.assignCollar = assignCollar
 exports.getCollar = getCollar
 exports.removeCollar = removeCollar
+exports.getCollarKeys = getCollarKeys

@@ -2,7 +2,7 @@ const fs = require('fs');
 const path = require('path');
 const https = require('https');
 const { messageSend, messageSendImg, messageSendDev } = require(`./../functions/messagefunctions.js`)
-const { getVibe, vibeText } = require(`./../functions/vibefunctions.js`)
+const { getVibe, stutterText } = require(`./../functions/vibefunctions.js`)
 
 // Grab all the command files from the commands directory
 const gagtypes = [];
@@ -32,7 +32,7 @@ const assignGag = (userID, gagtype = "ball", intensity = 5) => {
         gagtype: gagtype,
         intensity: intensity
     }
-    fs.writeFileSync(`./gaggedusers.txt`, JSON.stringify(process.gags));
+    fs.writeFileSync(`${process.GagbotSavedFileDirectory}/gaggedusers.txt`, JSON.stringify(process.gags));
 }
 
 const getGag = (userID) => {
@@ -48,13 +48,13 @@ const getGagIntensity = (userID) => {
 const deleteGag = (userID) => {
     if (process.gags == undefined) { process.gags = {} }
     delete process.gags[userID]
-    fs.writeFileSync(`./gaggedusers.txt`, JSON.stringify(process.gags));
+    fs.writeFileSync(`${process.GagbotSavedFileDirectory}/gaggedusers.txt`, JSON.stringify(process.gags));
 }
 
 const assignMitten = (userID) => {
     if (process.mitten == undefined) { process.mitten = {} }
     process.mitten[userID] = true
-    fs.writeFileSync(`./mittenedusers.txt`, JSON.stringify(process.mitten));
+    fs.writeFileSync(`${process.GagbotSavedFileDirectory}/mittenedusers.txt`, JSON.stringify(process.mitten));
 }
 
 const getMitten = (userID) => {
@@ -65,7 +65,7 @@ const getMitten = (userID) => {
 const deleteMitten = (userID) => {
     if (process.mitten == undefined) { process.mitten = {} }
     delete process.mitten[userID]
-    fs.writeFileSync(`./mittenedusers.txt`, JSON.stringify(process.mitten));
+    fs.writeFileSync(`${process.GagbotSavedFileDirectory}/mittenedusers.txt`, JSON.stringify(process.mitten));
 }
 
 const splitMessage = (text) => {
@@ -112,28 +112,29 @@ const garbleMessage = async (msg) => {
         let messageparts = splitMessage(msg.content);
         let modifiedmessage = false;
 
+        //Weird exception for links
+        for (let i = 0; i < messageparts.length - 1; i++) {
+            let current = messageparts[i];
+            let next = messageparts[i + 1];
+            if (current.text.startsWith("http://") || current.text.startsWith("https://")) {
+                messageparts[i].text += next.text;
+                messageparts.splice(i + 1, 1);
+            }
+        }
+
         // Vibrators first
         if (process.vibe == undefined) { process.vibe = {} }
         if (process.vibe[msg.author.id]) {
-            const vibetypes = [];
-            const commandsPath = path.join(__dirname, '..', 'vibes');
-            const commandFiles = fs.readdirSync(commandsPath).filter(file => file.endsWith('.js'));
-            console.log(commandFiles)
-            
-            if (commandFiles.includes(process.vibe[msg.author.id].vibetype + ".js")) {
-                modifiedmessage = true;
-                let vibegarble = require(path.join(commandsPath, `${process.vibe[msg.author.id].vibetype}.js`))
-                let vibeintensity = process.vibe[msg.author.id].intensity || 5
-                for (let i = 0; i < messageparts.length; i++) {
-                    try {
-                        if (messageparts[i].garble) {
-                            console.log(messageparts[i].text);
-                            messageparts[i].text = vibegarble.garbleText(messageparts[i].text, msg.author.id, vibeintensity)
-                            console.log(messageparts[i].text);
-                        }
+
+            modifiedmessage = true;
+            let vibeintensity = process.vibe[msg.author.id].reduce((a, b) => a + b.intensity, 0) || 5
+            for (let i = 0; i < messageparts.length; i++) {
+                try {
+                    if (messageparts[i].garble) {
+                        messageparts[i].text = stutterText(messageparts[i].text, vibeintensity)
                     }
-                    catch (err) { console.log(err) }
                 }
+                catch (err) { console.log(err) }
             }
         }
 

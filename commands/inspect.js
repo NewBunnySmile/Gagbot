@@ -1,8 +1,9 @@
 const { SlashCommandBuilder, MessageFlags } = require('discord.js');
 const { getMitten, getGag, convertGagText, getGagIntensity } = require('./../functions/gagfunctions.js')
-const { getChastity, getVibe } = require('./../functions/vibefunctions.js')
-const { getCollar } = require('./../functions/collarfunctions.js')
+const { getChastity, getVibe, getChastityKeys } = require('./../functions/vibefunctions.js')
+const { getCollar, getCollarKeys } = require('./../functions/collarfunctions.js')
 const { getHeavy } = require('./../functions/heavyfunctions.js')
+const { getPronouns } = require('./../functions/pronounfunctions.js')
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -37,7 +38,7 @@ module.exports = {
         }
         // Vibe status
         if (getVibe(inspectuser.id)) {
-            outtext = `${outtext}<:MagicWand:1073504682540011520> Vibrator: **${getVibe(inspectuser.id).vibetype}** **Set to Speed ${getVibe(inspectuser.id).intensity}**\n`
+            outtext = `${outtext}<:MagicWand:1073504682540011520> Vibrators/toys: **${getVibe(inspectuser.id).map(vibe => `${vibe.vibetype} (${vibe.intensity})`).join(', ')}**\n`
         }
         else {
             outtext = `${outtext}<:MagicWand:1073504682540011520> Vibrator: Not currently worn.\n`
@@ -61,6 +62,36 @@ module.exports = {
         }
         else {
             outtext = `${outtext}<:Armbinder:1073495590656286760> Heavy Bondage: Not currently worn.\n`
+        }
+        // Collar status
+        if (getCollar(inspectuser.id)) {
+            if (!getCollar(inspectuser.id).keyholder_only) {
+                // Free use!
+                outtext = `${outtext}<:collar:1449984183261986939> Collar: **Unlocked and free use!**\n`
+            }
+            else if (getCollar(inspectuser.id).keyholder == inspectuser.id) {
+                // Self bound!
+                outtext = `${outtext}<:collar:1449984183261986939> Collar: **Self-bound!**\n`
+            }
+            else {
+                outtext = `${outtext}<:collar:1449984183261986939> Collar: **Key held by <@${getCollar(inspectuser.id).keyholder}>**\n`
+            }
+        }
+        else {
+            outtext = `${outtext}<:collar:1449984183261986939> Collar: Not currently worn.\n`
+        }
+        outtext = `${outtext}\n`
+        let keysheldchastity = getChastityKeys(inspectuser.id)
+        if (keysheldchastity.length > 0) {
+            keysheldchastity = keysheldchastity.map(k => `<@${k}>`)
+            let keysstring = keysheldchastity.join(", ");
+            outtext = `${outtext}Currently holding chastity keys for: ${keysstring}\n`
+        }
+        let keysheldcollar = getCollarKeys(inspectuser.id)
+        if (keysheldcollar.length > 0) {
+            keysheldcollar = keysheldcollar.map(k => `<@${k}>`)
+            let keysstring = keysheldcollar.join(", ");
+            outtext = `${outtext}Currently holding collar keys for: ${keysstring}`
         }
         interaction.reply({ content: outtext, flags: MessageFlags.Ephemeral })
     }

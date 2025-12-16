@@ -3,6 +3,7 @@ const fs = require('fs');
 const path = require('path');
 const { assignGag, getMitten } = require('./../functions/gagfunctions.js')
 const { getHeavy } = require('./../functions/heavyfunctions.js')
+const { getPronouns } = require('./../functions/pronounfunctions.js')
 
 // Grab all the command files from the commands directory
 const gagtypes = [];
@@ -24,7 +25,6 @@ module.exports = {
 		.addUserOption(opt =>
 			opt.setName('user')
 			.setDescription('The user to gag')
-			.setRequired(true)
         )
 		.addStringOption(opt =>
 			opt.setName('gag')
@@ -38,7 +38,7 @@ module.exports = {
 			.setMaxValue(10)
 		),
     async execute(interaction) {
-		let gaggeduser = interaction.options.getUser('user')
+		let gaggeduser = interaction.options.getUser('user') ? interaction.options.getUser('user') : interaction.user
 		let gagtype = interaction.options.getString('gag') ? interaction.options.getString('gag') : 'ball'
 		let gagintensity = interaction.options.getNumber('intensity') ? interaction.options.getNumber('intensity') : 5
 		let gagname = gagtypes.find(g => g.value == gagtype).name;
@@ -65,21 +65,21 @@ module.exports = {
 			}
 		}
 		if (getHeavy(interaction.user.id)) {
-			interaction.reply(`${interaction.user} eyes a ${gagname}, but cannot put it on because of their ${getHeavy(interaction.user.id).type}!`)
+			interaction.reply(`${interaction.user} eyes a ${gagname}, but cannot put it on because of ${getPronouns(interaction.user.id, "possessiveDeterminer")} ${getHeavy(interaction.user.id).type}!`)
 		}
 		else if (getMitten(interaction.user)) {
 			// We are wearing mittens, we can't hold onto the straps!
 			if (interaction.user.id != gaggeduser.id) {
-				interaction.reply(`${interaction.user} attempts to gag someone, but fumbles at holding the gag in their mittens!`)
+				interaction.reply(`${interaction.user} attempts to gag someone, but fumbles at holding the gag in ${getPronouns(interaction.user.id, "possessiveDeterminer")} mittens!`)
 			}
 			else {
-				interaction.reply(`${interaction.user} attempts to gag themselves, but can't get a good grip on the straps with their mittens!`)
+				interaction.reply(`${interaction.user} attempts to gag ${getPronouns(interaction.user.id, "reflexive")}, but can't get a good grip on the straps with ${getPronouns(interaction.user.id, "possessiveDeterminer")} mittens!`)
 			}
 		}
 		else {
 			// We have fingers! 
 			if (interaction.user.id == gaggeduser.id) {
-				interaction.reply(`${interaction.user} inserts a ${gagname}${intensitytext} in their own mouth!`)
+				interaction.reply(`${interaction.user} inserts a ${gagname}${intensitytext} in ${getPronouns(interaction.user.id, "possessiveDeterminer")} own mouth!`)
 				assignGag(gaggeduser, gagtype, gagintensity)
 			}
 			else {

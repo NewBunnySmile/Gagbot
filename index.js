@@ -7,65 +7,80 @@ const { garbleMessage } = require(`./functions/gagfunctions.js`)
 
 dotenv.config()
 
+let GagbotSavedFileDirectory = process.env.GAGBOTFILEDIRECTORY ? process.env.GAGBOTFILEDIRECTORY : __dirname
+
+process.GagbotSavedFileDirectory = GagbotSavedFileDirectory // Because honestly, I dont know WHY global stuff in index.js can't be accessble everywhere
+
+console.log(fs.readdirSync(process.GagbotSavedFileDirectory))
+
 try {
-    if (!fs.existsSync(`./gaggedusers.txt`)) {
-        fs.writeFileSync(`./gaggedusers.txt`, JSON.stringify({}))
+    if (!fs.existsSync(`${process.GagbotSavedFileDirectory}/gaggedusers.txt`)) {
+        fs.writeFileSync(`${process.GagbotSavedFileDirectory}/gaggedusers.txt`, JSON.stringify({}))
     }
-    process.gags = JSON.parse(fs.readFileSync(`./gaggedusers.txt`))
+    process.gags = JSON.parse(fs.readFileSync(`${process.GagbotSavedFileDirectory}/gaggedusers.txt`))
 }
 catch (err) { 
     console.log(err);
 }
 try {
-    if (!fs.existsSync(`./mittenedusers.txt`)) {
-        fs.writeFileSync(`./mittenedusers.txt`, JSON.stringify({}))
+    if (!fs.existsSync(`${process.GagbotSavedFileDirectory}/mittenedusers.txt`)) {
+        fs.writeFileSync(`${process.GagbotSavedFileDirectory}/mittenedusers.txt`, JSON.stringify({}))
     }
-    process.mitten = JSON.parse(fs.readFileSync(`./mittenedusers.txt`))
+    process.mitten = JSON.parse(fs.readFileSync(`${process.GagbotSavedFileDirectory}/mittenedusers.txt`))
 }
 catch (err) { 
     console.log(err);
 }
 try {
-    if (!fs.existsSync(`./chastityusers.txt`)) {
-        fs.writeFileSync(`./chastityusers.txt`, JSON.stringify({}))
+    if (!fs.existsSync(`${process.GagbotSavedFileDirectory}/chastityusers.txt`)) {
+        fs.writeFileSync(`${process.GagbotSavedFileDirectory}/chastityusers.txt`, JSON.stringify({}))
     }
-    process.chastity = JSON.parse(fs.readFileSync(`./chastityusers.txt`))
+    process.chastity = JSON.parse(fs.readFileSync(`${process.GagbotSavedFileDirectory}/chastityusers.txt`))
 }
 catch (err) { 
     console.log(err);
 }
 try {
-    if (!fs.existsSync(`./vibeusers.txt`)) {
-        fs.writeFileSync(`./vibeusers.txt`, JSON.stringify({}))
+    if (!fs.existsSync(`${process.GagbotSavedFileDirectory}/vibeusers.txt`)) {
+        fs.writeFileSync(`${process.GagbotSavedFileDirectory}/vibeusers.txt`, JSON.stringify({}))
     }
-    process.vibe = JSON.parse(fs.readFileSync(`./vibeusers.txt`))
+    process.vibe = JSON.parse(fs.readFileSync(`${process.GagbotSavedFileDirectory}/vibeusers.txt`))
 }
 catch (err) { 
     console.log(err);
 }
 try {
-    if (!fs.existsSync(`./collarusers.txt`)) {
-        fs.writeFileSync(`./collarusers.txt`, JSON.stringify({}))
+    if (!fs.existsSync(`${process.GagbotSavedFileDirectory}/collarusers.txt`)) {
+        fs.writeFileSync(`${process.GagbotSavedFileDirectory}/collarusers.txt`, JSON.stringify({}))
     }
-    process.collar = JSON.parse(fs.readFileSync(`./collarusers.txt`))
+    process.collar = JSON.parse(fs.readFileSync(`${process.GagbotSavedFileDirectory}/collarusers.txt`))
 }
 catch (err) { 
     console.log(err);
 }
 try {
-    if (!fs.existsSync(`./heavyusers.txt`)) {
-        fs.writeFileSync(`./heavyusers.txt`, JSON.stringify({}))
+    if (!fs.existsSync(`${process.GagbotSavedFileDirectory}/heavyusers.txt`)) {
+        fs.writeFileSync(`${process.GagbotSavedFileDirectory}/heavyusers.txt`, JSON.stringify({}))
     }
-    process.heavy = JSON.parse(fs.readFileSync(`./heavyusers.txt`))
+    process.heavy = JSON.parse(fs.readFileSync(`${process.GagbotSavedFileDirectory}/heavyusers.txt`))
 }
 catch (err) { 
     console.log(err);
 }
 try {
-    if (!fs.existsSync(`./usersdata.txt`)) {
-        fs.writeFileSync(`./usersdata.txt`, JSON.stringify({}))
+    if (!fs.existsSync(`${process.GagbotSavedFileDirectory}/pronounsusers.txt`)) {
+        fs.writeFileSync(`${process.GagbotSavedFileDirectory}/pronounsusers.txt`, JSON.stringify({}))
     }
-    process.usersdata = JSON.parse(fs.readFileSync(`./usersdata.txt`))
+    process.pronouns = JSON.parse(fs.readFileSync(`${process.GagbotSavedFileDirectory}/pronounsusers.txt`))
+}
+catch (err) { 
+    console.log(err);
+}
+try {
+    if (!fs.existsSync(`${process.GagbotSavedFileDirectory}/usersdata.txt`)) {
+        fs.writeFileSync(`${process.GagbotSavedFileDirectory}/usersdata.txt`, JSON.stringify({}))
+    }
+    process.usersdata = JSON.parse(fs.readFileSync(`${process.GagbotSavedFileDirectory}/usersdata.txt`))
 }
 catch (err) { 
     console.log(err);

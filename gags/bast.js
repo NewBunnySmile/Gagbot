@@ -2,22 +2,32 @@ const garbleText = (text, intensity) => {
     let newtextparts = text.split(" ");
     let outtext = '';
     for (let i = 0; i < newtextparts.length; i++) {
-        if (Math.random() > (0.50 - (0.05 * intensity))) {
+        if (Math.random() > (0.50 - (0.05 * intensity))) { // 55-100% chance to replace
 
-            outtext = `${outtext} `
-
-            var rng = Math.random();
-
-            if (rng > 0.75) {
-                outtext = replacer(outtext, newtextparts[i], "ny", "a", "h")
-            } else if (rng > 0.5) {
-                outtext = replacer(outtext, newtextparts[i], "me", "o", "w")
-            } else if (rng > 0.25) {
-                outtext = replacer(outtext, newtextparts[i], "pu", "r", "")
+            if (newtextparts[i].length < 3) {
+                outtext = `${outtext}nya`;
             } else {
-                outtext = replacer(outtext, newtextparts[i], "g", "r", "")
+                var rng = Math.random();
+
+                if (rng > 0.75) {
+                    outtext = replacer(outtext, newtextparts[i], "ny", "a", "h")
+                } else if (rng > 0.5) {
+                    outtext = replacer(outtext, newtextparts[i], "me", "o", "w")
+                } else if (rng > 0.25) {
+                    outtext = replacer(outtext, newtextparts[i], "pu", "r", "")
+                } else {
+                    outtext = replacer(outtext, newtextparts[i], "g", "r", "")
+                }
             }
 
+            if (Math.random() > (0.80 - (0.04 * intensity))) { // 24-60% chance to add an additonal sound
+                let additionalsounds = [
+                    "purrrrr", "meow", "mew", "mrrp", "mrrrrrrrrrp", "purr<3", "mrrl"
+                ]
+                outtext = `${outtext} ${additionalsounds[Math.floor(Math.random() * additionalsounds.length)]}`
+            }
+
+            outtext = `${outtext} `
         }
         else {
             outtext = `${outtext} ${newtextparts[i]}`

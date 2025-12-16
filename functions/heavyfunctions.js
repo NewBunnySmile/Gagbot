@@ -10,6 +10,7 @@ const heavytypes = [
     { name: "Latex Boxbinder", value: "boxbinder_latex" },
     { name: "Comfy Straitjacket", value: "straitjacket_comfy" },
     { name: "Maid Punishment Straitjacket", value: "straitjacket_maid" },
+    { name: "Doll Straitjacket", value: "straitjacket_doll" },
     { name: "Black Hole Boxbinder", value: "boxbinder_blackhole" },
     { name: "Shadow Latex Petsuit", value: "petsuit_shadowlatex" },
     { name: "Bast Petsuit", value: "petsuit_bast" },
@@ -30,7 +31,7 @@ const assignHeavy = (user, type) => {
         type: convertheavy(type),
         typeval: type
     }
-    fs.writeFileSync(`./heavyusers.txt`, JSON.stringify(process.heavy));
+    fs.writeFileSync(`${process.GagbotSavedFileDirectory}/heavyusers.txt`, JSON.stringify(process.heavy));
 }
 
 const getHeavy = (user) => {
@@ -41,7 +42,7 @@ const getHeavy = (user) => {
 const removeHeavy = (user) => {
     if (process.heavy == undefined) { process.heavy = {} }
     delete process.heavy[user];
-    fs.writeFileSync(`./heavyusers.txt`, JSON.stringify(process.heavy));
+    fs.writeFileSync(`${process.GagbotSavedFileDirectory}/heavyusers.txt`, JSON.stringify(process.heavy));
 }
 
 exports.assignHeavy = assignHeavy
