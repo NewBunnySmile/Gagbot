@@ -51,6 +51,20 @@ const getChastityKeys = (user) => {
     return keysheld
 }
 
+const getChastityKeyholder = (user) => {
+    if (process.chastity == undefined) { process.chastity = {} }
+    return process.chastity[user]?.keyholder;
+}
+
+// transfer keys and returns whether the transfer was successful
+const transferChastityKey = (user, to) => {
+    if (process.chastity == undefined) { process.chastity = {} }
+    if (!process.chastity[user]) { return false }
+    if (process.chastity[user].keyholder == to) { return false }
+    process.chastity[user].keyholder = to;
+    return true
+}
+
 const arousedtexts = [
   "ah~", "mm~", "ahh~", "mmm~", "ooh!~",
   "mmmf~", "aah! <3", "aaahh!~", "mmm!~ <3", "aahhhhh!~",
@@ -104,5 +118,7 @@ exports.removeVibe = removeVibe
 
 exports.vibeText = vibeText;
 exports.getChastityKeys = getChastityKeys;
+exports.getChastityKeyholder = getChastityKeyholder;
+exports.transferChastityKey = transferChastityKey
 
 console.log(getChastityKeys("125093095405518850"))

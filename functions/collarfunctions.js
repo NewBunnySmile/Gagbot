@@ -33,7 +33,23 @@ const getCollarKeys = (user) => {
     return keysheld
 }
 
+const getCollarKeyholder = (user) => {
+    if (process.collar == undefined) { process.collar = {} }
+    return process.collar[user]?.keyholder;
+}
+
+// transfer keys and returns whether the transfer was successful
+const transferCollarKey = (user, to) => {
+    if (process.collar == undefined) { process.collar = {} }
+    if (!process.collar[user]) { return false }
+    if (process.collar[user].keyholder == to) { return false }
+    process.collar[user].keyholder = to;
+    return true
+}
+
 exports.assignCollar = assignCollar
 exports.getCollar = getCollar
 exports.removeCollar = removeCollar
 exports.getCollarKeys = getCollarKeys
+exports.getCollarKeyholder = getCollarKeyholder;
+exports.transferCollarKey = transferCollarKey
