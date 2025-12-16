@@ -127,8 +127,8 @@ module.exports = {
       return;
     }
 
-    if (lockedUser.id == newKeyholder) {
-      if (transferFunction(lockedUser, newKeyholder)) {
+    if (lockedUser.id == newKeyholder.id) {
+      if (transferFunction(lockedUser, newKeyholder.id)) {
         interaction.reply(
           `${
             interaction.user
@@ -143,7 +143,7 @@ module.exports = {
         });
       }
     } else if (lockedUser.id == interaction.user.id) {
-      if (transferFunction(lockedUser, newKeyholder)) {
+      if (transferFunction(lockedUser.id, newKeyholder.id)) {
         interaction.reply(
           `${interaction.user} gives the keys to ${their(
             interaction.user.id
@@ -156,7 +156,7 @@ module.exports = {
         });
       }
     } else if (optins.getKeyGiving(lockedUser)) {
-      if (transferFunction(lockedUser, newKeyholder)) {
+      if (transferFunction(lockedUser.id, newKeyholder.id)) {
         interaction.reply(
           `${interaction.user} gives the keys to ${lockedUser}'s ${restraint} to ${newKeyholder}`
         );
