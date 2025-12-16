@@ -56,6 +56,12 @@ catch (err) {
     console.log(err);
 }
 try {
+    process.consented = JSON.parse(fs.readFileSync(`${process.GagbotSavedFileDirectory}/consentusers.txt`))
+}
+catch (err) { 
+    console.log(err);
+}
+try {
     process.optins = JSON.parse(fs.readFileSync(`${process.GagbotSavedFileDirectory}/optinusers.txt`))
 }
 catch (err) { 
@@ -64,12 +70,14 @@ catch (err) {
 
 // Grab all the command files from the commands directory
 const commands = new Map();
+const modalHandlers = new Map();
 const componentHandlers = new Map();
 const commandsPath = path.join(__dirname, 'commands');
 const commandFiles = fs.readdirSync(commandsPath).filter(file => file.endsWith('.js'));
 for (const file of commandFiles) {
     const cmd = require(path.join(commandsPath, file));
     commands.set(cmd.data.name, cmd);
+    if (cmd.modalexecute) modalHandlers.set(file, cmd);
     cmd.componentHandlers?.forEach((handler) => {
         componentHandlers.set(handler.key, handler);
     });
@@ -112,17 +120,27 @@ client.on("messageCreate", async (msg) => {
 
 client.on('interactionCreate', async (interaction) => {
     try {
+        if (interaction.isModalSubmit()) {
+            // We can't pass custom data through the modal except via the ID, so separate out the first part
+            // as IDs will come in like collar_12451251253 - we want the collar part to query the command. 
+            let interactioncommand = interaction.customId.split("_")[0]
+            console.log(interactioncommand);
+            modalHandlers.get(`${interactioncommand}.js`)?.modalexecute(interaction);
+            return;
+        }
+      
         if (interaction.isMessageComponent()) {
             const [key, ...args] = interaction.customId.split("-");
             componentHandlers.get(key)?.handle(interaction, ...args);
-        } else {
-            if ((interaction.channel.id != process.env.CHANNELID) && (interaction.channel.id != process.env.CHANNELIDDEV)) { 
-                interaction.reply({ content: `Please use these commands over in <#${process.env.CHANNELID}>.`, flags: discord.MessageFlags.Ephemeral })
-                return;
-            }
-
-            commands.get(interaction.commandName)?.execute(interaction);
+            return;
+        } 
+      
+        if ((interaction.channel.id != process.env.CHANNELID) && (interaction.channel.id != process.env.CHANNELIDDEV)) { 
+            interaction.reply({ content: `Please use these commands over in <#${process.env.CHANNELID}>.`, flags: discord.MessageFlags.Ephemeral })
+            return;
         }
+
+        commands.get(interaction.commandName)?.execute(interaction);
     }
     catch (err) {
         console.log(err);
