@@ -58,7 +58,7 @@ module.exports = {
             }
             else if (getChastity(vibeuser.id)) {
                 // The target is in a chastity belt
-                if ((getChastity(vibeuser.id)?.keyholder == interaction.user.id)) {
+                if ((getChastity(vibeuser.id)?.keyholder == interaction.user.id || (getChastity(vibeuser.id)?.access === 0 && vibeuser.id != interaction.user.id))) {
                     // User tries to modify the vibe settings for someone in chastity that they do have the key for
                     if (vibeuser == interaction.user) {
                         // User tries to modify their own vibe settings while in chastity

@@ -162,12 +162,14 @@ This restraint is intended to allow **others** to use /chastity, /mittens and /h
     return modal;
 }
 
-const timelockChastityModal = (interaction, keyholder) => {
-    const modal = new ModalBuilder().setCustomId(`chastitytimelock_${keyholder.id}`).setTitle('Collar Permissions');
+const timelockChastityModal = (interaction, wearer) => {
+    const modal = new ModalBuilder().setCustomId(`chastitytimelock_${wearer.id}`).setTitle('Chastity Timelock');
 
     let restrictionWarningText = new TextDisplayBuilder()
-    let warningText = `# Timelock (Chastity Belt)
-This will lock your belt away for a set period of time. Please configure your timelock below.
+    let warningText = interaction.user.id == wearer.id ? `# Timelock (Chastity Belt)
+This will lock your belt for a set period of time. Please configure your timelock below.
+-# Once confirmed, you will have a final prompt before the timelock starts` : `# Timelock (Chastity Belt)
+This will lock ${wearer}'s belt for a set period of time. Please configure your timelock below.
 -# Once confirmed, you will have a final prompt before the timelock starts`
 
     restrictionWarningText.setContent(warningText)
@@ -183,26 +185,28 @@ This will lock your belt away for a set period of time. Please configure your ti
         .setCustomId('accesswhilebound')
         .setPlaceholder('Belt Access')
         .setRequired(true)
+        .setMinValues(1)
+        .setMaxValues(1)
         .addOptions(
             new StringSelectMenuOptionBuilder()
                 // Label displayed to user
                 .setLabel('Everyone Else')
                 // Description of option
-                .setDescription('Everyone except you can vibe and corset you')
+                .setDescription('Everyone except the wearer can vibe and corset the wearer')
                 // Value returned to you in modal submission
                 .setValue('access_others'),
             new StringSelectMenuOptionBuilder()
                 // Label displayed to user
                 .setLabel('Keyholder Only')
                 // Description of option
-                .setDescription('Only the keyholder can access your belt')
+                .setDescription('Only you can access the wearer\' belt')
                 // Value returned to you in modal submission
                 .setValue('access_kh'),
             new StringSelectMenuOptionBuilder()
                 // Label displayed to user
                 .setLabel('Nobody')
                 // Description of option
-                .setDescription('Nobody, not even you, can access your belt')
+                .setDescription('Nobody, not even you, can access the wearer\' belt')
                 // Value returned to you in modal submission
                 .setValue('access_no'),
         )
@@ -211,6 +215,8 @@ This will lock your belt away for a set period of time. Please configure your ti
         .setCustomId('keyholderafter')
         .setPlaceholder('Action after lock')
         .setRequired(true)
+        .setMinValues(1)
+        .setMaxValues(1)
         .addOptions(
             new StringSelectMenuOptionBuilder()
                 // Label displayed to user
@@ -223,14 +229,14 @@ This will lock your belt away for a set period of time. Please configure your ti
                 // Label displayed to user
                 .setLabel('Return')
                 // Description of option
-                .setDescription('Returns the keys to you')
+                .setDescription('Returns the keys to the wearer')
                 // Value returned to you in modal submission
                 .setValue('keyholder_return'),
             new StringSelectMenuOptionBuilder()
                 // Label displayed to user
                 .setLabel('To Keyholder')
                 // Description of option
-                .setDescription('Returns keys to your keyholder')
+                .setDescription('Returns keys to the keyholder')
                 // Value returned to you in modal submission
                 .setValue('keyholder_keyholder'),
         )

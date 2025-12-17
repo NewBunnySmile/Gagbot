@@ -3,7 +3,8 @@ const dotenv = require('dotenv')
 const fs = require('fs');
 const path = require('path');
 const https = require('https');
-const { garbleMessage } = require(`./functions/gagfunctions.js`)
+const { garbleMessage } = require(`./functions/gagfunctions.js`);
+const { restartChastityTimers } = require('./functions/timelockfunctions.js');
 
 dotenv.config()
 
@@ -145,6 +146,7 @@ const client = new discord.Client({
 client.on("clientReady", async () => {
     // This is run once we’re logged in!
     console.log(`Logged in as ${client.user.tag}!`)
+    restartChastityTimers(client);
 })
 
 client.on("messageCreate", async (msg) => {

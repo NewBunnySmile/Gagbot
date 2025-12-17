@@ -1,16 +1,102 @@
-const { SlashCommandBuilder, MessageFlags } = require('discord.js');
-const { getMitten, deleteMitten } = require('./../functions/gagfunctions.js')
-const { getHeavy } = require('./../functions/heavyfunctions.js')
-const { getPronouns } = require('./../functions/pronounfunctions.js')
-const { getConsent, handleConsent } = require('./../functions/interactivefunctions.js')
+const { MessageFlags, ComponentType, ButtonStyle } = require("discord.js");
+const { parseTime } = require("../functions/timefunctions.js");
+const { timelockChastity } = require("../functions/timelockfunctions.js");
+const { getChastityKeyholder } = require("../functions/vibefunctions.js");
 
 module.exports = {
-    async modalexecute(interaction) {
-		try {
-			console.log(interaction)
-		}
-		catch (err) {
-			console.log(err)
-		}
+  async modalexecute(interaction) {
+    console.log(interaction);
+
+    const keyholder = interaction.user.id;
+    const wearer = interaction.customId.split("_")[1];
+    const timeString = interaction.fields.getTextInputValue("timelockinput");
+    let access;
+    switch (interaction.fields.getStringSelectValues("accesswhilebound")[0]) {
+      case "access_others":
+        access = 0;
+        break;
+      case "access_kh":
+        access = 1;
+        break;
+      case "access_no":
+        access = 2;
+        break;
+      default:
+        interaction.reply({
+          content: "Unknown access option value",
+          flags: MessageFlags.Ephemeral,
+        });
+        return;
     }
+    let keyholderAfter;
+    switch (interaction.fields.getStringSelectValues("keyholderafter")[0]) {
+      case "keyholder_unlock":
+        keyholderAfter = 0;
+        break;
+      case "keyholder_return":
+        keyholderAfter = 1;
+        break;
+      case "keyholder_keyholder":
+        keyholderAfter = 2;
+        break;
+      default:
+        interaction.reply({
+          content: "Unknown return option value",
+          flags: MessageFlags.Ephemeral,
+        });
+        return;
+    }
+
+    const unlockTime = parseTime(timeString);
+
+    interaction.reply(buildConfirmMessage(wearer, keyholder, unlockTime.getTime(), access, keyholderAfter));
+  },
+  componentHandlers: [
+    {
+      key: "cctl",
+      async handle(interaction, wearer, keyholder, unlockTime, access, keyholderAfter) {
+        if (getChastityKeyholder(wearer) != keyholder) {
+          interaction.reply({
+            content: "Keyholder has changed since start of timelocking",
+            flags: MessageFlags.Ephemeral,
+          });
+          return;
+        }
+
+        if (timelockChastity(interaction.client, wearer, Number(unlockTime), Number(access), Number(keyholderAfter))) {
+          interaction.channel.send(`<@${wearer}>'s chastity belt has been locked with a timelock`);
+          interaction.reply({
+            content: "Timelock confirmed",
+            flags: MessageFlags.Ephemeral,
+          });
+        } else {
+          interaction.reply({
+            content: "Failed to timelock chastity belt",
+            flags: MessageFlags.Ephemeral,
+          });
+        }
+      },
+    },
+  ],
+};
+
+function buildConfirmMessage(wearer, keyholder, unlockTime, access, keyholderAfter) {
+  return {
+    content: `# Timelock (Chastity Belt)\nConfirm locking the belt until <t:${(unlockTime / 1000) | 0}:f>\nNote: Frustration may cause the actual unlock time to be later`,
+    flags: MessageFlags.Ephemeral,
+    components: [
+      {
+        type: ComponentType.ActionRow,
+        components: [
+          {
+            type: ComponentType.Button,
+            label: "Confirm",
+            // shortened id since it hits 100 char limit
+            customId: `cctl-${wearer}-${keyholder}-${unlockTime}-${access}-${keyholderAfter}`,
+            style: ButtonStyle.Success,
+          },
+        ],
+      },
+    ],
+  };
 }

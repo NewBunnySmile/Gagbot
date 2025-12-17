@@ -41,7 +41,7 @@ module.exports = {
             }
             else if (getChastity(corsetuser.id)) {
                 // The target is in a chastity belt
-                if ((getChastity(corsetuser.id)?.keyholder == interaction.user.id)) {
+                if ((getChastity(corsetuser.id)?.keyholder == interaction.user.id || (getChastity(corsetuser.id)?.access === 0 && corsetuser.id != interaction.user.id))) {
                     // User tries to modify the corset settings for someone in chastity that they do have the key for
                     if (corsetuser == interaction.user) {
                         // User tries to modify their own corset settings while in chastity
