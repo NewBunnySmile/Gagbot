@@ -261,14 +261,18 @@ async function sendKeyTransferRequest(
     content: `${oldKeyholder} is attempting to transfer ${their(
       oldKeyholder.id
     )} key to your ${restraint} to ${newKeyholder}.\n(If you do not want this, just ignore this message)`,
-    components: {
-      type: ComponentType.ActionRow,
-      components: {
-        type: ComponentType.Button,
-        label: "Allow transfer",
-        customId: `transferkey-${keyType}-${oldKeyholder.id}-${newKeyholder.id}`,
-        style: ButtonStyle.Success,
+    components: [
+      {
+        type: ComponentType.ActionRow,
+        components: [
+          {
+            type: ComponentType.Button,
+            label: "Allow transfer",
+            customId: `transferkey-${keyType}-${oldKeyholder.id}-${newKeyholder.id}`,
+            style: ButtonStyle.Success,
+          },
+        ],
       },
-    },
+    ],
   });
 }
