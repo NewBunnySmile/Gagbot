@@ -3,6 +3,7 @@ const path = require('path');
 const https = require('https');
 const { messageSend, messageSendImg, messageSendDev } = require(`./../functions/messagefunctions.js`)
 const { getVibe, vibeText } = require(`./../functions/vibefunctions.js`)
+const { getCorset, corsetLimitWords } = require(`./../functions/corsetfunctions.js`)
 
 // Grab all the command files from the commands directory
 const gagtypes = [];
@@ -121,19 +122,45 @@ const garbleMessage = async (msg) => {
         let outtext = '';
         let messageparts = splitMessage(msg.content);
         let modifiedmessage = false;
+        let totalwords = 0;
+        for (let i = 0; i < messageparts.length; i++) {
+            if (messageparts[i].garble) {
+                totalwords = totalwords + messageparts[i].text.split(" ").length
+            }
+        }
+        console.log(msg.content)
         // Vibrators first
         if (getVibe(msg.author.id)) {
             modifiedmessage = true;
+            totalwords = 0 // recalculate eligible word count because they're stimmed out of their mind. 
             for (let i = 0; i < messageparts.length; i++) {
                 try {
                     if (messageparts[i].garble) {
                         messageparts[i].text = vibeText(messageparts[i].text, msg.author.id)
+                        totalwords = totalwords + messageparts[i].text.split(" ").length
                     }
                 }
                 catch (err) { console.log(err) }
             }
         }
         console.log(messageparts)
+        console.log(totalwords)
+        // Now corset any words, using an amount to start with.
+        if (getCorset(msg.author.id)) {
+            let wordspermitted = (22 - (getCorset(msg.author.id).tightness * 2)) // subtract 2 for each tightness level
+            if ((totalwords >= wordspermitted) || (getCorset(msg.author.id).tightness >= 7)) { // Only bother modifying at this point if the eligible word count is longer than X words permitted. 
+                for (let i = 0; i < messageparts.length; i++) {
+                    modifiedmessage = true
+                    try {
+                        if (messageparts[i].garble) {
+                            messageparts[i].text = corsetLimitWords(msg.author.id, messageparts[i].text, wordspermitted)
+                            messageparts[i].text = `${messageparts[i].text}\n`
+                        }
+                    }
+                    catch (err) { console.log(err) }
+                }
+            }
+        }
         // Gags now
         if (process.gags == undefined) { process.gags = {} }
         if (process.gags[`<@${msg.author.id}>`]) {
