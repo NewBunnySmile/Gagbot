@@ -54,6 +54,9 @@ const removeVibe = (user, vibetype=null) => {
         delete process.vibe[user];
     } else {
         process.vibe[user] = process.vibe[user].filter(v => v.vibetype !== vibetype);
+        if (process.vibe[user].length == 0) {
+            delete process.vibe[user]; // Discard the vibes object as we are no longer using it. 
+        }
     }
     fs.writeFileSync(`${process.GagbotSavedFileDirectory}/vibeusers.txt`, JSON.stringify(process.vibe));
 }

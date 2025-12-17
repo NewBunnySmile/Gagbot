@@ -74,7 +74,7 @@ module.exports = {
                     }
                     else {
                         // User tries to modify another user's vibe settings
-                        if (getVibe(vibeuser.id && (getVibe(vibeuser.id).some((vibe) => (vibe.vibetype == vibetype)) || (!vibetype)))) {
+                        if (getVibe(vibeuser.id) && (getVibe(vibeuser.id).some((vibe) => (vibe.vibetype == vibetype)) || (!vibetype))) {
                             // User already has a vibrator of the same type on or type is null
                             interaction.reply(`${interaction.user} unlocks ${vibeuser}'s belt, removing the ${vibetype ? vibetype : "vibrators"} and then locks it back up!`)
                             removeVibe(vibeuser.id, vibetype)
