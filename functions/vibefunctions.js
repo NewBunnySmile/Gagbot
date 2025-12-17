@@ -171,7 +171,7 @@ function stutterText(text, stutterChance) {
         if (!((text.charAt(0) == "<" && text.charAt(1) == "@") || (text.charAt(0) == "\n") || (!text.charAt(0).match(/[a-zA-Z0-9]/)))) { //Ignore pings, linebreaks and signs (preventively I dunno)
             let stuttered = false;
             if (Math.random() < stutterChance) { // 2-20% to cause a stutter
-                let stuttertimes = Math.max(Math.floor(Math.random() * 3 * stutterChance), 1) // Stutter between 1, 1-2 and 1-3 times, depending on intensity
+                let stuttertimes = Math.max(Math.floor(Math.random() * 5 * stutterChance), 1) // Stutter between 1, 1-2 and 1-3 times, depending on intensity
                 for (let i = 0; i < stuttertimes; i++) {
                     outtext = `${outtext}${text.charAt(0)}-`
                 }
