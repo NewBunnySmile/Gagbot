@@ -229,6 +229,10 @@ module.exports = {
           channel.send(
             `<@${oldKeyholder}> gives the keys to ${interaction.user}'s ${restraint} to <@${newKeyholder}>`
           );
+          interaction.reply({
+            content: "Transfer successful",
+            flags: MessageFlags.Ephemeral,
+          });
         } else {
           interaction.reply({
             content: "Failed to transfer key, are you still locked?",
