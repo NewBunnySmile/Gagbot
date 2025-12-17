@@ -74,14 +74,14 @@ const splitMessage = (text) => {
     /*************************************************************************************
      * Massive Regex, let's break it down:
      * 
-     * 1.) Match Italicized Text, WITHOUT false-positives on bolded text.
-     * 2.) Match Website URLs - It's text copied from a random stack overflow post.
-     * 3.) Match HTTP(S) Headers - The URL matcher didn't catch these.
+     * 1.) Match User Tags. (@Dollminatrix)
+     * 2.) Match Italicized Text, WITHOUT false-positives on bolded text.
+     * 3.) Match Website URLs - Stack Overflow-sourced URL matcher plus Doll's HTTP(S) matching.
      * 4.) Match Emoji - <:Emojiname:000000000000000000>
      * 5.) Match Base Unicode Emoji - My stack is overflowing.
     **************************************************************************************/
-    //             |--------   Match italic text   -------| |----------------------  Match website URLs     ---------------------------------------------------| |--- Emojis ---| |--- Unicode Emoji -----------------------------------------------|
-    const regex = /(((?<!\*)\*{1})(\*{2})?([^\*]|\*{2})+\*)|(<?https?\:\/\/[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)>?)|(<:[^:]+:[^>]+>)|(\ud83c[\ud000-\udfff]|\ud83d[\ud000-\udfff]|\ud83e[\ud000-\udfff])/g
+    //             |-  Tags -| |--------   Match italic text   -------| |----------------------  Match website URLs     ---------------------------------------------------| |--- Emojis ---| |--- Unicode Emoji -----------------------------------------------|
+    const regex = /(<@[0-9]+>)|(((?<!\*)\*{1})(\*{2})?([^\*]|\*{2})+\*)|(<?https?\:\/\/[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)>?)|(<:[^:]+:[^>]+>)|(\ud83c[\ud000-\udfff]|\ud83d[\ud000-\udfff]|\ud83e[\ud000-\udfff])/g
 
     let output = [];
     let deepCopy = text.split()[0]
