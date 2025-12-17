@@ -86,6 +86,15 @@ catch (err) {
     console.log(err);
 }
 try {
+    if (!fs.existsSync(`${process.GagbotSavedFileDirectory}/optinusers.txt`)) {
+        fs.writeFileSync(`${process.GagbotSavedFileDirectory}/optinusers.txt`, JSON.stringify({}))
+    }
+    process.optins = JSON.parse(fs.readFileSync(`${process.GagbotSavedFileDirectory}/optinusers.txt`))
+}
+catch (err) { 
+    console.log(err);
+}
+try {
     if (!fs.existsSync(`${process.GagbotSavedFileDirectory}/consentusers.txt`)) {
         fs.writeFileSync(`${process.GagbotSavedFileDirectory}/consentusers.txt`, JSON.stringify({}))
     }
@@ -106,9 +115,19 @@ try {
 }
 
 // Grab all the command files from the commands directory
-const commands = [];
+const commands = new Map();
+const modalHandlers = new Map();
+const componentHandlers = new Map();
 const commandsPath = path.join(__dirname, 'commands');
 const commandFiles = fs.readdirSync(commandsPath).filter(file => file.endsWith('.js'));
+for (const file of commandFiles) {
+    const cmd = require(path.join(commandsPath, file));
+    commands.set(cmd.data.name, cmd);
+    if (cmd.modalexecute) modalHandlers.set(file, cmd);
+    cmd.componentHandlers?.forEach((handler) => {
+        componentHandlers.set(handler.key, handler);
+    });
+}
 
 var gagged = {}
 
@@ -151,22 +170,22 @@ client.on('interactionCreate', async (interaction) => {
             // as IDs will come in like collar_12451251253 - we want the collar part to query the command. 
             let interactioncommand = interaction.customId.split("_")[0]
             console.log(interactioncommand);
-            if (commandFiles.includes(`${interactioncommand}.js`)) {
-                const cmd = require(path.join(commandsPath, `${interactioncommand}.js`))
-                if (cmd.modalexecute) {
-                    cmd.modalexecute(interaction);
-                    return;
-                }
-            }
+            modalHandlers.get(`${interactioncommand}.js`)?.modalexecute(interaction);
+            return;
         }
+      
+        if (interaction.isMessageComponent()) {
+            const [key, ...args] = interaction.customId.split("-");
+            componentHandlers.get(key)?.handle(interaction, ...args);
+            return;
+        } 
+      
         if ((interaction.channel.id != process.env.CHANNELID) && (interaction.channel.id != process.env.CHANNELIDDEV)) { 
             interaction.reply({ content: `Please use these commands over in <#${process.env.CHANNELID}>.`, flags: discord.MessageFlags.Ephemeral })
             return;
         }
-        if (commandFiles.includes(`${interaction.commandName}.js`)) {
-            const cmd = require(path.join(commandsPath, `${interaction.commandName}.js`))
-            cmd.execute(interaction);
-        }
+
+        commands.get(interaction.commandName)?.execute(interaction);
     }
     catch (err) {
         console.log(err);

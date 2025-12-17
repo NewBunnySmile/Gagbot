@@ -72,6 +72,25 @@ const getChastityKeys = (user) => {
     return keysheld
 }
 
+const getChastityKeyholder = (user) => {
+    if (process.chastity == undefined) { process.chastity = {} }
+    return process.chastity[user]?.keyholder;
+}
+
+// transfer keys and returns whether the transfer was successful
+const transferChastityKey = (lockedUser, newKeyholder) => {
+    if (process.chastity == undefined) { process.chastity = {} }
+    if (process.chastity[lockedUser]) {
+        if (process.chastity[lockedUser].keyholder != newKeyholder) {
+            process.chastity[lockedUser].keyholder = newKeyholder;
+            fs.writeFileSync(`${process.GagbotSavedFileDirectory}/chastityusers.txt`, JSON.stringify(process.chastity));
+            return true;
+        }
+    }
+
+    return false;
+}
+
 function stutterText(text, intensity=5) {
     function aux(text) {
         outtext = '';
@@ -119,5 +138,7 @@ exports.removeVibe = removeVibe
 exports.stutterText = stutterText
 
 exports.getChastityKeys = getChastityKeys;
+exports.getChastityKeyholder = getChastityKeyholder;
+exports.transferChastityKey = transferChastityKey
 
 console.log(getChastityKeys("125093095405518850"))
