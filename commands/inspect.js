@@ -1,8 +1,9 @@
 const { SlashCommandBuilder, MessageFlags } = require('discord.js');
 const { getMitten, getGag, convertGagText, getGagIntensity } = require('./../functions/gagfunctions.js')
-const { getChastity, getVibe, getChastityKeys } = require('./../functions/vibefunctions.js')
+const { getChastity, getVibe, getChastityKeys, getChastityTimelock } = require('./../functions/vibefunctions.js')
 const { getCollar, getCollarPerm, getCollarKeys } = require('./../functions/collarfunctions.js')
 const { getHeavy } = require('./../functions/heavyfunctions.js')
+const { getCorset } = require('./../functions/corsetfunctions.js')
 const { getPronouns, getPronounsSet } = require('./../functions/pronounfunctions.js')
 
 module.exports = {
@@ -46,7 +47,10 @@ module.exports = {
             }
             // Chastity status
             if (getChastity(inspectuser.id)) {
-                if (getChastity(inspectuser.id).keyholder == inspectuser.id) {
+                if (getChastityTimelock(inspectuser.id)) {
+                    outtext = `${outtext}<:Chastity:1073495208861380629> Chastity: **Timelocked until ${getChastityTimelock(inspectuser.id, true)}**\n`
+                }
+                else if (getChastity(inspectuser.id).keyholder == inspectuser.id) {
                     // Self bound!
                     outtext = `${outtext}<:Chastity:1073495208861380629> Chastity: **Self-bound!**\n`
                 }
@@ -56,6 +60,21 @@ module.exports = {
             }
             else {
                 outtext = `${outtext}<:Chastity:1073495208861380629> Chastity: Not currently worn.\n`
+            }
+            // Corset status
+            if (getCorset(inspectuser.id)) {
+                if (getCorset(inspectuser.id).tightness > 7) {
+                    outtext = `${outtext}<:corset:1451126998192881684> Corset: **Laced tightly to a string length of ${getCorset(inspectuser.id).tightness}**\n`
+                }
+                else if (getCorset(inspectuser.id).tightness > 4) {
+                    outtext = `${outtext}<:corset:1451126998192881684> Corset: **Laced moderately to a string length of ${getCorset(inspectuser.id).tightness}**\n`
+                }
+                else {
+                    outtext = `${outtext}<:corset:1451126998192881684> Corset: **Laced loosely to a string length of ${getCorset(inspectuser.id).tightness}**\n`
+                }
+            }
+            else {
+                outtext = `${outtext}<:corset:1451126998192881684> Corset: Not currently worn.\n`
             }
             // Heavy Bondage status
             if (getHeavy(inspectuser.id)) {
