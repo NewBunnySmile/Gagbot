@@ -16,7 +16,7 @@ module.exports = {
   async execute(interaction) {
     const actiontotake = interaction.options.getSubcommand();
     const wearer = interaction.options.getUser("wearer") ?? interaction.user;
-    const tempKeyholder = interaction.options.getUser("wearer");
+    const tempKeyholder = interaction.options.getUser("keyholder");
 
     switch (actiontotake) {
       case "chastity":
@@ -34,6 +34,22 @@ module.exports = {
             flags: MessageFlags.Ephemeral,
           });
           return;
+        }
+
+        if (getHeavy(interaction.user.id)) {
+          if (wearer == interaction.user) {
+            interaction.reply(
+              `${interaction.user} wriggles ${getPronouns(mitteneduser.id, "possessiveDeterminer")} hands in their ${
+                getHeavy(interaction.user.id).type
+              }, but can't get good leverage to take ${getPronouns(mitteneduser.id, "possessiveDeterminer")} mittens off!`
+            );
+          } else {
+            interaction.reply(
+              `${interaction.user} uses ${getPronouns(interaction.user.id, "possessiveDeterminer")} nose because of ${getPronouns(interaction.user.id, "possessiveDeterminer")} ${
+                getHeavy(interaction.user.id).type
+              }, but can't help ${mitteneduser} out of ${getPronouns(mitteneduser.id, "possessiveDeterminer")} mittens!`
+            );
+          }
         }
 
         interaction.showModal(timelockChastityModal(interaction, wearer, tempKeyholder));
