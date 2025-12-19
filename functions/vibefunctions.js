@@ -212,7 +212,7 @@ function getStutterChance(user) {
     const chastity = getChastity(user);
     if (chastity) {
       const hoursBelted = (Date.now() - chastity.timestamp) / (60 * 60 * 1000);
-      chance += calcFrustration(hoursBelted);
+      chance += calcFrustration(hoursBelted) / 10;
     }
   }
   return chance / 100;

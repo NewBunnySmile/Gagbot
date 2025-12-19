@@ -79,7 +79,7 @@ function getFumbleChance(user) {
     process.keyfumbling = {};
   }
   if (!optins.getKeyFumbling(user)) return 0;
-  let chance = getArousal(user);
+  let chance = getArousal(user) / 10;
   const chastity = getChastity(user);
   if (chastity) {
     const hoursBelted = Date.now() - chastity.timestamp / (60 * 60 * 1000);
