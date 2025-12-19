@@ -16,6 +16,7 @@ function timelockChastity(client, wearer, keyholder, unlockTime, access, keyhold
   if (access == 2) chastity.keyholder = null;
   chastity.unlockTime = unlockTime;
   chastity.access = access;
+  console.log(`timelock set to unlock in ${unlockTime - now} ms`);
   setTimeout(() => {
     unlockTimelockChastity(client, wearer);
   }, unlockTime - now);
@@ -44,11 +45,14 @@ function restartChastityTimers(client) {
   const toUnlock = [];
   for (const wearer in process.chastity) {
     const unlockTime = process.chastity[wearer]?.unlockTime;
-    if (unlockTime >= now) toUnlock.push(wearer);
-    else
+    if (!unlockTime) continue;
+    if (unlockTime <= now) toUnlock.push(wearer);
+    else {
+      console.log(`timelock set to unlock in ${unlockTime - now} ms`);
       setTimeout(() => {
         unlockTimelockChastity(client, wearer);
       }, unlockTime - now);
+    }
   }
   for (const wearer of toUnlock) {
     unlockTimelockChastity(client, wearer, true);
