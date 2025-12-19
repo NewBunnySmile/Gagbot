@@ -12,6 +12,15 @@ module.exports = {
     const wearer = split[1];
     if (keyholder == wearer && split[2]) keyholder = split[2];
     const timeString = interaction.fields.getTextInputValue("timelockinput");
+    const timeStringSplit = timeString.split("-");
+    if (timeStringSplit.length > 2) {
+      interaction.reply({
+        content: "A range must be between exactly 2 values",
+        flags: MessageFlags.Ephemeral,
+      });
+      return;
+    }
+
     let access;
     switch (interaction.fields.getStringSelectValues("accesswhilebound")[0]) {
       case "access_others":
@@ -49,9 +58,17 @@ module.exports = {
         return;
     }
 
-    const unlockTime = parseTime(timeString);
+    if (timeStringSplit.length == 1) {
+      const unlockTime = parseTime(timeString);
+      interaction.reply(buildConfirmMessage(wearer, keyholder, unlockTime.getTime(), null, access, keyholderAfter));
+    } else {
+      const unlockTime1 = parseTime(timeStringSplit[0]);
+      const unlockTime2 = parseTime(timeStringSplit[1]);
 
-    interaction.reply(buildConfirmMessage(wearer, keyholder, unlockTime.getTime(), access, keyholderAfter));
+      if (unlockTime1 < unlockTime2) interaction.reply(buildConfirmMessage(wearer, keyholder, unlockTime1.getTime(), unlockTime2.getTime(), access, keyholderAfter));
+      else if (unlockTime1 > unlockTime2) interaction.reply(buildConfirmMessage(wearer, keyholder, unlockTime2.getTime(), unlockTime1.getTime(), access, keyholderAfter));
+      else interaction.reply(buildConfirmMessage(wearer, keyholder, unlockTime1.getTime(), null, access, keyholderAfter));
+    }
   },
   componentHandlers: [
     {
@@ -82,9 +99,12 @@ module.exports = {
   ],
 };
 
-function buildConfirmMessage(wearer, keyholder, unlockTime, access, keyholderAfter) {
+function buildConfirmMessage(wearer, keyholder, minUnlockTime, maxUnlockTime, access, keyholderAfter) {
+  const timeString = maxUnlockTime ? `<t:${(minUnlockTime / 1000) | 0}:f> - <t:${(maxUnlockTime / 1000) | 0}:f>` : `<t:${(minUnlockTime / 1000) | 0}:f>`;
+  const unlockTime = maxUnlockTime ? Math.floor(minUnlockTime + Math.random() * (maxUnlockTime - minUnlockTime)) : minUnlockTime;
+
   return {
-    content: `# Timelock (Chastity Belt)\nConfirm locking the belt until <t:${(unlockTime / 1000) | 0}:f>\nNote: Frustration may cause the actual unlock time to be later`,
+    content: `# Timelock (Chastity Belt)\nConfirm locking the belt until ${timeString}\nNote: Frustration may cause the actual unlock time to be later`,
     flags: MessageFlags.Ephemeral,
     components: [
       {

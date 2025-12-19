@@ -243,6 +243,7 @@ This will lock ${wearer}'s belt for a set period of time. Please configure your 
 
     const labeltimelockamt = new LabelBuilder()
         .setLabel(`How long should the timelock be?`)
+        .setDescription("This can be a range like `1 hour - 24 hours`")
         .setTextInputComponent(timelockamt)
 
     const labelaccesswhilebound = new LabelBuilder()
