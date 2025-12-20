@@ -5,6 +5,7 @@ const path = require('path');
 const https = require('https');
 const { garbleMessage } = require(`./functions/gagfunctions.js`);
 const { restartChastityTimers } = require('./functions/timelockfunctions.js');
+const { loadHeavyTypes } = require('./functions/heavyfunctions.js')
 
 dotenv.config()
 
@@ -114,6 +115,8 @@ try {
 } catch (err) { 
     console.log(err);
 }
+
+loadHeavyTypes();       // Load heavy types into memory for fast autocomplete access
 
 // Grab all the command files from the commands directory
 const commands = new Map();
