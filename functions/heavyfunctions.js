@@ -91,6 +91,7 @@ const removeHeavy = (user) => {
 }
 
 exports.loadHeavyTypes = loadHeavyTypes
+exports.heavytypes = heavytypes
 exports.assignHeavy = assignHeavy
 exports.getHeavy = getHeavy
 exports.removeHeavy = removeHeavy
