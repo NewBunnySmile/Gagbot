@@ -141,6 +141,8 @@ catch (err) {
 
 loadHeavyTypes();       // Load heavy types into memory for fast autocomplete access
 
+loadHeavyTypes();       // Load heavy types into memory for fast autocomplete access
+
 // Grab all the command files from the commands directory
 const commands = new Map();
 const modalHandlers = new Map();
