@@ -87,7 +87,7 @@ function getFumbleChance(keyholder, locked) {
   if (!optins.getKeyFumbling(keyholder)) return 0;
   if (keyholder != locked && !optins.getFumbleOthersKeys(keyholder)) return 0;
   if (keyholder != locked && !optins.getOthersKeyFumbling(locked)) return 0;
-  let chance = getArousal(keyholder) / 10;
+  let chance = getArousal(keyholder);
   const chastity = getChastity(keyholder);
   if (chastity) {
     const hoursBelted = Date.now() - chastity.timestamp / (60 * 60 * 1000);
