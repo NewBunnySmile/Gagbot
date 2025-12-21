@@ -25,7 +25,7 @@ const assignCorset = (user, tightness = 5) => {
     tightness: tightness,
     maxBreath: maxBreath,
     breathRecovery: breathRecovery,
-    breath: currentBreath ? (currentBreath < maxBreath ? maxBreath : currentBreath) : maxBreath,
+    breath: currentBreath ? (currentBreath > maxBreath ? maxBreath : currentBreath) : maxBreath,
     timestamp: Date.now(),
   };
   fs.writeFileSync(`${process.GagbotSavedFileDirectory}/corsetusers.txt`, JSON.stringify(process.corset));
@@ -65,22 +65,21 @@ function corsetLimitWords(user, text) {
         if (char == "!") corset.breath -= 5 * globalMultiplier;
       }
 
-      // add gasping sounds once at half of max breath, guaranteed at -max
-      if (!silence && corset.breath < corset.maxBreath / 2 && Math.random() > (corset.breath + corset.maxBreath) / (corset.maxBreath * 2)) {
+      // add gasping sounds once at half of max breath
+      if (!silence && corset.breath < corset.maxBreath / 2 && Math.random() > (corset.breath + corset.maxBreath) / (corset.tightness * corset.maxBreath * 0.2)) {
         newwordsinmessage.push(gaspSounds[Math.floor(Math.random() * gaspSounds.length)]);
       }
 
       // SILENCE BOTTOM
-      if (corset.tightness >= 5) word = word.replace("!", "");
+      if (!silence && corset.tightness >= 5) word = word.replace(/\!+/, "");
 
       // remove letters if out of breath
-      if (corset.breath < 0) {
+      if (!silence && corset.breath < 0) {
         const toRemove = Math.floor((Math.random() * word.length * -corset.breath) / corset.maxBreath);
-        console.log(toRemove);
         if (toRemove >= word.length) {
           // shortcut if all silence
           let newWord = "";
-          for (let i = 0; i < word.length; i++) newWord += silenceReplacers[Math.floor(Math.random() * silenceReplacers.length)];
+          for (let i = 0; i < word.length; i++) newWord += silenceReplacers[Math.floor((1 - Math.random() * Math.random()) * silenceReplacers.length)];
           word = newWord;
         } else {
           // inneffient for long words but shouldnt be a problem
@@ -105,7 +104,12 @@ function corsetLimitWords(user, text) {
   }
   fs.writeFileSync(`${process.GagbotSavedFileDirectory}/corsetusers.txt`, JSON.stringify(process.corset));
   let outtext = newwordsinmessage.join(" ");
-  if (getCorset(user).tightness >= 7) return `-# ${outtext.replace("-#", "")}`; // Replace other instances of small speak so we only have one.
+  // Replace other instances of small speak so we only have one.
+  if (getCorset(user).tightness >= 7)
+    return outtext
+      .split("\n")
+      .map((line) => (line.length > 0 ? `-# ${line.replace("-#", "")}` : ""))
+      .join("\n");
   return outtext;
 }
 
