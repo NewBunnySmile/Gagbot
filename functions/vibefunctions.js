@@ -319,7 +319,7 @@ function tryOrgasm(user) {
   const releaseStrength = RELEASE_STRENGTH;
   const canOrgasm = now - (process.arousal[user]?.lastOrgasm ?? 0) >= ORGASM_COOLDOWN;
 
-  if (canOrgasm && arousal.prev >= (UNBELTED_DECAY * orgasmLimit) / denialCoefficient) {
+  if (canOrgasm && arousal.prev * (1 + Math.random()) / 2 >= (UNBELTED_DECAY * orgasmLimit) / denialCoefficient) {
     process.arousal[user].lastOrgasm = now;
     addArousal(user, -(decayCoefficient * decayCoefficient * releaseStrength * orgasmLimit) / UNBELTED_DECAY);
   }
