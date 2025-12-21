@@ -32,7 +32,7 @@ module.exports = {
 			await interaction.respond(heaviestoreturn)
 		}
 		else {
-			let heavies = commandsheavy.filter((f) => (f.name.toLowerCase()).includes(focusedValue.toLowerCase())).slice(0,10)
+			let heavies = process.heavytypes.filter((f) => (f.name.toLowerCase()).includes(focusedValue.toLowerCase())).slice(0,10)
 			await interaction.respond(heavies)
 		}
 	},
