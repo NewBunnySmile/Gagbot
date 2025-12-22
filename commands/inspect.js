@@ -3,7 +3,7 @@ const { getMitten, getGag, convertGagText, getGagIntensity } = require('./../fun
 const { getChastity, getVibe, getChastityKeys, getChastityTimelock } = require('./../functions/vibefunctions.js')
 const { getCollar, getCollarPerm, getCollarKeys } = require('./../functions/collarfunctions.js')
 const { getHeavy } = require('./../functions/heavyfunctions.js')
-const { getCorset, TIGHT_BREAKPOINT, EXTREME_BREAKPOINT } = require('./../functions/corsetfunctions.js')
+const { getCorset } = require('./../functions/corsetfunctions.js')
 const { getPronouns, getPronounsSet } = require('./../functions/pronounfunctions.js')
 
 module.exports = {
@@ -69,10 +69,10 @@ module.exports = {
             }
             // Corset status
             if (getCorset(inspectuser.id)) {
-                if (getCorset(inspectuser.id).tightness > EXTREME_BREAKPOINT) {
+                if (getCorset(inspectuser.id).tightness > 10) {
                     outtext = `${outtext}<:corset:1451126998192881684> Corset: **Laced beyond reason to a string length of ${getCorset(inspectuser.id).tightness}**\n`
                 }
-                if (getCorset(inspectuser.id).tightness >= TIGHT_BREAKPOINT) {
+                if (getCorset(inspectuser.id).tightness > 7) {
                     outtext = `${outtext}<:corset:1451126998192881684> Corset: **Laced tightly to a string length of ${getCorset(inspectuser.id).tightness}**\n`
                 }
                 else if (getCorset(inspectuser.id).tightness > 4) {

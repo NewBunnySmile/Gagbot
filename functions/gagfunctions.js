@@ -169,14 +169,23 @@ const garbleMessage = async (msg) => {
         // Now corset any words, using an amount to start with.
         if (getCorset(msg.author.id)) {
             modifiedmessage = true
+            const toRemove = [];
             for (let i = 0; i < messageparts.length; i++) {
                 try {
                     if (messageparts[i].garble) {
                         messageparts[i].text = corsetLimitWords(msg.author.id, messageparts[i].text)
+                        if (messageparts[i].text.length == 0) toRemove.push(i);
                         messageparts[i].text = `${messageparts[i].text}\n`
                     }
                 }
                 catch (err) { console.log(err) }
+            }
+            for (let i = toRemove.length - 1; i >= 0; i--) {
+                messageparts.splice(toRemove[i], 1);
+            }
+            if (messageparts.length == 0) {
+                msg.delete();
+                return;
             }
         }
         // Gags now

@@ -57,6 +57,8 @@ function corsetLimitWords(user, text) {
         if (char == "!") corset.breath -= 5 * globalMultiplier;
       }
 
+      if (corset.breath < -corset.maxBreath && newwordsinmessage.length > 5 - Math.ceil(corset.tightness / 2)) silence = true;
+
       // add gasping sounds once at half of max breath
       if (!silence && corset.breath < corset.maxBreath / 2 && Math.random() > (corset.breath + corset.maxBreath) / (corset.tightness * corset.maxBreath * 0.2)) {
         newwordsinmessage.push(gaspSounds[Math.floor(Math.random() * gaspSounds.length)]);
@@ -90,11 +92,11 @@ function corsetLimitWords(user, text) {
         }
       }
 
-      if (corset.breath < -corset.maxBreath && newwordsinmessage.length > 5) silence = true;
       if (!silence) newwordsinmessage.push(word);
     }
   }
   fs.writeFileSync(`${process.GagbotSavedFileDirectory}/corsetusers.txt`, JSON.stringify(process.corset));
+  if (newwordsinmessage.length == 0) return "";
   let outtext = newwordsinmessage.join(" ");
   // Replace other instances of small speak so we only have one.
   if (getCorset(user).tightness >= 7)
@@ -146,7 +148,5 @@ exports.getCorset = getCorset;
 exports.removeCorset = removeCorset;
 exports.corsetLimitWords = corsetLimitWords;
 
-exports.TIGHT_BREAKPOINT = TIGHT_BREAKPOINT;
-exports.EXTREME_BREAKPOINT = EXTREME_BREAKPOINT;
 exports.getBreath = getBreath;
 exports.tryExpendBreath = tryExpendBreath;
