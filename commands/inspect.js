@@ -33,10 +33,10 @@ module.exports = {
             }
             // Mitten status
             if (getMitten(inspectuser)) {
-                outtext = `${outtext}<:Hand:1098086504598884402> Mittens: **WORN**\n`
+                outtext = `${outtext}<:mittens:1452425463757803783> Mittens: **WORN**\n`
             }
             else {
-                outtext = `${outtext}<:Hand:1098086504598884402> Mittens: Not currently worn.\n`
+                outtext = `${outtext}<:mittens:1452425463757803783> Mittens: Not currently worn.\n`
             }
             // Vibe status
             if (getVibe(inspectuser.id)) {
@@ -96,7 +96,12 @@ module.exports = {
             if (getCollar(inspectuser.id)) {
                 if (!getCollar(inspectuser.id).keyholder_only) {
                     // Free use!
-                    outtext = `${outtext}<:collar:1449984183261986939> Collar: **Unlocked and free use!**\n`
+                    if (getCollar(inspectuser.id).keyholder == inspectuser.id) {
+                        outtext = `${outtext}<:collar:1449984183261986939> Collar: **Self-bound and free use!**\n`
+                    }
+                    else {
+                        outtext = `${outtext}<:collar:1449984183261986939> Collar: **Key held by <@${getCollar(inspectuser.id).keyholder}>, free use!**\n`
+                    }
                 }
                 else if (getCollar(inspectuser.id).keyholder == inspectuser.id) {
                     // Self bound!

@@ -7,6 +7,7 @@ const { garbleMessage } = require(`./functions/gagfunctions.js`);
 const { restartChastityTimers } = require('./functions/timelockfunctions.js');
 const { loadHeavyTypes } = require('./functions/heavyfunctions.js');
 const { assignCorset } = require('./functions/corsetfunctions.js');
+const { assignMemeImages } = require('./functions/interactivefunctions.js')
 
 dotenv.config()
 
@@ -122,6 +123,7 @@ try {
 }
 
 loadHeavyTypes();       // Load heavy types into memory for fast autocomplete access
+assignMemeImages();
 
 // Grab all the command files from the commands directory
 const commands = new Map();

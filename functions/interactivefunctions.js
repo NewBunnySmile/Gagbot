@@ -261,8 +261,32 @@ This will lock ${wearer}'s belt for a set period of time. Please configure your 
     return modal;
 }
 
+// Assigns images to the process variable memes. Called once during index.js startup. 
+// Is this needed? Heck no. But I want it. For the Absolute Cinema meme. 
+// The feature creep has really sunk in hasn't it.
+// This will get posted in the server because of my comments won't it?
+// Well. Hi everyone! 
+// I hope you're well. 
+// Enjoy your Absolute Cinemeow. 
+const assignMemeImages = () => {
+    // Grab all the image files from the images directory
+    const memeimages = [];
+    const imagespath = path.join(__dirname, '..', 'memes');
+    const imagefiles = fs.readdirSync(imagespath);
+    imagefiles.forEach((i) => {
+        if (i.endsWith(".png")) {
+            memeimages.push(
+                { name: i.slice(0, -4), value: i.slice(0, -4) }
+            );
+        }
+    })
+    process.memes = memeimages
+}
+
 exports.consentMessage = consentMessage
 exports.getConsent = getConsent
 exports.handleConsent = handleConsent
 exports.collarPermModal = collarPermModal
 exports.timelockChastityModal = timelockChastityModal
+
+exports.assignMemeImages = assignMemeImages

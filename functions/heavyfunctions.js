@@ -47,6 +47,7 @@ const heavytypes = [
     { name: "Hogtie", value: "rope_hogtie" },
     { name: "Latex Sphere", value: "sphere_latex" },
     { name: "Shrimp Tie", value: "rope_shrimp" },
+    { name: "Blanket Burrito", value: "blanket_burrito" },
 ];
 
 
