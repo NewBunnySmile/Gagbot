@@ -5,12 +5,12 @@ const MAX_BREATH_TABLE = [2000, 620, 500, 410, 330, 280, 240, 195, 160, 130, 105
 const BREATH_RECOVERY_EXPONENT = 1.1;
 const BREATH_RECOVERY_COEFFICIENT = 0.01;
 
-const gaspSounds = ["*hff*", "*hnnf*", "*ahff*", "*hhh*", "*nnn*"];
+const gaspSounds = ["*hff*", "*hnnf*", "*ahff*", "*hhh*", "*nnn*", "*hnn*"];
 const silenceReplacers = [" ", ".", ",", ""];
 
 const assignCorset = (user, tightness = 5) => {
   if (process.corset == undefined) process.corset = {};
-  const currentBreath = process.corset[user]?.breath;
+  const currentBreath = getBreath(user);
   const maxBreath = calcMaxBreath(tightness);
   const breathRecovery = calcBreathRecovery(maxBreath);
   process.corset[user] = {
