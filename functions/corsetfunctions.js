@@ -10,7 +10,7 @@ const silenceReplacers = [" ", ".", ",", ""];
 
 const assignCorset = (user, tightness = 5) => {
   if (process.corset == undefined) process.corset = {};
-  const currentBreath = getBreath(user);
+  const currentBreath = process.corset[user] ? getBreath(user) : null;
   const maxBreath = calcMaxBreath(tightness);
   const breathRecovery = calcBreathRecovery(maxBreath);
   process.corset[user] = {
