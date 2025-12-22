@@ -45,6 +45,8 @@ function corsetLimitWords(user, text) {
   let wordsinmessage = text.split(" ");
   let newwordsinmessage = [];
   for (const i in wordsinmessage) {
+    if (!corset.maxBreath) break;
+
     let word = wordsinmessage[i];
     if (word.length == 0) {
       if (!silence) newwordsinmessage.push(word);
