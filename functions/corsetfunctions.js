@@ -74,7 +74,7 @@ function corsetLimitWords(user, text) {
       }
 
       // SILENCE BOTTOM
-      if (!silence && corset.tightness >= 5) word = word.replaceAll("!", "");
+      if (!silence && corset.tightness >= 5) word = word.replaceAll("!", "~");
 
       // remove letters if out of breath
       if (!silence && corset.breath < 0) {
