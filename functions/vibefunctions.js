@@ -394,6 +394,7 @@ function tryOrgasm(user) {
 }
 
 function setArousalCooldown(user) {
+  const now = Date.now();
   process.arousal[user].timestamp = now + ORGASM_COOLDOWN;
   process.arousal[user].prev = 0;
   process.arousal[user].prev2 = 0;
