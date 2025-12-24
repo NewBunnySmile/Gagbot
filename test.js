@@ -4,11 +4,11 @@ let object = {
     textarray: "texts_chastity",
     textdata: { 
         interactionuser: { id: "125093095405518850" },
-        targetuser: { id: "185614860942442496" },
-        c1: "Latex Armbinder"
+        targetuser: { id: "185614860942442496" }
     },
-    heavy: true,
-    chastity: true
+    noheavy: true,
+    chastity: true,
+    key_self: true
 }
 
 console.log(getText(object))
