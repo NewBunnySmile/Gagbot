@@ -41,6 +41,7 @@ function onOptinChange(user, offset, newValue) {
     setOptin(user, 2);
     if (process.vibe && process.vibe[user]) delete process.vibe[user];
     if (process.arousal && process.arousal[user]) delete process.arousal[user];
+    fs.writeFileSync(`${process.GagbotSavedFileDirectory}/arousal.txt`, JSON.stringify(process.arousal));
   }
 }
 

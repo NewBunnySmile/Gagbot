@@ -345,6 +345,7 @@ function addArousal(user, change) {
 function clearArousal(user) {
   if (process.arousal == undefined) process.arousal = {};
   process.arousal[user] = { prev: 0, prev2: 0, timestamp: Date.now(), lastOrgasm: 0 };
+  fs.writeFileSync(`${process.GagbotSavedFileDirectory}/arousal.txt`, JSON.stringify(process.arousal));
 }
 
 function calcNextArousal(prev, prev2, growthCoefficient, decayCoefficient, timeStep) {
