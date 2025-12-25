@@ -236,13 +236,34 @@ const texts_corset = {
                         `USER_TAG grabs the strings on TARGET_TAG's corset, bracing with USER_THEIR knee, and pulling them even tighter! The length of the strings hanging off of the corset is now at VAR_C2!`
                     ],
                     loosen: [
-                        `USER_TAG grabs the strings on USER_THEIR corset, carefully loosening them with a sigh of relief! The length of the strings hanging off of the corset is now at VAR_C2!`
+                        `USER_TAG grabs the strings on TARGET_TAG's corset, tugging on the laces carefully to loosen them a bit! The length of the strings hanging off of the corset is now at VAR_C2!`
                     ]
                 },
                 nocorset: [
-                    `USER_TAG wraps a corset around USER_THEIR waist, pulling the strings taut, and then further, leaving the length of the strings at VAR_C2!`
+                    `USER_TAG wraps a corset around TARGET_TAG's waist, pulling the strings taut, and then further, leaving the length of the strings at VAR_C2!`
                 ]
             }
+        }
+    }
+}
+
+const texts_gag = {
+    heavy: {
+        self: {
+            gag: [
+
+            ],
+            nogag: [
+
+            ]
+        },
+        other: {
+            gag: [
+
+            ],
+            nogag: [
+
+            ]
         }
     }
 }
@@ -252,8 +273,8 @@ const textarrays = {
     texts_chastity: texts_chastity,
     texts_collar: texts_collar,
     texts_collarequip: texts_collarequip,
-    //texts_corset: texts_corset,
-    //texts_gag: texts_gag
+    texts_corset: texts_corset,
+    texts_gag: texts_gag
 }
 
 
