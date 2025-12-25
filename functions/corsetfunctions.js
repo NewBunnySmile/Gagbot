@@ -7,6 +7,7 @@ const BREATH_RECOVERY_COEFFICIENT = 0.01;
 
 const gaspSounds = ["*hff*", "*hnnf*", "*ahff*", "*hhh*", "*nnn*", "*hnn*"];
 const silenceReplacers = [" ", ".", ",", ""];
+const specialCharacterCosts = new Map(["!", 4], ["-", 0]);
 
 const assignCorset = (user, tightness = 5) => {
   if (process.corset == undefined) process.corset = {};
@@ -54,13 +55,14 @@ function corsetLimitWords(user, text) {
     if (word.length == 0) {
       if (!silence) newwordsinmessage.push(word);
     } else {
-      corset.breath -= (word.length > 3 ? word.length : 3) * globalMultiplier;
       for (const char of word) {
         // Capitals cost more breath
         if (char > 64 && char < 91) corset.breath -= globalMultiplier;
-        // I said SILENCE bottom
-        if (char == "!") corset.breath -= 5 * globalMultiplier;
+        const cost = specialCharacterCosts.get(char) ?? 1;
+        corset.breath -= cost * globalMultiplier;
       }
+
+      if (word.length < 3) corset.breath -= (3 - word.length) * globalMultiplier;
 
       if (corset.breath < -2 * corset.maxBreath && newwordsinmessage.length > 5 - Math.ceil(corset.tightness / 2)) silence = true;
 
