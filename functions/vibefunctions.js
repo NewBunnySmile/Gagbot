@@ -357,7 +357,7 @@ function clearArousal(user) {
 
 function calcNextArousal(prev, prev2, growthCoefficient, decayCoefficient, timeStep) {
   const noDecay = prev + timeStep * growthCoefficient * Math.random();
-  let next = noDecay - timeStep * decayCoefficient * (prev + prev2 / 2);
+  let next = noDecay - timeStep * Math.max(decayCoefficient * (prev + prev2 / 2), 0.1);
   return next;
 }
 
