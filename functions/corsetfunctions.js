@@ -53,12 +53,18 @@ function corsetLimitWords(user, text) {
     if (word.length == 0) {
       if (!silence) newwordsinmessage.push(word);
     } else {
+      let capitals = 0;
       for (const char of word) {
-        // Capitals cost more breath
-        if (char > 64 && char < 91) corset.breath -= globalMultiplier;
+        if (char > 64 && char < 91) capitals++;
         const cost = specialCharacterCosts.get(char) ?? 1;
         corset.breath -= cost * globalMultiplier;
       }
+
+      // Capitals cost more breath
+      corset.breath -= globalMultiplier * capitals;
+
+      // Shouting is not fitting for a bottom
+      if (corset.tightness >= 3 && capitals > 1) word = toLowerCase();
 
       if (word.length < 3) corset.breath -= (3 - word.length) * globalMultiplier;
 
