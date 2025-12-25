@@ -205,16 +205,44 @@ const texts_corset = {
             nokey: {
                 self: {
                     corset: [
-
+                        `USER_TAG tugs at USER_THEIR corset, but since USER_THEY can't unlock USER_THEIR chastity belt, USER_THEY will have to tolerate the lightheadedness!`
                     ],
                     nocorset: [
-                        
+                        `USER_TAG dances USER_THEIR fingers on USER_THEIR belt while eying a corset, but USER_THEY won't be able to put it on because USER_THEY can't unlock USER_THEIR chastity belt!`
                     ]
-                }
+                },
+                other: [
+                    `You do not have the key for TARGET_TAG's chastity belt!`
+                ]
             }
         },
         nochastity: {
-
+            self: {
+                corset: {
+                    tighten: [
+                        `USER_TAG grabs the strings on USER_THEIR corset, pulling them even tighter! The length of the strings hanging off of the corset is now at VAR_C2! USER_THEIR_CAP breaths become shallower.`
+                    ],
+                    loosen: [
+                        `USER_TAG grabs the strings on USER_THEIR corset, carefully loosening them with a sigh of relief! The length of the strings hanging off of the corset is now at VAR_C2!`
+                    ]
+                },
+                nocorset: [
+                    `USER_TAG wraps a corset around USER_THEIR waist, pulling the strings taut, and then further, leaving the length of the strings at VAR_C2!`
+                ]
+            },
+            other: {
+                corset: {
+                    tighten: [
+                        `USER_TAG grabs the strings on TARGET_TAG's corset, bracing with USER_THEIR knee, and pulling them even tighter! The length of the strings hanging off of the corset is now at VAR_C2!`
+                    ],
+                    loosen: [
+                        `USER_TAG grabs the strings on USER_THEIR corset, carefully loosening them with a sigh of relief! The length of the strings hanging off of the corset is now at VAR_C2!`
+                    ]
+                },
+                nocorset: [
+                    `USER_TAG wraps a corset around USER_THEIR waist, pulling the strings taut, and then further, leaving the length of the strings at VAR_C2!`
+                ]
+            }
         }
     }
 }
