@@ -5,8 +5,8 @@ const { arousedtexts, arousedtextshigh } = require('../vibes/aroused/aroused_tex
 const { optins } = require('./optinfunctions');
 const { getHeavy, heavyDenialCoefficient } = require("./heavyfunctions.js");
 
-// the arousal under which calculations get reset to avoid long back-calculations
-const RESET_LIMT = 0.1;
+// the arousal under which it is treated as 0
+const RESET_LIMIT = 0.1;
 // the minimum arousal required for frustration to also impact speach
 const STUTTER_LIMIT = 1;
 // the arousal needed for an unbelted user to orgasm
@@ -233,7 +233,7 @@ function getVibeEquivalent(user) {
   if (!optins.getDynamicArousal(user)) return calcStaticVibeIntensity(user);
 
   let intensity = getArousal(user);
-  if (intensity < RESET_LIMT) intensity = 0;
+  if (intensity < RESET_LIMIT) intensity = 0;
   if (intensity >= STUTTER_LIMIT) {
     const chastity = getChastity(user);
     if (chastity) {
@@ -254,7 +254,7 @@ function getArousalDescription(user) {
   // these numbers are mostly arbitrary
   if (orgasmProgress > 1.4) return "Overstimulated";
   if (orgasmProgress > 0.9) return "On edge";
-  if (arousal < RESET_LIMT) return "Not aroused";
+  if (arousal < RESET_LIMIT) return "Not aroused";
   if (arousal < ORGASM_LIMIT * 0.3) return "A bit aroused";
   if (arousal < ORGASM_LIMIT * 0.8) return "Moderately aroused";
   if (arousal < ORGASM_LIMIT * 1.5) return "Very aroused";
@@ -283,20 +283,13 @@ function getArousal(user) {
   const now = Date.now();
   if (arousal.timestamp && arousal.timestamp > now) return arousal.prev;
   let timeStep = 1;
-  if (arousal.timestamp && arousal.prev > RESET_LIMT) {
+  if (arousal.timestamp) {
     timeStep = (now - arousal.timestamp) / (60 * 1000);
   }
   while (timeStep > 1) {
     const next = calcNextArousal(arousal.prev, arousal.prev2, calcGrowthCoefficient(user), calcDecayCoefficient(user), 1);
     arousal.prev2 = arousal.prev;
     arousal.prev = next;
-
-    // abort loop early if arousal goes below the reset limit
-    if (next < RESET_LIMT) {
-      timeStep = 1;
-      break;
-    }
-
     timeStep -= 1;
   }
   const next = calcNextArousal(arousal.prev, arousal.prev2, calcGrowthCoefficient(user), calcDecayCoefficient(user), timeStep);
@@ -319,7 +312,7 @@ function addArousal(user, change) {
     return arousal.prev;
   }
   let timeStep = 1;
-  if (arousal.timestamp && arousal.prev > RESET_LIMT) {
+  if (arousal.timestamp) {
     timeStep = (now - arousal.timestamp) / (60 * 1000);
   }
   // for large gaps, calculate it in steps
@@ -327,13 +320,6 @@ function addArousal(user, change) {
     const next = calcNextArousal(arousal.prev, arousal.prev2, calcGrowthCoefficient(user), calcDecayCoefficient(user), 1);
     arousal.prev2 = arousal.prev;
     arousal.prev = next;
-
-    // abort loop early if arousal goes below the reset limit
-    if (next < RESET_LIMT) {
-      timeStep = 1;
-      break;
-    }
-
     timeStep -= 1;
   }
   const next = calcNextArousal(arousal.prev, arousal.prev2, calcGrowthCoefficient(user), calcDecayCoefficient(user), timeStep) + change;
