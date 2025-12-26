@@ -54,8 +54,10 @@ module.exports = {
 			}
 			let gagtype = interaction.options.getString('gag') ? interaction.options.getString('gag') : 'ball'
 			let gagintensity = interaction.options.getNumber('intensity') ? interaction.options.getNumber('intensity') : 5
-			let gagname = gagtypes.find(g => g.value == gagtype).name;
-			let oldgagname = gagtypes.find(g => g.value == getGag(gaggeduser.id)?.gagtype).name;
+			let currentgag = getGag(gaggeduser.id)
+			console.log(currentgag)
+			let gagname = gagtypes.find(g => g.value == gagtype)?.name;
+			let oldgagname = gagtypes.find(g => g.value == currentgag)?.name;
 			let intensitytext = "loosely"
 			try {
 				let gagfile = require(path.join(commandsPath, `${gagtype}.js`))

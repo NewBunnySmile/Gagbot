@@ -126,6 +126,7 @@ module.exports = {
                     // ourselves
                     data.self = true
                     if ((getVibe(vibeuser.id) && (getVibe(vibeuser.id).some((vibe) => (vibe.vibetype == vibetype)) || (!vibetype)))) {
+                        data.hasvibe = true
                         if (getChastity(vibeuser.id)) {
                             // in chastity
                             data.chastity = true
@@ -225,6 +226,7 @@ module.exports = {
                     // them
                     data.other = true
                     if ((getVibe(vibeuser.id) && (getVibe(vibeuser.id).some((vibe) => (vibe.vibetype == vibetype)) || (!vibetype)))) {
+                        data.hasvibe = true
                         if (getChastity(vibeuser.id)) {
                             // in chastity
                             data.chastity = true

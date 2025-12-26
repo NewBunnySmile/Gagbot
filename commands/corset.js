@@ -51,6 +51,7 @@ module.exports = {
                 data.heavy = true
                 if (corsetuser == interaction.user) {
                     // Doing this to self
+                    data.self = true
                     if (getChastity(corsetuser.id)) {
                         data.chastity = true
                         interaction.reply(getText(data))
@@ -62,6 +63,7 @@ module.exports = {
                 }
                 else {
                     // To others
+                    data.other = true
                     if (getChastity(corsetuser.id)) {
                         data.chastity = true
                         interaction.reply(getText(data))
@@ -73,6 +75,7 @@ module.exports = {
                 }
             }
             else if (getChastity(corsetuser.id)) {
+                data.noheavy = true
                 data.chastity = true
                 // The target is in a chastity belt
                 if ((getChastity(corsetuser.id)?.keyholder == interaction.user.id || (getChastity(corsetuser.id)?.access === 0 && corsetuser.id != interaction.user.id))) {
@@ -202,6 +205,8 @@ module.exports = {
                     }
                 }
                 else {
+                    data.noheavy = true
+                    data.chastity = true
                     data.nokey = true
                     // User tries to modify corset settings but does not have the key for the belt
                     if (corsetuser == interaction.user) {

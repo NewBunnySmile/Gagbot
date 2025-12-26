@@ -327,7 +327,7 @@ const texts_letgo = {
         `USER_TAG squirms, trying to adjust the belt so USER_THEY can feel ***something***, but USER_THEY just can't get over the edge!`,
         `USER_TAG holds USER_THEIR breath, feverishly stroking the smooth belt USER_THEY USER_ISARE wearing, but USER_THEY just can't let go!`,
         `USER_TAG grinds on a near by object, trying to get that last little bit of sensation to let go... but USER_THEY just can't make it!`,
-        `USER_TAG buckles USER_THEIR legs, panting in short breaths as USER_THEY USER_TRY (and fail miserably) to get release!`
+        `USER_TAG buckles USER_THEIR legs, panting in short breaths as USER_THEY attempt to (and fail miserably) to get release!`
     ],
     heavy: [
         `USER_TAG shifts USER_THEIR legs to try to reach the peak! Too bad USER_THEIR VAR_C1 makes it hard to touch there!`,
@@ -674,7 +674,7 @@ const texts_unheavy = {
     },
     noheavy: {
         heavyequipped: [
-            `USER_TAG helps TARGET_TAG out of TARGET_THEIR VAR_C2! TARGET_THEY_CAP stretchTHEY_S TARGET_THEIR arms and sighTARGET_S with gratitude!`
+            `USER_TAG helps TARGET_TAG out of TARGET_THEIR VAR_C2! TARGET_THEY_CAP stretchTARGET_S TARGET_THEIR arms and sighTARGET_S with gratitude!`
         ],
         noheavyequipped: {
             self: [
@@ -1098,6 +1098,7 @@ const getText = (data) => {
         // At first I thought, a reducer might not be good performance. 
         // Then I remembered, javascript passes *objects* and *arrays* by reference.
         // This is gonna be so clever.
+        console.log(props)
         let sentencearr = props.reduce((prev, curr) => {
             return prev[curr];
         }, textarrays[textarray]);

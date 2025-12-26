@@ -27,7 +27,7 @@ module.exports = {
                     interactionuser: interaction.user,
                     targetuser: heavyuser,
                     c1: getHeavy(interaction.user.id)?.type, // heavy bondage type
-                    c2: getHeavy(targetuser.id) // Target's heavy bondage
+                    c2: getHeavy(heavyuser.id)?.type // Target's heavy bondage
                 }
             }
 

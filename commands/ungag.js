@@ -37,7 +37,7 @@ module.exports = {
                 if (gaggeduser == interaction.user) {
                     // Trying to ungag ourselves. 
                     data.self = true
-                    if (getGag(gaggeduser)) {
+                    if (getGag(gaggeduser.id)) {
                         // We are wearing a gag
                         data.gag = true
                         interaction.reply(getText(data))
@@ -51,7 +51,7 @@ module.exports = {
                 else {
                     // We are trying to ungag someone else
                     data.other = true
-                    if (getGag(gaggeduser)) {
+                    if (getGag(gaggeduser.id)) {
                         // They are wearing a gag
                         data.gag = true
                         interaction.reply(getText(data))
@@ -72,7 +72,7 @@ module.exports = {
                     if (gaggeduser == interaction.user) {
                         // Trying to ungag ourselves. 
                         data.self = true
-                        if (getGag(gaggeduser)) {
+                        if (getGag(gaggeduser.id)) {
                             // We are wearing a gag
                             data.gag = true
                             interaction.reply(getText(data))
@@ -86,7 +86,7 @@ module.exports = {
                     else {
                         // We are trying to ungag someone else
                         data.other = true
-                        if (getGag(gaggeduser)) {
+                        if (getGag(gaggeduser.id)) {
                             // They are wearing a gag
                             data.gag = true
                             interaction.reply(getText(data))
@@ -104,7 +104,7 @@ module.exports = {
                     if (gaggeduser == interaction.user) {
                         // Trying to ungag ourselves. 
                         data.self = true
-                        if (getGag(gaggeduser)) {
+                        if (getGag(gaggeduser.id)) {
                             // We are wearing a gag
                             data.gag = true
                             interaction.reply(getText(data))
@@ -119,7 +119,7 @@ module.exports = {
                     else {
                         // We are trying to ungag someone else
                         data.other = true
-                        if (getGag(gaggeduser)) {
+                        if (getGag(gaggeduser.id)) {
                             // They are wearing a gag
                             data.gag = true
                             interaction.reply(getText(data))
@@ -135,7 +135,7 @@ module.exports = {
             }
         }
         catch (err) {
-            
+            console.log(err)
         }
     }
 }

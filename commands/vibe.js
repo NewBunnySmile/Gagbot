@@ -148,6 +148,8 @@ module.exports = {
                     // ourselves
                     data.self = true
                     if ((getVibe(vibeuser.id) && (getVibe(vibeuser.id).some((vibe) => (vibe.vibetype == vibetype)) || (!vibetype)))) {
+                        // wearing the vibe right now
+                        data.vibe = true
                         if (getChastity(vibeuser.id)) {
                             // in chastity
                             data.chastity = true
@@ -231,15 +233,85 @@ module.exports = {
                     else {
                         // not wearing this kind of vibe
                         data.novibe = true
-                        if (vibetype) {
-                            // specific single vibe
-                            data.single = true
-                            interaction.reply({ content: getText(data), flags: MessageFlags.Ephemeral })
+                        if (getChastity(vibeuser.id)) {
+                            // in chastity
+                            data.chastity = true
+                            if ((getChastity(vibeuser.id)?.access == undefined) && getChastity(vibeuser.id).keyholder == interaction.user.id) {
+                                // We have the key to the belt and it is NOT timelocked
+                                data.key = true
+                                const fumbleResults = rollKeyFumbleN(interaction.user.id, vibeuser.id, 2);
+                                if (fumbleResults[0]) {
+                                    // User fumbles with the key due to their arousal and frustration
+                                    data.fumble = true
+                                    if (optins.getKeyDiscarding(vibeuser.id) && fumbleResults[1]) {
+                                        // lost the key
+                                        data.discard = true;
+                                        if (vibetype) {
+                                            // specific single vibe
+                                            data.single = true
+                                            interaction.reply(getText(data))
+                                            discardChastityKey(vibeuser.id)
+                                        }
+                                        else {
+                                            // removing all vibes
+                                            data.both = true
+                                            interaction.reply(getText(data))
+                                            discardChastityKey(vibeuser.id)
+                                        }
+                                    }
+                                    else {
+                                        // fumbled, but didnt lose key
+                                        data.nodiscard = true;
+                                        if (vibetype) {
+                                            // specific single vibe
+                                            data.single = true
+                                            interaction.reply(getText(data))
+                                        }
+                                        else {
+                                            // removing all vibes
+                                            data.both = true
+                                            interaction.reply(getText(data))
+                                        }
+                                    }
+                                }
+                                else {
+                                    // didnot fumble
+                                    data.nofumble = true;
+                                    if (vibetype) {
+                                        // specific single vibe
+                                        data.single = true
+                                        interaction.reply(getText(data))
+                                        assignVibe(vibeuser.id, vibeintensity, vibetype)
+                                    }
+                                    else {
+                                        // removing all vibes
+                                        data.both = true
+                                        interaction.reply(getText(data))
+                                        assignVibe(vibeuser.id, vibeintensity, vibetype)
+                                    }
+                                }
+                            }
+                            else {
+                                // We do not have the key
+                                data.nokey = true;
+                                interaction.reply({ content: getText(data), flags: MessageFlags.Ephemeral })
+                            }
                         }
                         else {
-                            // removing all vibes
-                            data.both = true
-                            interaction.reply({ content: getText(data), flags: MessageFlags.Ephemeral })
+                            // not in chastity
+                            data.nochastity = true
+                            if (vibetype) {
+                                // specific single vibe
+                                data.single = true
+                                interaction.reply(getText(data))
+                                assignVibe(vibeuser.id, vibeintensity, vibetype)
+                            }
+                            else {
+                                // removing all vibes
+                                data.both = true
+                                interaction.reply(getText(data))
+                                assignVibe(vibeuser.id, vibeintensity, vibetype)
+                            }
                         }
                     }
                 }
@@ -247,6 +319,8 @@ module.exports = {
                     // them
                     data.other = true
                     if ((getVibe(vibeuser.id) && (getVibe(vibeuser.id).some((vibe) => (vibe.vibetype == vibetype)) || (!vibetype)))) {
+                        // wearing the vibe right now
+                        data.vibe = true
                         if (getChastity(vibeuser.id)) {
                             // in chastity
                             data.chastity = true
@@ -347,19 +421,89 @@ module.exports = {
                     else {
                         // not wearing chosen vibrators or any
                         data.novibe = true
-                        if (vibetype) {
-                            // specific single vibe
-                            data.single = true
-                            interaction.reply({ content: getText(data), flags: MessageFlags.Ephemeral })
+                        if (getChastity(vibeuser.id)) {
+                            // in chastity
+                            data.chastity = true
+                            if ((getChastity(vibeuser.id)?.access == undefined) && getChastity(vibeuser.id).keyholder == interaction.user.id) {
+                                // We have the key to the belt and it is NOT timelocked
+                                data.key = true
+                                const fumbleResults = rollKeyFumbleN(interaction.user.id, vibeuser.id, 2);
+                                if (fumbleResults[0]) {
+                                    // User fumbles with the key due to their arousal and frustration
+                                    data.fumble = true
+                                    if (optins.getKeyDiscarding(vibeuser.id) && fumbleResults[1]) {
+                                        // lost the key
+                                        data.discard = true;
+                                        if (vibetype) {
+                                            // specific single vibe
+                                            data.single = true
+                                            interaction.reply(getText(data))
+                                            discardChastityKey(vibeuser.id)
+                                        }
+                                        else {
+                                            // removing all vibes
+                                            data.both = true
+                                            interaction.reply(getText(data))
+                                            discardChastityKey(vibeuser.id)
+                                        }
+                                    }
+                                    else {
+                                        // fumbled, but didnt lose key
+                                        data.nodiscard = true;
+                                        if (vibetype) {
+                                            // specific single vibe
+                                            data.single = true
+                                            interaction.reply(getText(data))
+                                        }
+                                        else {
+                                            // removing all vibes
+                                            data.both = true
+                                            interaction.reply(getText(data))
+                                        }
+                                    }
+                                }
+                                else {
+                                    // didnot fumble
+                                    data.nofumble = true;
+                                    if (vibetype) {
+                                        // specific single vibe
+                                        data.single = true
+                                        interaction.reply(getText(data))
+                                        assignVibe(vibeuser.id, vibeintensity, vibetype)
+                                    }
+                                    else {
+                                        // removing all vibes
+                                        data.both = true
+                                        interaction.reply(getText(data))
+                                        assignVibe(vibeuser.id, vibeintensity, vibetype)
+                                    }
+                                }
+                            }
+                            else {
+                                // We do not have the key
+                                data.nokey = true;
+                            }
                         }
                         else {
-                            // removing all vibes
-                            data.both = true
-                            interaction.reply({ content: getText(data), flags: MessageFlags.Ephemeral })
+                            // not in chastity
+                            data.nochastity = true
+                            if (vibetype) {
+                                // specific single vibe
+                                data.single = true
+                                interaction.reply(getText(data))
+                                assignVibe(vibeuser.id, vibeintensity, vibetype)
+                            }
+                            else {
+                                // removing all vibes
+                                data.both = true
+                                interaction.reply(getText(data))
+                                assignVibe(vibeuser.id, vibeintensity, vibetype)
+                            }
                         }
                     }
                 }
             }
+            console.log(data); // since I have no idea why vibe coding is failing. 
         }
         catch (err) {
             console.log(err)
