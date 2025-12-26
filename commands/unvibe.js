@@ -143,11 +143,13 @@ module.exports = {
                                             // specific single vibe
                                             data.single = true
                                             interaction.reply(getText(data))
+                                            discardChastityKey(vibeuser.id)
                                         }
                                         else {
                                             // removing all vibes
                                             data.both = true
                                             interaction.reply(getText(data))
+                                            discardChastityKey(vibeuser.id)
                                         }
                                     }
                                     else {
@@ -226,7 +228,7 @@ module.exports = {
                         if (getChastity(vibeuser.id)) {
                             // in chastity
                             data.chastity = true
-                            if (getChastity(vibeuser.id).keyholder == interaction.user.id) {
+                            if ((getChastity(vibeuser.id)?.access !== 2) && (getChastity(vibeuser.id).keyholder == interaction.user.id)) {
                                 // We have the key to the belt
                                 data.key = true
                                 const fumbleResults = rollKeyFumbleN(interaction.user.id, vibeuser.id, 2);
@@ -240,11 +242,13 @@ module.exports = {
                                             // specific single vibe
                                             data.single = true
                                             interaction.reply(getText(data))
+                                            discardChastityKey(vibeuser.id)
                                         }
                                         else {
                                             // removing all vibes
                                             data.both = true
                                             interaction.reply(getText(data))
+                                            discardChastityKey(vibeuser.id)
                                         }
                                     }
                                     else {
@@ -277,6 +281,22 @@ module.exports = {
                                         interaction.reply(getText(data))
                                         removeVibe(vibeuser.id, vibetype)
                                     }
+                                }
+                            }
+                            else if ((getChastity(corsetuser.id)?.access === 0 && corsetuser.id != interaction.user.id)) {
+                                // public access key
+                                data.public = true
+                                if (vibetype) {
+                                    // specific single vibe
+                                    data.single = true
+                                    interaction.reply(getText(data))
+                                    removeVibe(vibeuser.id, vibetype)
+                                }
+                                else {
+                                    // removing all vibes
+                                    data.both = true
+                                    interaction.reply(getText(data))
+                                    removeVibe(vibeuser.id, vibetype)
                                 }
                             }
                             else {

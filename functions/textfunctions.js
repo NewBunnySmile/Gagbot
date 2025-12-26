@@ -873,6 +873,119 @@ const texts_unvibe = {
     }
 }
 
+const texts_vibe = {
+    heavy: {
+        self: {
+            chastity: {
+                single: [
+                    `USER_TAG scoots a VAR_C2 with USER_THEIR ankle, but can't slip it past USER_THEIR chastity belt!`
+                ]
+            },
+            nochastity: {
+                single: [
+                    `USER_TAG tries to fanagle a VAR_C2 into USER_THEMSELF with USER_THEIR toes, but isn't flexible enough!`
+                ],
+            }
+        },
+        other: {
+            chastity: {
+                single: [
+                    `USER_TAG tries to carefully manipulate a VAR_C2 into TARGET_TAG, but isn't able to get past TARGET_THEIR chastity belt without arms!`
+                ],
+            },
+            nochastity: {
+                single: [
+                    `USER_TAG twists USER_THEIR leg to push a VAR_C2 towards TARGET_TAG, but without arms, USER_THEY can't really put it on TARGET_THEM.`
+                ],
+            }
+        }
+    },
+    noheavy: {
+        self: {
+            hasvibe: {
+                chastity: {
+                    key: {
+                        fumble: {
+                            discard: {
+                                single: [
+                                    `USER_TAG tries to put the key in USER_THEIR belt to add a VAR_C2, but the key slips and falls somewhere. It's nowhere to be seen.`
+                                ],
+                            },
+                            nodiscard: {
+                                single: [
+                                    `USER_TAG tries to put the key in USER_THEIR belt to add a VAR_C2, but the key slips! Thankfully, USER_THEY didn't lose it!`
+                                ],
+                            }
+                        },
+                        nofumble: {
+                            single: [
+                                `USER_TAG puts the key in USER_THEIR belt, unlocking it before adding a VAR_C2 set to VAR_C3! USER_THEY_CAP then closeUSER_S and lockUSER_S USER_THEMSELF back up.`
+                            ],
+                        }
+                    },
+                    // No public access to self belt
+                    nokey: [
+                        `USER_TAG prods at USER_THEIR belt, trying to open it to play with a vibe, but the belt is locked tightly!`
+                    ]
+                },
+                nochastity: {
+                    single: [
+                        `USER_TAG carefully inserts a VAR_C2 set to VAR_C3! The toy buzzes gently!`
+                    ],
+                }
+            },
+            novibe: {
+                single: [
+                    `NOT USED - I think`
+                ],
+            }
+        },
+        other: {
+            hasvibe: {
+                chastity: {
+                    key: {
+                        fumble: {
+                            discard: {
+                                single: [
+                                    `USER_TAG tries to put the key in TARGET_TAG's belt to insert a VAR_C2, but the key slips and falls somewhere. It's nowhere to be seen.`
+                                ],
+                            },
+                            nodiscard: {
+                                single: [
+                                    `USER_TAG tries to put the key in TARGET_TAG's belt to insert a buzzing VAR_C2, but the key slips! Thankfully, USER_THEY didn't lose it!`
+                                ],
+                            }
+                        },
+                        nofumble: {
+                            single: [
+                                `USER_TAG puts the key in TARGET_TAG's belt, unlocking it and adding a buzzing VAR_C2 set to VAR_C3 before closing it and locking TARGET_THEM back up.`
+                            ],
+                        }
+                    },
+                    public: {
+                        single: [
+                            `USER_TAG puts the public access key in TARGET_TAG's belt, unlocking it and adding a VAR_C2 set to VAR_C3 before closing it and locking TARGET_THEM back up.`
+                        ],
+                    },
+                    nokey: [
+                        `You do not have the key to TARGET_TAG's chastity belt.`
+                    ]
+                },
+                nochastity: {
+                    single: [
+                        `USER_TAG carefully adds a VAR_C2 to TARGET_TAG, setting it to VAR_C3. The toy's buzzing song precludes TARGET_THEIR joy!`
+                    ],
+                }
+            },
+            novibe: {
+                single: [
+                    `NOT USED... I think`
+                ],
+            }
+        }
+    }
+}
+
 const textarrays = {
     texts_chastity: texts_chastity,
     texts_collar: texts_collar,
@@ -887,7 +1000,9 @@ const textarrays = {
     texts_uncorset: texts_uncorset,
     texts_ungag: texts_ungag,
     texts_unheavy: texts_unheavy,
-    texts_unmitten: texts_unmitten
+    texts_unmitten: texts_unmitten,
+    texts_unvibe: texts_unvibe,
+    texts_vibe: texts_vibe
 }
 
 
