@@ -106,7 +106,7 @@ module.exports = {
                     c1: getHeavy(interaction.user.id)?.type, // heavy bondage type 
                     c2: getHeavy(collareduser.id)?.type,  // collar wearer's heavy bondage type
                     c3: convertheavy(heavybondagetype), // New heavy bondage
-                    c4: `<@${getChastity(collareduser.id).keyholder}>`, // collar wearer's chastity keyholder
+                    c4: `<@${getChastity(collareduser.id)?.keyholder}>`, // collar wearer's chastity keyholder
                     c5: keyholderuser // new chastity belt keyholder, if any
                 }
             }
