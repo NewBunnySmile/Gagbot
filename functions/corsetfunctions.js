@@ -95,7 +95,7 @@ function corsetLimitWords(user, text) {
   if (corset.tightness >= 7) {
     outtext = outtext.replace(/^\s*\-#\s/, "");
     outtext = outtext.replaceAll(/\n\s*\-#\s/g, "\n");
-    outtext = outtext.replaceAll("\n", "\n-# ");
+    outtext = outtext.replaceAll(/\n\s*/, "\n-# ");
     if (outtext.length > 0) outtext = `-# ${outtext}`;
   }
   return outtext;
