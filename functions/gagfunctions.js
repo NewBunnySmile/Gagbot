@@ -19,6 +19,15 @@ for (const file of commandFiles) {
     );
 }
 
+const mittentypes = [
+    { name: "Kitty Paws", value: "mittens_kitty" },
+    { name: "Cyber Doll Mittens", value: "mittens_cyberdoll" },
+    { name: "Leather Mittens", value: "mittens_leather" },
+    { name: "Hardlight Spheres", value: "mittens_hardlight" },
+    { name: "Latex Mittens", value: "mittens_latex" },
+    { name: "Taped Fists", value: "mittens_tape" },
+]
+
 const convertGagText = (type) => {
     let convertgagarr
     for (let i = 0; i < gagtypes.length; i++) {
@@ -53,9 +62,11 @@ const deleteGag = (userID) => {
     fs.writeFileSync(`${process.GagbotSavedFileDirectory}/gaggedusers.txt`, JSON.stringify(process.gags));
 }
 
-const assignMitten = (userID) => {
+const assignMitten = (userID, mittentype) => {
     if (process.mitten == undefined) { process.mitten = {} }
-    process.mitten[userID] = true
+    process.mitten[userID] = {
+        mittenname: mittentype
+    }
     fs.writeFileSync(`${process.GagbotSavedFileDirectory}/mittenedusers.txt`, JSON.stringify(process.mitten));
 }
 
@@ -68,6 +79,30 @@ const deleteMitten = (userID) => {
     if (process.mitten == undefined) { process.mitten = {} }
     delete process.mitten[userID]
     fs.writeFileSync(`${process.GagbotSavedFileDirectory}/mittenedusers.txt`, JSON.stringify(process.mitten));
+}
+
+const getMittenName = (userID, mittenname) => {
+    if (process.mitten == undefined) { process.mitten = {} }
+    let convertmittenarr = {}
+    for (let i = 0; i < mittentypes.length; i++) {
+        convertmittenarr[mittentypes[i].value] = mittentypes[i].name
+    }
+    console.log(convertmittenarr)
+    if (mittenname) {
+        console.log("MITTEN NAME")
+        console.log(mittenname)
+        console.log(convertmittenarr[mittenname])
+        return convertmittenarr[mittenname];
+    }
+    else if (process.mitten[userID]?.mittenname) {
+        console.log("USER NAME")
+        console.log(process.mitten[userID])
+        console.log(convertmittenarr[process.mitten[userID].mittenname])
+        return convertmittenarr[process.mitten[userID]?.mittenname]
+    }
+    else {
+        return undefined;
+    }
 }
 
 const splitMessage = (text) => {
@@ -297,3 +332,5 @@ exports.getMitten = getMitten;
 exports.deleteMitten = deleteMitten;
 exports.garbleMessage = garbleMessage;
 exports.convertGagText = convertGagText;
+exports.getMittenName = getMittenName;
+exports.mittentypes = mittentypes;
