@@ -12,9 +12,19 @@ const restraints = [
 const restraintOptions = restraints.map(([name, _], idx) => ({ label: name, value: idx }));
 
 module.exports = {
-  data: new SlashCommandBuilder().setName("list").setDescription(`View available restraints`),
+  data: new SlashCommandBuilder()
+    .setName("list")
+    .setDescription(`View available restraints`)
+    .addStringOption((opt) =>
+      opt
+        .setName("type")
+        .setDescription("What kind of restraints to list")
+        .addChoices(restraints.map(([name, _], idx) => ({ name: name, value: String(idx) })))
+    ),
   async execute(interaction) {
-    interaction.reply(buildMessage(0, 0));
+    const type = interaction.options.getString("type") ?? 0;
+
+    interaction.reply(buildMessage(Number(type), 0));
   },
   componentHandlers: [
     {
@@ -53,6 +63,7 @@ function buildMessage(type, page) {
             type: ComponentType.StringSelect,
             custom_id: `list-select-${page}`,
             options: restraintOptions,
+            placeholder: "Change restraint type...",
           },
         ],
       },
