@@ -482,6 +482,7 @@ module.exports = {
                             else {
                                 // We do not have the key
                                 data.nokey = true;
+                                interaction.reply({ content: getText(data), flags: MessageFlags.Ephemeral })
                             }
                         }
                         else {

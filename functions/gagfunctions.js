@@ -26,6 +26,7 @@ const mittentypes = [
     { name: "Hardlight Spheres", value: "mittens_hardlight" },
     { name: "Latex Mittens", value: "mittens_latex" },
     { name: "Taped Fists", value: "mittens_tape" },
+    { name: "Good Maid Mittens", value: "mittens_maid" },
 ]
 
 const convertGagText = (type) => {

@@ -63,8 +63,8 @@ function restartChastityTimers(client) {
 
 async function sendTimelockChastityUnlockMessage(client, wearer, keyholder) {
   const channel = await client.channels.fetch(process.env.CHANNELID);
-  if (!keyholder) channel.send(`As the timer finally expires, <@${wearer}>'s chastity belt unlocks and falls to the floor`);
-  else channel.send(`As the timer finally expires, <@${wearer}>'s chastity belt returns to normal with <@${keyholder}> holding the keys`);
+  if (!keyholder) channel.send(`As the timer finally expires, <@${wearer}>'s chastity belt unlocks and falls to the floor!`);
+  else channel.send(`As the timer finally expires, <@${wearer}>'s chastity belt returns to normal with <@${keyholder}> holding the keys!`);
 }
 
 exports.timelockChastity = timelockChastity;

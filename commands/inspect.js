@@ -1,6 +1,6 @@
 const { SlashCommandBuilder, MessageFlags } = require('discord.js');
 const { getMittenName, getMitten, getGag, convertGagText, getGagIntensity } = require('./../functions/gagfunctions.js')
-const { getChastity, getVibe, getChastityKeys, getChastityTimelock, getArousalDescription, getArousalChangeDescription } = require('./../functions/vibefunctions.js')
+const { getChastity, getVibe, getChastityKeys, getChastityTimelock, getArousalDescription, getArousalChangeDescription, getChastityName } = require('./../functions/vibefunctions.js')
 const { getCollar, getCollarPerm, getCollarKeys } = require('./../functions/collarfunctions.js')
 const { getHeavy } = require('./../functions/heavyfunctions.js')
 const { getCorset } = require('./../functions/corsetfunctions.js')
@@ -60,21 +60,22 @@ module.exports = {
                 let isLocked = (getChastity(inspectuser.id)?.keyholder == interaction.user.id || (getChastity(inspectuser.id)?.access === 0 && inspectuser.id != interaction.user.id))
                 let lockemoji = isLocked ? "🔑" : "🔒"
                 let chastitykeyaccess = getChastity(inspectuser.id)?.access
+                let currentchastitybelt = (getChastityName(inspectuser.id) ? getChastityName(inspectuser.id) : "Locked Up Nice and Tight!")
                 let timelockedtext = "Timelocked (Open)"
                 if (chastitykeyaccess == 1) { timelockedtext = "Timelocked (Keyed)" }
                 if (chastitykeyaccess == 2) { timelockedtext = "Timelocked (Sealed)" }
                 if (getChastity(inspectuser.id).keyholder == "discarded") {
-                    outtext = `${outtext}<:Chastity:1073495208861380629> Chastity: ${lockemoji} **Keys are Missing!**\n`
+                    outtext = `${outtext}<:Chastity:1073495208861380629> Chastity: **${currentchastitybelt}**\n-# ‎   ⤷ ${lockemoji} **Keys are Missing!**\n`
                 }
                 else if (getChastityTimelock(inspectuser.id)) {
-                    outtext = `${outtext}<:Chastity:1073495208861380629> Chastity: ${lockemoji} **${timelockedtext} until ${getChastityTimelock(inspectuser.id, true)}**\n`
+                    outtext = `${outtext}<:Chastity:1073495208861380629> Chastity: **${currentchastitybelt}**\n-# ‎   ⤷ ${lockemoji} **${timelockedtext} until ${getChastityTimelock(inspectuser.id, true)}**\n`
                 }
                 else if (getChastity(inspectuser.id).keyholder == inspectuser.id) {
                     // Self bound!
-                    outtext = `${outtext}<:Chastity:1073495208861380629> Chastity: ${lockemoji} **Self-bound!**\n`
+                    outtext = `${outtext}<:Chastity:1073495208861380629> Chastity: **${currentchastitybelt}**\n-# ‎   ⤷ ${lockemoji} **Self-bound!**\n`
                 }
                 else {
-                    outtext = `${outtext}<:Chastity:1073495208861380629> Chastity: ${lockemoji} **Key held by <@${getChastity(inspectuser.id).keyholder}>**\n`
+                    outtext = `${outtext}<:Chastity:1073495208861380629> Chastity: **${currentchastitybelt}**\n-# ‎   ⤷ ${lockemoji} **Key held by <@${getChastity(inspectuser.id).keyholder}>**\n`
                 }
             }
             else {
@@ -107,30 +108,33 @@ module.exports = {
             }
             // Collar status
             if (getCollar(inspectuser.id)) {
+                let currentcollartext = "Locked Up Nice and Tight!"
+                let isLocked = ((getCollar(inspectuser.id).keyholder == interaction.user) || (!getCollar(inspectuser.id).keyholder_only))
+                let lockemoji = isLocked ? "🔑" : "🔒"
                 if (getCollar(inspectuser.id).keyholder == "discarded") {
                     // Self bound!
                     if (getCollar(inspectuser.id).keyholder_only) {
-                        outtext = `${outtext}<:collar:1449984183261986939> Collar: **Keys are Missing!**\n`
+                        outtext = `${outtext}<:collar:1449984183261986939> Collar: **${currentcollartext}**\n-# ‎   ⤷ ${lockemoji} **Keys are Missing!**\n`
                     }
                     else {
-                        outtext = `${outtext}<:collar:1449984183261986939> Collar: **Keys are Missing! Free Use!**\n`
+                        outtext = `${outtext}<:collar:1449984183261986939> Collar: **${currentcollartext}**\n-# ‎   ⤷ ${lockemoji} **Keys are Missing! Free Use!**\n`
                     }
                 }
                 else if (!getCollar(inspectuser.id).keyholder_only) {
                     // Free use!
                     if (getCollar(inspectuser.id).keyholder == inspectuser.id) {
-                        outtext = `${outtext}<:collar:1449984183261986939> Collar: **Self-bound and free use!**\n`
+                        outtext = `${outtext}<:collar:1449984183261986939> Collar: **${currentcollartext}**\n-# ‎   ⤷ ${lockemoji} **Self-bound and free use!**\n`
                     }
                     else {
-                        outtext = `${outtext}<:collar:1449984183261986939> Collar: **Key held by <@${getCollar(inspectuser.id).keyholder}>, free use!**\n`
+                        outtext = `${outtext}<:collar:1449984183261986939> Collar: **${currentcollartext}**\n-# ‎   ⤷ ${lockemoji} **Key held by <@${getCollar(inspectuser.id).keyholder}>, free use!**\n`
                     }
                 }
                 else if (getCollar(inspectuser.id).keyholder == inspectuser.id) {
                     // Self bound!
-                    outtext = `${outtext}<:collar:1449984183261986939> Collar: **Self-bound!**\n`
+                    outtext = `${outtext}<:collar:1449984183261986939> Collar: **${currentcollartext}**\n-# ‎   ⤷ ${lockemoji} **Self-bound!**\n`
                 }
                 else {
-                    outtext = `${outtext}<:collar:1449984183261986939> Collar: **Key held by <@${getCollar(inspectuser.id).keyholder}>**\n`
+                    outtext = `${outtext}<:collar:1449984183261986939> Collar: **${currentcollartext}**\n-# ‎   ⤷ ${lockemoji} **Key held by <@${getCollar(inspectuser.id).keyholder}>**\n`
                 }
                 // Output Collar Perms
                 outtext = `${outtext}-# Mittens: ${getCollarPerm(inspectuser.id, "mitten") ? "YES":"NO"}, Chastity: ${getCollarPerm(inspectuser.id, "chastity") ? "YES":"NO"}, Heavy: ${getCollarPerm(inspectuser.id, "heavy") ? "YES":"NO"}\n`

@@ -45,6 +45,7 @@ module.exports = {
                 return;
             }
             let bondagetype = interaction.options.getString('type')
+            console.log(bondagetype)
             // Build data tree:
             let data = {
                 textarray: "texts_chastity",
@@ -54,6 +55,9 @@ module.exports = {
                     c1: getHeavy(interaction.user.id)?.type, // heavy bondage type 
                     c2: getChastityName(interaction.user.id, bondagetype)
                 }
+            }
+            if (bondagetype && !getChastityName(interaction.user.id, bondagetype)) {
+                bondagetype = undefined; // Just delete it, we got something invalid lol
             }
 
             // Check if the wearer is in an armbinder - if they are, block them. 
@@ -95,13 +99,13 @@ module.exports = {
                             // Locked it and giving someone else the key
                             data.key_other = true
                             interaction.reply(getText(data))
-                            assignChastity(interaction.user.id, chastitykeyholder.id)
+                            assignChastity(interaction.user.id, chastitykeyholder.id, bondagetype)
                         }
                         else {
                             // Locked it but holding onto the key
                             data.key_self = true
                             interaction.reply(getText(data))
-                            assignChastity(interaction.user.id, chastitykeyholder.id)
+                            assignChastity(interaction.user.id, chastitykeyholder.id, bondagetype)
                         }
                     }
                     else {

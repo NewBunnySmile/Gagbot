@@ -3,6 +3,15 @@ const path = require('path');
 const https = require('https');
 const { optins } = require('./optinfunctions');
 
+const collartypes = [
+    { name: "Latex Collar", value: "collar_latex" },
+    { name: "Leather Collar", value: "collar_leather" },
+    { name: "Cyber Doll Collar", value: "collar_cyberdoll" },
+    { name: "Hardlight Collar", value: "collar_hardlight" },
+    { name: "Runic Collar", value: "collar_runic" },
+    { name: "Tall Posture Collar", value: "collar_posture" },
+]
+
 const assignCollar = (user, keyholder, restraints, only) => {
     if (process.collar == undefined) { process.collar = {} }
     process.collar[user] = {
@@ -40,6 +49,23 @@ const getCollarKeys = (user) => {
         }
     })
     return keysheld
+}
+
+const getCollarName = (userID, collarname) => {
+    if (process.collar == undefined) { process.collar = {} }
+    let convertcollararr = {}
+    for (let i = 0; i < collartypes.length; i++) {
+        convertcollararr[collartypes[i].value] = collartypes[i].name
+    }
+    if (collarname) {
+        return convertcollararr[collarname];
+    }
+    else if (process.collar[userID]?.collartype) {
+        return convertcollararr[process.collar[userID]?.collartype]
+    }
+    else {
+        return undefined;
+    }
 }
 
 const getCollarKeyholder = (user) => {
@@ -112,3 +138,5 @@ exports.getCollarPerm = getCollarPerm
 exports.discardCollarKey = discardCollarKey;
 exports.findCollarKey = findCollarKey;
 exports.getFindableCollarKeys = getFindableCollarKeys;
+
+exports.getCollarName = getCollarName;
