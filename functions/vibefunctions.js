@@ -6,17 +6,17 @@ const { optins } = require('./optinfunctions');
 const { getHeavy, heavyDenialCoefficient } = require("./heavyfunctions.js");
 
 const chastitytypes = [
-    { name: "Featherlight Belt", value: "belt_featherlight" },
-    { name: "Blacksteel Chastity Belt", value: "belt_blacksteel" },
-    { name: "Silver Chastity Belt", value: "belt_silver" },
-    { name: "Ancient Chastity Belt", value: "belt_ancient" },
-    { name: "Cyber Doll Belt", value: "belt_cyberdoll" },
-    { name: "Tungsten Belt", value: "belt_tungsten" },
-    { name: "Hardlight Belt", value: "belt_hardlight" },
-    { name: "Wolf Panties", value: "belt_wolf" },
-    { name: "Maid Chastity Belt", value: "belt_maid" },
-    { name: "Chastity Belt of Eternal Binding", value: "belt_eternal" },
-    { name: "Queensbelt", value: "belt_queen" },
+    { name: "Featherlight Belt", value: "belt_featherlight", denialCoefficient: 15 },
+    { name: "Blacksteel Chastity Belt", value: "belt_blacksteel", denialCoefficient: 7.5 },
+    { name: "Silver Chastity Belt", value: "belt_silver", denialCoefficient: 5 },
+    { name: "Ancient Chastity Belt", value: "belt_ancient", denialCoefficient: 15 },
+    { name: "Cyber Doll Belt", value: "belt_cyberdoll", denialCoefficient: 10 },
+    { name: "Tungsten Belt", value: "belt_tungsten", denialCoefficient: 7.5 },
+    { name: "Hardlight Belt", value: "belt_hardlight", denialCoefficient: 10 },
+    { name: "Wolf Panties", value: "belt_wolf", denialCoefficient: 7.5 },
+    { name: "Maid Chastity Belt", value: "belt_maid", denialCoefficient: 10 },
+    { name: "Chastity Belt of Eternal Binding", value: "belt_eternal", denialCoefficient: 20 },
+    { name: "Queensbelt", value: "belt_queen", denialCoefficient: 10 },
 ]
 
 // the minimum arousal required for frustration to also impact speach
@@ -398,7 +398,11 @@ function calcDecayCoefficient(user) {
 // modify when more things affect it
 function calcDenialCoefficient(user) {
   const heavy = getHeavy(user);
-  if (getChastity(user)) return (heavy ? heavyDenialCoefficient(heavy.typeval) : 0) / 2 + 5;
+  const chastity = getChastity(user);
+  if (chastity) {
+    const denialCoefficient = chastitytypes.find(c => c.value == chastity.chastitytype)?.denialCoefficient ?? 5;
+    return (heavy ? heavyDenialCoefficient(heavy.typeval) : 0) / 2 + denialCoefficient;
+  }
   return heavy ? heavyDenialCoefficient(heavy.typeval) : 1;
 }
 
