@@ -19,6 +19,8 @@ const chastitytypes = [
     { name: "Queensbelt", value: "belt_queen", denialCoefficient: 10 },
 ]
 
+const chastitytypesoptions = chastitytypes.map((chastity) => ({name: chastity.name, value: chastity.value}));
+
 // the minimum arousal required for frustration to also impact speach
 const STUTTER_LIMIT = 1;
 // the arousal needed for an unbelted user to orgasm
@@ -445,4 +447,5 @@ exports.findChastityKey = findChastityKey;
 exports.getFindableChastityKeys = getFindableChastityKeys;
 
 exports.chastitytypes = chastitytypes;
+exports.chastitytypesoptions = chastitytypesoptions;
 exports.getChastityName = getChastityName;
