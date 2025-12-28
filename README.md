@@ -1,2 +1,2 @@
 # Gagbot
-A bot for garbling messages sent in a certain channel on a certain server. 
+A bot for NSFW roleplay involving chat control on users!
