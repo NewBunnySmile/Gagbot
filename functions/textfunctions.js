@@ -19,12 +19,22 @@ const texts_chastity = {
             ]
         },
         nochastity: {
-            key_other: [
-                `USER_TAG slips into a chastity belt, slipping on a tiny lock, and then hands TARGET_TAG the key!`
-            ],
-            key_self: [
-                `USER_TAG puts a chastity belt on and clicks a tiny lock on it before stashing the key for safekeeping!`
-            ]
+            namedchastity: {
+                key_other: [
+                    `USER_TAG slips into a VAR_C2, slipping on a tiny lock, and then hands TARGET_TAG the key!`
+                ],
+                key_self: [
+                    `USER_TAG puts a VAR_C2 on and clicks a tiny lock on it before stashing the key for safekeeping!`
+                ]
+            },
+            nonamedchastity: {
+                key_other: [
+                    `USER_TAG slips into a chastity belt, slipping on a tiny lock, and then hands TARGET_TAG the key!`
+                ],
+                key_self: [
+                    `USER_TAG puts a chastity belt on and clicks a tiny lock on it before stashing the key for safekeeping!`
+                ]
+            },
         }
     }
 }
@@ -65,15 +75,28 @@ const texts_collarequip = {
         collar: {
             key: {
                 mitten: {
-                    alreadyworn: [
-                        `TARGET_TAG is already wearing mittens!`
-                    ],
-                    allowed: [
-                        `USER_TAG grabs TARGET_TAG's hands, shoving a pair of mittens on, and putting a lock on the straps, sealing away TARGET_THEIR hands!`
-                    ],
-                    notallowed: [
-                        `TARGET_TAG's collar does not allow you to mitten TARGET_THEM!`
-                    ]
+                    namedmitten: {
+                        alreadyworn: [
+                            `TARGET_TAG's hands are already occupied by a pair of VAR_C3!`
+                        ],
+                        allowed: [
+                            `USER_TAG grabs TARGET_TAG's hands, shoving a set of VAR_C3 on them! TARGET_THEY_CAP won't be able to use TARGET_THEIR hands!`
+                        ],
+                        notallowed: [
+                            `TARGET_TAG's collar does not allow you to mitten TARGET_THEM!`
+                        ]
+                    },
+                    nonamedmitten: {
+                        alreadyworn: [
+                            `TARGET_TAG is already wearing mittens!`
+                        ],
+                        allowed: [
+                            `USER_TAG grabs TARGET_TAG's hands, shoving a pair of mittens on, and putting a lock on the straps, sealing away TARGET_THEIR hands!`
+                        ],
+                        notallowed: [
+                            `TARGET_TAG's collar does not allow you to mitten TARGET_THEM!`
+                        ]
+                    }
                 },
                 heavybondage: {
                     alreadyworn: [
@@ -87,20 +110,38 @@ const texts_collarequip = {
                     ]
                 },
                 chastity: {
-                    alreadyworn: [
-                        `TARGET_TAG is already in a chastity belt, with keys held by VAR_C4!`
-                    ],
-                    allowed: {
-                        key_self: [
-                            `USER_TAG grabs TARGET_TAG and wraps a chastity belt around TARGET_THEIR waist and clicking the lock shut before TARGET_THEY can even react!`
+                    namedchastity: {
+                        alreadyworn: [
+                            `TARGET_TAG is already in a chastity belt, with keys held by VAR_C4!`
                         ],
-                        key_other: [
-                            `USER_TAG grabs TARGET_TAG and wraps a chastity belt around TARGET_THEIR waist before clicking the lock shut and tossing the key over to VAR_C5! TARGET_THEY_CAP will no doubt have to earn TARGET_THEIR chastity back!`
+                        allowed: {
+                            key_self: [
+                                `USER_TAG grabs TARGET_TAG and wraps a VAR_C3 around TARGET_THEIR waist and clicking the lock shut before TARGET_THEY can even react!`
+                            ],
+                            key_other: [
+                                `USER_TAG grabs TARGET_TAG and wraps a VAR_C3 around TARGET_THEIR waist before clicking the lock shut and tossing the key over to VAR_C5! TARGET_THEY_CAP will no doubt have to earn TARGET_THEIR chastity back!`
+                            ]
+                        },
+                        notallowed: [
+                            `TARGET_TAG's collar does not allow you to put TARGET_THEM in chastity!`
                         ]
                     },
-                    notallowed: [
-                        `TARGET_TAG's collar does not allow you to put TARGET_THEM in chastity!`
-                    ]
+                    nonamedchastity: {
+                        alreadyworn: [
+                            `TARGET_TAG is already in a chastity belt, with keys held by VAR_C4!`
+                        ],
+                        allowed: {
+                            key_self: [
+                                `USER_TAG grabs TARGET_TAG and wraps a chastity belt around TARGET_THEIR waist and clicking the lock shut before TARGET_THEY can even react!`
+                            ],
+                            key_other: [
+                                `USER_TAG grabs TARGET_TAG and wraps a chastity belt around TARGET_THEIR waist before clicking the lock shut and tossing the key over to VAR_C5! TARGET_THEY_CAP will no doubt have to earn TARGET_THEIR chastity back!`
+                            ]
+                        },
+                        notallowed: [
+                            `TARGET_TAG's collar does not allow you to put TARGET_THEM in chastity!`
+                        ]
+                    },
                 } 
             },
             nokey: [
@@ -294,12 +335,18 @@ const texts_gag = {
                 gag: [
                     `USER_TAG runs USER_THEIR hands behind TARGET_TAG's head, unbuckling the straps on TARGET_THEIR VAR_C4 and then gently pressing a VAR_C3 between TARGET_THEIR lips again. The straps are then pulled VAR_C2 and buckled again!`
                 ],
-                nogag: [
-                    `USER_TAG takes a VAR_C3 out and brushes the hair out of TARGET_TAG's face, before pinching TARGET_THEIR nose for a moment and shoving the gag between TARGET_THEIR teeth when TARGET_THEY goTARGET_ES to breathe! The straps are pulled VAR_C2 behind TARGET_THEIR head and buckled shut!`,
-                    `USER_TAG uses a finger to gently pry open TARGET_TAG's lips before inserting a VAR_C3 between TARGET_THEIR teeth, secured VAR_C2 behind TARGET_THEIR head. A muted meep follows soon after from TARGET_THEM!`,
-                    `USER_TAG holds up a VAR_C3, pressing it against TARGET_TAG's lips with ever increasing force until they part, taking away TARGET_THEIR ability to speak coherently! The straps are pulled VAR_C2 behind TARGET_THEIR head and buckled under TARGET_THEIR hair!`,
-                    `USER_TAG taps TARGET_TAG's lips, silently suggesting to say "ahh" before pushing a VAR_C3 VAR_C2 between TARGET_THEIR lips!`
-                ]
+                nogag: {
+                    gentle: [
+                        `USER_TAG uses a finger to gently pry open TARGET_TAG's lips before inserting a VAR_C3 between TARGET_THEIR teeth, secured VAR_C2 behind TARGET_THEIR head. A muted meep follows soon after from TARGET_THEM!`,
+                    ],
+                    forceful: [
+                        `USER_TAG takes a VAR_C3 out and brushes the hair out of TARGET_TAG's face, before pinching TARGET_THEIR nose for a moment and shoving the gag between TARGET_THEIR teeth when TARGET_THEY goTARGET_ES to breathe! The straps are pulled VAR_C2 behind TARGET_THEIR head and buckled shut!`,
+                        `USER_TAG holds up a VAR_C3, pressing it against TARGET_TAG's lips with ever increasing force until they part, taking away TARGET_THEIR ability to speak coherently! The straps are pulled VAR_C2 behind TARGET_THEIR head and buckled under TARGET_THEIR hair!`,
+                    ],
+                    requesting: [
+                        `USER_TAG taps TARGET_TAG's lips, silently suggesting to say "ahh" before pushing a VAR_C3 VAR_C2 between TARGET_THEIR lips!`
+                    ]
+                }
             }
         }
     }
@@ -331,7 +378,7 @@ const texts_letgo = {
         `USER_TAG squirms, trying to adjust the belt so USER_THEY can feel ***something***, but USER_THEY just can't get over the edge!`,
         `USER_TAG holds USER_THEIR breath, feverishly stroking the smooth belt USER_THEY USER_ISARE wearing, but USER_THEY just can't let go!`,
         `USER_TAG grinds on a near by object, trying to get that last little bit of sensation to let go... but USER_THEY just can't make it!`,
-        `USER_TAG buckles USER_THEIR legs, panting in short breaths as USER_THEY attempt to (and fail miserably) to get release!`
+        `USER_TAG buckles USER_THEIR legs, panting in short breaths as USER_THEY attemptUSER_S to (and fail miserably) to get release!`
     ],
     heavy: [
         `USER_TAG shifts USER_THEIR legs to try to reach the peak! Too bad USER_THEIR VAR_C1 makes it hard to touch there!`,
@@ -567,7 +614,7 @@ const texts_uncorset = {
                     ]
                 },
                 nochastity: [
-                    `USER_TAG carefully undoes the laces and USER_THEIR corset, unwrapping it from USER_THEIR waist. USER_THEY_CAP breathe a *huge* breath of relief!`
+                    `USER_TAG carefully undoes the laces and USER_THEIR corset, unwrapping it from USER_THEIR waist. USER_THEY_CAP breatheUSER_S a *huge* breath of relief!`
                 ]
             },
             // Ephemeral

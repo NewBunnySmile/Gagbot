@@ -2,7 +2,7 @@ const fs = require('fs');
 const path = require('path');
 const https = require('https');
 const { messageSend, messageSendImg, messageSendDev } = require(`./../functions/messagefunctions.js`)
-const { getCorset, corsetLimitWords } = require(`./../functions/corsetfunctions.js`)
+const { getCorset, corsetLimitWords, silenceMessage } = require(`./../functions/corsetfunctions.js`)
 const { stutterText } = require(`./../functions/vibefunctions.js`);
 const { getVibeEquivalent } = require('./vibefunctions.js');
 
@@ -26,6 +26,7 @@ const mittentypes = [
     { name: "Hardlight Spheres", value: "mittens_hardlight" },
     { name: "Latex Mittens", value: "mittens_latex" },
     { name: "Taped Fists", value: "mittens_tape" },
+    { name: "Good Maid Mittens", value: "mittens_maid" },
 ]
 
 const convertGagText = (type) => {
@@ -87,17 +88,10 @@ const getMittenName = (userID, mittenname) => {
     for (let i = 0; i < mittentypes.length; i++) {
         convertmittenarr[mittentypes[i].value] = mittentypes[i].name
     }
-    console.log(convertmittenarr)
     if (mittenname) {
-        console.log("MITTEN NAME")
-        console.log(mittenname)
-        console.log(convertmittenarr[mittenname])
         return convertmittenarr[mittenname];
     }
     else if (process.mitten[userID]?.mittenname) {
-        console.log("USER NAME")
-        console.log(process.mitten[userID])
-        console.log(convertmittenarr[process.mitten[userID].mittenname])
         return convertmittenarr[process.mitten[userID]?.mittenname]
     }
     else {
@@ -207,18 +201,25 @@ const garbleMessage = async (threadId, msg) => {
         console.log(totalwords)
         // Now corset any words, using an amount to start with.
         if (getCorset(msg.author.id)) {
-            let wordspermitted = (22 - (getCorset(msg.author.id).tightness * 2)) // subtract 2 for each tightness level
-            if ((totalwords >= wordspermitted) || (getCorset(msg.author.id).tightness >= 7)) { // Only bother modifying at this point if the eligible word count is longer than X words permitted. 
-                for (let i = 0; i < messageparts.length; i++) {
-                    modifiedmessage = true
-                    try {
-                        if (messageparts[i].garble) {
-                            messageparts[i].text = corsetLimitWords(msg.author.id, messageparts[i].text, wordspermitted)
-                            messageparts[i].text = `${messageparts[i].text}\n`
-                        }
+            const hadParts = messageparts.length > 0;
+            modifiedmessage = true
+            const toRemove = [];
+            for (let i = 0; i < messageparts.length; i++) {
+                try {
+                    if (messageparts[i].garble) {
+                        messageparts[i].text = corsetLimitWords(msg.author.id, messageparts[i].text)
+                        if (messageparts[i].text.length == 0) toRemove.push(i);
+                        messageparts[i].text = `${messageparts[i].text}\n`
                     }
-                    catch (err) { console.log(err) }
                 }
+                catch (err) { console.log(err) }
+            }
+            for (let i = toRemove.length - 1; i >= 0; i--) {
+                messageparts.splice(toRemove[i], 1);
+            }
+            if (hadParts && messageparts.length == 0) {
+                messageSend(threadId, silenceMessage(), msg.member.displayAvatarURL(), msg.member.displayName).then(() => msg.delete())
+                return;
             }
         }
         // Gags now
@@ -262,7 +263,7 @@ const garbleMessage = async (threadId, msg) => {
         }
         else {
             let messagetexts = messageparts.map(m => m.text);
-            outtext = messagetexts.join(" ");
+            outtext = messagetexts.join("");
         }
 
         if (modifiedmessage) { //Fake reply with a ping

@@ -38,6 +38,15 @@ module.exports = {
 			.setDescription("How tightly to gag. Range 1-10")
 			.setMinValue(1)
 			.setMaxValue(10)
+		)
+		.addStringOption(opt =>
+			opt.setName('tone')
+			.setDescription('What tone to use for the RP output?')
+			.addChoices(
+				{ name: "Gentle", value: "gentle" },
+				{ name: "Forceful", value: "forceful" },
+				{ name: "Requesting", value: "requesting" }
+			)
 		),
     async execute(interaction) {
 		try {
@@ -83,6 +92,13 @@ module.exports = {
 				if (gagintensity > 9) {
 					intensitytext = "as tightly as possible"
 				}
+			}
+
+			let tone = interaction.options.getString('tone')
+			// Choose a random choice if the user did not choose. 
+			if (!tone) {
+				let choices = ["gentle", "forceful", "requesting"]
+				tone = choices[Math.floor(choices.length * Math.random())]
 			}
 
 			// Build data tree:
@@ -181,7 +197,9 @@ module.exports = {
 					}
 					else {
 						// Not already gagged, lets put one on
+						// Respects tone currently!
 						data.nogag = true
+						data[tone] = true
 						interaction.reply(getText(data))
 						assignGag(gaggeduser.id, gagtype, gagintensity)
 					}
