@@ -77,6 +77,7 @@ function getFumbleChance(keyholder, locked) {
 
 async function handleKeyFinding(message) {
   if (process.discardedKeys == undefined) process.discardedKeys = [];
+  if (process.discardedKeys.length == 0) return;
   if (Math.random() > (Math.min(message.content.length / 20, 20) * process.discardedKeys.length) / 100) return;
   const idx = Math.floor(Math.random() * process.discardedKeys.length);
   const restraint = process.discardedKeys[idx];
