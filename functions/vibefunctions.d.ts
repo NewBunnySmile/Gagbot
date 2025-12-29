@@ -22,9 +22,10 @@ export function getChastityKeyholder(user: Snowflake): Snowflake | null;
 export function transferChastityKey(lockedUser: Snowflake, newKeyholder: Snowflake): boolean;
 export function discardChastityKey(user: Snowflake): void;
 export function findChastityKey(index: number, newKeyholder: Snowflake): void;
+export function getArousedTexts(user: Snowflake): string[];
 
 // Given a string, randomly provides a stutter and rarely provides an arousal text per word.
-export function stutterText(text: string, intensity: number): string;
+export function stutterText(text: string, intensity: number, arousedtexts: string[]): string;
 
 /**
  * Returns a value representing arousal in a way that is roughly equivalet to intensity in the prior vibe system.

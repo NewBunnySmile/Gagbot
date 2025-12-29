@@ -3,7 +3,7 @@ const path = require('path');
 const https = require('https');
 const { messageSend, messageSendImg, messageSendDev } = require(`./../functions/messagefunctions.js`)
 const { getCorset, corsetLimitWords, silenceMessage } = require(`./../functions/corsetfunctions.js`)
-const { stutterText } = require(`./../functions/vibefunctions.js`);
+const { stutterText, getArousedTexts } = require(`./../functions/vibefunctions.js`);
 const { getVibeEquivalent } = require('./vibefunctions.js');
 
 // Grab all the command files from the commands directory
@@ -185,11 +185,14 @@ const garbleMessage = async (threadId, msg) => {
         if (intensity) {
             modifiedmessage = true;
 
+            const arousedtexts = getArousedTexts(msg.author.id);
+            console.log(arousedtexts);
+
             totalwords = 0 // recalculate eligible word count because they're stimmed out of their mind. 
             for (let i = 0; i < messageparts.length; i++) {
                 try {
                     if (messageparts[i].garble) {
-                        messageparts[i].text = stutterText(messageparts[i].text, intensity)
+                        messageparts[i].text = stutterText(messageparts[i].text, intensity, arousedtexts)
                         totalwords = totalwords + messageparts[i].text.split(" ").length
                     }
                 }

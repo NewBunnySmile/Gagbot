@@ -1,9 +1,9 @@
 const fs = require('fs');
 const path = require('path');
 const https = require('https');
-const { arousedtexts, arousedtextshigh } = require('../vibes/aroused/aroused_texts.js')
 const { optins } = require('./optinfunctions');
 const { getHeavy, heavyDenialCoefficient } = require("./heavyfunctions.js");
+const { arousedtexts } = require('../vibes/aroused/aroused_texts.js');
 
 const chastitytypes = [
     { name: "Featherlight Belt", value: "belt_featherlight", denialCoefficient: 15 },
@@ -259,8 +259,29 @@ const findChastityKey = (index, newKeyholder) => {
     return false;
 }
 
+function getArousedTexts(user) {
+    const texts = [];
+
+    if (optins.getDynamicArousal(user)) {
+        const arousal = process.arousal[user];
+        const current = arousal.arousal;
+        const change = arousal.arousal - arousal.prev;
+        for (const [min, max, minChange, maxChange, text] of arousedtexts) {
+            if ((min < 0 || min <= current) && (max < 0 || max >= current) && (minChange < 0 || minChange <= change) && (maxChange < 0 || maxChange >= change)) texts.push(text);
+        }
+    } else {
+        const arousal = calcStaticVibeIntensity(user);
+
+        for (const [min, max, _0, _1, text] of arousedtexts) {
+            if ((min < 0 || min <= arousal) && (max < 0 || max >= arousal)) texts.push(text);
+        }
+    }
+
+    return texts;
+}
+
 // Given a string, randomly provides a stutter and rarely provides an arousal text per word.
-function stutterText(text, intensity) {
+function stutterText(text, intensity, arousedtexts) {
     function aux(text) {
         outtext = '';
         if (!((text.charAt(0) == "<" && text.charAt(1) == "@") || (text.charAt(0) == "\n") || (!text.charAt(0).match(/[a-zA-Z0-9]/)))) { //Ignore pings, linebreaks and signs (preventively I dunno)
@@ -277,12 +298,6 @@ function stutterText(text, intensity) {
                 outtext = `${outtext}${text}`
             }
             if (Math.random() < intensity / 40) { // 0.5-5% to insert an arousal text
-                let arousedlist = arousedtexts;
-                if (intensity > 7) {
-                    for (let i = 0; i < arousedtextshigh; i++) { // Remove the first 5 elements to give the high arousal texts higher chance to show up
-                        arousedlist[i] = arousedtextshigh[i]
-                    }
-                }
                 let arousedtext = arousedtexts[Math.floor(Math.random() * arousedtexts.length)]
                 outtext = `${outtext} ${arousedtext}`
             }
@@ -478,6 +493,7 @@ exports.removeChastity = removeChastity
 exports.assignVibe = assignVibe
 exports.getVibe = getVibe
 exports.removeVibe = removeVibe
+exports.getArousedTexts = getArousedTexts;
 exports.stutterText = stutterText
 exports.getChastityTimelock = getChastityTimelock
 
