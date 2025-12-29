@@ -383,7 +383,7 @@ const texts_headwear = {
                 `TARGET_TAG is already wearing a VAR_C2, but you wouldn't be able to put it on TARGET_THEM anyway!`
             ],
             noworn: [
-                `USER_TAG boops a VAR_C2 towards TARGET_TAG, but USER_THEY can't really put it on TARGET_THEM because of USER_THEIR VAR_C1. USER_THEY should grow arms!`
+                `USER_TAG boops a VAR_C2 towards TARGET_TAG, but USER_THEY can't really put it on TARGET_THEM because of USER_THEIR VAR_C1. USER_THEY_CAP should grow arms!`
             ]
         }
     },
@@ -867,7 +867,7 @@ const texts_unheadwear = {
                 },
                 multiple: {
                     worn: [
-                        `USER_TAG paws at USER_THEIR VAR_C2, trying to scoot it off of USER_THEIR head! No fingers makes it impossible to slip off!`
+                        `USER_TAG paws at USER_THEIR head restraints, trying to scoot them off of USER_THEIR head! No fingers makes it impossible to slip any off!`
                     ],
                     // Ephemeral
                     noworn: [
