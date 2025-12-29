@@ -81,6 +81,7 @@ async function handleKeyFinding(message) {
   if (Math.random() > (Math.min(message.content.length / 20, 20) * process.discardedKeys.length) / 100) return;
   const idx = Math.floor(Math.random() * process.discardedKeys.length);
   const restraint = process.discardedKeys[idx];
+  if (!restraint) return;
 
   if (Math.random() < calcFindSuccessChance(message.author.id)) {
     const findFunction = getFindFunction(restraint.restraint);
