@@ -1,5 +1,15 @@
-const { ButtonStyle, ActionRowBuilder, StringSelectMenuBuilder, StringSelectMenuOptionBuilder, PermissionsBitField } = require("discord.js")
-
+const { ButtonStyle, ActionRowBuilder, SectionBuilder, StringSelectMenuBuilder, 
+    StringSelectMenuOptionBuilder, PermissionsBitField, ButtonBuilder,
+    ComponentType, MessageFlags} = require("discord.js")
+const fs = require('fs');
+const path = require('path');
+const https = require('https');
+const { getHeavy } = require('./../functions/heavyfunctions.js')
+const { getCorset } = require('./../functions/corsetfunctions.js')
+const { getVibe, getChastityKeyholder } = require('./../functions/vibefunctions.js')
+const { getMitten, getGagg } = require('./../functions/gagfunctions.js')
+const { getHeadwear } = require('./../functions/headwearfunctions.js');
+const { getCollarKeyholder } = require("./collarfunctions");
 
 const configoptions = {
     "Arousal": {
@@ -61,6 +71,7 @@ const configoptions = {
                 }
             ],
             default: "self",
+            disabled: () => { return false } // if true, button is greyed out
         },
         "keyloss": {
             name: "Key Loss",
@@ -138,8 +149,8 @@ const configoptions = {
             disabled: () => { return false }
         },
         "removebondage": {
-            name: "Prompt to Remove Non-keyed",
-            desc: "Should you be prompted for others to /ungag you, etc?",
+            name: "Prompt to Remove Non-Keyed Bondage",
+            desc: "Should you be prompted for others to **/ungag** you, etc?",
             choices: [
                 {
                     name: "Everyone",
@@ -178,26 +189,26 @@ const configoptions = {
 
 function generateConfigModal(interaction, menuset = "General", page) {
     // Construct the list of options for a given menu set
-    let pageoptions = [];
+    let pagecomponents = [];
     Object.keys(configoptions[menuset]).forEach((k) => {
         let buttonsection = new SectionBuilder()
             .addTextDisplayComponents(
                 (textdisplay) => textdisplay.setContent(`## ${configoptions[menuset][k].name}`),
                 (textdisplay) => textdisplay.setContent(`${configoptions[menuset][k].desc}`),
-                (textdisplay) => textdisplay.setContent(`-# ${configoptions[menuset][k].choices.find((f) => f.value == getOption(userID,k))?.helptext}`)
+                (textdisplay) => textdisplay.setContent(`-# ‎   ⤷ ${configoptions[menuset][k].choices.find((f) => f.value == getOption(interaction.user.id,k))?.helptext}`)
             )
             .setButtonAccessory((button) =>
-                button.setCustomId(`pageopt_${k}`)
-                    .setLabel(configoptions[menuset][k].choices.find((f) => f.value == getOption(userID,k))?.name)
-                    .setStyle(configoptions[menuset][k].choices.find((f) => f.value == getOption(userID,k))?.style)
+                button.setCustomId(`config_pageopt_${menuset}_${k}`)
+                    .setLabel(configoptions[menuset][k].choices.find((f) => f.value == getOption(interaction.user.id,k))?.name)
+                    .setStyle(configoptions[menuset][k].choices.find((f) => f.value == getOption(interaction.user.id,k))?.style)
                     .setDisabled(configoptions[menuset][k].disabled(interaction.user.id))
             )
-        pageoptions.push(buttonsection)
+        pagecomponents.push(buttonsection)
     })
 
     // Construct the menu selector
     let menupageoptions = new StringSelectMenuBuilder()
-        .setCustomId('menuselector')
+        .setCustomId('config_menuselector')
         .setPlaceholder('Choose Menu Section')
     
     let menupageoptionsarr = []
@@ -212,63 +223,31 @@ function generateConfigModal(interaction, menuset = "General", page) {
     // Note, they must have global manage messages permission.
     if (interaction.member.permissions.has(PermissionsBitField.Flags.ManageMessages)) {
         let opt = new StringSelectMenuOptionBuilder()
-            .setLabel("Server")
+            .setLabel("Server Settings")
             .setValue(`menuopt_Server`)
+        menupageoptionsarr.push(opt)
     }
 
     // If the user is the owner of the bot
+    // The application should already be retrieved during the index.js initialization. 
     if (interaction.user.id == interaction.client.application.owner.id) {
         let opt = new StringSelectMenuOptionBuilder()
-            .setLabel("Server")
-            .setValue(`menuopt_Server`)
+            .setLabel("Bot Settings")
+            .setValue(`menuopt_Bot`)
+        menupageoptionsarr.push(opt)
     }
 
-    let menunavigationactionrow = new ActionRowBuilder()
-        .addComponents()
+    // Add all of the available options we have for the menu selection
+    menupageoptions.addOptions(...menupageoptionsarr);
 
-    {
-        type: ComponentType.ActionRow,
-        components: [
-            {
-            type: ComponentType.StringSelect,
-            custom_id: `list-select-${page}-${+details}`,
-            options: restraintOptions,
-            placeholder: "Change restraint type...",
-            },
-        ],
-    },
-        {
-        type: ComponentType.ActionRow,
-        components: [
-            {
-            type: ComponentType.Button,
-            custom_id: `list-${type}-${page - 1}-${+details}`,
-            label: "← Prev",
-            disabled: page == 0,
-            style: ButtonStyle.Secondary,
-            },
-            {
-            type: ComponentType.Button,
-            custom_id: `list-${type}-${page}-${+details}`,
-            label: `Page ${page + 1} of ${maxPage + 1}`,
-            disabled: true,
-            style: ButtonStyle.Secondary,
-            },
-            {
-            type: ComponentType.Button,
-            custom_id: `list-${type}-${page + 1}-${+details}`,
-            label: "Next →",
-            disabled: page == maxPage,
-            style: ButtonStyle.Secondary,
-            },
-            {
-            type: ComponentType.Button,
-            custom_id: `list-${type}-${page}-${+!details}`,
-            label: details ? "Hide details" : "Show details",
-            style: ButtonStyle.Secondary,
-            },
-        ],
-        },
+    pagecomponents.push(new ActionRowBuilder()
+        .addComponents(menupageoptions)
+    )
+
+    return {
+        components: pagecomponents,
+        flags: [MessageFlags.IsComponentsV2, MessageFlags.Ephemeral],
+    }
 }
 
 function setOption(userID, option, choice) {
@@ -276,6 +255,7 @@ function setOption(userID, option, choice) {
     if (process.configs.users == undefined) { process.configs.users = {} } 
     if (process.configs.users[userID] == undefined) { process.configs.users[userID] = {} } 
     process.configs.users[userID][option] = choice;
+    fs.writeFileSync(`${process.GagbotSavedFileDirectory}/configs.txt`, JSON.stringify(process.configs));
 }
 
 function getOption(userID, option) {
@@ -285,6 +265,17 @@ function getOption(userID, option) {
         process.configs.users[userID] = {} 
         initializeOptions(userID)
     } 
+    if (process.configs.users[userID][option] == undefined) {
+        let arousaloptionpages = Object.keys(configoptions["Arousal"])
+        let generaloptionpages = Object.keys(configoptions["General"])
+        arousaloptionpages.forEach((k) => {
+            if (k == option) { process.configs.users[userID][k] = configoptions["Arousal"][k].default }
+        })
+        generaloptionpages.forEach((k) => {
+            if (k == option) { process.configs.users[userID][k] = configoptions["General"][k].default }
+        })
+        fs.writeFileSync(`${process.GagbotSavedFileDirectory}/configs.txt`, JSON.stringify(process.configs));
+    }
     return process.configs.users[userID][option];
 }
 
@@ -299,3 +290,105 @@ function initializeOptions(userID) {
     })
     fs.writeFileSync(`${process.GagbotSavedFileDirectory}/configs.txt`, JSON.stringify(process.configs));
 }
+
+// Returns a blocking function which can be awaited
+// Will immediately resolve if the user allows everyone to remove bondage
+// else, will prompt them. Will resolve false if rejected. 
+function checkBondageRemoval(userID, targetID, type) {
+    let useroption = getOption(targetID, "removebondage");
+    
+    console.log(useroption);
+    console.log(userID == targetID)
+    console.log((useroption == "all_binder_and_keyholder") && ((getCollarKeyholder(targetID) == userID) || (getChastityKeyholder(targetID) == userID)))
+
+
+    // Return true immediately if it's accepted without question
+    if (useroption == "accept") { return true }
+    
+    // Return true immediately if the targetID and userID are the same
+    // The user probably wants to remove their own stuff! 
+    if (userID == targetID) { return true }
+
+    // If keyholder and keyholders allowed, return true 
+    if ((useroption == "all_binder_and_keyholder") && ((getCollarKeyholder(targetID) == userID) || (getChastityKeyholder(targetID) == userID))) {
+        return true;
+    }
+
+    // if binder or KH, return true if target ID is origbinder
+    if ((useroption == "all_binder") || (useroption == "all_binder_and_keyholder")) {
+        let restraintobject;
+        if (type == "heavy") { restraintobject = getHeavy(targetID) } 
+        if (type == "gag") { restraintobject = getGagg(targetID) } 
+        if (type == "mitten") { restraintobject = getMitten(targetID) } 
+        if (type == "corset") { restraintobject = getCorset(targetID) } 
+        if (type == "headwear") { restraintobject = getHeadwear(targetID) } 
+        if (type == "vibe") { restraintobject = getVibe(targetID) } 
+
+        if (restraintobject) {
+            if (restraintobject.origbinder == userID) { return true }
+        }
+    }
+
+    console.log("didnt match ANYTHING")
+
+    return false
+}
+
+async function handleBondageRemoval(user, target, type) {
+    return new Promise(async (res,rej) => {
+        let buttons = [
+            new ButtonBuilder().setCustomId("denyButton").setLabel("Deny").setStyle(ButtonStyle.Danger),
+            new ButtonBuilder().setCustomId("acceptButton").setLabel("Allow").setStyle(ButtonStyle.Success)
+        ]
+        let dmchannel = await target.createDM();
+        await dmchannel.send({
+            content: `${user} would like to remove your ${type}. Do you want to allow this action?`,
+            components: [new ActionRowBuilder().addComponents(...buttons)]
+        }).then((mess) => {
+            // Create a collector for up to 30 seconds
+            const collector = mess.createMessageComponentCollector({ componentType: ComponentType.Button, time: 30_000, max: 1 })
+
+            collector.on('collect', async (i) => {
+                console.log(i)
+                if (i.customId == "acceptButton") {
+                    await mess.delete().then(() => {
+                        i.reply(`Confirmed - ${user} is permitted to take your ${type} off!`)
+                    })
+                    res(true);
+                }
+                else {
+                    await mess.delete().then(() => {
+                        i.reply(`Rejected - ${user} is blocked from taking your ${type} off!`)
+                    })
+                    rej(true);
+                }
+            })
+
+            collector.on('end', async (collected) => {
+                // timed out
+                if (collected.length == 0) {
+                    await mess.delete().then(() => {
+                        i.reply(`Timed out - ${user} is blocked from taking your ${type} off!`)
+                    })
+                    rej(true);
+                }
+            })
+        })
+    })/*.then(
+        (res) => {
+            console.log("We got ALLOWED")
+            return true
+    }, 
+        (rej) => {
+            console.log("We got REJECTED")
+            return false
+    })*/
+}
+
+exports.generateConfigModal = generateConfigModal;
+exports.configoptions = configoptions;
+exports.getOption = getOption;
+exports.setOption = setOption;
+
+exports.handleBondageRemoval = handleBondageRemoval;
+exports.checkBondageRemoval = checkBondageRemoval;

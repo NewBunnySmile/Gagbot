@@ -33,6 +33,7 @@ let processdatatoload = [
     { textname: "arousal.txt", processvar: "arousal", default: {} },
     { textname: "headwearusers.txt", processvar: "headwear", default: {} },
     { textname: "discardedkeys.txt", processvar: "discardedKeys", default: [] },
+    { textname: "configs.txt", processvar: "configs", default: {}}
 ]
 
 processdatatoload.forEach((s) => {
@@ -157,6 +158,11 @@ client.on('interactionCreate', async (interaction) => {
         }
       
         if (interaction.isMessageComponent()) {
+            // Lazy workaround for config handling, that will probably stand the test of time. 
+            if (interaction.customId.startsWith("config_")) {
+                let configfunc = require(`./commands/test.js`)
+                configfunc.interactionresponse(interaction);  
+            }
             const [key, ...args] = interaction.customId.split("-");
             componentHandlers.get(key)?.handle(interaction, ...args);
             return;

@@ -177,13 +177,13 @@ module.exports = {
 						// We are already gagged, so we want to change gags
 						data.gag = true
 						interaction.reply(getText(data))
-						assignGag(gaggeduser.id, gagtype, gagintensity)
+						assignGag(gaggeduser.id, gagtype, gagintensity, interaction.user.id)
 					}
 					else {
 						// Not already gagged, lets put one on
 						data.nogag = true
 						interaction.reply(getText(data))
-						assignGag(gaggeduser.id, gagtype, gagintensity)
+						assignGag(gaggeduser.id, gagtype, gagintensity, interaction.user.id)
 					}
 				}
 				else {
@@ -193,7 +193,7 @@ module.exports = {
 						// They are already gagged, so we want to change gags
 						data.gag = true
 						interaction.reply(getText(data))
-						assignGag(gaggeduser.id, gagtype, gagintensity)
+						assignGag(gaggeduser.id, gagtype, gagintensity, interaction.user.id)
 					}
 					else {
 						// Not already gagged, lets put one on
@@ -201,7 +201,7 @@ module.exports = {
 						data.nogag = true
 						data[tone] = true
 						interaction.reply(getText(data))
-						assignGag(gaggeduser.id, gagtype, gagintensity)
+						assignGag(gaggeduser.id, gagtype, gagintensity, interaction.user.id)
 					}
 				}
 			}

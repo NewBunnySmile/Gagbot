@@ -1343,6 +1343,19 @@ const textarrays = {
     texts_vibe: texts_vibe
 }
 
+// Get generic text and spit out a pronoun respecting version YAY
+const getTextGeneric = (type, data_in) => {
+    let generics = {
+        "unbind": "TARGET_TAG has elected to prompt for TARGET_THEIR VAR_C1 to be removed. Please wait as TARGET_THEY confirm (30 second timeout).",
+        "unbind_decline": "TARGET_TAG has declined your help with USER_THEIR VAR_C1.",
+        "unbind_accept": "TARGET_TAG has accepted your offer to help!",
+        "unbind_timeout": "The request to help TARGET_TAG timed out!",
+    }
+
+    let chosentext = generics[type];
+    return convertPronounsText(chosentext, data_in)
+}
+
 
 /* ----------------------------------
 getText() -> Returns a full text depending on data

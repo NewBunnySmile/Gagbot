@@ -38,11 +38,12 @@ const convertGagText = (type) => {
     return convertgagarr[type];
 }
 
-const assignGag = (userID, gagtype = "ball", intensity = 5) => {
+const assignGag = (userID, gagtype = "ball", intensity = 5, origbinder) => {
     if (process.gags == undefined) { process.gags = {} }
     process.gags[userID] = {
         gagtype: gagtype,
-        intensity: intensity
+        intensity: intensity,
+        origbinder: origbinder
     }
     fs.writeFileSync(`${process.GagbotSavedFileDirectory}/gaggedusers.txt`, JSON.stringify(process.gags));
 }
@@ -50,6 +51,11 @@ const assignGag = (userID, gagtype = "ball", intensity = 5) => {
 const getGag = (userID) => {
     if (process.gags == undefined) { process.gags = {} }
     return process.gags[userID]?.gagtype
+}
+
+// Rename this later probably. Or forget lol. It's used to get the origbinder prop. 
+const getGagg = (userID) => {
+    return process.gags[userID]
 }
 
 const getGagIntensity = (userID) => {
@@ -326,6 +332,9 @@ const garbleMessage = async (threadId, msg) => {
 
 exports.assignGag = assignGag;
 exports.getGag = getGag;
+
+exports.getGagg = getGagg;
+
 exports.getGagIntensity = getGagIntensity;
 exports.deleteGag = deleteGag;
 exports.assignMitten = assignMitten;

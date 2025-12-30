@@ -3,27 +3,53 @@ const { mittentypes } = require('./../functions/gagfunctions.js')
 const { heavytypes } = require('./../functions/heavyfunctions.js')
 const { getPronouns } = require('./../functions/pronounfunctions.js')
 const { getConsent, handleConsent, timelockChastityModalnew } = require('./../functions/interactivefunctions.js')
+const { generateConfigModal, configoptions, getOption, setOption } = require('./../functions/configfunctions.js');
 
 module.exports = {
 	data: new SlashCommandBuilder()
 		.setName('test')
-        .setDescription(`Put heavy bondage on, preventing the use of any command`)
-		.addUserOption((opt) => opt.setName("wearer").setDescription("Who wears the belt?").setRequired(false))
-        .addUserOption((opt) => opt.setName("keyholder").setDescription("If selflocked, who is your temporary keyholder?").setRequired(false)),
-    async execute(interaction) {
+        .setDescription(`Testing new menu builders`),
+	async execute(interaction) {
 		try {
-			if (interaction.user.id != "125093095405518850") {
-                await interaction.reply("You're not Enraa. No. <:NijikaGrin:1051258841913905302>")
+			if (interaction.user.id !== interaction.client?.application?.owner?.id) {
+                await interaction.reply(`You're not ${interaction.client?.application?.owner?.displayName}. Go away.`)
                 return
             }
-
-    		const wearer = interaction.options.getUser("wearer") ?? interaction.user;
-    		const tempKeyholder = interaction.options.getUser("keyholder");
 			
-			interaction.showModal(await timelockChastityModalnew(interaction, wearer, tempKeyholder));
+			interaction.reply(generateConfigModal(interaction, "General", 0));
+
+			//await interaction.reply({ content: "This is the ephemeral first message", flags: MessageFlags.Ephemeral })
+			//await interaction.followUp(`Test Message followup!`)
 		}
 		catch (err) {
 			console.log(err)
 		}
-    }
+    },
+	async interactionresponse(interaction) {
+		try {
+			console.log(interaction)
+			let optionparts = interaction.customId.split("_");
+			
+			// We changed page, new page!
+			if (optionparts[1] == "menuselector") {
+				interaction.update(generateConfigModal(interaction, interaction.values[0].split("_")[1]));
+			}
+			else if (optionparts[1] == "pageopt") {
+				// Frankly I hate arrays for this but lets break it down.
+				// We retrieve all of the choices for the given configuration option, mapping their values.
+				// We then find the current value and then increment it, resetting to 0 when out of range.
+				// Then we assign it to setOption. This means that choices are chosen from top to bottom in a circle.
+				let optionschoice = configoptions[optionparts[2]][optionparts[3]].choices.map((c) => c.value);
+				let newindex = optionschoice.indexOf(getOption(interaction.user.id,optionparts[3])) + 1;
+				if (newindex >= optionschoice.length) { newindex = 0 }
+				setOption(interaction.user.id, optionparts[3], optionschoice[newindex])
+
+				// Finally, reprompt the user, now with the new choice set. 
+				interaction.update(generateConfigModal(interaction, optionparts[2]));
+			}
+		}
+		catch (err) {
+			console.log(err);
+		}
+	}
 }
