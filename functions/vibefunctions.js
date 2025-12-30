@@ -1,9 +1,9 @@
 const fs = require('fs');
 const path = require('path');
 const https = require('https');
-const { arousedtexts, arousedtextshigh } = require('../vibes/aroused/aroused_texts.js')
 const { optins } = require('./optinfunctions');
 const { getHeavy, heavyDenialCoefficient } = require("./heavyfunctions.js");
+const { arousedtexts } = require('../vibes/aroused/aroused_texts.js');
 
 const chastitytypes = [
     { name: "Featherlight Belt", value: "belt_featherlight", denialCoefficient: 15 },
@@ -30,7 +30,7 @@ const ORGASM_LIMIT = 10;
 // the rate of arousal decay without orgasms when unbelted
 const UNBELTED_DECAY = 0.2;
 // the maximum frustration that can be reached
-const MAX_FRUSTRATION = 100;
+const MAX_FRUSTRATION = 1; // Set to 1 to effectively neuter frustration
 // by how much arousal randomness is biased upwards
 const RANDOM_BIAS = 1;
 // by how much vibe intensity is scaled for the arousal model
@@ -65,15 +65,18 @@ const getChastity = (user) => {
     return process.chastity[user];
 }
 
+// Chastity does not need an origbinder function
+
 const removeChastity = (user) => {
     if (process.chastity == undefined) { process.chastity = {} }
     delete process.chastity[user];
     fs.writeFileSync(`${process.GagbotSavedFileDirectory}/chastityusers.txt`, JSON.stringify(process.chastity));
 }
 
-const assignVibe = (user, intensity, vibetype = "bullet vibe") => {
+const assignVibe = (user, intensity, vibetype = "bullet vibe", origbinder) => {
     if (!optins.getEnableVibes(user)) return;
     if (process.vibe == undefined) { process.vibe = {} }
+    let originalbinder = process.vibe[user]?.origbinder // ... well I was gonna finish vibe code but this needs a bigger rework
     if (!process.vibe[user]) {        
         process.vibe[user] = [{
             vibetype: vibetype,
@@ -259,8 +262,29 @@ const findChastityKey = (index, newKeyholder) => {
     return false;
 }
 
+function getArousedTexts(user) {
+    const texts = [];
+
+    if (optins.getDynamicArousal(user)) {
+        const arousal = process.arousal[user];
+        const current = arousal.arousal;
+        const change = arousal.arousal - arousal.prev;
+        for (const [min, max, minChange, maxChange, text] of arousedtexts) {
+            if ((min < 0 || min <= current) && (max < 0 || max >= current) && (minChange < 0 || minChange <= change) && (maxChange < 0 || maxChange >= change)) texts.push(text);
+        }
+    } else {
+        const arousal = calcStaticVibeIntensity(user);
+
+        for (const [min, max, _0, _1, text] of arousedtexts) {
+            if ((min < 0 || min <= arousal) && (max < 0 || max >= arousal)) texts.push(text);
+        }
+    }
+
+    return texts;
+}
+
 // Given a string, randomly provides a stutter and rarely provides an arousal text per word.
-function stutterText(text, intensity) {
+function stutterText(text, intensity, arousedtexts) {
     function aux(text) {
         outtext = '';
         if (!((text.charAt(0) == "<" && text.charAt(1) == "@") || (text.charAt(0) == "\n") || (!text.charAt(0).match(/[a-zA-Z0-9]/)))) { //Ignore pings, linebreaks and signs (preventively I dunno)
@@ -277,13 +301,7 @@ function stutterText(text, intensity) {
                 outtext = `${outtext}${text}`
             }
             if (Math.random() < intensity / 40) { // 0.5-5% to insert an arousal text
-                let arousedlist = arousedtexts;
-                if (intensity > 7) {
-                    for (let i = 0; i < arousedtextshigh; i++) { // Remove the first 5 elements to give the high arousal texts higher chance to show up
-                        arousedlist[i] = arousedtextshigh[i]
-                    }
-                }
-                let arousedtext = arousedtexts[Math.floor(Math.random() * arousedtexts.length)]
+                let arousedtext = arousedtexts[Math.floor(Math.random() * arousedtexts.length)] ?? "mmf~"
                 outtext = `${outtext} ${arousedtext}`
             }
             return outtext;
@@ -478,6 +496,7 @@ exports.removeChastity = removeChastity
 exports.assignVibe = assignVibe
 exports.getVibe = getVibe
 exports.removeVibe = removeVibe
+exports.getArousedTexts = getArousedTexts;
 exports.stutterText = stutterText
 exports.getChastityTimelock = getChastityTimelock
 

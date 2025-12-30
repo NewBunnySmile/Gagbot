@@ -383,7 +383,7 @@ const texts_headwear = {
                 `TARGET_TAG is already wearing a VAR_C2, but you wouldn't be able to put it on TARGET_THEM anyway!`
             ],
             noworn: [
-                `USER_TAG boops a VAR_C2 towards TARGET_TAG, but USER_THEY can't really put it on TARGET_THEM because of USER_THEIR VAR_C1. USER_THEY should grow arms!`
+                `USER_TAG boops a VAR_C2 towards TARGET_TAG, but USER_THEY can't really put it on TARGET_THEM because of USER_THEIR VAR_C1. USER_THEY_CAP should grow arms!`
             ]
         }
     },
@@ -867,7 +867,7 @@ const texts_unheadwear = {
                 },
                 multiple: {
                     worn: [
-                        `USER_TAG paws at USER_THEIR VAR_C2, trying to scoot it off of USER_THEIR head! No fingers makes it impossible to slip off!`
+                        `USER_TAG paws at USER_THEIR head restraints, trying to scoot them off of USER_THEIR head! No fingers makes it impossible to slip any off!`
                     ],
                     // Ephemeral
                     noworn: [
@@ -1343,6 +1343,22 @@ const textarrays = {
     texts_vibe: texts_vibe
 }
 
+// Get generic text and spit out a pronoun respecting version YAY
+const getTextGeneric = (type, data_in) => {
+    let generics = {
+        "unbind": "TARGET_TAG has elected to prompt for TARGET_THEIR VAR_C1 to be removed. Please wait as TARGET_THEY confirmTARGET_S (30 second timeout).",
+        "unbind_decline": "TARGET_TAG has declined your help with USER_THEIR VAR_C1.",
+        "unbind_accept": "TARGET_TAG has accepted your offer to help with USER_THEIR VAR_C1!",
+        "unbind_timeout": "The request to help TARGET_TAG timed out!",
+        "changebind": "TARGET_TAG has elected to prompt for TARGET_THEIR VAR_C1 to be changed. Please wait as TARGET_THEY confirmTARGET_S (30 second timeout).",
+        "changebind_decline": "TARGET_TAG has declined allowing you to change USER_THEIR bindings.",
+        "changebind_accept": "TARGET_TAG has allowed you to change USER_THEIR bindings.",
+    }
+
+    let chosentext = generics[type];
+    return convertPronounsText(chosentext, data_in)
+}
+
 
 /* ----------------------------------
 getText() -> Returns a full text depending on data
@@ -1403,3 +1419,4 @@ const getText = (data) => {
 }
 
 exports.getText = getText;
+exports.getTextGeneric = getTextGeneric;

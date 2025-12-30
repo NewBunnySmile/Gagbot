@@ -3,7 +3,8 @@ const { getGag, deleteGag, getMitten } = require('./../functions/gagfunctions.js
 const { getHeavy } = require('./../functions/heavyfunctions.js')
 const { getPronouns } = require('./../functions/pronounfunctions.js')
 const { getConsent, handleConsent } = require('./../functions/interactivefunctions.js')
-const { getText } = require("./../functions/textfunctions.js");
+const { getText, getTextGeneric } = require("./../functions/textfunctions.js");
+const { checkBondageRemoval, handleBondageRemoval } = require('../functions/configfunctions.js');
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -75,7 +76,7 @@ module.exports = {
                         if (getGag(gaggeduser.id)) {
                             // We are wearing a gag
                             data.gag = true
-                            interaction.reply(getText(data))
+                            interaction.reply(getText(data));
                         }
                         else {
                             // Not gagged! Ephemeral
@@ -122,8 +123,25 @@ module.exports = {
                         if (getGag(gaggeduser.id)) {
                             // They are wearing a gag
                             data.gag = true
-                            interaction.reply(getText(data))
-                            deleteGag(gaggeduser.id)
+                            // Now lets make sure the wearer wants that.
+                            if (checkBondageRemoval(interaction.user.id, gaggeduser.id, "gag") == true) {
+                                // Allowed immediately, lets go
+                                interaction.reply(getText(data))
+                                deleteGag(gaggeduser.id)
+                            }
+                            else {
+                                // We need to ask first. 
+                                let datatogeneric = Object.assign({}, data.textdata);
+                                datatogeneric.c1 = "gag";
+                                interaction.reply({ content: getTextGeneric("unbind", datatogeneric), flags: MessageFlags.Ephemeral })
+                                let canRemove = await handleBondageRemoval(interaction.user, gaggeduser, "gag").then(async (res) => {
+                                    await interaction.editReply(getTextGeneric("unbind_accept", datatogeneric))
+                                    await interaction.followUp(getText(data))
+                                    deleteGag(gaggeduser.id)
+                                }, async (rej) => {
+                                    await interaction.editReply(getTextGeneric("unbind_decline", datatogeneric))
+                                })
+                            }
                         }
                         else {
                             // Not gagged! Ephemeral

@@ -18,6 +18,11 @@ const headweartypes = [
     { name: "Kigu Mask", value: "mask_kigu", blockinspect: true, blockemote: true },
     { name: "Doll Visor", value: "doll_visor", blockinspect: true, blockemote: true },
     { name: "VR Headset", value: "vr_visor", blockinspect: true },
+    { name: "Witchy Glasses", value: "glasses_witchy" },
+    { name: "Full Frame Glasses", value: "glasses_fullframe" },
+    { name: "Nostalgia Glasses", value: "glasses_nostalgia" },
+    { name: "Ridiculously Big Witch Hat", value: "witchhat_big" },
+    { name: "Princess Crown", value: "princess_crown" },
 ]
 
 /**************
@@ -28,14 +33,16 @@ const loadHeadwearTypes = () => {
     process.headtypes = headweartypes.map((item) => {return { name: item.name, value: item.value }})
 }
 
-const assignHeadwear = (userID, headwear) => {
+const assignHeadwear = (userID, headwear, origbinder) => {
     if (process.headwear == undefined) { process.headwear = {} }
+    let originalbinder = process.headwear[userID]?.origbinder
     if (process.headwear[userID]) {
         process.headwear[userID].wornheadwear.push(headwear);
     }
     else {
         process.headwear[userID] = {
-            wornheadwear: [headwear]
+            wornheadwear: [headwear],
+            origbinder: originalbinder ?? origbinder
         }
     }
     fs.writeFileSync(`${process.GagbotSavedFileDirectory}/headwearusers.txt`, JSON.stringify(process.headwear));
@@ -44,6 +51,11 @@ const assignHeadwear = (userID, headwear) => {
 const getHeadwear = (userID) => {
     if (process.headwear == undefined) { process.headwear = {} }
     return process.headwear[userID]?.wornheadwear ? process.headwear[userID]?.wornheadwear : [];
+}
+
+const getHeadwearBinder = (userID) => {
+    if (process.headwear == undefined) { process.headwear = {} }
+    return process.headwear[userID]?.origbinder;
 }
 
 const deleteHeadwear = (userID, headwear) => {
@@ -79,6 +91,23 @@ const getHeadwearName = (userID, headnname) => {
     }
 }
 
+// Gets the full headwear entry
+// There's a better way to do this.
+// I didnt feel like doing some kind of .some condition checking. 
+// Plz simplify.
+const getHeadwearBlocks = (headnname) => {
+    let convertmittenarr = {}
+    for (let i = 0; i < headweartypes.length; i++) {
+        convertmittenarr[headweartypes[i].value] = headweartypes[i]
+    }
+    if (headnname) {
+        return convertmittenarr[headnname];
+    }
+    else {
+        return undefined;
+    }
+}
+
 // Returns an object with true/false if *ANY* headwear they're wearing 
 // blocks a given function. 
 // { canEmote: true, canInspect: true }
@@ -87,8 +116,15 @@ const getHeadwearRestrictions = (userID) => {
         canEmote: true,
         canInspect: true
     }
-
-
+    let wornheadwear = getHeadwear(userID);
+    for (let i = 0; i < wornheadwear.length; i++) {
+        if (getHeadwearBlocks(wornheadwear[i]).blockemote) {
+            allowedperms.canEmote = false
+        }
+        if (getHeadwearBlocks(wornheadwear[i]).blockinspect) {
+            allowedperms.canInspect = false
+        }
+    }
 
     return allowedperms
 }
@@ -97,5 +133,7 @@ exports.headweartypes = headweartypes
 exports.loadHeadwearTypes = loadHeadwearTypes;
 exports.assignHeadwear = assignHeadwear
 exports.getHeadwear = getHeadwear
+exports.getHeadwearBinder = getHeadwearBinder;
 exports.deleteHeadwear = deleteHeadwear
 exports.getHeadwearName = getHeadwearName;
+exports.getHeadwearRestrictions = getHeadwearRestrictions;

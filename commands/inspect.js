@@ -4,7 +4,7 @@ const { getChastity, getVibe, getChastityKeys, getChastityTimelock, getArousalDe
 const { getCollar, getCollarPerm, getCollarKeys, getCollarName } = require('./../functions/collarfunctions.js')
 const { getHeavy } = require('./../functions/heavyfunctions.js')
 const { getCorset } = require('./../functions/corsetfunctions.js')
-const { getHeadwear, getHeadwearName } = require('./../functions/headwearfunctions.js')
+const { getHeadwear, getHeadwearName, getHeadwearRestrictions } = require('./../functions/headwearfunctions.js')
 const { getPronouns, getPronounsSet } = require('./../functions/pronounfunctions.js')
 
 module.exports = {
@@ -18,6 +18,12 @@ module.exports = {
     async execute(interaction) {
         try {
             let inspectuser = interaction.options.getUser('user') ? interaction.options.getUser('user') : interaction.user;
+            let headwearrestrictions = getHeadwearRestrictions(interaction.user.id)
+            console.log(headwearrestrictions);
+            if ((inspectuser != interaction.user) && !headwearrestrictions.canInspect) {
+                interaction.reply({ content: `You are blinded and cannot look at ${inspectuser}.`, flags: MessageFlags.Ephemeral })
+                return;
+            }
             let inspectparts = [];
             let titletext = ``
             let outtext = ``
@@ -28,6 +34,7 @@ module.exports = {
                 titletext = `## ${inspectuser}'s current restraints:\n-# (${getPronounsSet(inspectuser.id)})\n\n`
             }
             // Gag status
+            // You can easily feel if you're gagged, so no restrictions here
             if (getGag(inspectuser.id)) {
                 inspectparts.push(`<:Gag:1073495437635506216> Gag: **${convertGagText(getGag(inspectuser.id))}** set to Intensity **${getGagIntensity(inspectuser.id)}**`)
             }
@@ -48,6 +55,7 @@ module.exports = {
                 inspectparts.push(`👤 Headwear: Not currently worn.`)
             }
             // Mitten status
+            // You can easily feel if you're wearing mittens, so no restrictions
             if (getMitten(inspectuser.id)) {
                 if (getMittenName(inspectuser.id)) {
                     inspectparts.push(`<:mittens:1452425463757803783> Mittens: **${getMittenName(inspectuser.id)}**`)
@@ -67,6 +75,7 @@ module.exports = {
                 inspectparts.push(`<:MagicWand:1073504682540011520> Vibrator: Not currently worn.`)
             }
             // Arousal status
+            // You can *definitely* tell how horny you are, so no restrictions
             let arousalblock = ``
             const arousal = getArousalDescription(inspectuser.id);
             if (arousal) arousalblock = `Arousal: **${getArousalDescription(inspectuser.id)}**`;
@@ -74,15 +83,21 @@ module.exports = {
             if (change) arousalblock = `${arousalblock}\n-# ...${change}`;
             if (arousalblock.length > 0) { inspectparts.push(arousalblock) }
             // Chastity status
+            // You'll be able to tell that it's locked, but nothing more. 
             if (getChastity(inspectuser.id)) {
                 let isLocked = (getChastity(inspectuser.id)?.keyholder == interaction.user.id || (getChastity(inspectuser.id)?.access === 0 && inspectuser.id != interaction.user.id))
                 let lockemoji = isLocked ? "🔑" : "🔒"
+                if (!headwearrestrictions.canInspect) { lockemoji = "❓" }
                 let chastitykeyaccess = getChastity(inspectuser.id)?.access
                 let currentchastitybelt = (getChastityName(inspectuser.id) ? getChastityName(inspectuser.id) : "Locked Up Nice and Tight!")
                 let timelockedtext = "Timelocked (Open)"
                 if (chastitykeyaccess == 1) { timelockedtext = "Timelocked (Keyed)" }
                 if (chastitykeyaccess == 2) { timelockedtext = "Timelocked (Sealed)" }
-                if (getChastity(inspectuser.id).keyholder == "discarded") {
+                if (!headwearrestrictions.canInspect) {
+                    // Wearer is blind - they can only tell its on and locked. Nothing more. 
+                    inspectparts.push(`<:Chastity:1073495208861380629> Chastity: **${currentchastitybelt}**\n-# ‎   ⤷ ${lockemoji} **Locked (blind)**`)
+                }
+                else if (getChastity(inspectuser.id).keyholder == "discarded") {
                     inspectparts.push(`<:Chastity:1073495208861380629> Chastity: **${currentchastitybelt}**\n-# ‎   ⤷ ${lockemoji} **Keys are Missing!**`)
                 }
                 else if (getChastityTimelock(inspectuser.id)) {
@@ -100,6 +115,7 @@ module.exports = {
                 inspectparts.push(`<:Chastity:1073495208861380629> Chastity: Not currently worn.`)
             }
             // Corset status
+            // Can probably easily tell how tight it is by how shallow your breathing is. No restrictions.
             if (getCorset(inspectuser.id)) {
                 if (getCorset(inspectuser.id).tightness > 10) {
                     inspectparts.push(`<:corset:1451126998192881684> Corset: **Laced beyond reason to a string length of ${getCorset(inspectuser.id).tightness}**`)
@@ -118,6 +134,7 @@ module.exports = {
                 inspectparts.push(`<:corset:1451126998192881684> Corset: Not currently worn.`)
             }
             // Heavy Bondage status
+            // Bendy arms are uncomfortable! Easy to tell! No restrictions!
             if (getHeavy(inspectuser.id)) {
                 inspectparts.push(`<:Armbinder:1073495590656286760> Heavy Bondage: **${getHeavy(inspectuser.id).type}**`)
             }
@@ -125,12 +142,18 @@ module.exports = {
                 inspectparts.push(`<:Armbinder:1073495590656286760> Heavy Bondage: Not currently worn.`)
             }
             // Collar status
+            // You'll be able to tell that it's locked, but nothing more. 
             let collarparts = []
             if (getCollar(inspectuser.id)) {
                 let currentcollartext = (getCollarName(inspectuser.id) ? getCollarName(inspectuser.id) : "Locked Up Nice and Tight!")
                 let isLocked = ((getCollar(inspectuser.id).keyholder == interaction.user) || (!getCollar(inspectuser.id).keyholder_only))
                 let lockemoji = isLocked ? "🔑" : "🔒"
-                if (getCollar(inspectuser.id).keyholder == "discarded") {
+                if (!headwearrestrictions.canInspect) { lockemoji = "❓" }
+                if (!headwearrestrictions.canInspect) {
+                    // Wearer is blind - they can only tell its on and locked. Nothing more. 
+                    collarparts.push(`<:collar:1449984183261986939> Collar: **${currentcollartext}**\n-# ‎   ⤷ ${lockemoji} **Locked (blind)**`)
+                }
+                else if (getCollar(inspectuser.id).keyholder == "discarded") {
                     // Self bound!
                     if (getCollar(inspectuser.id).keyholder_only) {
                         collarparts.push(`<:collar:1449984183261986939> Collar: **${currentcollartext}**\n-# ‎   ⤷ ${lockemoji} **Keys are Missing!**`)
@@ -177,7 +200,15 @@ module.exports = {
                 let keysstring = keysheldcollar.join(", ");
                 keysheldtext = `${keysheldtext}Currently holding collar keys for: ${keysstring}`
             }
-            if (keysheldtext.length > 0) { inspectparts.push(keysheldtext) }
+            if (keysheldtext.length > 0) { 
+                // Only add keys if not blind. Can't really tell without eyes.
+                if (headwearrestrictions.canInspect) {
+                    inspectparts.push(keysheldtext) 
+                }
+                else {
+                    inspectparts.push(`Holding keys for something...`)
+                }
+            }
 
             // Now construct the pages - we want pages of 1000 characters or fewer. If a part causes a page to exceed that,
             // we want to use a new page button eventually to handle this. 

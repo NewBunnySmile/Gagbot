@@ -33,6 +33,7 @@ let processdatatoload = [
     { textname: "arousal.txt", processvar: "arousal", default: {} },
     { textname: "headwearusers.txt", processvar: "headwear", default: {} },
     { textname: "discardedkeys.txt", processvar: "discardedKeys", default: [] },
+    { textname: "configs.txt", processvar: "configs", default: {}}
 ]
 
 processdatatoload.forEach((s) => {
@@ -115,6 +116,13 @@ const client = new discord.Client({
 client.on("clientReady", async () => {
     // This is run once we’re logged in!
     console.log(`Logged in as ${client.user.tag}!`)
+    try {
+        await client.application.fetch();
+        console.log(`Bot is owned by user ID ${client?.application?.owner.id}`)
+    }
+    catch (err) {
+        console.log(err)
+    }
     restartChastityTimers(client);
     setInterval(updateArousalValues, Number(process.env.AROUSALSTEPSIZE ?? 6000));
 })
@@ -150,6 +158,11 @@ client.on('interactionCreate', async (interaction) => {
         }
       
         if (interaction.isMessageComponent()) {
+            // Lazy workaround for config handling, that will probably stand the test of time. 
+            if (interaction.customId.startsWith("config_")) {
+                let configfunc = require(`./commands/config.js`)
+                configfunc.interactionresponse(interaction);  
+            }
             const [key, ...args] = interaction.customId.split("-");
             componentHandlers.get(key)?.handle(interaction, ...args);
             return;

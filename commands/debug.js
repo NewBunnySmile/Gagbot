@@ -16,8 +16,8 @@ module.exports = {
         .setDefaultMemberPermissions(PermissionFlagsBits.BanMembers), // Hide this from most people to limit people who can attempt anyway
     async execute(interaction) {
 		try {
-			if (interaction.user.id !== process.env.DEBUGUSERID) {
-                await interaction.reply("You're not Enraa. No. <:NijikaGrin:1051258841913905302>")
+			if (interaction.user.id !== interaction.client?.application?.owner?.id) {
+                await interaction.reply(`You're not ${interaction.client?.application?.owner?.displayName}. Go away.`)
                 return
             }
 			let command = interaction.options.getString("command")

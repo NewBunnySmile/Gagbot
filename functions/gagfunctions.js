@@ -3,7 +3,7 @@ const path = require('path');
 const https = require('https');
 const { messageSend, messageSendImg, messageSendDev } = require(`./../functions/messagefunctions.js`)
 const { getCorset, corsetLimitWords, silenceMessage } = require(`./../functions/corsetfunctions.js`)
-const { stutterText } = require(`./../functions/vibefunctions.js`);
+const { stutterText, getArousedTexts } = require(`./../functions/vibefunctions.js`);
 const { getVibeEquivalent } = require('./vibefunctions.js');
 
 // Grab all the command files from the commands directory
@@ -38,11 +38,13 @@ const convertGagText = (type) => {
     return convertgagarr[type];
 }
 
-const assignGag = (userID, gagtype = "ball", intensity = 5) => {
+const assignGag = (userID, gagtype = "ball", intensity = 5, origbinder) => {
     if (process.gags == undefined) { process.gags = {} }
+    let originalbinder = process.gags[userID]?.origbinder
     process.gags[userID] = {
         gagtype: gagtype,
-        intensity: intensity
+        intensity: intensity,
+        origbinder: originalbinder ?? origbinder // Preserve original binder until it is removed. 
     }
     fs.writeFileSync(`${process.GagbotSavedFileDirectory}/gaggedusers.txt`, JSON.stringify(process.gags));
 }
@@ -50,6 +52,11 @@ const assignGag = (userID, gagtype = "ball", intensity = 5) => {
 const getGag = (userID) => {
     if (process.gags == undefined) { process.gags = {} }
     return process.gags[userID]?.gagtype
+}
+
+const getGagBinder = (userID) => {
+    if (process.gags == undefined) { process.gags = {} }
+    return process.gags[userID]?.origbinder
 }
 
 const getGagIntensity = (userID) => {
@@ -63,10 +70,12 @@ const deleteGag = (userID) => {
     fs.writeFileSync(`${process.GagbotSavedFileDirectory}/gaggedusers.txt`, JSON.stringify(process.gags));
 }
 
-const assignMitten = (userID, mittentype) => {
+const assignMitten = (userID, mittentype, origbinder) => {
     if (process.mitten == undefined) { process.mitten = {} }
+    let originalbinder = process.mitten[userID]?.origbinder;
     process.mitten[userID] = {
-        mittenname: mittentype
+        mittenname: mittentype,
+        origbinder: originalbinder ?? origbinder // Preserve original binder until it is removed. 
     }
     fs.writeFileSync(`${process.GagbotSavedFileDirectory}/mittenedusers.txt`, JSON.stringify(process.mitten));
 }
@@ -74,6 +83,11 @@ const assignMitten = (userID, mittentype) => {
 const getMitten = (userID) => {
     if (process.mitten == undefined) { process.mitten = {} }
     return process.mitten[userID]
+}
+
+const getMittenBinder = (userID) => {
+    if (process.mitten == undefined) { process.mitten = {} }
+    return process.mitten[userID]?.origbinder
 }
 
 const deleteMitten = (userID) => {
@@ -185,11 +199,14 @@ const garbleMessage = async (threadId, msg) => {
         if (intensity) {
             modifiedmessage = true;
 
+            const arousedtexts = getArousedTexts(msg.author.id);
+            console.log(arousedtexts);
+
             totalwords = 0 // recalculate eligible word count because they're stimmed out of their mind. 
             for (let i = 0; i < messageparts.length; i++) {
                 try {
                     if (messageparts[i].garble) {
-                        messageparts[i].text = stutterText(messageparts[i].text, intensity)
+                        messageparts[i].text = stutterText(messageparts[i].text, intensity, arousedtexts)
                         totalwords = totalwords + messageparts[i].text.split(" ").length
                     }
                 }
@@ -326,6 +343,8 @@ const garbleMessage = async (threadId, msg) => {
 
 exports.assignGag = assignGag;
 exports.getGag = getGag;
+exports.getGagBinder = getGagBinder;
+exports.getMittenBinder = getMittenBinder;
 exports.getGagIntensity = getGagIntensity;
 exports.deleteGag = deleteGag;
 exports.assignMitten = assignMitten;

@@ -9,10 +9,10 @@ const PAGE_SIZE = 10;
 
 const restraints = [
   ["Heavy", heavytypes.sort((a,b) => a.name.localeCompare(b.name)).map((heavy) => ({ name: heavy.name, value: `Denial coefficient: ${heavy.denialCoefficient}`, inline: false }))],
-  ["Mittens", mittentypes.sort((a,b) => a.name.localeCompare(b.name)).map((heavy) => ({ name: heavy.name, value: "-# No description", inline: false }))],
+  ["Mittens", mittentypes.sort((a,b) => a.name.localeCompare(b.name)).map((heavy) => ({ name: heavy.name, value: "-# *No description*", inline: false }))],
   ["Chastity", chastitytypes.sort((a,b) => a.name.localeCompare(b.name)).map((heavy) => ({ name: heavy.name, value: `Denial coefficient: ${heavy.denialCoefficient}`, inline: false }))],
-  ["Masks", headweartypes.sort((a,b) => a.name.localeCompare(b.name)).map((heavy) => ({ name: heavy.name, value: `Restricts: ${(heavy.blockinspect || heavy.blockemote) ? `${heavy.blockinspect ? `Inspect ` : ``}${heavy.blockemote ? `Emote ` : ``}` : `-# No description`}`, inline: false }))],
-  ["Collars", collartypes.sort((a,b) => a.name.localeCompare(b.name)).map((heavy) => ({ name: heavy.name, value: "-# No description", inline: false }))],
+  ["Masks", headweartypes.sort((a,b) => a.name.localeCompare(b.name)).map((heavy) => ({ name: heavy.name, value: (heavy.blockinspect || heavy.blockemote) ? (`Restricts: ${heavy.blockinspect ? `Inspect, ` : ``}${heavy.blockemote ? `Emote, ` : ``}`).slice(0,-2) : `-# *No description*`, inline: false }))],
+  ["Collars", collartypes.sort((a,b) => a.name.localeCompare(b.name)).map((heavy) => ({ name: heavy.name, value: "-# *No description*", inline: false }))],
 ];
 
 const restraintOptions = restraints.map(([name, _], idx) => ({ label: name, value: idx }));

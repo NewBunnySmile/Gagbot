@@ -12,13 +12,15 @@ const specialCharacterCosts = new Map([
   ["-", 0],
 ]);
 
-const assignCorset = (user, tightness = 5) => {
+const assignCorset = (user, tightness = 5, origbinder) => {
   if (process.corset == undefined) process.corset = {};
   const currentBreath = process.corset[user] ? getBreath(user) : null;
+  let originalbinder = process.corset[user]?.origbinder
   process.corset[user] = {
     tightness: tightness,
     breath: currentBreath ? Math.min(currentBreath, MAX_BREATH_TABLE[tightness]) : MAX_BREATH_TABLE[tightness],
     timestamp: Date.now(),
+    origbinder: originalbinder ?? origbinder // Preserve original binder until it is removed. 
   };
   fs.writeFileSync(`${process.GagbotSavedFileDirectory}/corsetusers.txt`, JSON.stringify(process.corset));
 };
@@ -26,6 +28,11 @@ const assignCorset = (user, tightness = 5) => {
 const getCorset = (user) => {
   if (process.corset == undefined) process.corset = {};
   return process.corset[user];
+};
+
+const getCorsetBinder = (user) => {
+  if (process.corset == undefined) process.corset = {};
+  return process.corset[user]?.origbinder;
 };
 
 const removeCorset = (user) => {
@@ -137,6 +144,7 @@ function silenceMessage() {
 
 exports.assignCorset = assignCorset;
 exports.getCorset = getCorset;
+exports.getCorsetBinder = getCorsetBinder;
 exports.removeCorset = removeCorset;
 exports.corsetLimitWords = corsetLimitWords;
 exports.silenceMessage = silenceMessage;

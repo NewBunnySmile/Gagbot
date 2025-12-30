@@ -60,7 +60,7 @@ module.exports = {
                 }
             }
 
-			if (getHeavy(headwearuser.id)) {
+			if (getHeavy(interaction.user.id)) {
 				// target is in heavy bondage
 				data.heavy = true;
 				if (headwearuser.id == interaction.user.id) {

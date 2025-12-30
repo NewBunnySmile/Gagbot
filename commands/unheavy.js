@@ -3,7 +3,8 @@ const { calculateTimeout } = require("./../functions/timefunctions.js")
 const { getHeavy, removeHeavy, convertheavy } = require('./../functions/heavyfunctions.js')
 const { getPronouns } = require('./../functions/pronounfunctions.js')
 const { getConsent, handleConsent } = require('./../functions/interactivefunctions.js')
-const { getText } = require("./../functions/textfunctions.js");
+const { getText, getTextGeneric } = require("./../functions/textfunctions.js");
+const { checkBondageRemoval, handleBondageRemoval } = require('../functions/configfunctions.js');
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -48,8 +49,25 @@ module.exports = {
                 data.noheavy = true
                 if (getHeavy(heavyuser.id)) {
                     data.heavyequipped = true
-                    interaction.reply(getText(data))
-                    removeHeavy(heavyuser.id)
+                    // Now lets make sure the wearer wants that.
+                    if (checkBondageRemoval(interaction.user.id, heavyuser.id, "heavy") == true) {
+                        // Allowed immediately, lets go
+                        interaction.reply(getText(data))
+                        removeHeavy(heavyuser.id)
+                    }
+                    else {
+                        // We need to ask first. 
+                        let datatogeneric = Object.assign({}, data.textdata);
+                        datatogeneric.c1 = "heavy bondage";
+                        interaction.reply({ content: getTextGeneric("unbind", datatogeneric), flags: MessageFlags.Ephemeral })
+                        let canRemove = await handleBondageRemoval(interaction.user, heavyuser, "heavy bondage").then(async (res) => {
+                            await interaction.editReply(getTextGeneric("unbind_accept", datatogeneric))
+                            await interaction.followUp(getText(data))
+                            removeHeavy(heavyuser.id)
+                        }, async (rej) => {
+                            await interaction.editReply(getTextGeneric("unbind_decline", datatogeneric))
+                        })
+                    }
                 }
                 else {
                     data.noheavyequipped = true

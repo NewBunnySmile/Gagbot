@@ -39,6 +39,8 @@ const getCollar = (user) => {
     return process.collar[user];
 }
 
+// Collar orig binder is not necessary - it's keyed
+
 const getCollarPerm = (user, perm) => {
     if (process.collar == undefined) { process.collar = {} }
     return process.collar[user][perm];

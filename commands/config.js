@@ -7,19 +7,11 @@ const { generateConfigModal, configoptions, getOption, setOption } = require('./
 
 module.exports = {
 	data: new SlashCommandBuilder()
-		.setName('test')
-        .setDescription(`Testing new menu builders`),
+		.setName('config')
+        .setDescription(`Configure settings...`),
 	async execute(interaction) {
-		try {
-			if (interaction.user.id !== interaction.client?.application?.owner?.id) {
-                await interaction.reply(`You're not ${interaction.client?.application?.owner?.displayName}. Go away.`)
-                return
-            }
-			
+		try {			
 			interaction.reply(generateConfigModal(interaction, "General", 0));
-
-			//await interaction.reply({ content: "This is the ephemeral first message", flags: MessageFlags.Ephemeral })
-			//await interaction.followUp(`Test Message followup!`)
 		}
 		catch (err) {
 			console.log(err)

@@ -3,7 +3,8 @@ const { getGag, getMitten, deleteMitten } = require('./../functions/gagfunctions
 const { getHeavy } = require('./../functions/heavyfunctions.js')
 const { getPronouns } = require('./../functions/pronounfunctions.js')
 const { getConsent, handleConsent } = require('./../functions/interactivefunctions.js')
-const { getText } = require("./../functions/textfunctions.js");
+const { getText, getTextGeneric } = require("./../functions/textfunctions.js");
+const { checkBondageRemoval, handleBondageRemoval } = require('../functions/configfunctions.js');
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -46,13 +47,47 @@ module.exports = {
 					data.other = true
 					if (getGag(mitteneduser.id)) {
 						data.gag = true
-						interaction.reply(getText(data))
-						deleteMitten(mitteneduser.id)
+						// Now lets make sure the wearer wants that.
+						if (checkBondageRemoval(interaction.user.id, mitteneduser.id, "mitten") == true) {
+							// Allowed immediately, lets go
+							interaction.reply(getText(data))
+							deleteMitten(mitteneduser.id)
+						}
+						else {
+							// We need to ask first. 
+							let datatogeneric = Object.assign({}, data.textdata);
+							datatogeneric.c1 = "mittens";
+							interaction.reply({ content: getTextGeneric("unbind", datatogeneric), flags: MessageFlags.Ephemeral })
+							let canRemove = await handleBondageRemoval(interaction.user, mitteneduser, "mittens").then(async (res) => {
+								await interaction.editReply(getTextGeneric("unbind_accept", datatogeneric))
+								await interaction.followUp(getText(data))
+								deleteMitten(mitteneduser.id)
+							}, async (rej) => {
+								await interaction.editReply(getTextGeneric("unbind_decline", datatogeneric))
+							})
+						}
 					}
 					else {
 						data.nogag = true
-						interaction.reply(getText(data))
-						deleteMitten(mitteneduser.id)
+						// Now lets make sure the wearer wants that.
+						if (checkBondageRemoval(interaction.user.id, mitteneduser.id, "mitten") == true) {
+							// Allowed immediately, lets go
+							interaction.reply(getText(data))
+							deleteMitten(mitteneduser.id)
+						}
+						else {
+							// We need to ask first. 
+							let datatogeneric = Object.assign({}, data.textdata);
+							datatogeneric.c1 = "mittens";
+							interaction.reply({ content: getTextGeneric("unbind", datatogeneric), flags: MessageFlags.Ephemeral })
+							let canRemove = await handleBondageRemoval(interaction.user, mitteneduser, "mittens").then(async (res) => {
+								await interaction.editReply(getTextGeneric("unbind_accept", datatogeneric))
+								await interaction.followUp(getText(data))
+								deleteMitten(mitteneduser.id)
+							}, async (rej) => {
+								await interaction.editReply(getTextGeneric("unbind_decline", datatogeneric))
+							})
+						}
 					}
 				}
 				else {

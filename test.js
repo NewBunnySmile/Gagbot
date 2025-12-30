@@ -1,3 +1,3 @@
 const { getText } = require("./functions/textfunctions.js");
 
-console.log(getText(object))
+console.log(interaction.client.application.owner.id)

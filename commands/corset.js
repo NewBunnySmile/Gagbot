@@ -6,7 +6,8 @@ const { getConsent, handleConsent } = require('./../functions/interactivefunctio
 const { getCorset, assignCorset } = require('./../functions/corsetfunctions.js');
 const { rollKeyFumbleN } = require('../functions/keyfindingfunctions.js');
 const { optins } = require('../functions/optinfunctions.js');
-const { getText } = require("./../functions/textfunctions.js");
+const { getText, getTextGeneric } = require("./../functions/textfunctions.js");
+const { checkBondageRemoval, handleBondageRemoval } = require('../functions/configfunctions.js');
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -185,8 +186,25 @@ module.exports = {
                                 if (getCorset(corsetuser.id).tightness < tightness) {
                                     // Tightening the corset!
                                     data.tighter = true
-                                    interaction.reply(getText(data))
-                                    assignCorset(corsetuser.id, tightness)
+                                    // Now lets make sure the wearer wants that.
+                                    if (checkBondageRemoval(interaction.user.id, corsetuser.id, "corset") == true) {
+                                        // Allowed immediately, lets go
+                                        interaction.reply(getText(data))
+                                        assignCorset(corsetuser.id, tightness, interaction.user.id)
+                                    }
+                                    else {
+                                        // We need to ask first. 
+                                        let datatogeneric = Object.assign({}, data.textdata);
+                                        datatogeneric.c1 = "corset";
+                                        interaction.reply({ content: getTextGeneric("changebind", datatogeneric), flags: MessageFlags.Ephemeral })
+                                        let canRemove = await handleBondageRemoval(interaction.user, corsetuser, "corset", true).then(async (res) => {
+                                            await interaction.editReply(getTextGeneric("changebind_accept", datatogeneric))
+                                            await interaction.followUp(getText(data))
+                                            assignCorset(corsetuser.id, tightness, interaction.user.id)
+                                        }, async (rej) => {
+                                            await interaction.editReply(getTextGeneric("changebind_decline", datatogeneric))
+                                        })
+                                    }
                                 }
                                 else {
                                     // Loosening the corset!
@@ -267,14 +285,48 @@ module.exports = {
                         if (getCorset(corsetuser.id).tightness < tightness) {
                             // Tightening
                             data.tighten = true
-                            interaction.reply(getText(data))
-                            assignCorset(corsetuser.id, tightness)
+                            // Now lets make sure the wearer wants that.
+                            if (checkBondageRemoval(interaction.user.id, corsetuser.id, "corset") == true) {
+                                // Allowed immediately, lets go
+                                interaction.reply(getText(data))
+                                assignCorset(corsetuser.id, tightness, interaction.user.id)
+                            }
+                            else {
+                                // We need to ask first. 
+                                let datatogeneric = Object.assign({}, data.textdata);
+                                datatogeneric.c1 = "corset";
+                                interaction.reply({ content: getTextGeneric("changebind", datatogeneric), flags: MessageFlags.Ephemeral })
+                                let canRemove = await handleBondageRemoval(interaction.user, corsetuser, "corset").then(async (res) => {
+                                    await interaction.editReply(getTextGeneric("changebind_accept", datatogeneric))
+                                    await interaction.followUp(getText(data))
+                                    assignCorset(corsetuser.id, tightness, interaction.user.id)
+                                }, async (rej) => {
+                                    await interaction.editReply(getTextGeneric("changebind_decline", datatogeneric))
+                                })
+                            }
                         }
                         else {
                             // Loosening
                             data.loosen = true
-                            interaction.reply(getText(data))
-                            assignCorset(corsetuser.id, tightness)
+                            // Now lets make sure the wearer wants that.
+                            if (checkBondageRemoval(interaction.user.id, corsetuser.id, "corset") == true) {
+                                // Allowed immediately, lets go
+                                interaction.reply(getText(data))
+                                assignCorset(corsetuser.id, tightness, interaction.user.id)
+                            }
+                            else {
+                                // We need to ask first. 
+                                let datatogeneric = Object.assign({}, data.textdata);
+                                datatogeneric.c1 = "corset";
+                                interaction.reply({ content: getTextGeneric("changebind", datatogeneric), flags: MessageFlags.Ephemeral })
+                                let canRemove = await handleBondageRemoval(interaction.user, corsetuser, "corset").then(async (res) => {
+                                    await interaction.editReply(getTextGeneric("changebind_accept", datatogeneric))
+                                    await interaction.followUp(getText(data))
+                                    assignCorset(corsetuser.id, tightness, interaction.user.id)
+                                }, async (rej) => {
+                                    await interaction.editReply(getTextGeneric("changebind_decline", datatogeneric))
+                                })
+                            }
                         }
                     }
                     else {

@@ -4,7 +4,8 @@ const { getHeavy } = require('./../functions/heavyfunctions.js')
 const { getPronouns } = require('./../functions/pronounfunctions.js')
 const { getConsent, handleConsent } = require('./../functions/interactivefunctions.js')
 const { getHeadwear, getHeadwearName, deleteHeadwear } = require('../functions/headwearfunctions.js');
-const { getText } = require("./../functions/textfunctions.js");
+const { getText, getTextGeneric } = require("./../functions/textfunctions.js");
+const { checkBondageRemoval, handleBondageRemoval } = require('../functions/configfunctions.js');
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -59,7 +60,7 @@ module.exports = {
                 }
             }
 
-			if (getHeavy(headwearuser.id)) {
+			if (getHeavy(interaction.user.id)) {
 				// target is in heavy bondage
 				data.heavy = true;
 				if (headwearuser.id == interaction.user.id) {
@@ -244,8 +245,25 @@ module.exports = {
                             if (getHeadwear(headwearuser.id).includes(headwearchoice)) {
                                 // Wearing the headgear already, Ephemeral
                                 data.worn = true
-                                interaction.reply(getText(data))
-                                deleteHeadwear(headwearuser.id, headwearchoice)
+                                // Now lets make sure the wearer wants that.
+                                if (checkBondageRemoval(interaction.user.id, headwearuser.id, "headwear") == true) {
+                                    // Allowed immediately, lets go
+                                    interaction.reply(getText(data))
+                                    deleteHeadwear(headwearuser.id, headwearchoice)
+                                }
+                                else {
+                                    // We need to ask first. 
+                                    let datatogeneric = Object.assign({}, data.textdata);
+                                    datatogeneric.c1 = "head restraints";
+                                    interaction.reply({ content: getTextGeneric("unbind", datatogeneric), flags: MessageFlags.Ephemeral })
+                                    let canRemove = await handleBondageRemoval(interaction.user, headwearuser, "head restraints").then(async (res) => {
+                                        await interaction.editReply(getTextGeneric("unbind_accept", datatogeneric))
+                                        await interaction.followUp(getText(data))
+                                        deleteHeadwear(headwearuser.id, headwearchoice)
+                                    }, async (rej) => {
+                                        await interaction.editReply(getTextGeneric("unbind_decline", datatogeneric))
+                                    })
+                                }
                             }
                             else {
                                 // Not wearing it!
@@ -259,8 +277,25 @@ module.exports = {
                             if (getHeadwear(headwearuser.id).length > 0) {
                                 // Wearing the headgear already, Ephemeral
                                 data.worn = true
-                                interaction.reply(getText(data))
-                                deleteHeadwear(headwearuser.id, headwearchoice)
+                                // Now lets make sure the wearer wants that.
+                                if (checkBondageRemoval(interaction.user.id, headwearuser.id, "headwear") == true) {
+                                    // Allowed immediately, lets go
+                                    interaction.reply(getText(data))
+                                    deleteHeadwear(headwearuser.id, headwearchoice)
+                                }
+                                else {
+                                    // We need to ask first. 
+                                    let datatogeneric = Object.assign({}, data.textdata);
+                                    datatogeneric.c1 = "head restraints";
+                                    interaction.reply({ content: getTextGeneric("unbind", datatogeneric), flags: MessageFlags.Ephemeral })
+                                    let canRemove = await handleBondageRemoval(interaction.user, headwearuser, "head restraints").then(async (res) => {
+                                        await interaction.editReply(getTextGeneric("unbind_accept", datatogeneric))
+                                        await interaction.followUp(getText(data))
+                                        deleteHeadwear(headwearuser.id, headwearchoice)
+                                    }, async (rej) => {
+                                        await interaction.editReply(getTextGeneric("unbind_decline", datatogeneric))
+                                    })
+                                }
                             }
                             else {
                                 // Not wearing it!
