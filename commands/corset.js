@@ -1,5 +1,5 @@
 const { SlashCommandBuilder, MessageFlags } = require('discord.js');
-const { getChastity, getVibe, assignVibe, discardChastityKey } = require('./../functions/vibefunctions.js')
+const { getChastity, getVibe, assignVibe, discardChastityKey, canAccessChastity } = require('./../functions/vibefunctions.js')
 const { getHeavy } = require('./../functions/heavyfunctions.js')
 const { getPronouns } = require('./../functions/pronounfunctions.js')
 const { getConsent, handleConsent } = require('./../functions/interactivefunctions.js')
@@ -79,7 +79,7 @@ module.exports = {
                 data.noheavy = true
                 data.chastity = true
                 // The target is in a chastity belt
-                if ((getChastity(corsetuser.id)?.keyholder == interaction.user.id || (getChastity(corsetuser.id)?.access === 0 && corsetuser.id != interaction.user.id))) {
+                if (canAccessChastity(corsetuser.id, interaction.user.id).access) {
                     // User tries to modify the corset settings for someone in chastity that they do have the key for
                     data.key = true
                     const fumbleResults = rollKeyFumbleN(interaction.user.id, corsetuser.id, 2);

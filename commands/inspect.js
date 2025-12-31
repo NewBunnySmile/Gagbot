@@ -1,11 +1,11 @@
 const { SlashCommandBuilder, MessageFlags } = require('discord.js');
 const { getMittenName, getMitten, getGag, convertGagText, getGagIntensity } = require('./../functions/gagfunctions.js')
-const { getChastity, getVibe, getChastityKeys, getChastityTimelock, getArousalDescription, getArousalChangeDescription, getChastityName } = require('./../functions/vibefunctions.js')
-const { getCollar, getCollarPerm, getCollarKeys, getCollarName } = require('./../functions/collarfunctions.js')
+const { getChastity, getVibe, getChastityKeys, getChastityTimelock, getArousalDescription, getArousalChangeDescription, getChastityName, getClonedChastityKeysOwned, canAccessChastity } = require('./../functions/vibefunctions.js')
+const { getCollar, getCollarPerm, getCollarKeys, getCollarName, getClonedCollarKeysOwned, canAccessCollar } = require('./../functions/collarfunctions.js')
 const { getHeavy } = require('./../functions/heavyfunctions.js')
 const { getCorset } = require('./../functions/corsetfunctions.js')
 const { getHeadwear, getHeadwearName, getHeadwearRestrictions, getLockedHeadgear } = require('./../functions/headwearfunctions.js')
-const { getPronouns, getPronounsSet } = require('./../functions/pronounfunctions.js')
+const { getPronouns, getPronounsSet } = require('./../functions/pronounfunctions.js');
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -91,7 +91,7 @@ module.exports = {
             // Chastity status
             // You'll be able to tell that it's locked, but nothing more. 
             if (getChastity(inspectuser.id)) {
-                let isLocked = (getChastity(inspectuser.id)?.keyholder == interaction.user.id || (getChastity(inspectuser.id)?.access === 0 && inspectuser.id != interaction.user.id))
+                let isLocked = (canAccessChastity(inspectuser.id, interaction.user.id).access)
                 let lockemoji = isLocked ? "🔑" : "🔒"
                 if (!headwearrestrictions.canInspect) { lockemoji = "❓" }
                 let chastitykeyaccess = getChastity(inspectuser.id)?.access
@@ -152,7 +152,7 @@ module.exports = {
             let collarparts = []
             if (getCollar(inspectuser.id)) {
                 let currentcollartext = (getCollarName(inspectuser.id) ? getCollarName(inspectuser.id) : "Locked Up Nice and Tight!")
-                let isLocked = ((getCollar(inspectuser.id).keyholder == interaction.user) || (!getCollar(inspectuser.id).keyholder_only))
+                let isLocked = (canAccessCollar(inspectuser.id, interaction.user.id).access)
                 let lockemoji = isLocked ? "🔑" : "🔒"
                 if (!headwearrestrictions.canInspect) { lockemoji = "❓" }
                 if (!headwearrestrictions.canInspect) {
@@ -194,22 +194,36 @@ module.exports = {
             inspectparts.push(" ")
             // Keys Held
             let keysheldtext = ''
+            // Held Primary Keys
             let keysheldchastity = getChastityKeys(inspectuser.id)
             if (keysheldchastity.length > 0) {
                 keysheldchastity = keysheldchastity.map(k => `<@${k}>`)
                 let keysstring = keysheldchastity.join(", ");
-                keysheldtext = `Currently holding chastity keys for: ${keysstring}\n`
+                keysheldtext = `- Chastity keys: ${keysstring}\n`
             }
             let keysheldcollar = getCollarKeys(inspectuser.id)
             if (keysheldcollar.length > 0) {
                 keysheldcollar = keysheldcollar.map(k => `<@${k}>`)
                 let keysstring = keysheldcollar.join(", ");
-                keysheldtext = `${keysheldtext}Currently holding collar keys for: ${keysstring}`
+                keysheldtext = `${keysheldtext}- Collar keys: ${keysstring}\n`
+            }
+            // Held Cloned Keys
+            let keysheldclonedchastity = getClonedChastityKeysOwned(inspectuser.id)
+            if (keysheldclonedchastity.length > 0) {
+                keysheldclonedchastity = keysheldclonedchastity.map(k => `<@${k.split("_")[0]}>`)
+                let keysstring = keysheldclonedchastity.join(", ");
+                keysheldtext = `${keysheldtext}- Cloned chastity keys: ${keysstring}\n`
+            }
+            let keysheldclonedcollar = getClonedCollarKeysOwned(inspectuser.id)
+            if (keysheldclonedcollar.length > 0) {
+                keysheldclonedcollar = keysheldclonedcollar.map(k => `<@${k.split("_")[0]}>`)
+                let keysstring = keysheldclonedcollar.join(", ");
+                keysheldtext = `${keysheldtext}- Cloned collar keys: ${keysstring}`
             }
             if (keysheldtext.length > 0) { 
                 // Only add keys if not blind. Can't really tell without eyes.
                 if (headwearrestrictions.canInspect) {
-                    inspectparts.push(keysheldtext) 
+                    inspectparts.push(`### Held Keys\n${keysheldtext}`) 
                 }
                 else {
                     inspectparts.push(`Holding keys for something...`)

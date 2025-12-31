@@ -1,8 +1,9 @@
 const { SlashCommandBuilder, ComponentType, ButtonBuilder, ActionRowBuilder, ButtonStyle, MessageFlags } = require('discord.js');
 const { generateConfigModal, configoptions, getOption, setOption } = require('./../functions/configfunctions.js');
 const { getHeadwear, getHeadwearName, getLockedHeadgear, addLockedHeadgear, removeLockedHeadgear } = require('./../functions/headwearfunctions.js');
-const { canAccessCollar, promptCloneCollarKey, cloneCollarKey } = require('./../functions/collarfunctions.js');
-const { canAccessChastity, promptCloneChastityKey, cloneChastityKey } = require('./../functions/vibefunctions.js');
+const { canAccessCollar, promptCloneCollarKey, cloneCollarKey, revokeCollarKey, getClonedCollarKeysOwned, getOtherKeysCollar } = require('./../functions/collarfunctions.js');
+const { canAccessChastity, promptCloneChastityKey, cloneChastityKey, revokeChastityKey, getClonedChastityKeysOwned, getOtherKeysChastity } = require('./../functions/vibefunctions.js');
+const { getText, getTextGeneric } = require('./../functions/textfunctions.js');
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -24,25 +25,16 @@ module.exports = {
                 .addUserOption((opt) => 
                     opt.setName("clonedkeyholder")
 						.setDescription("Who to give the copied key to?")
-					)
-
+					)    
 		)
 		.addSubcommand((subcommand) =>
       		subcommand
 				.setName("revoke")
 				.setDescription("Revoke a cloned key")
-				.addUserOption((opt) => 
-                    opt.setName("wearer")
-						.setDescription("Whose restraint to revoke a key for?")
-					)
 				.addStringOption((opt) => 
-					opt.setName("restraint")
-						.setDescription("Which restraint of theirs to clone?")
+					opt.setName("clones")
+						.setDescription("Which key clone to revoke?")
 						.setAutocomplete(true)
-					)
-                .addUserOption((opt) => 
-                    opt.setName("clonedkeyholder")
-						.setDescription("Who to give the copied key to?")
 					)
     ),
 	async autoComplete(interaction) {
@@ -69,13 +61,60 @@ module.exports = {
 
 				await interaction.respond(choices)
 			}
-			else {
-				let itemslocked = getLockedHeadgear(interaction.user.id)
+			else if (subcommand == "revoke") {
+				let ownedclonedchastitykeys = getClonedChastityKeysOwned(interaction.user.id)
+                let ownedclonedcollarkeys = getClonedCollarKeysOwned(interaction.user.id)
 
-				let sorted = itemslocked.map((f) => { return { name: getHeadwearName(undefined, f), value: f }})
+                let clonedchastitykeys = getOtherKeysChastity(interaction.user.id)
+                let clonedcollarkeys = getOtherKeysCollar(interaction.user.id)
+
+                // Iterate over every member, ensuring that they are cached using the await command.
+                // I hate this code. It feels sloppy. 
+                ownedclonedchastitykeys.forEach(async (m) => {
+                    await interaction.guild.members.fetch(m.split("_")[0]); 
+                })
+                ownedclonedcollarkeys.forEach(async (m) => {
+                    await interaction.guild.members.fetch(m.split("_")[0]); 
+                })
+                clonedchastitykeys.forEach(async (m) => {
+                    await interaction.guild.members.fetch(m.split("_")[0]); 
+                    await interaction.guild.members.fetch(m.split("_")[1]); 
+                })
+                clonedcollarkeys.forEach(async (m) => {
+                    await interaction.guild.members.fetch(m.split("_")[0]); 
+                    await interaction.guild.members.fetch(m.split("_")[1]); 
+                })
+
+                // Unfortunately, we will still get undefined for names the FIRST time this is invoked. 
+                // Assuming the bot hasn't seen the user say anything that instance. 
+                // We need to consider a future solution. 
+                // Maybe have the bot do an await fetch on every member in it's process variables during index.js init.
+
+                ownedclonedchastitykeys = ownedclonedchastitykeys.map((k) => {
+                    return { name: `Your key to ${interaction.guild.members.cache.get(k.split("_")[0])?.displayName}'s chastity belt`, value: `${k.split("_")[0]}_${interaction.user.id}_${k.split("_")[1]}`}
+                })
+                ownedclonedcollarkeys = ownedclonedcollarkeys.map((k) => {
+                    return { name: `Your key to ${interaction.guild.members.cache.get(k.split("_")[0])?.displayName}'s collar`, value: `${k.split("_")[0]}_${interaction.user.id}_${k.split("_")[1]}`}
+                })
+                clonedchastitykeys = clonedchastitykeys.map((k) => {
+                    return { name: `${interaction.guild.members.cache.get(k.split("_")[1])?.displayName}'s key to ${interaction.guild.members.cache.get(k.split("_")[0])?.displayName}'s chastity belt`.slice(0,100), value: `${k}_chastitybelt` }
+                })
+                clonedcollarkeys = clonedcollarkeys.map((k) => {
+                    return { name: `${interaction.guild.members.cache.get(k.split("_")[1])?.displayName}'s key to ${interaction.guild.members.cache.get(k.split("_")[0])?.displayName}'s collar`.slice(0,100), value: `${k}_collar` }
+                })
+                
+                console.log(ownedclonedchastitykeys)
+                console.log(ownedclonedcollarkeys)
+                console.log(clonedchastitykeys)
+                console.log(clonedcollarkeys)
+
+				let sorted = [...clonedchastitykeys, ...clonedcollarkeys, ...ownedclonedchastitykeys, ...ownedclonedcollarkeys]
 				if (sorted.length == 0) {
-					sorted = [{ name: "Nothing", value: "nothing" }]
+					sorted = [{ name: "No Eligible Keys To Revoke...", value: "nothing" }]
 				}
+                else if ((sorted.filter((f) => (f.name.toLowerCase()).includes(focusedValue.toLowerCase())).slice(0,25).length == 0) && focusedValue.length > 0) {
+                    sorted = [{ name: "No Eligible Keys To Revoke...", value: "nothing" }]
+                }
 				await interaction.respond(sorted)
 			}
 		}
@@ -84,127 +123,300 @@ module.exports = {
 		}
 	},
 	async execute(interaction) {
-		try {
-            if (interaction.user.id !== interaction.client?.application?.owner?.id) {
-                await interaction.reply(`You're not ${interaction.client?.application?.owner?.displayName}. Go away.`)
-                return
-            }
-			let subcommand = interaction.options.getSubcommand();
-            let wearertoclone = interaction.options.getUser("wearer") ?? interaction.user;
-			let chosenrestrainttoclone = interaction.options.getString("restraint")
-            let clonedkeyholder = interaction.options.getUser("clonedKeyholder")
+		try {	
+            let subcommand = interaction.options.getSubcommand();
+            let choiceemoji;
 
-            // We're missing info, back to the start!
-            if (!wearertoclone || !chosenrestrainttoclone || clonedkeyholder) {
-                interaction.reply({ content: `Something went wrong. The command was parsed as:\nClone ${wearertoclone}'s key for ${chosenrestrainttoclone} and give to ${clonedkeyholder}!`, flags: MessageFlags.Ephemeral })
-                return;
-            }
-
-            // Check if the interaction user has access to clone the target restraint.
-            let canclone = false;
-            let chosenrestraintreadable;
-            if (chosenrestrainttoclone == "collar" && canAccessCollar(chosenuserid, interaction.user.id, undefined, true)) { 
-                canclone = true 
-                chosenrestraintreadable = "collar";
-            }
-            if (chosenrestrainttoclone == "chastitybelt" && canAccessChastity(chosenuserid, interaction.user.id, undefined, true)) { 
-                canclone = true 
-                chosenrestraintreadable = "chastity belt"
-            }
-            if (!canclone) {
-                interaction.reply({ content: `You do not have the keys for the wearer's ${chosenrestrainttoclone}.`, flags: MessageFlags.Ephemeral })
-                return;
-            }
-
-            // At this point, we're sure this is a valid cloning attempt. Prompt the user that this is what they want to do.
-            // Prompt and ensure the user intended to run this command for this combination. 
-            let components = [
-				{
-					type: ComponentType.ActionRow,
-					components: [
-						{
-							type: ComponentType.Button,
-							label: "Cancel",
-							customId: `cancel`,
-							style: ButtonStyle.Danger,
-					  	},
-					  	{
-							type: ComponentType.Button,
-							label: "Clone the Key",
-							customId: `agreetoclonebutton`,
-							style: ButtonStyle.Success,
-					  	}
-					],
-				},
-			]
-
-            let response = await interaction.reply({ 
-                content: `Cloning the keys for ${choiceemoji}${lockedUser} and giving the copy to 🔑${clonedkeyholder}.\n\nPlease confirm by pressing the button below:`, 
-                flags: MessageFlags.Ephemeral, 
-                components: components,
-                withResponse: true 
-            })
-            let confirmation;
-
-            const collectorFilter = (i) => i.user.id === interaction.user.id;
-            try {
-                confirmation = await response.resource.message.awaitMessageComponent({ filter: collectorFilter, time: 30_000 });
-
-                if (confirmation.customId === 'agreetoclonebutton') {
-                    await confirmation.update({ content: `Prompting the user for permission.`, components: [] });
-                    if (chosenrestrainttoclone == "collar") {
-                        let canRemove = await promptCloneCollarKey(interaction.user, wearertoclone, clonedkeyholder).then(async (res) => {
-                            // User said yes
-                            let data = {
-                                textarray: "texts_key",
-                                textdata: {
-                                    interactionuser: interaction.user,
-                                    targetuser: wearertoclone,
-                                    c1: chosenrestraintreadable,
-                                    c2: clonedkeyholder
-                                }
-                            }
-                            data.clone = true;
-                            data[chosenrestrainttoclone] = true;
-                            await confirmation.update(getTextGeneric("clone_accept", data.textdata))
-                            await confirmation.followUp(getText(data))
-                            cloneCollarKey(wearertoclone.id, clonedkeyholder.id);
-                        }, async (rej) => {
-                            // User said no.
-                            await interaction.editReply(getTextGeneric("clone_decline", datatogeneric))
-                        })
-                    }
-                    else if (chosenrestrainttoclone == "chastitybelt") {
-                        let canRemove = await promptCloneChastityKey(interaction.user, wearertoclone, clonedkeyholder).then(async (res) => {
-                            // User said yes
-                            let data = {
-                                textarray: "texts_key",
-                                textdata: {
-                                    interactionuser: interaction.user,
-                                    targetuser: wearertoclone,
-                                    c1: chosenrestraintreadable,
-                                    c2: clonedkeyholder
-                                }
-                            }
-                            data.clone = true;
-                            data[chosenrestrainttoclone] = true;
-                            await confirmation.update(getTextGeneric("clone_accept", data.textdata))
-                            await confirmation.followUp(getText(data))
-                            cloneChastityKey(wearertoclone.id, clonedkeyholder.id);
-                        }, async (rej) => {
-                            // User said no.
-                            await interaction.editReply(getTextGeneric("clone_decline", datatogeneric))
-                        })
-                    }
-                } else if (confirmation.customId === 'cancel') {
-                    await confirmation.update({ content: 'Action cancelled', components: [] });
-                    return; // Stop with the key cloning immediately. 
+            if (subcommand == "clone") {
+                let wearertoclone = interaction.options.getUser("wearer") ?? interaction.user;
+                let chosenrestrainttoclone = interaction.options.getString("restraint")
+                let clonedkeyholder = interaction.options.getUser("clonedkeyholder")
+                
+                // We're missing info, back to the start!
+                if (!wearertoclone || !chosenrestrainttoclone || !clonedkeyholder) {
+                    interaction.reply({ content: `Something went wrong. The command was parsed as:\nClone ${wearertoclone}'s key for ${chosenrestrainttoclone} and give to ${clonedkeyholder}!`, flags: MessageFlags.Ephemeral })
+                    return;
                 }
-            } 
-            catch (err) {
-                console.log(err);
-                await interaction.editReply({ content: 'Confirmation not received within 1 minute, cancelling transfer.', components: [] });
-                return;
+
+                // We can't clone ourselves lol
+                if (wearertoclone == clonedkeyholder) {
+                    interaction.reply({ content: `You can't give yourself a copy of a key!`, flags: MessageFlags.Ephemeral })
+                    return;
+                }
+
+                // Check if the interaction user has access to clone the target restraint.
+                let canclone = false;
+                let chosenrestraintreadable;
+                if (chosenrestrainttoclone == "collar" && canAccessCollar(wearertoclone.id, interaction.user.id, undefined, true)) { 
+                    canclone = true 
+                    chosenrestraintreadable = "collar";
+                    choiceemoji = "<:collar:1449984183261986939>";
+                }
+                if (chosenrestrainttoclone == "chastitybelt" && canAccessChastity(wearertoclone.id, interaction.user.id, undefined, true)) { 
+                    canclone = true 
+                    chosenrestraintreadable = "chastity belt"
+                    choiceemoji = "<:Chastity:1073495208861380629>"
+                }
+                if (!canclone) {
+                    interaction.reply({ content: `You do not have the keys for ${wearertoclone}'s ${chosenrestrainttoclone}.`, flags: MessageFlags.Ephemeral })
+                    return;
+                }
+
+                // At this point, we're sure this is a valid cloning attempt. Prompt the user that this is what they want to do.
+                // Prompt and ensure the user intended to run this command for this combination. 
+                let components = [
+                    {
+                        type: ComponentType.ActionRow,
+                        components: [
+                            {
+                                type: ComponentType.Button,
+                                label: "Cancel",
+                                customId: `cancel`,
+                                style: ButtonStyle.Danger,
+                            },
+                            {
+                                type: ComponentType.Button,
+                                label: "Clone the Key",
+                                customId: `agreetoclonebutton`,
+                                style: ButtonStyle.Success,
+                            }
+                        ],
+                    },
+                ]
+
+                let responsetext = `Cloning the keys for ${choiceemoji}${wearertoclone} and giving the copy to 🔑${clonedkeyholder}.\n\nPlease confirm by pressing the button below:`
+                if (wearertoclone == interaction.user) {
+                    responsetext = `Cloning the keys for your ${choiceemoji}${chosenrestraintreadable} and giving the copy to 🔑${clonedkeyholder}. You will retain full access to your restraints while ${clonedkeyholder} has the cloned key.\n\nPlease confirm by pressing the button below:`
+                }
+
+                let response = await interaction.reply({ 
+                    content: responsetext, 
+                    flags: MessageFlags.Ephemeral, 
+                    components: components,
+                    withResponse: true 
+                })
+                let confirmation;
+
+                const collectorFilter = (i) => i.user.id === interaction.user.id;
+                try {
+                    confirmation = await response.resource.message.awaitMessageComponent({ filter: collectorFilter, time: 30_000 });
+
+                    if (confirmation.customId === 'agreetoclonebutton') {
+                        // Skip the DM if it's the wearer giving a clone of their key.
+                        if (wearertoclone == interaction.user) {
+                            let data = {
+                                textarray: "texts_key",
+                                textdata: {
+                                    interactionuser: interaction.user,
+                                    targetuser: wearertoclone,
+                                    c1: chosenrestraintreadable,
+                                    c2: clonedkeyholder
+                                }
+                            }
+                            data.clone = true;
+                            data.self = true;
+                            data[chosenrestrainttoclone] = true;
+                            if (chosenrestrainttoclone == "collar") {
+                                await confirmation.update({ content: getTextGeneric("clone_accept_self", data.textdata) , components: [] })
+                                await confirmation.followUp(getText(data))
+                                cloneCollarKey(wearertoclone.id, clonedkeyholder.id);
+                            }
+                            else if (chosenrestrainttoclone == "chastitybelt") {
+                                await confirmation.update({ content: getTextGeneric("clone_accept_self", data.textdata), components: [] })
+                                await confirmation.followUp(getText(data))
+                                cloneChastityKey(wearertoclone.id, clonedkeyholder.id);
+                            }
+                        }
+                        else {
+                            await confirmation.update({ content: `Prompting the user for permission.`, components: [] });
+                            if (chosenrestrainttoclone == "collar") {
+                                let canRemove = await promptCloneCollarKey(interaction.user, wearertoclone, clonedkeyholder).then(async (res) => {
+                                    // User said yes
+                                    let data = {
+                                        textarray: "texts_key",
+                                        textdata: {
+                                            interactionuser: interaction.user,
+                                            targetuser: wearertoclone,
+                                            c1: chosenrestraintreadable,
+                                            c2: clonedkeyholder
+                                        }
+                                    }
+                                    data.clone = true;
+                                    data.other = true;
+                                    data[chosenrestrainttoclone] = true;
+                                    await confirmation.editReply(getTextGeneric("clone_accept", data.textdata))
+                                    await confirmation.followUp(getText(data))
+                                    cloneCollarKey(wearertoclone.id, clonedkeyholder.id);
+                                }, async (rej) => {
+                                    // User said no.
+                                    await interaction.editReply(getTextGeneric("clone_decline", datatogeneric))
+                                })
+                            }
+                            else if (chosenrestrainttoclone == "chastitybelt") {
+                                let canRemove = await promptCloneChastityKey(interaction.user, wearertoclone, clonedkeyholder).then(async (res) => {
+                                    // User said yes
+                                    let data = {
+                                        textarray: "texts_key",
+                                        textdata: {
+                                            interactionuser: interaction.user,
+                                            targetuser: wearertoclone,
+                                            c1: chosenrestraintreadable,
+                                            c2: clonedkeyholder
+                                        }
+                                    }
+                                    data.clone = true;
+                                    data.other = true;
+                                    data[chosenrestrainttoclone] = true;
+                                    await confirmation.editReply(getTextGeneric("clone_accept", data.textdata))
+                                    await confirmation.followUp(getText(data))
+                                    cloneChastityKey(wearertoclone.id, clonedkeyholder.id);
+                                }, async (rej) => {
+                                    // User said no.
+                                    await interaction.editReply(getTextGeneric("clone_decline", datatogeneric))
+                                })
+                            }
+                        }
+                    } else if (confirmation.customId === 'cancel') {
+                        await confirmation.update({ content: 'Action cancelled', components: [] });
+                        return; // Stop with the key cloning immediately. 
+                    }
+                } 
+                catch (err) {
+                    console.log(err);
+                    await interaction.editReply({ content: 'Confirmation not received within 30 seconds, cancelling transfer.', components: [] });
+                    return;
+                }
+            }
+            else if (subcommand == "revoke") {
+                let cloneresponse = interaction.options.getString("clones") 
+
+                // We're missing a string, back to the start!
+                if (!cloneresponse) {
+                    interaction.reply({ content: `Something went wrong. You provided no option.`, flags: MessageFlags.Ephemeral })
+                    return;
+                }
+
+                let clonedkeyholder = await interaction.guild.members.fetch(cloneresponse.split("_")[1])
+                let wearer = await interaction.guild.members.fetch(cloneresponse.split("_")[0])
+                let typeofrestraint = cloneresponse.split("_")[2]
+
+                // Check if the interaction user has access to clone the target restraint.
+                let canrevoke = false;
+                let isclone = false;
+                let typeofrestraintreadable;
+                // Has primary keys to the collar!
+                if (typeofrestraint == "collar" && canAccessCollar(wearer, interaction.user.id, undefined, true)) { 
+                    canrevoke = true 
+                    typeofrestraintreadable = "collar";
+                    choiceemoji = "<:collar:1449984183261986939>";
+                }
+                if (typeofrestraint == "chastitybelt" && canAccessChastity(wearer, interaction.user.id, undefined, true)) { 
+                    canrevoke = true 
+                    typeofrestraintreadable = "chastity belt"
+                    choiceemoji = "<:Chastity:1073495208861380629>"
+                }
+                // Allow cloned key to be revoked if the cloned keyholder is the interaction user. 
+                if (typeofrestraint == "collar" && canAccessCollar(wearer, interaction.user.id) && (clonedkeyholder == interaction.user)) { 
+                    canrevoke = true 
+                    typeofrestraintreadable = "collar";
+                    choiceemoji = "<:collar:1449984183261986939>";
+                }
+                if (typeofrestraint == "chastitybelt" && canAccessChastity(wearer, interaction.user.id) && (clonedkeyholder == interaction.user)) { 
+                    canrevoke = true 
+                    typeofrestraintreadable = "chastity belt"
+                    choiceemoji = "<:Chastity:1073495208861380629>"
+                }
+                if ((clonedkeyholder == interaction.user)) {
+                    isclone = true;
+                }
+                if (!canrevoke) {
+                    if (!isclone) {
+                        interaction.reply({ content: `You do not have the primary keys for ${wearer}'s ${typeofrestraintreadable}.`, flags: MessageFlags.Ephemeral })
+                        return;
+                    }
+                    else {
+                        interaction.reply({ content: `You do not have a cloned key for ${wearer}'s ${typeofrestraintreadable}.`, flags: MessageFlags.Ephemeral })
+                        return;
+                    }
+                }
+
+                // At this point, we're sure this is a valid Revoke attempt. Prompt the user that this is what they want to do.
+                // Prompt and ensure the user intended to run this command for this combination. 
+                let components = [
+                    {
+                        type: ComponentType.ActionRow,
+                        components: [
+                            {
+                                type: ComponentType.Button,
+                                label: "Cancel",
+                                customId: `cancel`,
+                                style: ButtonStyle.Danger,
+                            },
+                            {
+                                type: ComponentType.Button,
+                                label: "Revoke the Key",
+                                customId: `agreetorevokebutton`,
+                                style: ButtonStyle.Success,
+                            }
+                        ],
+                    },
+                ]
+
+                let verifyresponse = `Revoking the cloned keys for ${choiceemoji}${wearer} from 🔑${clonedkeyholder}. ${clonedkeyholder} will no longer have access to ${wearer}'s ${typeofrestraintreadable}.\n\nPlease confirm by pressing the button below:`
+                if (isclone) {
+                    verifyresponse = `Revoking your cloned keys for ${choiceemoji}${wearer}. You will no longer have access to ${wearer}'s ${typeofrestraintreadable}.\n\nPlease confirm by pressing the button below:`
+                }
+
+                let response = await interaction.reply({ 
+                    content: verifyresponse, 
+                    flags: MessageFlags.Ephemeral, 
+                    components: components,
+                    withResponse: true 
+                })
+                let confirmation;
+
+                const collectorFilter = (i) => i.user.id === interaction.user.id;
+                try {
+                    confirmation = await response.resource.message.awaitMessageComponent({ filter: collectorFilter, time: 30_000 });
+
+                    if (confirmation.customId === 'agreetorevokebutton') {
+                        let data = {
+                            textarray: "texts_key",
+                            textdata: {
+                                interactionuser: interaction.user,
+                                targetuser: wearer,
+                                c1: typeofrestraintreadable,
+                                c2: clonedkeyholder
+                            }
+                        }
+                        data.revoke = true
+                        if (isclone) {
+                            data.isclone = true;
+                        }
+                        else {
+                            data.isprimary = true;
+                        }
+                        data[typeofrestraint] = true;
+                        if (typeofrestraint == "collar") {
+                            await confirmation.update({ content: getTextGeneric("revoke_accept", data.textdata), components: [] })
+                            await confirmation.followUp(getText(data))
+                            revokeCollarKey(wearer.id, clonedkeyholder.id);
+                        }
+                        else if (typeofrestraint == "chastitybelt") {
+                            await confirmation.update({ content: getTextGeneric("revoke_accept", data.textdata), components: [] })
+                            await confirmation.followUp(getText(data))
+                            revokeChastityKey(wearer.id, clonedkeyholder.id);
+                        }
+                    } else if (confirmation.customId === 'cancel') {
+                        await confirmation.update({ content: 'Action cancelled', components: [] });
+                        return; // Stop with the key revokation immediately. 
+                    }
+                } 
+                catch (err) {
+                    console.log(err);
+                    await interaction.editReply({ content: 'Confirmation not received within 1 minute, cancelling transfer.', components: [] });
+                    return;
+                }
             }
 		}
 		catch (err) {

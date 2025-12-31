@@ -120,7 +120,7 @@ module.exports = {
                 }
             }
             else {
-                // We are in heavy bondage
+                // We are NOT in heavy bondage
                 data.noheavy = true
                 if (vibeuser == interaction.user) {
                     // ourselves
@@ -130,7 +130,7 @@ module.exports = {
                         if (getChastity(vibeuser.id)) {
                             // in chastity
                             data.chastity = true
-                            if ((getChastity(vibeuser.id)?.access == undefined) && getChastity(vibeuser.id).keyholder == interaction.user.id) {
+                            if (canAccessChastity(vibeuser.id, interaction.user.id).access) {
                                 // We have the key to the belt and it is NOT timelocked
                                 data.key = true
                                 const fumbleResults = rollKeyFumbleN(interaction.user.id, vibeuser.id, 2);

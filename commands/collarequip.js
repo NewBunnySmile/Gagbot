@@ -1,6 +1,6 @@
 const { SlashCommandBuilder, MessageFlags } = require('discord.js');
 const { getHeavy, assignHeavy, commandsheavy, convertheavy, heavytypes } = require('./../functions/heavyfunctions.js')
-const { getCollar, getCollarPerm } = require('./../functions/collarfunctions.js')
+const { getCollar, getCollarPerm, canAccessCollar } = require('./../functions/collarfunctions.js')
 const { getChastity, assignChastity, chastitytypesoptions, getChastityName } = require('./../functions/vibefunctions.js')
 const { getMittenName, assignMitten, getMitten, mittentypes } = require('./../functions/gagfunctions.js')
 const { getPronouns } = require('./../functions/pronounfunctions.js')
@@ -198,8 +198,8 @@ module.exports = {
             else if (getCollar(collareduser.id)) {
                 data.noheavy = true
                 data.collar = true
-                if ((getCollar(collareduser.id).keyholder == interaction.user) || (!getCollar(collareduser.id).keyholder_only)) {
-                    // Either we're a keyholder or it's a free user collar. 
+                if (canAccessCollar(collareduser.id, interaction.user.id).access) {
+                    // Either we're a keyholder or it's a free use collar. 
                     data.key = true
                     if (actiontotake == "mittens") {
                         data.mitten = true

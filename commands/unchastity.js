@@ -1,5 +1,5 @@
 const { SlashCommandBuilder, MessageFlags } = require('discord.js');
-const { getChastity, removeChastity, discardChastityKey } = require('./../functions/vibefunctions.js')
+const { getChastity, removeChastity, discardChastityKey, canAccessChastity } = require('./../functions/vibefunctions.js')
 const { calculateTimeout } = require("./../functions/timefunctions.js")
 const { getHeavy } = require('./../functions/heavyfunctions.js')
 const { getPronouns } = require('./../functions/pronounfunctions.js')
@@ -74,7 +74,7 @@ module.exports = {
                     if (getChastity(chastitywearer.id)) {
                         // We are in chastity
                         data.chastity = true
-                        if (getChastity(chastitywearer.id).keyholder == interaction.user.id) {
+                        if (canAccessChastity(chastitywearer.id, interaction.user.id, true).access) {
                             // We have the key to our belt
                             data.key = true
                             const fumbleResults = rollKeyFumbleN(interaction.user.id, chastitywearer.id, 2);
@@ -117,7 +117,7 @@ module.exports = {
                     if (getChastity(chastitywearer.id)) {
                         // They are in chastity
                         data.chastity = true
-                        if (getChastity(chastitywearer.id).keyholder == interaction.user.id) {
+                        if (canAccessChastity(chastitywearer.id, interaction.user.id).access) {
                             // We have their chastity key
                             data.key = true
                             const fumbleResults = rollKeyFumbleN(interaction.user.id, chastitywearer.id, 2);

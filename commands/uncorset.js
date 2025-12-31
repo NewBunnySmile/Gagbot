@@ -1,5 +1,5 @@
 const { SlashCommandBuilder, MessageFlags } = require('discord.js');
-const { getChastity } = require('./../functions/vibefunctions.js')
+const { getChastity, canAccessChastity } = require('./../functions/vibefunctions.js')
 const { getHeavy } = require('./../functions/heavyfunctions.js')
 const { getPronouns } = require('./../functions/pronounfunctions.js')
 const { getConsent, handleConsent } = require('./../functions/interactivefunctions.js')
@@ -96,7 +96,7 @@ module.exports = {
                         if (getChastity(corsetuser.id)) {
                             // We're in a chastity belt!
                             data.chastity = true
-                            if ((getChastity(corsetuser.id)?.access == undefined) && getChastity(corsetuser.id).keyholder == interaction.user.id) {
+                            if (canAccessChastity(corsetuser.id, interaction.user.id).access) {
                                 // We own the key for the chastity belt
                                 data.key = true
                                 const fumbleResults = rollKeyFumbleN(interaction.user.id, corsetuser.id, 2);
@@ -150,7 +150,7 @@ module.exports = {
                         if (getChastity(corsetuser.id)) {
                             // They're in a chastity belt!
                             data.chastity = true
-                            if ((getChastity(corsetuser.id)?.access !== 2) && (getChastity(corsetuser.id).keyholder == interaction.user.id)) {
+                            if (canAccessChastity(corsetuser.id, interaction.user.id).access && !canAccessChastity(corsetuser.id, interaction.user.id).public) {
                                 // We own the key for the chastity belt and it is NOT sealed.
                                 data.key = true
                                 const fumbleResults = rollKeyFumbleN(interaction.user.id, corsetuser.id, 2);
@@ -192,7 +192,7 @@ module.exports = {
                                     }
                                 }
                             }
-                            else if (getChastity(corsetuser.id)?.access === 0 && corsetuser.id != interaction.user.id) {
+                            else if (canAccessChastity(corsetuser.id, interaction.user.id).access && canAccessChastity(corsetuser.id, interaction.user.id).public) {
                                 // This is a public access belt!
                                 data.public = true
                                 // Now lets make sure the wearer wants that.

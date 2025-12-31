@@ -127,6 +127,8 @@ const convertPronounsText = (text, data) => {
     
     // Additionally, to handle a followup is/are:
     outtext = outtext.replaceAll("USER_ISARE", (getPronouns(interactionuser.id, "subject") == "they") ? "are" : "is");
+    // And was/were
+    outtext = outtext.replaceAll("USER_WERE", (getPronouns(interactionuser.id, "subject") == "they") ? "was" : "were");
     // And wasn't/weren't
     outtext = outtext.replaceAll("USER_WERENT", (getPronouns(interactionuser.id, "subject") == "they") ? "weren't" : "wasn't");
     // And "doesn't"
@@ -173,6 +175,8 @@ const convertPronounsText = (text, data) => {
     
     // Additionally, to handle a followup is/are:
     outtext = outtext.replaceAll("TARGET_ISARE", (getPronouns(targetuser.id, "subject") == "they") ? "are" : "is");
+    // And was/were
+    outtext = outtext.replaceAll("TARGET_WERE", (getPronouns(targetuser.id, "subject") == "they") ? "was" : "were");
     // And wasn't/weren't
     outtext = outtext.replaceAll("TARGET_WERENT", (getPronouns(targetuser.id, "subject") == "they") ? "weren't" : "wasn't");
     // And "doesn't"

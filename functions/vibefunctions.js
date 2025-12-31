@@ -1,6 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 const https = require('https');
+const { SlashCommandBuilder, ComponentType, ButtonBuilder, ActionRowBuilder, ButtonStyle, MessageFlags } = require('discord.js');
 const { optins } = require('./optinfunctions');
 const { getHeavy, heavyDenialCoefficient } = require("./heavyfunctions.js");
 const { arousedtexts } = require('../vibes/aroused/aroused_texts.js');
@@ -198,6 +199,11 @@ const canAccessChastity = (chastityuser, keyholder, unlock, cloning) => {
         if ((getChastity(chastityuser)?.access == undefined) && (getChastity(chastityuser)?.keyholder == keyholder)) {
             accessval.access = true;
         }
+        // Allow unlocks by secondary keyholder if no timelock
+        let clonedkeys = getChastity(chastityuser)?.clonedKeyholders ?? [];
+        if ((getChastity(chastityuser)?.access == undefined) && (clonedkeys.includes(keyholder))) {
+            accessval.access = true;
+        }
         // Else, return false.
 
         return accessval;
@@ -278,12 +284,65 @@ async function promptCloneChastityKey(user, target, clonekeyholder, bra) {
 // giving the key or cloning the key. These actions should check the
 // fourth param of the canAccessCollar function and set it to true
 // when the action needs to REJECT cloned keys. 
-const cloneChastityKey = (collarUser, newKeyholder, bra) => {
-    let chastity = getChastity(collarUser);
+const cloneChastityKey = (chastityuser, newKeyholder, bra) => {
+    let chastity = getChastity(chastityuser);
     if (!chastity.clonedKeyholders) {
         chastity.clonedKeyholders = [];
     }
     chastity.clonedKeyholders.push(newKeyholder)
+    fs.writeFileSync(`${process.GagbotSavedFileDirectory}/chastityusers.txt`, JSON.stringify(process.chastity));
+}
+
+// Called to remove a single cloned keyholder from the list. 
+const revokeChastityKey = (chastityuser, newKeyholder) => {
+    let chastity = getChastity(chastityuser);
+    if (!chastity.clonedKeyholders) {
+        chastity.clonedKeyholders = [];
+    }
+    if (chastity.clonedKeyholders.includes(newKeyholder)) {
+        chastity.clonedKeyholders.splice(chastity.clonedKeyholders.indexOf(newKeyholder), 1)
+    }
+    fs.writeFileSync(`${process.GagbotSavedFileDirectory}/chastityusers.txt`, JSON.stringify(process.chastity));
+}
+
+// Called to get cloned keys on a restraint
+const getClonedChastityKey = (userID) => {
+    if (process.chastity == undefined) { process.chastity = {} }
+    let returnval = process.chastity[userID]?.clonedKeyholders ?? []
+    return returnval;
+}
+
+// Called to get cloned keys held by userID
+// Returns a list in format: [USERID_type]
+const getClonedChastityKeysOwned = (userID) => {
+    if (process.chastity == undefined) { process.chastity = {} }
+    let ownedkeys = []
+    Object.keys(process.chastity).forEach((k) => {
+        if (process.chastity[k].clonedKeyholders) {
+            console.log(process.chastity[k].clonedKeyholders)
+            if (process.chastity[k].clonedKeyholders.includes(userID)) {
+                ownedkeys.push(`${k}_chastitybelt`)
+            }
+        }
+    })
+    return ownedkeys;
+}
+
+// Called to get cloned keys from restraints the keyholder is primary for
+// Returns a list in format: [wearerID_clonedKeyholderID]
+const getOtherKeysChastity = (userID) => {
+    if (process.chastity == undefined) { process.chastity = {} }
+    let ownedkeys = []
+    Object.keys(process.chastity).forEach((k) => {
+        if (process.chastity[k].keyholder == userID) {
+            if (process.chastity[k].clonedKeyholders) {
+                process.chastity[k].clonedKeyholders.forEach((c) => {
+                    ownedkeys.push(`${k}_${c}`)
+                })
+            }
+        }
+    })
+    return ownedkeys;
 }
 
 // transfer keys and returns whether the transfer was successful
@@ -292,6 +351,7 @@ const transferChastityKey = (lockedUser, newKeyholder) => {
     if (process.chastity[lockedUser]) {
         if (process.chastity[lockedUser].keyholder != newKeyholder) {
             process.chastity[lockedUser].keyholder = newKeyholder;
+            process.chastity[lockedUser].clonedKeyholders = []
             fs.writeFileSync(`${process.GagbotSavedFileDirectory}/chastityusers.txt`, JSON.stringify(process.chastity));
             return true;
         }
@@ -305,6 +365,7 @@ const discardChastityKey = (user) => {
     if (process.discardedKeys == undefined) { process.discardedKeys = [] }
     if (process.chastity[user]) {
         process.chastity[user].keyholder = "discarded";
+        process.chastity[user].clonedKeyholders = []
         process.discardedKeys.push({
           restraint: "chastity belt",
           wearer: user
@@ -322,6 +383,7 @@ const findChastityKey = (index, newKeyholder) => {
     if (chastity.length < 1) return false;
     if (process.chastity[chastity[0].wearer]) {
       process.chastity[chastity[0].wearer].keyholder = newKeyholder;
+      process.chastity[chastity[0].wearer].clonedKeyholders = []
       fs.writeFileSync(`${process.GagbotSavedFileDirectory}/chastityusers.txt`, JSON.stringify(process.chastity));
       return true;
     }
@@ -586,3 +648,7 @@ exports.canAccessChastity = canAccessChastity;
 
 exports.promptCloneChastityKey = promptCloneChastityKey;
 exports.cloneChastityKey = cloneChastityKey;
+exports.revokeChastityKey = revokeChastityKey;
+exports.getClonedChastityKey = getClonedChastityKey;
+exports.getClonedChastityKeysOwned = getClonedChastityKeysOwned;
+exports.getOtherKeysChastity = getOtherKeysChastity;

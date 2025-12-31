@@ -442,12 +442,40 @@ const texts_heavy = {
 
 const texts_key = {
     clone: {
-        collar: [
-            `USER_TAG subtly puts TARGET_TAG's collar key in a key copying machine and then hands the cloned key to VAR_C2 without TARGET_THEM noticing!`
-        ],
-        chastitybelt: [
-            `USER_TAG subtly puts TARGET_TAG's chastity belt key in a key copying machine and then hands the cloned key to VAR_C2 without TARGET_THEM noticing!`
-        ]
+        self: {
+            collar: [
+                `USER_TAG waves USER_THEIR fingers a bit and a nearly-perfect replica of USER_THEIR collar key appears! USER_THEY_CAP giveUSER_S it to VAR_C2.`
+            ],
+            chastitybelt: [
+                `USER_TAG waves USER_THEIR fingers a bit and a nearly-perfect replica of USER_THEIR chastity belt key appears! USER_THEY_CAP giveUSER_S it to VAR_C2.`
+            ]
+        },
+        other: {
+            collar: [
+                `USER_TAG subtly puts TARGET_TAG's collar key in a key copying machine and then hands the cloned key to VAR_C2 without TARGET_THEM noticing!`
+            ],
+            chastitybelt: [
+                `USER_TAG subtly puts TARGET_TAG's chastity belt key in a key copying machine and then hands the cloned key to VAR_C2 without TARGET_THEM noticing!`
+            ]
+        }
+    },
+    revoke: {
+        isclone: {
+            collar: [
+                "USER_TAG magically destroys the cloned key for TARGET_TAG's collar that USER_THEY USER_WERE holding!"
+            ],
+            chastitybelt: [
+                "USER_TAG magically destroys the cloned key for TARGET_TAG's chastity belt that USER_THEY USER_WERE holding!"
+            ],
+        },
+        isprimary: {
+            collar: [
+                "USER_TAG has magically broken the cloned key for TARGET_TAG's collar that VAR_C2 was holding!"
+            ],
+            chastitybelt: [
+                "USER_TAG has magically broken the cloned key for TARGET_TAG's chastity belt that VAR_C2 was holding!"
+            ],
+        }
     }
 }
 
@@ -1341,6 +1369,7 @@ const textarrays = {
     texts_gag: texts_gag,
     texts_headwear: texts_headwear,
     texts_heavy: texts_heavy,
+    texts_key: texts_key,
     texts_letgo: texts_letgo,
     texts_mitten: texts_mitten,
     texts_unchastity: texts_unchastity,
@@ -1365,7 +1394,9 @@ const getTextGeneric = (type, data_in) => {
         "changebind_decline": "TARGET_TAG has declined allowing you to change USER_THEIR bindings.",
         "changebind_accept": "TARGET_TAG has allowed you to change USER_THEIR bindings.",
         "clone_accept": "TARGET_TAG has allowed you to make a clone of USER_THEIR VAR_C1 key, giving it to VAR_C2!",
-        "clone_decline": "TARGET_TAG has forbidden you from making a clone of USER_THEIR VAR_C1 key for VAR_C2!"
+        "clone_accept_self": "Cloning your key...",
+        "clone_decline": "TARGET_TAG has forbidden you from making a clone of USER_THEIR VAR_C1 key for VAR_C2!",
+        "revoke_accept": "You have destroyed the key VAR_C2 had to TARGET_TAG's VAR_C1.",
     }
 
     let chosentext = generics[type];

@@ -72,7 +72,7 @@ module.exports = {
                 }
             }
 
-            if (data.textdata.c2 == undefined) {
+            if (headwearchoice && data.textdata.c2 == undefined) {
                 // Something went CRITICALLY wrong. Eject, eject!
                 interaction.reply({ content: `Something went wrong with your input. Please let Enraa know with the exact thing you put in the Type field!`, flags: MessageFlags.Ephemeral })
                 return;

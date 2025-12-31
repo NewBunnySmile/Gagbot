@@ -1,6 +1,6 @@
 const { SlashCommandBuilder, MessageFlags } = require('discord.js');
 const { getHeavy } = require('./../functions/heavyfunctions.js')
-const { getCollar, removeCollar } = require('./../functions/collarfunctions.js')
+const { getCollar, removeCollar, canAccessCollar } = require('./../functions/collarfunctions.js')
 const { getPronouns } = require('./../functions/pronounfunctions.js')
 const { getConsent, handleConsent } = require('./../functions/interactivefunctions.js')
 const { getText } = require("./../functions/textfunctions.js");
@@ -67,7 +67,7 @@ module.exports = {
                     if (getCollar(collaruser.id)) {
                         // we are wearing a collar
                         data.collar = true
-                        if (getCollar(collaruser.id).keyholder == interaction.user.id) {
+                        if (canAccessCollar(collaruser.id, interaction.user.id, true).access) {
                             // We have the key to our own collar
                             data.key = true
                             interaction.reply(getText(data))
@@ -91,7 +91,7 @@ module.exports = {
                     if (getCollar(collaruser.id)) {
                         // they are wearing a collar
                         data.collar = true
-                        if (getCollar(collaruser.id).keyholder == interaction.user.id) {
+                        if (canAccessCollar(collaruser.id, interaction.user.id, true).access) {
                             // We have the key to their collar
                             data.key = true
                             interaction.reply(getText(data))
