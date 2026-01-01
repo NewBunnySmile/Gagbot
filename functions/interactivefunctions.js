@@ -3,10 +3,15 @@ const path = require('path');
 const https = require('https');
 const { SlashCommandBuilder, UserSelectMenuBuilder, MessageFlags, TextInputBuilder, TextInputStyle, 
     ModalBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, LabelBuilder, StringSelectMenuBuilder, 
-    StringSelectMenuOptionBuilder, TextDisplayBuilder } = require('discord.js');
+    StringSelectMenuOptionBuilder, TextDisplayBuilder, ComponentType } = require('discord.js');
 const { getPronouns } = require('./../functions/pronounfunctions.js')
-const { collartypes } = require('./collarfunctions.js');
+const { collartypes, getCollarKeyholder } = require('./collarfunctions.js');
 const { getOption } = require('./../functions/configfunctions.js')
+const { getChastityKeyholder } = require('./../functions/vibefunctions.js')
+const { getHeavyBinder } = require('./../functions/heavyfunctions.js')
+const { getGagBinder, getMittenBinder } = require('./../functions/gagfunctions.js')
+const { getCorsetBinder } = require('./../functions/corsetfunctions.js')
+const { getHeadwearBinder } = require('./../functions/headwearfunctions.js')
 
 // Generates a consent button which the user will have to agree to. 
 const consentMessage = (interaction, user) => {

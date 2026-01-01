@@ -38,7 +38,7 @@ module.exports = {
             if (headbondage) { outopts.push({ name: `Head Restraints`, value: "head" }) } 
             if (corsetbondage) { outopts.push({ name: `Corset`, value: "corset" }) } 
             if (collarbondage) { outopts.push({ name: `Collar${(collarbondage.collartype ? `: ${getCollarName(interaction.user.id)}` : "")}`, value: "collar" }) }
-
+                                                                                                        
             if (outopts.length == 0) { outopts = [{ name: "Nothing", value: "nothing" }]}
             await interaction.respond(outopts)
         }
@@ -58,24 +58,81 @@ module.exports = {
                 await handleConsent(interaction, interaction.user.id);
                 return;
             }
-            
+            let heavybondage = getHeavy(interaction.user.id)?.type;
+            let gagbondage = getGag(interaction.user.id);
+            let mittenbondage = getMitten(interaction.user.id);
+            let chastitybondage = getChastity(interaction.user.id);
+            let headbondage = getHeadwear(interaction.user.id);
+            let corsetbondage = getCorset(interaction.user.id);
+            let collarbondage = getCollar(interaction.user.id);
+
             // Build data tree:
             let data = {
-                textarray: "texts_mitten",
+                textarray: "texts_struggles",
                 textdata: {
                     interactionuser: interaction.user,
-                    targetuser: interaction.user,
+                    targetuser: interaction.user, // Doesn't really matter but we're adding to avoid a crash
                     c1: getHeavy(interaction.user.id)?.type, // heavy bondage type
-                    c2: getMittenName(interaction.user.id, chosenmittens)
+                    c2: getGag(interaction.user.id),
+                    c3: getMittenName(interaction.user.id),
+                    c4: getChastityName(interaction.user.id),
+                    c5: getCollarName(interaction.user.id)
                 }
             }
 
-            if (data.textdata.c2 == undefined) {
+            let chosenopt = interaction.options.getString('type')
+
+            if (!chosenopt) {
                 // Something went CRITICALLY wrong. Eject, eject!
                 interaction.reply({ content: `Something went wrong with your input. Please let Enraa know with the exact thing you put in the Type field!`, flags: MessageFlags.Ephemeral })
                 return;
             }
 
+            // This way of doing it is gonna be fucky.
+            // From the top. Lets do an if/else for what kind we chose
+            // heavy, gag, mitten, chastity, head, corset, collar
+            if (chosenopt == "heavy") {
+                data.heavy = true;
+                // Heavy Bondage is... pretty uniquely only influenced by itself. 
+                // It will also only ever have named bondage.
+                interaction.reply(getText(data))
+            }
+            else if (chosenopt == "gag") {
+                data.gag = true;
+                // Gags are influenced by heavy bondage or mittens. 
+                if (heavybondage) {
+                    // Heavy Bondage is disabling.
+                    data.heavy = true;
+                    interaction.reply(getText(data))
+                }
+                else {
+                    data.noheavy = true;
+                    if (mittenbondage) {
+                        data.mitten = true;
+                        interaction.reply(getText(data))
+                    }
+                    else {
+                        data.nomitten = true;
+                        interaction.reply(getText(data))
+                    }
+                }
+            }
+            else if (chosenopt == "mitten") {
+                data.mitten = true;
+            }
+            else if (chosenopt == "chastity") {
+
+            }
+            else if (chosenopt == "head") {
+
+            }
+            else if (chosenopt == "corset") {
+
+            }
+            else if (chosenopt == "collar") {
+
+            }
+            
             if (getHeavy(interaction.user.id)) {
                 data.heavy = true
                 interaction.reply(getText(data))
