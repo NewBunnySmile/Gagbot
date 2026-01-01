@@ -16,12 +16,17 @@ const garbleText = (text, intensity) => {
 
     for(let x = 0; x < words.length; x++){
     
-        let allCaps = false;
+        let allCaps = (words[x].match(/[A-Z]/) && !words[x].match(/[a-z]/)) ? true : false;
 
-        if(words[x].length == 1){
-            
-        }else{
-            allCaps = (words[x].match(/[A-Z]/) && !words[x].match(/[a-z]/)) ? true : false
+        // Special case for "I", "a", etc.
+        if(allCaps && words[x].length == 1){
+            if((words[x-1] && (words[x-1].match(/[A-Z]/) && !words[x-1].match(/[a-z]/)))
+            || (words[x+1] && (words[x+1].match(/[A-Z]/) && !words[x+1].match(/[a-z]/)))){
+
+            }
+            else{
+                allCaps = false;
+            }
         }
 
         let itr = 0;
@@ -75,7 +80,7 @@ exports.choicename = "Ball Gag"
 
 //Test Gag Intensities
 let intensityTestMsg = "I AM LOUD.  I am quiet."
-let intensityTestMsg2 = "AAAAAAA!!! Aargh..."
+let intensityTestMsg2 = "What A predicament."
 
 console.log(`Original:     ${intensityTestMsg}\n`)
 console.log(`Intensity 1-2:   ${garbleText(intensityTestMsg, 1)}`)
