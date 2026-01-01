@@ -4,7 +4,7 @@ type FixedSizeArray<N extends number, T> = { length: N } & ReadonlyArray<T>;
 
 /**
  * Returns true if the keyholder fumbles and false if not.
- * This function handles optins and persistent state.
+ * This function handles configs and persistent state.
  * IMPORTANT: A single keyholder action should never cause this function to be called multiple times. If multiple results are needed, use {@link rollKeyFumbleN} to get all possibly needed results.
  * @param keyholder
  * @param locked 
@@ -13,7 +13,7 @@ export function rollKeyFumble(keyholder: Snowflake, locked: Snowflake): boolean;
 
 /**
  * Acts as if {@link rollKeyFumble} was called several times, but without causing issues with cooldown and blessed luck.
- * This function handles optins and persistent state.
+ * This function handles configs and persistent state.
  * IMPORTANT: A single keyholder action should never cause this function to be called multiple times
  * @param keyholder
  * @param locked 

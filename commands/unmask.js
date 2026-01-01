@@ -5,7 +5,7 @@ const { getPronouns } = require('./../functions/pronounfunctions.js')
 const { getConsent, handleConsent } = require('./../functions/interactivefunctions.js')
 const { getHeadwear, getHeadwearName, deleteHeadwear, getLockedHeadgear } = require('../functions/headwearfunctions.js');
 const { getText, getTextGeneric } = require("./../functions/textfunctions.js");
-const { checkBondageRemoval, handleBondageRemoval } = require('../functions/configfunctions.js');
+const { checkBondageRemoval, handleBondageRemoval } = require('../functions/interactivefunctions.js');
 
 module.exports = {
 	data: new SlashCommandBuilder()

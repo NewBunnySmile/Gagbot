@@ -2,10 +2,10 @@ const { findCollarKey } = require("./collarfunctions");
 const { findChastityKey, getChastity, getArousal, calcFrustration } = require("./vibefunctions");
 const { their } = require("./pronounfunctions");
 const { getMitten } = require("./gagfunctions");
-const { optins } = require("./optinfunctions");
 const fs = require("fs");
 const { getUserVar, setUserVar } = require("./usercontext");
 const { getHeavy } = require("./heavyfunctions");
+const { config } = require("./configfunctions");
 
 // return true if the user fumbles
 function rollKeyFumble(keyholder, locked) {
@@ -15,7 +15,7 @@ function rollKeyFumble(keyholder, locked) {
   const fumbleChance = getFumbleChance(keyholder, locked);
   if (!fumbleChance) return false;
   if (Math.random() < fumbleChance) {
-    if (optins.getBlessedLuck(keyholder)) {
+    if (config.getBlessedLuck(keyholder)) {
       const blessing = getUserVar(keyholder, "blessed") ?? 0;
       setUserVar(keyholder, "blessing", blessing + 1 - fumbleChance);
     }
@@ -33,7 +33,7 @@ function rollKeyFumbleN(keyholder, locked, n) {
   const results = [];
   for (let i = 0; i < n; i++) {
     if (Math.random() < fumbleChance) {
-      if (optins.getBlessedLuck(keyholder)) {
+      if (config.getBlessedLuck(keyholder)) {
         const blessing = getUserVar(keyholder, "blessed") ?? 0;
         setUserVar(keyholder, "blessing", blessing + 1 - fumbleChance);
       }
@@ -49,10 +49,9 @@ function rollKeyFumbleN(keyholder, locked, n) {
 
 // return of 0 = never, 1+ = always
 function getFumbleChance(keyholder, locked) {
-  if (!optins.getDynamicArousal(keyholder)) return 0;
-  if (!optins.getKeyFumbling(keyholder)) return 0;
-  if (keyholder != locked && !optins.getFumbleOthersKeys(keyholder)) return 0;
-  if (keyholder != locked && !optins.getOthersKeyFumbling(locked)) return 0;
+  if (!config.getDynamicArousal(keyholder)) return 0;
+  if (config.getKeyLossDisabled(keyholder)) return 0;
+  if (keyholder != locked && (!config.getKeyFumblingOthers(keyholder) || !config.getKeyFumblingOthers(locked))) return 0;
   let chance = getArousal(keyholder) * 2;
   const chastity = getChastity(keyholder);
   if (chastity) {
@@ -67,7 +66,7 @@ function getFumbleChance(keyholder, locked) {
     chance *= 1.1;
   }
 
-  if (chance < 100 && optins.getBlessedLuck(keyholder)) chance -= getUserVar(keyholder, "blessed") ?? 0;
+  if (chance < 100 && config.getBlessedLuck(keyholder)) chance -= getUserVar(keyholder, "blessed") ?? 0;
 
   // divine intervention
   if (chance < 100 && Math.random() < 0.02) chance -= 50;

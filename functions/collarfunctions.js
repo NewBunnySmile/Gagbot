@@ -1,7 +1,6 @@
 const fs = require('fs');
 const path = require('path');
 const https = require('https');
-const { optins } = require('./optinfunctions');
 
 const collartypes = [
     { name: "Latex Collar", value: "collar_latex" },

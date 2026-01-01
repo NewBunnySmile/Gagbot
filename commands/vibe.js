@@ -6,8 +6,8 @@ const { getConsent, handleConsent } = require('./../functions/interactivefunctio
 const fs = require('fs');
 const path = require('path');
 const { rollKeyFumbleN } = require('../functions/keyfindingfunctions.js');
-const { optins } = require('../functions/optinfunctions.js');
 const { getText } = require("./../functions/textfunctions.js");
+const { config } = require('../functions/configfunctions.js');
 
 const vibetypes = [];
 const commandsPath = path.join(__dirname, '..', 'vibes');
@@ -55,7 +55,7 @@ module.exports = {
                 return;
             }
             // it has an optin now
-            if (!optins.getEnableVibes(vibeuser.id)) {
+            if (config.getDisableVibes(vibeuser.id)) {
                 interaction.reply({
                     content: `${vibeuser} has disabled vibes`,
                     flags: MessageFlags.Ephemeral
@@ -166,7 +166,7 @@ module.exports = {
                                 if (fumbleResults[0]) {
                                     // User fumbles with the key due to their arousal and frustration
                                     data.fumble = true
-                                    if (optins.getKeyDiscarding(vibeuser.id) && fumbleResults[1]) {
+                                    if (config.getKeyLoss(vibeuser.id) && fumbleResults[1]) {
                                         // lost the key
                                         data.discard = true;
                                         if (vibetype) {
@@ -250,7 +250,7 @@ module.exports = {
                                 if (fumbleResults[0]) {
                                     // User fumbles with the key due to their arousal and frustration
                                     data.fumble = true
-                                    if (optins.getKeyDiscarding(vibeuser.id) && fumbleResults[1]) {
+                                    if (config.getKeyLoss(vibeuser.id) && fumbleResults[1]) {
                                         // lost the key
                                         data.discard = true;
                                         if (vibetype) {
@@ -338,7 +338,7 @@ module.exports = {
                                 if (fumbleResults[0]) {
                                     // User fumbles with the key due to their arousal and frustration
                                     data.fumble = true
-                                    if (optins.getKeyDiscarding(vibeuser.id) && fumbleResults[1]) {
+                                    if (config.getKeyLoss(vibeuser.id) && fumbleResults[1]) {
                                         // lost the key
                                         data.discard = true;
                                         if (vibetype) {
@@ -438,7 +438,7 @@ module.exports = {
                                 if (fumbleResults[0]) {
                                     // User fumbles with the key due to their arousal and frustration
                                     data.fumble = true
-                                    if (optins.getKeyDiscarding(vibeuser.id) && fumbleResults[1]) {
+                                    if (config.getKeyLoss(vibeuser.id) && fumbleResults[1]) {
                                         // lost the key
                                         data.discard = true;
                                         if (vibetype) {

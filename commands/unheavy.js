@@ -4,7 +4,7 @@ const { getHeavy, removeHeavy, convertheavy } = require('./../functions/heavyfun
 const { getPronouns } = require('./../functions/pronounfunctions.js')
 const { getConsent, handleConsent } = require('./../functions/interactivefunctions.js')
 const { getText, getTextGeneric } = require("./../functions/textfunctions.js");
-const { checkBondageRemoval, handleBondageRemoval } = require('../functions/configfunctions.js');
+const { checkBondageRemoval, handleBondageRemoval } = require('../functions/interactivefunctions.js');
 
 module.exports = {
     data: new SlashCommandBuilder()
