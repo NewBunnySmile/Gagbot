@@ -14,7 +14,7 @@ const {
   getChastityKeyholder,
 } = require("../functions/vibefunctions.js");
 const { their, them, getPronouns } = require("../functions/pronounfunctions.js");
-const { optins } = require("../functions/optinfunctions.js");
+const { config } = require("../functions/configfunctions.js");
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -210,7 +210,7 @@ module.exports = {
           });
         }
         // I'm not sure what this does.
-      } else if (optins.getKeyGiving(lockedUser)) {
+      } else if (config.getKeyGivingAuto(lockedUser)) {
         console.log("Idk what this does")
         if (transferFunction(lockedUser.id, newKeyholder.id)) {
           await interaction.channel.send(

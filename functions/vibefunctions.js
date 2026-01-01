@@ -2,9 +2,9 @@ const fs = require('fs');
 const path = require('path');
 const https = require('https');
 const { SlashCommandBuilder, ComponentType, ButtonBuilder, ActionRowBuilder, ButtonStyle, MessageFlags } = require('discord.js');
-const { optins } = require('./optinfunctions');
 const { getHeavy, heavyDenialCoefficient } = require("./heavyfunctions.js");
 const { arousedtexts } = require('../vibes/aroused/aroused_texts.js');
+const { config } = require('./configfunctions.js');
 
 const chastitytypes = [
     { name: "Featherlight Belt", value: "belt_featherlight", denialCoefficient: 15 },
@@ -75,7 +75,7 @@ const removeChastity = (user) => {
 }
 
 const assignVibe = (user, intensity, vibetype = "bullet vibe", origbinder) => {
-    if (!optins.getEnableVibes(user)) return;
+    if (config.getDisableVibes(user)) return;
     if (process.vibe == undefined) { process.vibe = {} }
     let originalbinder = process.vibe[user]?.origbinder // ... well I was gonna finish vibe code but this needs a bigger rework
     if (!process.vibe[user]) {        
@@ -393,7 +393,7 @@ const findChastityKey = (index, newKeyholder) => {
 function getArousedTexts(user) {
     const texts = [];
 
-    if (optins.getDynamicArousal(user)) {
+    if (config.getDynamicArousal(user)) {
         const arousal = process.arousal[user];
         const current = arousal.arousal;
         const change = arousal.arousal - arousal.prev;
@@ -468,7 +468,7 @@ function updateArousalValues() {
 }
 
 function getVibeEquivalent(user) {
-  if (!optins.getDynamicArousal(user)) return calcStaticVibeIntensity(user);
+  if (!config.getDynamicArousal(user)) return calcStaticVibeIntensity(user);
 
   let intensity = getArousal(user);
   if (intensity >= STUTTER_LIMIT) {
@@ -482,7 +482,7 @@ function getVibeEquivalent(user) {
 }
 
 function getArousalDescription(user) {
-  if (!optins.getDynamicArousal(user)) return null;
+  if (!config.getDynamicArousal(user)) return null;
 
   const arousal = getArousal(user);
   const denialCoefficient = calcDenialCoefficient(user);
@@ -499,7 +499,7 @@ function getArousalDescription(user) {
 }
 
 function getArousalChangeDescription(user) {
-  if (!optins.getDynamicArousal(user)) return null;
+  if (!config.getDynamicArousal(user)) return null;
   
   const arousal = process.arousal[user];
   if (!arousal) return null;
@@ -537,7 +537,7 @@ function calcNextArousal(arousal, prev, growthCoefficient, decayCoefficient) {
 // user attempts to orgasm, returns if it succeeds
 function tryOrgasm(user) {
   // always succeed if user isnt using the system
-  if (!optins.getDynamicArousal(user)) return true;
+  if (!config.getDynamicArousal(user)) return true;
 
   const now = Date.now();
   const arousal = getArousal(user);

@@ -332,10 +332,105 @@ const assignMemeImages = () => {
     process.memes = memeimages
 }
 
+// Returns a blocking function which can be awaited
+// Will immediately resolve if the user allows everyone to remove bondage
+// else, will prompt them. Will resolve false if rejected. 
+function checkBondageRemoval(userID, targetID, type) {
+    let useroption = getOption(targetID, "removebondage");
+    
+    console.log(useroption);
+    console.log(userID == targetID)
+    console.log((useroption == "all_binder_and_keyholder") && ((getCollarKeyholder(targetID) == userID) || (getChastityKeyholder(targetID) == userID)))
+
+
+    // Return true immediately if it's accepted without question
+    if (useroption == "accept") { return true }
+    
+    // Return true immediately if the targetID and userID are the same
+    // The user probably wants to remove their own stuff! 
+    if (userID == targetID) { return true }
+
+    // If keyholder and keyholders allowed, return true 
+    if ((useroption == "all_binder_and_keyholder") && ((getCollarKeyholder(targetID) == userID) || (getChastityKeyholder(targetID) == userID))) {
+        return true;
+    }
+
+    // if binder or KH, return true if target ID is origbinder
+    if ((useroption == "all_binder") || (useroption == "all_binder_and_keyholder")) {
+        let restraintobject;
+        if (type == "heavy") { restraintobject = getHeavyBinder(targetID) } 
+        if (type == "gag") { restraintobject = getGagBinder(targetID) } 
+        if (type == "mitten") { restraintobject = getMittenBinder(targetID) } 
+        if (type == "corset") { restraintobject = getCorsetBinder(targetID) } 
+        if (type == "headwear") { restraintobject = getHeadwearBinder(targetID) } 
+        // if (type == "vibe") { restraintobject = getVibe(targetID) } 
+
+        if (restraintobject) {
+            if (restraintobject == userID) { return true }
+        }
+    }
+
+    return false
+}
+
+async function handleBondageRemoval(user, target, type, change = false) {
+    return new Promise(async (res,rej) => {
+        let buttons = [
+            new ButtonBuilder().setCustomId("denyButton").setLabel("Deny").setStyle(ButtonStyle.Danger),
+            new ButtonBuilder().setCustomId("acceptButton").setLabel("Allow").setStyle(ButtonStyle.Success)
+        ]
+        let dmchannel = await target.createDM();
+        await dmchannel.send({
+            content: `${user} would like to ${change ? "change" : "remove"} your ${type}. Do you want to allow this action?`,
+            components: [new ActionRowBuilder().addComponents(...buttons)]
+        }).then((mess) => {
+            // Create a collector for up to 30 seconds
+            const collector = mess.createMessageComponentCollector({ componentType: ComponentType.Button, time: 30_000, max: 1 })
+
+            collector.on('collect', async (i) => {
+                console.log(i)
+                if (i.customId == "acceptButton") {
+                    await mess.delete().then(() => {
+                        i.reply(`Confirmed - ${user} is permitted to ${change ? `change your ${type}` : `take your ${type} off`}!`)
+                    })
+                    res(true);
+                }
+                else {
+                    await mess.delete().then(() => {
+                        i.reply(`Rejected - ${user} is blocked from ${change ? `changing your ${type}` : `taking your ${type} off`}!`)
+                    })
+                    rej(true);
+                }
+            })
+
+            collector.on('end', async (collected) => {
+                // timed out
+                if (collected.length == 0) {
+                    await mess.delete().then(() => {
+                        i.reply(`Timed out - ${user} is blocked from ${change ? `changing your ${type}` : `taking your ${type} off`}!`)
+                    })
+                    rej(true);
+                }
+            })
+        })
+    })/*.then(
+        (res) => {
+            console.log("We got ALLOWED")
+            return true
+    }, 
+        (rej) => {
+            console.log("We got REJECTED")
+            return false
+    })*/
+}
+
 exports.consentMessage = consentMessage
 exports.getConsent = getConsent
 exports.handleConsent = handleConsent
 exports.collarPermModal = collarPermModal
 exports.timelockChastityModal = timelockChastityModal
+
+exports.handleBondageRemoval = handleBondageRemoval;
+exports.checkBondageRemoval = checkBondageRemoval;
 
 exports.assignMemeImages = assignMemeImages

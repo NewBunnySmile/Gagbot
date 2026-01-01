@@ -1,16 +1,9 @@
 const { ButtonStyle, ActionRowBuilder, SectionBuilder, StringSelectMenuBuilder, 
-    StringSelectMenuOptionBuilder, PermissionsBitField, ButtonBuilder,
-    ComponentType, MessageFlags,
+    StringSelectMenuOptionBuilder, PermissionsBitField, MessageFlags,
     RoleSelectMenuBuilder} = require("discord.js")
 const fs = require('fs');
 const path = require('path');
 const https = require('https');
-const { getHeavyBinder } = require('./../functions/heavyfunctions.js')
-const { getCorsetBinder } = require('./../functions/corsetfunctions.js')
-const { getVibe, getChastityKeyholder } = require('./../functions/vibefunctions.js')
-const { getMittenBinder, getGagBinder } = require('./../functions/gagfunctions.js')
-const { getHeadwearBinder } = require('./../functions/headwearfunctions.js');
-const { getCollarKeyholder } = require("./collarfunctions");
 
 const configoptions = {
     "Arousal": {
@@ -22,24 +15,27 @@ const configoptions = {
                     name: "Off",
                     helptext: "*Arousal disabled*",
                     select_function: (userID) => { 
-                        removeVibe(userID) // Delete vibes when disabling arousal
+                        delete process.vibe[userID]
                     },
                     value: 0,
-                    style: ButtonStyle.Danger
+                    style: ButtonStyle.Danger,
+                    uname: "DisableVibes"
                 },
                 {
                     name: "Static Arousal",
                     helptext: "Static Arousal (when vibed)",
                     select_function: (userID) => { return false },
                     value: 1,
-                    style: ButtonStyle.Secondary
+                    style: ButtonStyle.Secondary,
+                    uname: "StaticArousal"
                 },
                 {
                     name: "Dynamic Arousal",
                     helptext: "Dynamic Arousal",
                     select_function: (userID) => { return false },
                     value: 2,
-                    style: ButtonStyle.Secondary
+                    style: ButtonStyle.Secondary,
+                    uname: "DynamicArousal"
                 }
             ],
             default: 2,
@@ -54,21 +50,24 @@ const configoptions = {
                     helptext: "*Fumbling is disabled*",
                     select_function: (userID) => { return false },
                     value: "disabled",
-                    style: ButtonStyle.Danger
+                    style: ButtonStyle.Danger,
+                    uname: "DisabledKeyFumbling"
                 },
                 {
                     name: "Self Only",
                     helptext: "Can fumble your own keys",
                     select_function: (userID) => { return false },
                     value: "self",
-                    style: ButtonStyle.Secondary
+                    style: ButtonStyle.Secondary,
+                    uname: "KeyFumblingSelf"
                 },
                 {
                     name: "Self and Others",
                     helptext: "You and others can fumble your keys",
                     select_function: (userID) => { return false },
                     value: "everyone",
-                    style: ButtonStyle.Secondary
+                    style: ButtonStyle.Secondary,
+                    uname: "KeyFumblingOthers"
                 }
             ],
             default: "self",
@@ -83,14 +82,16 @@ const configoptions = {
                     helptext: "*Key Loss is disabled*",
                     select_function: (userID) => { return false },
                     value: "disabled",
-                    style: ButtonStyle.Danger
+                    style: ButtonStyle.Danger,
+                    uname: "KeyLossDisabled"
                 },
                 {
                     name: "Enabled",
                     helptext: "**Your keys can be lost**",
                     select_function: (userID) => { return false },
                     value: "enabled",
-                    style: ButtonStyle.Secondary
+                    style: ButtonStyle.Secondary,
+                    uname: "KeyLoss"
                 }
             ],
             default: "disabled",
@@ -105,14 +106,16 @@ const configoptions = {
                     helptext: "*Blessed Luck is disabled*",
                     select_function: (userID) => { return false },
                     value: "disabled",
-                    style: ButtonStyle.Danger
+                    style: ButtonStyle.Danger,
+                    uname: "BlessedLuckDisabled"
                 },
                 {
                     name: "Yes",
                     helptext: "Failed rolls add to future success chance",
                     select_function: (userID) => { return false },
                     value: "enabled",
-                    style: ButtonStyle.Secondary
+                    style: ButtonStyle.Secondary,
+                    uname: "BlessedLuck"
                 },
             ],
             default: "enabled",
@@ -129,21 +132,24 @@ const configoptions = {
                     helptext: "*Key giving is disabled*",
                     select_function: (userID) => { return false },
                     value: "disabled",
-                    style: ButtonStyle.Danger
+                    style: ButtonStyle.Danger,
+                    uname: "KeyGivingDisabled"
                 },
                 {
                     name: "Prompt",
                     helptext: "You will be prompted for key transfers",
                     select_function: (userID) => { return false },
                     value: "prompt",
-                    style: ButtonStyle.Secondary
+                    style: ButtonStyle.Secondary,
+                    uname: "KeyGivingPrompt"
                 },
                 {
                     name: "Automatic",
                     helptext: "⚠️ **You will accept keygiving requests automatically**",
                     select_function: (userID) => { return false },
-                    value: "prompt",
-                    style: ButtonStyle.Secondary
+                    value: "auto",
+                    style: ButtonStyle.Secondary,
+                    uname: "KeyGivingAuto"
                 },
             ],
             default: "prompt",
@@ -158,28 +164,32 @@ const configoptions = {
                     helptext: "Prompt for anyone to remove non-keyed bondage",
                     select_function: (userID) => { return false },
                     value: "all",
-                    style: ButtonStyle.Secondary
+                    style: ButtonStyle.Secondary,
+                    uname: "RemoveBondagePrompt"
                 },
                 {
                     name: "Everyone except Binder",
                     helptext: "Prompt for anyone besides who put something on you",
                     select_function: (userID) => { return false },
                     value: "all_binder",
-                    style: ButtonStyle.Secondary
+                    style: ButtonStyle.Secondary,
+                    uname: "RemoveBondageBinder"
                 },
                 {
                     name: "Everyone except Binder and Keyholder(s)",
                     helptext: "Prompt for anyone besides who put something on you or keyholders",
                     select_function: (userID) => { return false },
                     value: "all_binder_and_keyholder",
-                    style: ButtonStyle.Secondary
+                    style: ButtonStyle.Secondary,
+                    uname: "RemoveBondageKeyholder"
                 },
                 {
                     name: "Disabled",
                     helptext: "Automatically allow bondage to be removed",
                     select_function: (userID) => { return false },
                     value: "accept",
-                    style: ButtonStyle.Secondary
+                    style: ButtonStyle.Secondary,
+                    uname: "RemoveBondageAuto"
                 },
             ],
             default: "accept",
@@ -352,102 +362,19 @@ function initializeOptions(userID) {
     fs.writeFileSync(`${process.GagbotSavedFileDirectory}/configs.txt`, JSON.stringify(process.configs));
 }
 
-// Returns a blocking function which can be awaited
-// Will immediately resolve if the user allows everyone to remove bondage
-// else, will prompt them. Will resolve false if rejected. 
-function checkBondageRemoval(userID, targetID, type) {
-    let useroption = getOption(targetID, "removebondage");
-    
-    console.log(useroption);
-    console.log(userID == targetID)
-    console.log((useroption == "all_binder_and_keyholder") && ((getCollarKeyholder(targetID) == userID) || (getChastityKeyholder(targetID) == userID)))
-
-
-    // Return true immediately if it's accepted without question
-    if (useroption == "accept") { return true }
-    
-    // Return true immediately if the targetID and userID are the same
-    // The user probably wants to remove their own stuff! 
-    if (userID == targetID) { return true }
-
-    // If keyholder and keyholders allowed, return true 
-    if ((useroption == "all_binder_and_keyholder") && ((getCollarKeyholder(targetID) == userID) || (getChastityKeyholder(targetID) == userID))) {
-        return true;
-    }
-
-    // if binder or KH, return true if target ID is origbinder
-    if ((useroption == "all_binder") || (useroption == "all_binder_and_keyholder")) {
-        let restraintobject;
-        if (type == "heavy") { restraintobject = getHeavyBinder(targetID) } 
-        if (type == "gag") { restraintobject = getGagBinder(targetID) } 
-        if (type == "mitten") { restraintobject = getMittenBinder(targetID) } 
-        if (type == "corset") { restraintobject = getCorsetBinder(targetID) } 
-        if (type == "headwear") { restraintobject = getHeadwearBinder(targetID) } 
-        // if (type == "vibe") { restraintobject = getVibe(targetID) } 
-
-        if (restraintobject) {
-            if (restraintobject == userID) { return true }
-        }
-    }
-
-    return false
-}
-
-async function handleBondageRemoval(user, target, type, change = false) {
-    return new Promise(async (res,rej) => {
-        let buttons = [
-            new ButtonBuilder().setCustomId("denyButton").setLabel("Deny").setStyle(ButtonStyle.Danger),
-            new ButtonBuilder().setCustomId("acceptButton").setLabel("Allow").setStyle(ButtonStyle.Success)
-        ]
-        let dmchannel = await target.createDM();
-        await dmchannel.send({
-            content: `${user} would like to ${change ? "change" : "remove"} your ${type}. Do you want to allow this action?`,
-            components: [new ActionRowBuilder().addComponents(...buttons)]
-        }).then((mess) => {
-            // Create a collector for up to 30 seconds
-            const collector = mess.createMessageComponentCollector({ componentType: ComponentType.Button, time: 30_000, max: 1 })
-
-            collector.on('collect', async (i) => {
-                console.log(i)
-                if (i.customId == "acceptButton") {
-                    await mess.delete().then(() => {
-                        i.reply(`Confirmed - ${user} is permitted to ${change ? `change your ${type}` : `take your ${type} off`}!`)
-                    })
-                    res(true);
-                }
-                else {
-                    await mess.delete().then(() => {
-                        i.reply(`Rejected - ${user} is blocked from ${change ? `changing your ${type}` : `taking your ${type} off`}!`)
-                    })
-                    rej(true);
-                }
-            })
-
-            collector.on('end', async (collected) => {
-                // timed out
-                if (collected.length == 0) {
-                    await mess.delete().then(() => {
-                        i.reply(`Timed out - ${user} is blocked from ${change ? `changing your ${type}` : `taking your ${type} off`}!`)
-                    })
-                    rej(true);
-                }
-            })
-        })
-    })/*.then(
-        (res) => {
-            console.log("We got ALLOWED")
-            return true
-    }, 
-        (rej) => {
-            console.log("We got REJECTED")
-            return false
-    })*/
-}
-
 exports.generateConfigModal = generateConfigModal;
 exports.configoptions = configoptions;
 exports.getOption = getOption;
 exports.setOption = setOption;
 
-exports.handleBondageRemoval = handleBondageRemoval;
-exports.checkBondageRemoval = checkBondageRemoval;
+const functions = {};
+
+Object.entries(configoptions).forEach(([_, page]) => {
+    Object.entries(page).forEach(([key, option]) => {
+        option.choices.forEach((choice) => {
+            functions[`get${choice.uname}`] = (user) => getOption(user, key) == choice.value
+        })
+    })
+});
+
+exports.config = functions;

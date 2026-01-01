@@ -3,7 +3,6 @@ const { parseTime } = require("../functions/timefunctions.js");
 const { timelockChastity } = require("../functions/timelockfunctions.js");
 const { getChastityKeyholder } = require("../functions/vibefunctions.js");
 const { rollKeyFumbleN, rollKeyFumble } = require("../functions/keyfindingfunctions.js");
-const { optins } = require("../functions/optinfunctions.js");
 const { getPronouns } = require('./../functions/pronounfunctions.js')
 
 module.exports = {

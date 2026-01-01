@@ -4,9 +4,9 @@ const { calculateTimeout } = require("./../functions/timefunctions.js")
 const { getHeavy } = require('./../functions/heavyfunctions.js')
 const { getPronouns } = require('./../functions/pronounfunctions.js')
 const { getConsent, handleConsent } = require('./../functions/interactivefunctions.js');
-const { optins } = require('../functions/optinfunctions.js');
 const { rollKeyFumbleN } = require('../functions/keyfindingfunctions.js');
 const { getText } = require("./../functions/textfunctions.js");
+const { config } = require('../functions/configfunctions.js');
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -81,7 +81,7 @@ module.exports = {
                             if (fumbleResults[0]) {
                                 // We fumbled
                                 data.fumble = true
-                                if (optins.getKeyDiscarding(chastitywearer.id) && fumbleResults[1]) {
+                                if (config.getKeyLoss(chastitywearer.id) && fumbleResults[1]) {
                                     // We lost the key
                                     data.discard = true
                                     interaction.reply(getText(data))
@@ -124,7 +124,7 @@ module.exports = {
                             if (fumbleResults[0]) {
                                 // We fumbled the key
                                 data.fumble = true
-                                if (optins.getKeyDiscarding(chastitywearer.id) && fumbleResults[1]) {
+                                if (config.getKeyLoss(chastitywearer.id) && fumbleResults[1]) {
                                     // We lost the key
                                     data.discard = true
                                     interaction.reply(getText(data))

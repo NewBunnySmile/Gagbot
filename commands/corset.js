@@ -5,9 +5,9 @@ const { getPronouns } = require('./../functions/pronounfunctions.js')
 const { getConsent, handleConsent } = require('./../functions/interactivefunctions.js')
 const { getCorset, assignCorset } = require('./../functions/corsetfunctions.js');
 const { rollKeyFumbleN } = require('../functions/keyfindingfunctions.js');
-const { optins } = require('../functions/optinfunctions.js');
 const { getText, getTextGeneric } = require("./../functions/textfunctions.js");
-const { checkBondageRemoval, handleBondageRemoval } = require('../functions/configfunctions.js');
+const { checkBondageRemoval, handleBondageRemoval } = require('../functions/interactivefunctions.js');
+const { config } = require('../functions/configfunctions.js');
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -86,7 +86,7 @@ module.exports = {
                     if (fumbleResults[0]) {
                         // User fumbles with the key due to their arousal and frustration
                         data.fumble = true
-                        if (optins.getKeyDiscarding(corsetuser.id) && fumbleResults[1]) {
+                        if (config.getKeyLoss(corsetuser.id) && fumbleResults[1]) {
                             data.discard = true
                             // if they fumble again they can lose the key
                             if (corsetuser == interaction.user) {

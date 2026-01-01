@@ -8,7 +8,7 @@ const { getHeavy } = require("../functions/heavyfunctions.js");
 const { discardCollarKey, getCollarKeyholder } = require("../functions/collarfunctions.js");
 const { discardChastityKey, getChastityKeyholder } = require("../functions/vibefunctions.js");
 const { their, they } = require("../functions/pronounfunctions.js");
-const { optins } = require("../functions/optinfunctions.js");
+const { config } = require("../functions/configfunctions.js");
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -34,12 +34,12 @@ module.exports = {
     const keyType = interaction.options.getSubcommand();
     const lockedUser = interaction.options.getUser("user") ?? interaction.user;
 
-    if (!optins.getKeyDiscarding(lockedUser.id)) {
+    if (config.getKeyLossDisabled(lockedUser.id)) {
       interaction.reply({
         content: `${lockedUser} has not opted in to key discarding. ${they(
           lockedUser.id,
           true
-        )} can do so using the \`/optins\` command.`,
+        )} can do so using the \`/config\` command.`,
         flags: MessageFlags.Ephemeral,
       });
       return;
