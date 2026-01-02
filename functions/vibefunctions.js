@@ -7,7 +7,7 @@ const { arousedtexts } = require('../vibes/aroused/aroused_texts.js');
 const { config } = require('./configfunctions.js');
 
 const chastitytypes = [
-    { name: "Featherlight Belt", value: "belt_featherlight", denialCoefficient: 15 },
+    { name: "Featherlight Belt", value: "belt_featherlight", denialCoefficient: 15, minVibe: 2, minArousal: 1 },
     { name: "Blacksteel Chastity Belt", value: "belt_blacksteel", denialCoefficient: 7.5 },
     { name: "Silver Chastity Belt", value: "belt_silver", denialCoefficient: 5 },
     { name: "Ancient Chastity Belt", value: "belt_ancient", denialCoefficient: 15 },
@@ -455,6 +455,7 @@ function updateArousalValues() {
         const now = Date.now();
         const time = now * AROUSAL_STEP_SIZE_SCALING;
         for (const user in process.vibe) if (!process.arousal[user]) process.arousal[user] = {arousal: 0, prev: 0, timestamp: now};
+        for (const user in process.chastity) if (!process.arousal[user]) process.arousal[user] = {arousal: 0, prev: 0, timestamp: now};
         for (const user in process.arousal) {
             const arousal = process.arousal[user];
             if (arousal.timestamp > now) continue;
@@ -462,6 +463,11 @@ function updateArousalValues() {
             arousal.timestamp = now;
             arousal.prev = arousal.arousal;
             arousal.arousal = next < RESET_LIMIT ? 0 : next;
+            const chastity = getChastity(user);
+            if (chastity) {
+                const minArousal = chastitytypes.find(c => c.value == chastity.chastitytype)?.minArousal ?? 0;
+                if (arousal.arousal < minArousal) arousal.arousal = minArousal;
+            }
         }
         fs.writeFileSync(`${process.GagbotSavedFileDirectory}/arousal.txt`, JSON.stringify(process.arousal));
     }
@@ -579,9 +585,12 @@ function setArousalCooldown(user) {
 
 // modify when more things affect it
 function calcGrowthCoefficient(user) {
-  const vibes = getVibe(user);
-  if (!vibes) return 0;
-  return vibes.reduce((a, b) => a + b.intensity, 0) * VIBE_SCALING;
+  let vibes = getVibe(user);
+  let minVibe = 0;
+  const chastity = getChastity(user);
+  if (chastity) minVibe = chastitytypes.find(c => c.value == chastity.chastitytype)?.minVibe ?? 0;
+  if (!vibes && !minVibe) return 0;
+  return Math.max(vibes?.reduce((a, b) => a + b.intensity, 0) ?? 0, minVibe) * VIBE_SCALING;
 }
 
 // modify when more things affect it
