@@ -38,6 +38,7 @@ module.exports = {
                 data.noheavyequipped = true
                 data.other = true
                 interaction.reply({ content: getText(data), flags: MessageFlags.Ephemeral })
+                return;
             }
 
             if (getHeavy(interaction.user.id)) {

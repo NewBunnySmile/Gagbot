@@ -318,9 +318,9 @@ const configoptions = {
             default: "Enabled",
             disabled: () => { return false }
         },
-        "server-allowheadandwear": {
-            name: "Allow Headwear and Apparel",
-            desc: "Allows **/mask**, **/wear and **/unmask**, **/unwear**",
+        "server-allowhead": {
+            name: "Allow Headwear",
+            desc: "Allows **/mask** and **/unmask**",
             choices: [
                 {
                     name: "Disabled",
@@ -332,6 +332,29 @@ const configoptions = {
                 {
                     name: "Enabled",
                     helptext: "Headgear is enabled",
+                    select_function: (serverID) => { return false }, // We will need to have this update commands
+                    value: "Enabled",
+                    style: ButtonStyle.Secondary
+                },
+            ],
+            menutype: "choice_server",
+            default: "Enabled",
+            disabled: () => { return false }
+        },
+        "server-allowapparel": {
+            name: "Allow Apparel",
+            desc: "Allows **/wear** and **/unwear**",
+            choices: [
+                {
+                    name: "Disabled",
+                    helptext: "*Apparel is disabled*",
+                    select_function: (serverID) => { return false }, // We will need to have this update commands
+                    value: "Disabled",
+                    style: ButtonStyle.Danger
+                },
+                {
+                    name: "Enabled",
+                    helptext: "Apparel is enabled",
                     select_function: (serverID) => { return false }, // We will need to have this update commands
                     value: "Enabled",
                     style: ButtonStyle.Secondary
@@ -392,9 +415,7 @@ function generateConfigModal(interaction, menuset = "General", page) {
             if (configoptions[menuset][k].menutype == "choice") {
                 let buttonsection = new SectionBuilder()
                     .addTextDisplayComponents(
-                        (textdisplay) => textdisplay.setContent(`## ${configoptions[menuset][k].name}`),
-                        (textdisplay) => textdisplay.setContent(`${configoptions[menuset][k].desc}`),
-                        (textdisplay) => textdisplay.setContent(`-# ‎   ⤷ ${configoptions[menuset][k].choices.find((f) => f.value == getOption(interaction.user.id,k))?.helptext}`)
+                        (textdisplay) => textdisplay.setContent(`## ${configoptions[menuset][k].name}\n${configoptions[menuset][k].desc}\n-# ‎   ⤷ ${configoptions[menuset][k].choices.find((f) => f.value == getOption(interaction.user.id,k))?.helptext}`)
                     )
                     .setButtonAccessory((button) =>
                         button.setCustomId(`config_pageopt_${menuset}_${k}`)
@@ -407,9 +428,7 @@ function generateConfigModal(interaction, menuset = "General", page) {
             else if (configoptions[menuset][k].menutype == "choice_server") {
                 let buttonsection = new SectionBuilder()
                     .addTextDisplayComponents(
-                        (textdisplay) => textdisplay.setContent(`## ${configoptions[menuset][k].name}`),
-                        (textdisplay) => textdisplay.setContent(`${configoptions[menuset][k].desc}`),
-                        (textdisplay) => textdisplay.setContent(`-# ‎   ⤷ ${configoptions[menuset][k].choices.find((f) => f.value == getServerOption(interaction.guildId,k))?.helptext}`)
+                        (textdisplay) => textdisplay.setContent(`## ${configoptions[menuset][k].name}\n${configoptions[menuset][k].desc}\n-# ‎   ⤷ ${configoptions[menuset][k].choices.find((f) => f.value == getServerOption(interaction.guildId,k))?.helptext}`)
                     )
                     .setButtonAccessory((button) =>
                         button.setCustomId(`config_pageopt_${menuset}_${k}`)
