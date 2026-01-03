@@ -24,6 +24,7 @@ let wearabletypes = [
     { name: "Frilled Dress", value: "frilled_dress", colorable: true },
     { name: "Strapless Dress", value: "strapless_dress", colorable: true },
     { name: "Halter Dress", value: "halter_dress", colorable: true },
+    { name: "Dragonscale Mail", value: "dragonscale_mail", colorable: true },
     { name: "Binding Dress", value: "binding_dress", colorable: true, uniquecolors: ["Latex","Leather"] },
     { name: "Pleated Skirt", value: "pleated_skirt", colorable: true, uniquecolors: ["Latex", "Witchy", "Gothic", "Starry", "Shadow"] },
     { name: "Miniskirt", value: "pleated_skirt", colorable: true, uniquecolors: ["Latex", "Witchy", "Gothic", "Cheerleader"] },
@@ -46,6 +47,8 @@ const colors = ["Black", "Red", "Purple", "Green",
  * { name: "Latex Armbinder", value: "armbinder_latex" }
  ********************/
 const loadWearables = () => {
+    // Copy the array so we dont mutate the original lmao
+    let wearablestoadd = wearabletypes.slice(0);
     // Iterate over each wearable type, filtering only the ones that are colorable. 
     let colorables = wearabletypes.filter((w) => w.colorable);
 
@@ -64,11 +67,12 @@ const loadWearables = () => {
             let newobject = Object.assign({}, w);
             newobject.name = `${c} ${w.name}`;
             newobject.value = `${w.value}_${c.toLowerCase()}`
-            wearabletypes.push(newobject)
+            wearablestoadd.push(newobject)
         })
     })
 
-    process.wearableslist = wearabletypes.map((item) => {return { name: item.name, value: item.value }})
+    process.wearableslist = wearablestoadd.map((item) => {return { name: item.name, value: item.value }})
+    console.log(process.wearableslist);
 }
 
 const assignWearable = (userID, wearable) => {
@@ -131,14 +135,14 @@ const removeLockedWearable = (userID, wearable) => {
 const deleteWearable = (userID, wearable) => {
     if (process.wearable == undefined) { process.wearable = {} }
     if (!process.wearable[userID]) { return false }
-    if (wearable && process.wearable[userID].wornwearable.includes(wearable) && !getLockedHeadgear(userID).includes(wearable)) {
+    if (wearable && process.wearable[userID].wornwearable.includes(wearable) && !getLockedWearable(userID).includes(wearable)) {
         process.wearable[userID].wornwearable.splice(process.wearable[userID].wornwearable.indexOf(wearable), 1)
         if (process.wearable[userID].wornwearable.length == 0) {
             delete process.wearable[userID]
         }
     }
     else if (process.wearable[userID]) {
-        let locks = getLockedHeadgear(userID);
+        let locks = getLockedWearable(userID);
         let savedheadgear = [];
         process.wearable[userID].wornwearable.forEach((g) => {
             if (locks.includes(g)) {
@@ -157,8 +161,8 @@ const deleteWearable = (userID, wearable) => {
 const getWearableName = (userID, wearablename) => {
     if (process.wearable == undefined) { process.wearable = {} }
     let convertmittenarr = {}
-    for (let i = 0; i < wearabletypes.length; i++) {
-        convertmittenarr[wearabletypes[i].value] = wearabletypes[i].name
+    for (let i = 0; i < process.wearableslist.length; i++) {
+        convertmittenarr[process.wearableslist[i].value] = process.wearableslist[i].name
     }
     if (wearablename) {
         return convertmittenarr[wearablename];

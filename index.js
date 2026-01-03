@@ -15,6 +15,7 @@ const { assignMemeImages } = require('./functions/interactivefunctions.js');
 const { updateArousalValues } = require('./functions/vibefunctions.js');
 const { backupsAreAnnoying, saveFiles } = require('./functions/timefunctions.js');
 const { loadEmoji } = require("./functions/messagefunctions.js");
+const { loadWearables } = require("./functions/wearablefunctions.js");
 
 // Prevent node from killing us immediately when we do the next line.
 process.stdin.resume();
@@ -51,7 +52,8 @@ let processdatatoload = [
     { textname: "headwearusers.txt", processvar: "headwear", default: {} },
     { textname: "discardedkeys.txt", processvar: "discardedKeys", default: [] },
     { textname: "configs.txt", processvar: "configs", default: {}},
-    { textname: "dollusers.txt", processvar: "dolloverrides", default: {}}
+    { textname: "dollusers.txt", processvar: "dolloverrides", default: {}},
+    { textname: "wearables.txt", processvar: "wearable", default: {}}
 ]
 
 processdatatoload.forEach((s) => {
@@ -100,6 +102,7 @@ Object.keys(process.mitten).forEach((m) => {
 gagtypesset();
 loadHeavyTypes(); 
 loadHeadwearTypes();
+loadWearables();
 assignMemeImages();
 
 // Grab all the command files from the commands directory

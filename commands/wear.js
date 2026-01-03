@@ -3,7 +3,7 @@ const { getMitten } = require('./../functions/gagfunctions.js')
 const { getHeavy } = require('./../functions/heavyfunctions.js')
 const { getPronouns } = require('./../functions/pronounfunctions.js')
 const { getConsent, handleConsent } = require('./../functions/interactivefunctions.js')
-const { getWearable, assignHeadwear, getHeadwearName } = require('../functions/wearablefunctions.js');
+const { getWearable, assignWearable, getWearableName } = require('../functions/wearablefunctions.js');
 const { getText } = require("./../functions/textfunctions.js");
 
 
@@ -17,25 +17,25 @@ module.exports = {
 		)
         .addStringOption(opt =>
 			opt.setName('type')
-			.setDescription('What headwear to wear...')
+			.setDescription('What fashion to wear...')
 			.setAutocomplete(true)
 		),
 	async autoComplete(interaction) {
 		const focusedValue = interaction.options.getFocused(); 
 		let chosenuserid = interaction.options.get('user')?.value ?? interaction.user.id // Note we can only retrieve the user ID here!
 		if (focusedValue == "") { // User hasn't entered anything, lets give them a suggested set of 10
-			let itemsworn = getHeadwear(chosenuserid)
+			let itemsworn = getWearable(chosenuserid)
 
 			// Remove anything we're already wearing from the list
-			let sorted = process.headtypes.filter(f => !itemsworn.includes(f.value))
+			let sorted = process.wearableslist.filter(f => !itemsworn.includes(f.value))
 			await interaction.respond(sorted.slice(0,10))
 		}
 		else {
             try {
-				let itemsworn = getHeadwear(chosenuserid)
+				let itemsworn = getWearable(chosenuserid)
 
 				// Remove anything we're already wearing from the list
-				let sorted = process.headtypes.filter(f => !itemsworn.includes(f.value))
+				let sorted = process.wearableslist.filter(f => !itemsworn.includes(f.value))
                 let headstoreturn = sorted.filter((f) => (f.name.toLowerCase()).includes(focusedValue.toLowerCase())).slice(0,10)
 			    await interaction.respond(headstoreturn)
             }
@@ -46,11 +46,11 @@ module.exports = {
 	},
     async execute(interaction) {
 		try {
-			let headwearuser = interaction.options.getUser('user') ? interaction.options.getUser('user') : interaction.user
-			let headwearchoice = interaction.options.getString('type') ? interaction.options.getString('type') : "hood_latex"
+			let wearableuser = interaction.options.getUser('user') ? interaction.options.getUser('user') : interaction.user
+			let wearablechoice = interaction.options.getString('type') ? interaction.options.getString('type') : "catsuit_latex"
 			// CHECK IF THEY CONSENTED! IF NOT, MAKE THEM CONSENT
-			if (!getConsent(headwearuser.id)?.mainconsent) {
-				await handleConsent(interaction, headwearuser.id);
+			if (!getConsent(wearableuser.id)?.mainconsent) {
+				await handleConsent(interaction, wearableuser.id);
 				return;
 			}
 			// CHECK IF THEY CONSENTED! IF NOT, MAKE THEM CONSENT
@@ -59,12 +59,12 @@ module.exports = {
 				return;
 			}
 			let data = {
-                textarray: "texts_headwear",
+                textarray: "texts_wear",
                 textdata: {
                     interactionuser: interaction.user,
-                    targetuser: headwearuser,
+                    targetuser: wearableuser,
                     c1: getHeavy(interaction.user.id)?.type, // heavy bondage type
-					c2: getHeadwearName(headwearuser.id, headwearchoice)
+					c2: getWearableName(wearableuser.id, wearablechoice)
                 }
             }
 
@@ -77,10 +77,10 @@ module.exports = {
 			if (getHeavy(interaction.user.id)) {
 				// target is in heavy bondage
 				data.heavy = true;
-				if (headwearuser.id == interaction.user.id) {
+				if (wearableuser.id == interaction.user.id) {
 					// ourselves
 					data.self = true;
-					if (getHeadwear(headwearuser.id).includes(headwearchoice)) {
+					if (getWearable(wearableuser.id).includes(wearablechoice)) {
 						// Wearing the headgear already, Ephemeral
 						data.worn = true
 						interaction.reply({ content: getText(data), flags: MessageFlags.Ephemeral })
@@ -94,7 +94,7 @@ module.exports = {
 				else {
 					// Them
 					data.other = true;
-					if (getHeadwear(headwearuser.id).includes(headwearchoice)) {
+					if (getWearable(wearableuser.id).includes(wearablechoice)) {
 						// Wearing the headgear already, Ephemeral
 						data.worn = true
 						interaction.reply({ content: getText(data), flags: MessageFlags.Ephemeral })
@@ -109,72 +109,37 @@ module.exports = {
 			else {
 				// Not in heavy bondage
 				data.noheavy = true;
-				if (getMitten(interaction.user.id)) {
-					// Wearing mittens!
-					data.mitten = true
-					if (headwearuser.id == interaction.user.id) {
-						// ourselves
-						data.self = true;
-						if (getHeadwear(headwearuser.id).includes(headwearchoice)) {
-							// Wearing the headgear already, Ephemeral
-							data.worn = true
-							interaction.reply({ content: getText(data), flags: MessageFlags.Ephemeral })
-						}
-						else {
-							// Not wearing it!
-							data.noworn = true
-							interaction.reply(getText(data))
-						}
-					}
-					else {
-						// Them
-						data.other = true;
-						if (getHeadwear(headwearuser.id).includes(headwearchoice)) {
-							// Wearing the headgear already, Ephemeral
-							data.worn = true
-							interaction.reply({ content: getText(data), flags: MessageFlags.Ephemeral })
-						}
-						else {
-							// Not wearing it!
-							data.noworn = true
-							interaction.reply(getText(data))
-						}
-					}
-				}
-				else {
-					// Not wearing mittens!
-					data.nomitten = true
-					if (headwearuser.id == interaction.user.id) {
-						// ourselves
-						data.self = true;
-						if (getHeadwear(headwearuser.id).includes(headwearchoice)) {
-							// Wearing the headgear already, Ephemeral
-							data.worn = true
-							interaction.reply({ content: getText(data), flags: MessageFlags.Ephemeral })
-						}
-						else {
-							// Not wearing it!
-							data.noworn = true
-							interaction.reply(getText(data))
-							assignHeadwear(headwearuser.id, headwearchoice)
-						}
-					}
-					else {
-						// Them
-						data.other = true;
-						if (getHeadwear(headwearuser.id).includes(headwearchoice)) {
-							// Wearing the headgear already, Ephemeral
-							data.worn = true
-							interaction.reply({ content: getText(data), flags: MessageFlags.Ephemeral })
-						}
-						else {
-							// Not wearing it!
-							data.noworn = true
-							interaction.reply(getText(data))
-							assignHeadwear(headwearuser.id, headwearchoice)
-						}
-					}
-				}
+                if (wearableuser.id == interaction.user.id) {
+                    // ourselves
+                    data.self = true;
+                    if (getWearable(wearableuser.id).includes(wearablechoice)) {
+                        // Wearing the headgear already, Ephemeral
+                        data.worn = true
+                        interaction.reply({ content: getText(data), flags: MessageFlags.Ephemeral })
+                    }
+                    else {
+                        // Not wearing it!
+                        data.noworn = true
+                        assignWearable(wearableuser.id, wearablechoice)
+                        interaction.reply(getText(data))
+                    }
+                }
+                else {
+                    // Them
+                    data.other = true;
+                    if (getWearable(wearableuser.id).includes(wearablechoice)) {
+                        // Wearing the headgear already, Ephemeral
+                        data.worn = true
+                        interaction.reply({ content: getText(data), flags: MessageFlags.Ephemeral })
+                    }
+                    else {
+                        // Not wearing it!
+                        data.noworn = true
+                        assignWearable(wearableuser.id, wearablechoice)
+                        interaction.reply(getText(data))
+                    }
+                }
+
 			}
 		}
 		catch (err) {

@@ -92,12 +92,17 @@ const backupsAreAnnoying = () => {
 const saveFiles = () => {
     try {
         if (process.readytosave == undefined) { process.readytosave = {} }
+        console.log(process.readytosave)
         Object.keys(process.readytosave).forEach((k) => {
             let filepath;
             let processvar;
             // Honestly, this could probably just be a similar thing like the processdatatoload at the beginning of index.js
             // but meh. This allows for potential configuration later. 
             switch (k) {
+                case "wearable":
+                    filepath = `${process.GagbotSavedFileDirectory}/wearables.txt`
+                    processvar = "wearable"
+                    break;
                 case "gags":
                     filepath = `${process.GagbotSavedFileDirectory}/gaggedusers.txt`
                     processvar = "gags"

@@ -1,6 +1,7 @@
 const { SlashCommandBuilder, ComponentType, ButtonBuilder, ActionRowBuilder, ButtonStyle, MessageFlags } = require('discord.js');
 const { generateConfigModal, configoptions, getOption, setOption } = require('./../functions/configfunctions.js');
 const { getHeadwear, getHeadwearName, getLockedHeadgear, addLockedHeadgear, removeLockedHeadgear } = require('./../functions/headwearfunctions.js');
+const { getWearable, getLockedWearable, addLockedWearable, getWearableName, removeLockedWearable } = require('../functions/wearablefunctions.js');
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -33,16 +34,24 @@ module.exports = {
 		let subcommand = interaction.options.getSubcommand();
 		try {
 			if (subcommand == "lock") {
-				let itemsworn = getHeadwear(interaction.user.id)
-				let itemslocked = getLockedHeadgear(interaction.user.id)
+				// Headwear
+				let itemswornhead = getHeadwear(interaction.user.id)
+				let itemslockedhead = getLockedHeadgear(interaction.user.id)
 
-				let sorted = itemsworn.filter(f => !itemslocked.includes(f))
+				let sorted = itemswornhead.filter(f => !itemslockedhead.includes(f))
 
-				/*console.log(itemsworn)
-				console.log(itemslocked)
-				console.log(sorted);*/
+				// Clothing
+				let itemswornwearable = getWearable(interaction.user.id)
+				let itemslockedwearable = getLockedWearable(interaction.user.id)
 
-				sorted = sorted.map((f) => { return { name: getHeadwearName(undefined, f), value: f }})
+				let sortedwearable = itemswornwearable.filter(f => !itemslockedwearable.includes(f))
+
+				sorted = sorted.map((f) => { return { name: getHeadwearName(undefined, f), value: `${f}+head` }})
+				sortedwearable = sortedwearable.map((f) => { return { name: getWearableName(undefined, f), value: `${f}+wearable` }})
+
+				// Merge the lists. 
+				sorted = sorted.concat(...sortedwearable);
+
 				if (sorted.length == 0) {
 					sorted = [{ name: "Nothing", value: "nothing" }]
 				}
@@ -55,9 +64,15 @@ module.exports = {
 				}
 			}
 			else {
-				let itemslocked = getLockedHeadgear(interaction.user.id)
+				let itemslockedhead = getLockedHeadgear(interaction.user.id)
+				let itemslockedwearable = getLockedWearable(interaction.user.id)
 
-				let sorted = itemslocked.map((f) => { return { name: getHeadwearName(undefined, f), value: f }})
+				let sorted = itemslockedhead.map((f) => { return { name: getHeadwearName(undefined, f), value: `${f}+head` }})
+				let sortedwearable = itemslockedwearable.map((f) => { return { name: getWearableName(undefined, f), value: `${f}+wearable` }})
+
+				// Merge the lists. 
+				sorted = sorted.concat(...sortedwearable);
+
 				if (sorted.length == 0) {
 					sorted = [{ name: "Nothing", value: "nothing" }]
 				}
@@ -75,8 +90,17 @@ module.exports = {
 
 			if (subcommand == "lock") {
 				if (chosenitem && chosenitem != "nothing") {
-					addLockedHeadgear(interaction.user.id, chosenitem)
-					interaction.reply({ content: `Item ${getHeadwearName(undefined, chosenitem)} successfully locked!`, flags: MessageFlags.Ephemeral });
+					let chosenitemparts = chosenitem.split("+")
+					let replytextname;
+					if (chosenitemparts[1] == "head") {
+						addLockedHeadgear(interaction.user.id, chosenitemparts[0])
+						replytextname = getHeadwearName(undefined, chosenitemparts[0])
+					}
+					else {
+						addLockedWearable(interaction.user.id, chosenitemparts[0])
+						replytextname = getWearableName(undefined, chosenitemparts[0])
+					}
+					interaction.reply({ content: `Item ${replytextname} successfully locked!`, flags: MessageFlags.Ephemeral });
 				}
 				else if (chosenitem == "nothing") {
 					interaction.reply({ content: `You chose nothing to lock.`, flags: MessageFlags.Ephemeral });
@@ -87,8 +111,17 @@ module.exports = {
 			}
 			else {
 				if (chosenitem && chosenitem != "nothing") {
-					removeLockedHeadgear(interaction.user.id, chosenitem)
-					interaction.reply({ content: `Item ${getHeadwearName(undefined, chosenitem)} successfully unlocked!`, flags: MessageFlags.Ephemeral });
+					let chosenitemparts = chosenitem.split("+")
+					let replytextname;
+					if (chosenitemparts[1] == "head") {
+						removeLockedHeadgear(interaction.user.id, chosenitem)
+						replytextname = getHeadwearName(undefined, chosenitemparts[0])
+					}
+					else {
+						removeLockedWearable(interaction.user.id, chosenitemparts[0])
+						replytextname = getWearableName(undefined, chosenitemparts[0])
+					}
+					interaction.reply({ content: `Item ${replytextname} successfully unlocked!`, flags: MessageFlags.Ephemeral });
 				}
 				else if (chosenitem == "nothing") {
 					interaction.reply({ content: `You chose nothing to lock.`, flags: MessageFlags.Ephemeral });

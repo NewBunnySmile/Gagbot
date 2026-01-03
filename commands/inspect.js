@@ -6,6 +6,7 @@ const { getHeavy } = require('./../functions/heavyfunctions.js')
 const { getCorset } = require('./../functions/corsetfunctions.js')
 const { getHeadwear, getHeadwearName, getHeadwearRestrictions, getLockedHeadgear } = require('./../functions/headwearfunctions.js')
 const { getPronouns, getPronounsSet } = require('./../functions/pronounfunctions.js');
+const { getWearable, getWearableName, getLockedWearable } = require('../functions/wearablefunctions.js');
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -72,6 +73,26 @@ module.exports = {
             }
             else {
                 inspectparts.push(`<:mittens:1452425463757803783> Mittens: Not currently worn.`)
+            }
+            // Wearable status
+            // You probably can't really tell what you're wearing but...
+            if (getWearable(inspectuser.id).length > 0) {
+                let headout = `👗 General Clothing: **`;
+                let lockedwears = getLockedWearable(inspectuser.id);
+                getWearable(inspectuser.id).forEach((h) => {
+                    if (lockedwears.includes(h)) {
+                        headout = `${headout}*${getWearableName(inspectuser.id, h)}*, `
+                    }
+                    else {
+                        headout = `${headout}${getWearableName(inspectuser.id, h)}, `
+                    }
+                })
+                headout = headout.slice(0,-2)
+                headout = `${headout}**`
+                inspectparts.push(headout)
+            }
+            else {
+                inspectparts.push(`👗 General Clothing: Not currently worn.`)
             }
             // Vibe status
             if (getVibe(inspectuser.id)) {
@@ -234,6 +255,7 @@ module.exports = {
             // we want to use a new page button eventually to handle this. 
             outtext = `${titletext}${inspectparts.join("\n")}`
             interaction.reply({ content: outtext, flags: MessageFlags.Ephemeral })
+            console.log(`Inspect text generated was ${outtext.length} characters long.`)
         }
         catch (err) {
             console.log(err)

@@ -1415,6 +1415,93 @@ const texts_unvibe = {
     }
 }
 
+const texts_unwear = {
+    heavy: {
+        self: {
+            single: {
+                worn: [
+                    `Try as USER_THEY might, USER_TAG can't wriggle out of USER_THEIR VAR_C2 right now in USER_THEIR bondage.`
+                ],
+                // Ephemeral
+                noworn: [
+                    `You aren't wearing a VAR_C2, but you couldn't remove it anyway!`
+                ]
+            },
+            multiple: {
+                worn: [
+                    `Try as USER_THEY might, USER_TAG can't really take off USER_THEIR clothes while USER_THEY are tied up.`
+                ],
+                // Ephemeral
+                noworn: [
+                    `You aren't wearing any head restraints, but you couldn't remove them anyway!`
+                ]
+            }
+        },
+        other: {
+            single: {
+                worn: [
+                    `Despite all of USER_THEIR enthusiasm, USER_TAG is unable to take off TARGET_TAG's VAR_C2 without USER_THEIR arms.`
+                ],
+                // Ephemeral
+                noworn: [
+                    `TARGET_TAG isn't wearing a VAR_C2, but you couldn't remove it anyway!`
+                ]
+            },
+            multiple: {
+                worn: [
+                    `Despite all of USER_THEIR enthusiasm, USER_TAG is unable to undress TARGET_TAG without USER_THEIR arms.`
+                ],
+                // Ephemeral
+                noworn: [
+                    `TARGET_TAG isn't wearing any head restraints, but you couldn't remove them anyway!`
+                ]
+            }
+        }
+    },
+    noheavy: {
+        self: {
+            single: {
+                worn: [
+                    `USER_TAG slowly slips out of USER_THEIR VAR_C2, folding it and putting it away for future wear!`
+                ],
+                // Ephemeral
+                noworn: [
+                    `You aren't currently wearing a VAR_C2!`
+                ]
+            },
+            multiple: {
+                worn: [
+                    `USER_TAG slowly slips out of USER_THEIR clothes, folding them all up and stowing them away for future wear!`
+                ],
+                // Ephemeral
+                noworn: [
+                    `You aren't currently wearing any headgear!`
+                ]
+            }
+        },
+        other: {
+            single: {
+                worn: [
+                    `Slowly, USER_TAG runs USER_THEIR fingers over TARGET_TAG, sensually pulling off TARGET_THEIR VAR_C2 and setting it aside.`
+                ],
+                // Ephemeral
+                noworn: [
+                    `TARGET_TAG isn't currently wearing a VAR_C2!`
+                ]
+            },
+            multiple: {
+                worn: [
+                    `Giggling with glee, USER_TAG pulls all the clothes off of TARGET_TAG and sets them aside!`
+                ],
+                // Ephemeral
+                noworn: [
+                    `TARGET_TAG isn't currently wearing any headgear!`
+                ]
+            }
+        }
+    }
+}
+
 const texts_vibe = {
     heavy: {
         self: {
@@ -1586,6 +1673,49 @@ const texts_vibe = {
     }
 }
 
+const texts_wear = {
+    heavy: {
+        self: {
+            // Ephemeral
+            worn: [
+                `You are already wearing a VAR_C2, but you wouldn't be able to put it on anyway!`
+            ],
+            noworn: [
+                `USER_TAG nuzzles a VAR_C2, but putting it on would be kinda difficult without USER_THEIR arms.`
+            ]
+        },
+        other: {
+            // Ephemeral
+            worn: [
+                `TARGET_TAG is already wearing a VAR_C2, but you wouldn't be able to put it on TARGET_THEM anyway!`
+            ],
+            noworn: [
+                `USER_TAG tries to pick up a VAR_C2 and slip it on TARGET_TAG... with something besides USER_THEIR arms, since USER_THEY USER_ISARE wearing a VAR_C1.`
+            ]
+        }
+    },
+    noheavy: {
+        self: {
+            // Ephemeral
+            worn: [
+                `You are already wearing a VAR_C2!`
+            ],
+            noworn: [
+                `USER_TAG picks up a beautiful VAR_C2 and puts it on! It sits snugly on USER_THEM!`
+            ]
+        },
+        other: {
+            // Ephemeral
+            worn: [
+                `You are already wearing a VAR_C2!`
+            ],
+            noworn: [
+                `USER_TAG helps TARGET_TAG into a VAR_C2, ensuring it all fits snugly!`
+            ]
+        }
+    }
+} 
+
 const textarrays = {
     texts_chastity: texts_chastity,
     texts_collar: texts_collar,
@@ -1606,7 +1736,9 @@ const textarrays = {
     texts_unheavy: texts_unheavy,
     texts_unmitten: texts_unmitten,
     texts_unvibe: texts_unvibe,
-    texts_vibe: texts_vibe
+    texts_unwear: texts_unwear,
+    texts_vibe: texts_vibe,
+    texts_wear: texts_wear
 }
 
 // Get generic text and spit out a pronoun respecting version YAY
