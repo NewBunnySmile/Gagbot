@@ -104,7 +104,8 @@ const setPronouns = (user, pronouns) => {
 
     process.pronouns[user] = pronounsMap.get(pronouns);
 
-    fs.writeFileSync(`${process.GagbotSavedFileDirectory}/pronounsusers.txt`, JSON.stringify(process.pronouns));
+    if (process.readytosave == undefined) { process.readytosave = {} }
+    process.readytosave.pronouns = true;
 }
 
 // -----------------------------------------------------------------

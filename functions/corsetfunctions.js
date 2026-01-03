@@ -22,7 +22,8 @@ const assignCorset = (user, tightness = 5, origbinder) => {
     timestamp: Date.now(),
     origbinder: originalbinder ?? origbinder // Preserve original binder until it is removed. 
   };
-  fs.writeFileSync(`${process.GagbotSavedFileDirectory}/corsetusers.txt`, JSON.stringify(process.corset));
+  if (process.readytosave == undefined) { process.readytosave = {} }
+    process.readytosave.corset = true;
 };
 
 const getCorset = (user) => {
@@ -38,7 +39,8 @@ const getCorsetBinder = (user) => {
 const removeCorset = (user) => {
   if (process.corset == undefined) process.corset = {};
   delete process.corset[user];
-  fs.writeFileSync(`${process.GagbotSavedFileDirectory}/corsetusers.txt`, JSON.stringify(process.corset));
+  if (process.readytosave == undefined) { process.readytosave = {} }
+  process.readytosave.corset = true;
 };
 
 // Consumes breath and returns possibly modified text
@@ -99,7 +101,8 @@ function corsetLimitWords(user, text) {
       if (!silence) newwordsinmessage.push(word);
     }
   }
-  fs.writeFileSync(`${process.GagbotSavedFileDirectory}/corsetusers.txt`, JSON.stringify(process.corset));
+  if (process.readytosave == undefined) { process.readytosave = {} }
+  process.readytosave.corset = true;
   if (newwordsinmessage.length == 0) return "";
   let outtext = newwordsinmessage.join(" ");
   // Replace other instances of small speak so we only have one.
@@ -126,7 +129,8 @@ function calcBreath(user) {
 
 function getBreath(user) {
   const corset = calcBreath(user);
-  fs.writeFileSync(`${process.GagbotSavedFileDirectory}/corsetusers.txt`, JSON.stringify(process.corset));
+  if (process.readytosave == undefined) { process.readytosave = {} }
+  process.readytosave.corset = true;
   return corset.breath;
 }
 
@@ -134,7 +138,8 @@ function getBreath(user) {
 function tryExpendBreath(user, exertion) {
   const corset = calcBreath(user);
   corset.breath -= exertion;
-  fs.writeFileSync(`${process.GagbotSavedFileDirectory}/corsetusers.txt`, JSON.stringify(process.corset));
+  if (process.readytosave == undefined) { process.readytosave = {} }
+  process.readytosave.corset = true;
   return corset.breath > 0;
 }
 

@@ -88,7 +88,8 @@ const assignHeavy = (user, type, origbinder) => {
         typeval: type,
         origbinder: originalbinder ?? origbinder
     }
-    fs.writeFileSync(`${process.GagbotSavedFileDirectory}/heavyusers.txt`, JSON.stringify(process.heavy));
+    if (process.readytosave == undefined) { process.readytosave = {} }
+    process.readytosave.heavy = true;
 }
 
 const getHeavy = (user) => {
@@ -104,7 +105,8 @@ const getHeavyBinder = (user) => {
 const removeHeavy = (user) => {
     if (process.heavy == undefined) { process.heavy = {} }
     delete process.heavy[user];
-    fs.writeFileSync(`${process.GagbotSavedFileDirectory}/heavyusers.txt`, JSON.stringify(process.heavy));
+    if (process.readytosave == undefined) { process.readytosave = {} }
+    process.readytosave.heavy = true;
 }
 
 exports.loadHeavyTypes = loadHeavyTypes

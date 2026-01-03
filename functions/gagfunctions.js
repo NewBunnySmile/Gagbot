@@ -69,7 +69,8 @@ const assignGag = (userID, gagtype = "ball", intensity = 5, origbinder) => {
         intensity: intensity,
         origbinder: originalbinder ?? origbinder // Preserve original binder until it is removed. 
     }
-    fs.writeFileSync(`${process.GagbotSavedFileDirectory}/gaggedusers.txt`, JSON.stringify(process.gags));
+    if (process.readytosave == undefined) { process.readytosave = {} }
+    process.readytosave.gags = true;
 }
 
 const getGag = (userID) => {
@@ -90,7 +91,8 @@ const getGagIntensity = (userID) => {
 const deleteGag = (userID) => {
     if (process.gags == undefined) { process.gags = {} }
     delete process.gags[userID]
-    fs.writeFileSync(`${process.GagbotSavedFileDirectory}/gaggedusers.txt`, JSON.stringify(process.gags));
+    if (process.readytosave == undefined) { process.readytosave = {} }
+    process.readytosave.gags = true;
 }
 
 const assignMitten = (userID, mittentype, origbinder) => {
@@ -100,7 +102,8 @@ const assignMitten = (userID, mittentype, origbinder) => {
         mittenname: mittentype,
         origbinder: originalbinder ?? origbinder // Preserve original binder until it is removed. 
     }
-    fs.writeFileSync(`${process.GagbotSavedFileDirectory}/mittenedusers.txt`, JSON.stringify(process.mitten));
+    if (process.readytosave == undefined) { process.readytosave = {} }
+    process.readytosave.mitten = true;
 }
 
 const getMitten = (userID) => {
@@ -116,7 +119,8 @@ const getMittenBinder = (userID) => {
 const deleteMitten = (userID) => {
     if (process.mitten == undefined) { process.mitten = {} }
     delete process.mitten[userID]
-    fs.writeFileSync(`${process.GagbotSavedFileDirectory}/mittenedusers.txt`, JSON.stringify(process.mitten));
+    if (process.readytosave == undefined) { process.readytosave = {} }
+    process.readytosave.mitten = true;
 }
 
 const getMittenName = (userID, mittenname) => {

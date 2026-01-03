@@ -13,6 +13,23 @@ const { loadHeadwearTypes } = require('./functions/headwearfunctions.js')
 const { assignCorset } = require('./functions/corsetfunctions.js');
 const { assignMemeImages } = require('./functions/interactivefunctions.js');
 const { updateArousalValues } = require('./functions/vibefunctions.js');
+const { backupsAreAnnoying, saveFiles } = require('./functions/timefunctions.js');
+
+// Prevent node from killing us immediately when we do the next line.
+process.stdin.resume();
+
+// I've never considered overriding this before lol
+process.on('SIGINT', () => {
+    try {
+        console.log('Received SIGINT. Performing graceful shutdown...');
+        saveFiles();
+        process.exit(0);
+    }
+    catch (err) {
+        console.log(err);
+        process.abort();
+    }
+});
 
 let GagbotSavedFileDirectory = process.env.GAGBOTFILEDIRECTORY ? process.env.GAGBOTFILEDIRECTORY : __dirname
 
@@ -197,27 +214,13 @@ client.on('interactionCreate', async (interaction) => {
 
 // I refuse to use a proper database with backups. 
 // This is a solution to backup the terrible database. 
-setInterval(() => {
-    try {
-        let filepath = process.GagbotSavedFileDirectory;
-        let dest = path.resolve(filepath, "backups");
-        let files = fs.readdirSync(filepath).filter(file => file.endsWith('.txt'));
+backupsAreAnnoying();
+let backupset = setInterval(() => {
+    backupsAreAnnoying()
+}, parseInt(process.env.BACKUPDELAY ?? 3600000)) // Backups every one hour, or time specified in .env
 
-        let zip = new admZip();
-
-        let timestring = getTimestringForZip();
-
-        files.forEach(f => {
-            zip.addLocalFile(path.resolve(filepath, f));
-        })
-
-        zip.writeZip(path.resolve(dest, `backup-${timestring}.zip`));
-
-        console.log(`Completed zip .\\backup\\backup-${timestring}.zip`)
-    }
-    catch (err) {
-        console.log(err)
-    }
-}, 3600000) // Backups every one hour. 
+let savefileset = setInterval(() => {
+    saveFiles();
+}, parseInt(process.env.SAVEDELAY ?? 60000)) // Backups every one hour, or time specified in .env
 
 client.login(process.env.DISCORDBOTTOKEN)

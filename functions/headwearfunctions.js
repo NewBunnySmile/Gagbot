@@ -89,7 +89,8 @@ const assignHeadwear = (userID, headwear, origbinder) => {
             origbinder: originalbinder ?? origbinder
         }
     }
-    fs.writeFileSync(`${process.GagbotSavedFileDirectory}/headwearusers.txt`, JSON.stringify(process.headwear));
+    if (process.readytosave == undefined) { process.readytosave = {} }
+    process.readytosave.headwear = true;
 }
 
 const getHeadwear = (userID) => {
@@ -117,7 +118,8 @@ const addLockedHeadgear = (userID, headwear) => {
             process.headwear[userID].locked.push(headwear);
         }
     }
-    fs.writeFileSync(`${process.GagbotSavedFileDirectory}/headwearusers.txt`, JSON.stringify(process.headwear));
+    if (process.readytosave == undefined) { process.readytosave = {} }
+    process.readytosave.headwear = true;
 }
 
 const removeLockedHeadgear = (userID, headwear) => {
@@ -135,7 +137,8 @@ const removeLockedHeadgear = (userID, headwear) => {
             }
         }
     }
-    fs.writeFileSync(`${process.GagbotSavedFileDirectory}/headwearusers.txt`, JSON.stringify(process.headwear));
+    if (process.readytosave == undefined) { process.readytosave = {} }
+    process.readytosave.headwear = true;
 }
 
 const deleteHeadwear = (userID, headwear) => {
@@ -160,7 +163,8 @@ const deleteHeadwear = (userID, headwear) => {
             delete process.headwear[userID]
         }
     }
-    fs.writeFileSync(`${process.GagbotSavedFileDirectory}/headwearusers.txt`, JSON.stringify(process.headwear));
+    if (process.readytosave == undefined) { process.readytosave = {} }
+    process.readytosave.headwear = true;
 }
 
 const getHeadwearName = (userID, headnname) => {

@@ -326,7 +326,8 @@ function setOption(userID, option, choice) {
     if (process.configs.users == undefined) { process.configs.users = {} } 
     if (process.configs.users[userID] == undefined) { process.configs.users[userID] = {} } 
     process.configs.users[userID][option] = choice;
-    fs.writeFileSync(`${process.GagbotSavedFileDirectory}/configs.txt`, JSON.stringify(process.configs));
+    if (process.readytosave == undefined) { process.readytosave = {} }
+    process.readytosave.configs = true;
 }
 
 function getOption(userID, option) {
@@ -345,7 +346,8 @@ function getOption(userID, option) {
         generaloptionpages.forEach((k) => {
             if (k == option) { process.configs.users[userID][k] = configoptions["General"][k].default }
         })
-        fs.writeFileSync(`${process.GagbotSavedFileDirectory}/configs.txt`, JSON.stringify(process.configs));
+        if (process.readytosave == undefined) { process.readytosave = {} }
+    process.readytosave.configs = true;
     }
     return process.configs.users[userID][option];
 }
@@ -359,7 +361,8 @@ function initializeOptions(userID) {
     generaloptionpages.forEach((k) => {
         process.configs.users[userID][k] = configoptions["General"][k].default
     })
-    fs.writeFileSync(`${process.GagbotSavedFileDirectory}/configs.txt`, JSON.stringify(process.configs));
+    if (process.readytosave == undefined) { process.readytosave = {} }
+    process.readytosave.configs = true;
 }
 
 exports.generateConfigModal = generateConfigModal;

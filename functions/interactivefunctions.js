@@ -42,11 +42,8 @@ const assignConsent = (user) => {
     process.consented[user] = {
         mainconsent: true
     }
-    console.log(process.consented)
-    console.log(fs.readFileSync(`${process.GagbotSavedFileDirectory}/consentusers.txt`))
-    fs.writeFileSync(`${process.GagbotSavedFileDirectory}/consentusers.txt`, JSON.stringify(process.consented));
-    console.log(fs.readFileSync(`${process.GagbotSavedFileDirectory}/consentusers.txt`))
-    console.log("I SWEAR TO GOD IF YOU DIDNT SAVE")
+    if (process.readytosave == undefined) { process.readytosave = {} }
+    process.readytosave.consented = true;
 }
 
 const getConsent = (user) => {

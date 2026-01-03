@@ -20,7 +20,8 @@ function timelockChastity(client, wearer, keyholder, unlockTime, access, keyhold
   setTimeout(() => {
     unlockTimelockChastity(client, wearer);
   }, unlockTime - now);
-  fs.writeFileSync(`${process.GagbotSavedFileDirectory}/chastityusers.txt`, JSON.stringify(process.chastity));
+  if (process.readytosave == undefined) { process.readytosave = {} }
+    process.readytosave.chastity = true;
   return true;
 }
 
@@ -34,7 +35,10 @@ function unlockTimelockChastity(client, wearer, skipWrite = false) {
   chastity.unlockTime = null;
   chastity.access = null;
   if (!chastity.keyholder) removeChastity(wearer);
-  else if (!skipWrite) fs.writeFileSync(`${process.GagbotSavedFileDirectory}/chastityusers.txt`, JSON.stringify(process.chastity));
+  else if (!skipWrite) {
+    if (process.readytosave == undefined) { process.readytosave = {} }
+    process.readytosave.chastity = true;
+  }
   sendTimelockChastityUnlockMessage(client, wearer, chastity.keyholder);
   return true;
 }
@@ -58,7 +62,8 @@ function restartChastityTimers(client) {
     unlockTimelockChastity(client, wearer, true);
   }
   // only write to file once for this
-  fs.writeFileSync(`${process.GagbotSavedFileDirectory}/chastityusers.txt`, JSON.stringify(process.chastity));
+  if (process.readytosave == undefined) { process.readytosave = {} }
+    process.readytosave.chastity = true;
 }
 
 async function sendTimelockChastityUnlockMessage(client, wearer, keyholder) {

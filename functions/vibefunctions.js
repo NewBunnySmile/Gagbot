@@ -63,7 +63,8 @@ const assignChastity = (user, keyholder, namedchastity) => {
         extraFrustration: 0,
         chastitytype: namedchastity
     }
-    fs.writeFileSync(`${process.GagbotSavedFileDirectory}/chastityusers.txt`, JSON.stringify(process.chastity));
+    if (process.readytosave == undefined) { process.readytosave = {} }
+    process.readytosave.chastity = true;
 }
 
 const getChastity = (user) => {
@@ -76,7 +77,8 @@ const getChastity = (user) => {
 const removeChastity = (user) => {
     if (process.chastity == undefined) { process.chastity = {} }
     delete process.chastity[user];
-    fs.writeFileSync(`${process.GagbotSavedFileDirectory}/chastityusers.txt`, JSON.stringify(process.chastity));
+    if (process.readytosave == undefined) { process.readytosave = {} }
+    process.readytosave.chastity = true;
 }
 
 const assignVibe = (user, intensity, vibetype = "bullet vibe", origbinder) => {
@@ -100,7 +102,8 @@ const assignVibe = (user, intensity, vibetype = "bullet vibe", origbinder) => {
             });
         }
     }
-    fs.writeFileSync(`${process.GagbotSavedFileDirectory}/vibeusers.txt`, JSON.stringify(process.vibe));
+    if (process.readytosave == undefined) { process.readytosave = {} }
+    process.readytosave.vibe = true;
 }
 
 const getVibe = (user) => {
@@ -118,7 +121,8 @@ const removeVibe = (user, vibetype) => {
             delete process.vibe[user]; // Discard the vibes object as we are no longer using it. 
         }
     }
-    fs.writeFileSync(`${process.GagbotSavedFileDirectory}/vibeusers.txt`, JSON.stringify(process.vibe));
+    if (process.readytosave == undefined) { process.readytosave = {} }
+    process.readytosave.vibe = true;
 }
 
 const getChastityKeys = (user) => {
@@ -295,7 +299,8 @@ const cloneChastityKey = (chastityuser, newKeyholder, bra) => {
         chastity.clonedKeyholders = [];
     }
     chastity.clonedKeyholders.push(newKeyholder)
-    fs.writeFileSync(`${process.GagbotSavedFileDirectory}/chastityusers.txt`, JSON.stringify(process.chastity));
+    if (process.readytosave == undefined) { process.readytosave = {} }
+    process.readytosave.chastity = true;
 }
 
 // Called to remove a single cloned keyholder from the list. 
@@ -307,7 +312,8 @@ const revokeChastityKey = (chastityuser, newKeyholder) => {
     if (chastity.clonedKeyholders.includes(newKeyholder)) {
         chastity.clonedKeyholders.splice(chastity.clonedKeyholders.indexOf(newKeyholder), 1)
     }
-    fs.writeFileSync(`${process.GagbotSavedFileDirectory}/chastityusers.txt`, JSON.stringify(process.chastity));
+    if (process.readytosave == undefined) { process.readytosave = {} }
+    process.readytosave.chastity = true;
 }
 
 // Called to get cloned keys on a restraint
@@ -356,7 +362,8 @@ const transferChastityKey = (lockedUser, newKeyholder) => {
         if (process.chastity[lockedUser].keyholder != newKeyholder) {
             process.chastity[lockedUser].keyholder = newKeyholder;
             process.chastity[lockedUser].clonedKeyholders = []
-            fs.writeFileSync(`${process.GagbotSavedFileDirectory}/chastityusers.txt`, JSON.stringify(process.chastity));
+            if (process.readytosave == undefined) { process.readytosave = {} }
+            process.readytosave.chastity = true;
             return true;
         }
     }
@@ -375,20 +382,23 @@ const discardChastityKey = (user) => {
           wearer: user
         })
     }
-    fs.writeFileSync(`${process.GagbotSavedFileDirectory}/chastityusers.txt`, JSON.stringify(process.chastity));
-    fs.writeFileSync(`${process.GagbotSavedFileDirectory}/discardedkeys.txt`, JSON.stringify(process.discardedKeys));
+    if (process.readytosave == undefined) { process.readytosave = {} }
+    process.readytosave.chastity = true;
+    process.readytosave.discardedKeys = true;
 }
 
 const findChastityKey = (index, newKeyholder) => {
     if (process.chastity == undefined) { process.chastity = {} }
     if (process.discardedKeys == undefined) { process.discardedKeys = [] }
     const chastity = process.discardedKeys.splice(index, 1);
-    fs.writeFileSync(`${process.GagbotSavedFileDirectory}/discardedkeys.txt`, JSON.stringify(process.discardedKeys));
+    if (process.readytosave == undefined) { process.readytosave = {} }
+    process.readytosave.discardedKeys = true;
     if (chastity.length < 1) return false;
     if (process.chastity[chastity[0].wearer]) {
       process.chastity[chastity[0].wearer].keyholder = newKeyholder;
       process.chastity[chastity[0].wearer].clonedKeyholders = []
-      fs.writeFileSync(`${process.GagbotSavedFileDirectory}/chastityusers.txt`, JSON.stringify(process.chastity));
+      if (process.readytosave == undefined) { process.readytosave = {} }
+        process.readytosave.chastity = true;
       return true;
     }
     return false;
@@ -469,7 +479,8 @@ function updateArousalValues() {
                 if (arousal.arousal < minArousal) arousal.arousal = minArousal;
             }
         }
-        fs.writeFileSync(`${process.GagbotSavedFileDirectory}/arousal.txt`, JSON.stringify(process.arousal));
+        if (process.readytosave == undefined) { process.readytosave = {} }
+        process.readytosave.arousal = true;
     }
     catch (err) {
         // SAM PLEASE TRY CATCH THESE THINGS
@@ -536,7 +547,8 @@ function addArousal(user, change) {
 
 function clearArousal(user) {
   process.arousal[user] = { arousal: 0, prev: 0, timestamp: Date.now() };
-  fs.writeFileSync(`${process.GagbotSavedFileDirectory}/arousal.txt`, JSON.stringify(process.arousal));
+  if (process.readytosave == undefined) { process.readytosave = {} }
+    process.readytosave.arousal = true;
 }
 
 function calcNextArousal(time, arousal, prev, growthCoefficient, decayCoefficient) {
@@ -561,7 +573,8 @@ function tryOrgasm(user) {
     if (chastity) {
       chastity.extraFrustration = 0;
       chastity.timestamp = (chastity.timestamp + now) / 2;
-      fs.writeFileSync(`${process.GagbotSavedFileDirectory}/chastityusers.txt`, JSON.stringify(process.chastity));
+      if (process.readytosave == undefined) { process.readytosave = {} }
+        process.readytosave.chastity = true;
     }
     return true;
   }
@@ -571,7 +584,8 @@ function tryOrgasm(user) {
   if (chastity) {
     const extraFrustration = chastity.extraFrustration ?? 0;
     chastity.extraFrustration = extraFrustration + ORGASM_FRUSTRATION;
-    fs.writeFileSync(`${process.GagbotSavedFileDirectory}/chastityusers.txt`, JSON.stringify(process.chastity));
+    if (process.readytosave == undefined) { process.readytosave = {} }
+    process.readytosave.chastity = true;
   }
 
   return false;

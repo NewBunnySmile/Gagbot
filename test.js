@@ -2,24 +2,16 @@ const fs = require('fs')
 const path = require('path');
 const admZip = require('adm-zip');
 const { getTimestringForZip } = require("./functions/timefunctions");
+const env = require('dotenv')
 
-try {
-    let filepath = `Z:\\Data\\Codeprojects\\NodeJs\\GagbotFiles`;
-    let dest = path.resolve(filepath, "backups");
-    let files = fs.readdirSync(filepath).filter(file => file.endsWith('.txt'));
+env.config();
 
-    let zip = new admZip();
+process.stdin.resume();
 
-    let timestring = getTimestringForZip();
-
-    files.forEach(f => {
-        zip.addLocalFile(path.resolve(filepath, f));
-    })
-
-    zip.writeZip(path.resolve(dest, `backup-${timestring}.zip`));
-
-    console.log(`Completed zip .\\backup\\backup-${timestring}.zip`)
-}
-catch (err) {
-    console.log(err)
-}
+// I've never considered overriding this before lol
+process.on('SIGINT', () => {
+  console.log('Received SIGINT (Ctrl+C). Performing graceful shutdown...');
+  console.log(`DO ALL THE THINGS`)
+  console.log(process.pid)
+  process.exit(0); 
+});
