@@ -1,10 +1,9 @@
 const { SlashCommandBuilder, ComponentType, ButtonBuilder, ActionRowBuilder, ButtonStyle, MessageFlags } = require('discord.js');
 const { generateConfigModal, configoptions, getOption, setOption, config } = require('./../functions/configfunctions.js');
 const { getHeadwear, getHeadwearName, getLockedHeadgear, addLockedHeadgear, removeLockedHeadgear } = require('./../functions/headwearfunctions.js');
-const { canAccessCollar, promptCloneCollarKey, cloneCollarKey, revokeCollarKey, getClonedCollarKeysOwned, getOtherKeysCollar, transferCollarKey, promptTransferCollarKey } = require('./../functions/collarfunctions.js');
-const { canAccessChastity, promptCloneChastityKey, cloneChastityKey, revokeChastityKey, getClonedChastityKeysOwned, getOtherKeysChastity, transferChastityKey } = require('./../functions/vibefunctions.js');
+const { canAccessCollar, promptCloneCollarKey, cloneCollarKey, revokeCollarKey, getClonedCollarKeysOwned, getOtherKeysCollar, getCollar, transferCollarKey, promptTransferCollarKey } = require('./../functions/collarfunctions.js');
+const { canAccessChastity, promptCloneChastityKey, cloneChastityKey, revokeChastityKey, getClonedChastityKeysOwned, getOtherKeysChastity, getChastity, transferChastityKey, promptTransferChastityKey } = require('./../functions/vibefunctions.js');
 const { getText, getTextGeneric } = require('./../functions/textfunctions.js');
-const { promptTransferChastityKey } = require('../functions/vibefunctions.js');
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -63,9 +62,9 @@ module.exports = {
 			if (subcommand == "clone" || subcommand == "give") {
                 // We want to return ONLY options that the user COULD clone a key for
                 // So if they own a collar key, it only gives "Collar"
-                let chosenuserid = interaction.options.get('user')?.value ?? interaction.user.id // Note we can only retrieve the user ID here!
-				let collarkeyholder = canAccessCollar(chosenuserid, interaction.user.id, undefined, true);
-                let chastitykeyholder = canAccessChastity(chosenuserid, interaction.user.id, undefined, true);
+                let chosenuserid = interaction.options.get('wearer')?.value ?? interaction.user.id // Note we can only retrieve the user ID here!
+				let collarkeyholder = (getCollar(chosenuserid) && canAccessCollar(chosenuserid, interaction.user.id, undefined, true).access);
+                let chastitykeyholder = (getChastity(chosenuserid) && canAccessChastity(chosenuserid, interaction.user.id, undefined, true).access);
 
 				let choices = [];
                 if (!collarkeyholder && !chastitykeyholder) {
@@ -448,20 +447,20 @@ module.exports = {
                 }
 
                 // We can't give to ourselves lol
-                if (wearer == newKeyholder) {
-                    interaction.reply({ content: `You can't give yourself your own key!`, flags: MessageFlags.Ephemeral })
+                if (interaction.user == newKeyholder) {
+                    interaction.reply({ content: `You can't give yourself the key you're holding!`, flags: MessageFlags.Ephemeral })
                     return;
                 }
 
                 // Check if the interaction user has access to give the key for the target restraint.
                 let cangive = false;
                 let chosenrestraintreadable;
-                if (restraint == "collar" && canAccessCollar(wearer.id, interaction.user.id, undefined, true)) { 
+                if (restraint == "collar" && getCollar(wearer.id) && canAccessCollar(wearer.id, interaction.user.id, undefined, true)) { 
                     cangive = true 
                     chosenrestraintreadable = "collar";
                     choiceemoji = "<:collar:1449984183261986939>";
                 }
-                if (restraint == "chastitybelt" && canAccessChastity(wearer.id, interaction.user.id, undefined, true)) { 
+                if (restraint == "chastitybelt" && getChastity(wearer.id) && canAccessChastity(wearer.id, interaction.user.id, undefined, true)) { 
                     cangive = true 
                     chosenrestraintreadable = "chastity belt"
                     choiceemoji = "<:Chastity:1073495208861380629>"
@@ -493,9 +492,9 @@ module.exports = {
                     },
                 ]
 
-                let responsetext = `Giving the keys for ${choiceemoji}${wearer} to 🔑${newKeyholder}.\n\nPlease confirm by pressing the button below:`
+                let responsetext = `Giving the keys for ${choiceemoji}${wearer} to 🔑${newKeyholder}. *You will no longer be able to access that restraint.*\n\nPlease confirm by pressing the button below:`
                 if (wearer == interaction.user) {
-                    responsetext = `Giving the keys for your ${choiceemoji}${chosenrestraintreadable} to 🔑${newKeyholder}.\n\nPlease confirm by pressing the button below:`
+                    responsetext = `Giving the keys for your ${choiceemoji}${chosenrestraintreadable} to 🔑${newKeyholder}. *You will no longer be able to access your restraint.*\n\nPlease confirm by pressing the button below:`
                 }
 
                 let response = await interaction.reply({ 
@@ -512,7 +511,7 @@ module.exports = {
 
                     if (confirmation.customId === 'agreetogivebutton') {
                         // Skip the DM if the wearer is the giver or receiver, or if they have auto accepting enabled
-                        if (wearer == interaction.user || wearer == newKeyholder || config.getKeyGivingAuto(wearer)) {
+                        if (wearer == interaction.user || wearer == newKeyholder || config.getKeyGivingAuto(wearer.id)) {
                             let data = {
                                 textarray: "texts_key",
                                 textdata: {
@@ -523,7 +522,12 @@ module.exports = {
                                 }
                             }
                             data.give = true;
-                            data.self = wearer == interaction.user;
+                            if (wearer == interaction.user) {
+                                data.self = true;
+                            }
+                            else {
+                                data.other = true;
+                            }
                             data[restraint] = true;
                             if (restraint == "collar") {
                                 await confirmation.update({ content: getTextGeneric("give_accept_self", data.textdata) , components: [] })
@@ -558,7 +562,16 @@ module.exports = {
                                     transferCollarKey(wearer.id, newKeyholder.id);
                                 }, async (rej) => {
                                     // User said no.
-                                    await interaction.editReply(getTextGeneric("give_decline", datatogeneric))
+                                    let data = {
+                                        textarray: "texts_key",
+                                        textdata: {
+                                            interactionuser: interaction.user,
+                                            targetuser: wearer,
+                                            c1: chosenrestraintreadable,
+                                            c2: newKeyholder
+                                        }
+                                    }
+                                    await interaction.editReply(getTextGeneric("give_decline", data.textdata))
                                 })
                             }
                             else if (restraint == "chastitybelt") {
@@ -581,7 +594,16 @@ module.exports = {
                                     transferChastityKey(wearer.id, newKeyholder.id);
                                 }, async (rej) => {
                                     // User said no.
-                                    await interaction.editReply(getTextGeneric("give_decline", datatogeneric))
+                                    let data = {
+                                        textarray: "texts_key",
+                                        textdata: {
+                                            interactionuser: interaction.user,
+                                            targetuser: wearer,
+                                            c1: chosenrestraintreadable,
+                                            c2: newKeyholder
+                                        }
+                                    }
+                                    await interaction.editReply(getTextGeneric("give_decline", data.textdata))
                                 })
                             }
                         }
