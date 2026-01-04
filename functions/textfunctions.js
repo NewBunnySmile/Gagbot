@@ -555,12 +555,12 @@ const texts_mitten = {
             gag: [
                 `USER_TAG puts on a set of VAR_C2. USER_THEYLL_CAP be unable to remove USER_THEIR gag!`,
                 `USER_TAG wriggles their fingers into some VAR_C2. USER_THEIR_CAP gag will be impossible to remove!`,
-                `As if USER_THEY want to stay gagged, USER_TAG renders USER_THEIR hands useless with a pair of VAR_C2!`,
+                `As if USER_THEY wantUSER_S to stay gagged, USER_TAG renders USER_THEIR hands useless with a pair of VAR_C2!`,
             ],
             nogag: [
                 `USER_TAG slips USER_THEIR hands into some VAR_C2! USER_THEYLL_CAP be unable to remove a gag if someone puts one on USER_THEM!`,
                 `USER_TAG wriggles USER_THEIR fingers into some VAR_C2. Gags will be impossible to remove!`,
-                `As if USER_THEY want to be gagged, USER_TAG renders USER_THEIR hands useless with a pair of VAR_C2!`,
+                `As if USER_THEY wantUSER_S to be gagged, USER_TAG renders USER_THEIR hands useless with a pair of VAR_C2!`,
             ]
         },
         nonamedmitten: {

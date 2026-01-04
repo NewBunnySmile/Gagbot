@@ -362,7 +362,7 @@ const findCollarKey = (index, newKeyholder) => {
     if (process.collar[collar[0].wearer]) {
       process.collar[collar[0].wearer].keyholder = newKeyholder;
       // Erase cloned keys in this process!
-      process.collar[lockedUser].clonedKeyholders = [];
+      process.collar[collar[0].wearer].clonedKeyholders = [];
       if (process.readytosave == undefined) { process.readytosave = {} }
         process.readytosave.collar = true;
       return true;
