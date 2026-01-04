@@ -55,6 +55,7 @@ const heavytypes = [
     { name: "Hardlight Cuffs (strict)", value: "hardlight_strict", denialCoefficient: 4.5 },
     { name: "Bed Restraints", value: "bedrestraints", denialCoefficient: 6 },
     { name: "Chair with Cuffs", value: "chaircuffs", denialCoefficient: 3.5 },
+    { name: "Shadow Hands", value: "shadowhands", denialCoefficient: 1.5 },
     { name: "Pile of Cats", value: "catpile", denialCoefficient: 99 } // Are you ***really*** going to disturb the kitties to let go?
 ];
 

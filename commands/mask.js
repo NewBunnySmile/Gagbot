@@ -28,7 +28,7 @@ module.exports = {
 
 			// Remove anything we're already wearing from the list
 			let sorted = process.headtypes.filter(f => !itemsworn.includes(f.value))
-			await interaction.respond(sorted.slice(0,10))
+			await interaction.respond(sorted.slice(0,20))
 		}
 		else {
             try {
@@ -36,7 +36,7 @@ module.exports = {
 
 				// Remove anything we're already wearing from the list
 				let sorted = process.headtypes.filter(f => !itemsworn.includes(f.value))
-                let headstoreturn = sorted.filter((f) => (f.name.toLowerCase()).includes(focusedValue.toLowerCase())).slice(0,10)
+                let headstoreturn = sorted.filter((f) => (f.name.toLowerCase()).includes(focusedValue.toLowerCase())).slice(0,20)
 			    await interaction.respond(headstoreturn)
             }
 			catch (err) {

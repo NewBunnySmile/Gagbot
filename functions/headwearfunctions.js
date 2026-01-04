@@ -31,6 +31,7 @@ const headweartypes = [
     { name: "Dog Mask", value: "mask_dog", blockinspect: true, blockemote: true, replaceemote: "🐶" },
     { name: "Frog Mask", value: "mask_frog", blockinspect: true, blockemote: true, replaceemote: "🐸" },
     { name: "Turtle Mask", value: "mask_turtle", blockinspect: true, blockemote: true, replaceemote: "🐢" },
+    { name: "Fox Mask", value: "mask_fox", blockinspect: true, blockemote: true, replaceemote: "🦊" },
     { name: "Doll Visor", value: "doll_visor", blockemote: true },                                      // Doll Visor removes emotes only.
     { name: "Doll Visor (opaque)", value: "doll_visor_blind", blockinspect: true, blockemote: true },   // Blindfolding Doll Visor
     { name: "Doll Visor (transparent)", value: "doll_visor_trans", },                                   // Cosmetic Item
@@ -45,9 +46,6 @@ const headweartypes = [
     { name: "Moonveiled Glasses", value: "glasses_moon" },
     { name: "Starry Night Glasses", value: "glasses_stars" },
     { name: "Ridiculously Big Witch Hat", value: "witchhat_big" },
-    //{ name: "Ridiculously Big Witch Hat 2", value: "witchhat_big2" }, // These were a funny meme, but not necessary
-    //{ name: "Ridiculously Big Witch Hat 3", value: "witchhat_big3" },
-    //{ name: "Final Ridiculously Big Witch Hat", value: "witchhat_big4" },
     { name: "Witch Hat", value: "witchhat_normal" },
     { name: "Princess Crown", value: "princess_crown" },
     { name: "Sunless Tiara", value: "sunless_crown" },
@@ -56,6 +54,7 @@ const headweartypes = [
     { name: "Moon Phase Headchain", value: "moonphase_headchain" },
     { name: "Elemental Headchain", value: "elemental_headchain" },
     { name: "Starveiled Headdress", value: "starveiled_headchain" },
+    { name: "Faceveil", value: "faceveil" },
     { name: "Maid Headdress", value: "maid_headchain" },
     { name: "Demon Horns", value: "demon_horns" },
     { name: "Demon Horns (Sheep)", value: "demon_horns_sheep" },
@@ -65,6 +64,11 @@ const headweartypes = [
     { name: "Floppy Bunny Ears", value: "ears_bunny_floppy" },
     { name: "Dog Ears", value: "ears_dog" },
     { name: "Fox Ears", value: "ears_fox" },
+    { name: "Hairpins", value: "Hairpins" },
+    { name: "Hairstick", value: "hairstick" },
+    { name: "Half Faceveil", value: "faceveil_half" },
+    { name: "Sunglasses", value: "sunglasses" },
+    { name: "Vampire Fangs", value: "fangs_vampire" },
 ]
 
 const DOLLVISORS = ["doll_visor", "doll_visor_blind"]
