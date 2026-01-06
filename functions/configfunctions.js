@@ -101,7 +101,7 @@ const configoptions = {
             default: "disabled",
             disabled: (userID) => { return (getOption(userID,"fumbling") == "disabled") } // if true, button is greyed out
         },
-        "blessed_luck": {
+        "blessed-luck": {
             name: "Blessed Luck",
             desc: "Should failed rolls from fumbling contribute to future rolls?",
             choices: [
