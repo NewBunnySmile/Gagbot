@@ -140,6 +140,8 @@ const client = new discord.Client({
 client.on("clientReady", async () => {
     // This is run once we’re logged in!
     console.log(`Logged in as ${client.user.tag}!`)
+    // Please stop crashing
+    if (process.webhook == undefined) { process.webhook = {} }
     try {
         await client.application.fetch();
         console.log(`Bot is owned by user ID ${client?.application?.owner.id}`)
@@ -155,7 +157,7 @@ client.on("clientReady", async () => {
 
         // Load webhooks
         await loadWebhooks(client);
-        console.log(`Webhook Channels: [${Array.from(process.webhook.keys()).join(", ")}]`)
+        //console.log(`Webhook Channels: [${Array.from(process.webhook.keys()).join(", ")}]`)
     }
     catch (err) {
         console.log(err)

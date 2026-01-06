@@ -2,7 +2,7 @@ const { removeChastity } = require("./vibefunctions");
 const fs = require("fs");
 
 // returns whether the locking was successful
-function timelockChastity(client, wearer, keyholder, unlockTime, access, keyholderAfter) {
+function timelockChastity(client, wearer, keyholder, unlockTime, access, keyholderAfter, webhookchannel) {
   const now = Date.now();
   if (now >= unlockTime) return false;
   if (process.chastity == undefined) process.chastity = {};
@@ -12,6 +12,7 @@ function timelockChastity(client, wearer, keyholder, unlockTime, access, keyhold
   if (chastity.keyholder == wearer) {
     chastity.keyholder = null;
     chastity.keyholderAfter = keyholderAfter ? wearer : null;
+    chastity.webhookchannel = webhookchannel;
   } else chastity.keyholderAfter = [null, wearer, chastity.keyholder][keyholderAfter];
   if (access == 2) chastity.keyholder = null;
   chastity.unlockTime = unlockTime;
@@ -67,9 +68,16 @@ function restartChastityTimers(client) {
 }
 
 async function sendTimelockChastityUnlockMessage(client, wearer, keyholder) {
-  const channel = await client.channels.fetch(process.env.CHANNELID);
-  if (!keyholder) channel.send(`As the timer finally expires, <@${wearer}>'s chastity belt unlocks and falls to the floor!`);
-  else channel.send(`As the timer finally expires, <@${wearer}>'s chastity belt returns to normal with <@${keyholder}> holding the keys!`);
+  if (process.chastity[wearer].webhookchannel) { 
+    const channel = await client.channels.fetch(process.chastity[wearer].webhookchannel);
+    if (!keyholder) {
+      channel.send(`As the timer finally expires, <@${wearer}>'s chastity belt unlocks and falls to the floor!`)
+    }
+    else {
+      channel.send(`As the timer finally expires, <@${wearer}>'s chastity belt returns to normal with <@${keyholder}> holding the keys!`)
+    };
+  }
+  
 }
 
 exports.timelockChastity = timelockChastity;

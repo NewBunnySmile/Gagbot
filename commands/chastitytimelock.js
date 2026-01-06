@@ -101,7 +101,7 @@ module.exports = {
         // const modifiedUnlockTime = Number(unlockTime) + (Number(unlockTime) - Date.now()) * frustrationMultiplier;
         const modifiedUnlockTime = Number(unlockTime);
 
-        if (timelockChastity(interaction.client, wearer, keyholder, Math.floor(modifiedUnlockTime), Number(access), Number(keyholderAfter))) {
+        if (timelockChastity(interaction.client, wearer, keyholder, Math.floor(modifiedUnlockTime), Number(access), Number(keyholderAfter), interaction.channel.id)) {
           interaction.channel.send(`<@${wearer}>'s chastity belt has been locked with a timelock`);
           interaction.reply({
             content: "Timelock confirmed",
