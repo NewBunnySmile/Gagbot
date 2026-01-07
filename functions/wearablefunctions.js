@@ -5,7 +5,7 @@ let wearabletypes = [
     // Tails and Misc Body Parts
     { name: "Tail", value: "tail", colorable: true, uniqueColors: ["Cat", "Dog", "Bunny", "Sheep", "Demon", "Fox", "Pony", "Lizard", "Dragon"], forbiddenColors: ["Black", "Red", "Purple", "Green", "Orange", "Red", "Pink", "White", "Yellow", "Cyan", "Aqua", "Blue", "Indigo", "Gray", "Brown"] },
     { name: "Wings", value: "wings", colorable: true, uniqueColors: ["Cat", "Dog", "Demon", "Angel", "Imp", "Succubus", "Bat", "Butterfly", "Dragon", "Crystal"], forbiddenColors: ["Black", "Red", "Purple", "Green", "Orange", "Red", "Pink", "White", "Yellow", "Cyan", "Aqua", "Blue", "Indigo", "Gray", "Brown"] },
-    { name: "Womb Tattoo", value: "wombtat", colorable: true, uniqueColors: ["Glowing", "Starry", "Shimmering"], forbiddenColors: [] },
+    { name: "Womb Tattoo", value: "wombtat", colorable: true, uniqueColors: ["Glowing", "Starry", "Shimmering", "Cyber"], forbiddenColors: [] },
     { name: "Vine Hair", value: "hair_vine", colorable: true, uniqueColors: ["Flowery", "Verdant"], forbiddenColors: [] },
 
     // Headwear - Relocate to Masks?
@@ -42,6 +42,7 @@ let wearabletypes = [
     { name: "Latex Drone Suit", value: "dronesuit_latex", colorable: true, uniqueColors: ["Starry", "Shadow"] },
     { name: "Control Harness", value: "control_harness" },
     { name: "Cyber Doll Harness", value: "cyberdoll_harness" },
+    { name: "Doll Barcode", value: "cyberdoll_barcode" },
 
     //Faux Bondage and Non Restrictive Gear
     { name: "Leather Harness", value: "harness_leather" },
