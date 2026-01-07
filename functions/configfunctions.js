@@ -502,7 +502,7 @@ function generateConfigModal(interaction, menuset = "General", page, statustext)
                                 .setMaxValues(25)
 
                     if (channelsmentioned && (channelsmentioned.length > 0)) {
-                        component.setDefaultChannels(...channelsmentioned);
+                        component.setDefaultChannels(...[...new Set(channelsmentioned)]);
                     }
                     let rolesection = new ActionRowBuilder()
                         .addComponents(component)
@@ -948,14 +948,30 @@ async function createWebhook(interaction, channel) {
         // We're now reasonably sure we can make webhooks. 
         // Check if a Gagbot webhook already exists. If it does, use it.
         let existingwebhooks = await channel.fetchWebhooks();
-        let webhook
+        let webhook;
+        let humanwebhook;
+        // Use a user-made webhook first if available
         existingwebhooks.forEach((w) => {
-            if (w.applicationId == interaction.client.user.id ) { webhook = w }
+            console.log(existingwebhooks)
+            console.log(`ISBOT: ${(w.applicationId != interaction.client.user.id)}, ISNAME: ${(w.name == "Gagbot")}`)
+            if ((w.applicationId != interaction.client.user.id) && (w.name == "Gagbot")) { 
+                webhook = w 
+                humanwebhook = true;
+            }
         })
+        // Use an existing bot created webhook if available.
+        if (!webhook) {
+            existingwebhooks.forEach((w) => {
+                if (w.applicationId == interaction.client.user.id) { 
+                    webhook = w 
+                    humanwebhook = false;
+                }
+            })
+        }
         // A gagbot webhook does not exist. Create one. 
         if (!webhook) {
             webhook = await channel.createWebhook({
-                name: "Gagbot",
+                name: "Gagbot Webhook",
                 reason: "Auto-generated Webhook for Gagbot"
             })
         }
@@ -966,12 +982,38 @@ async function createWebhook(interaction, channel) {
         if (process.readytosave == undefined) { process.readytosave = {} }
         process.readytosave.webhooks = true;
         console.log(process.webhookstoload);
-        return webhook;
+        return { humanwebhook: humanwebhook };
     }
     catch (err) {
         console.log(err)
         return false;
     }
+}
+
+async function deleteWebhook(interaction, channel) {
+    // First, check if we can manage webhooks. If we can't, vamos. 
+    if (!channel.permissionsFor(channel.guild.members.me).has(PermissionsBitField.Flags.ManageWebhooks)) {
+        return false;
+    }
+    let webhook;
+    let existingwebhooks = await channel.fetchWebhooks();
+    existingwebhooks.forEach((w) => {
+        if (w.id == process.webhook[channel.id]) {
+            webhook = w;
+        }
+    })
+    delete process.webhook[channel.id];
+    delete process.webhookstoload[channel.id];
+    if (webhook) {
+        if (webhook.w.applicationId == interaction.client.user.id) {
+            await interaction.client.deleteWebhook(webhook.id);
+            return "bot";
+        }
+        else {
+            return "notbot";
+        }
+    }
+    return false;
 }
 
 // Load all known webhooks into the list 
@@ -1009,6 +1051,7 @@ exports.knownServer = knownServer;
 exports.leaveServerOptions = leaveServerOptions;
 
 exports.createWebhook = createWebhook;
+exports.deleteWebhook = deleteWebhook;
 exports.loadWebhooks = loadWebhooks;
 
 const functions = {};
