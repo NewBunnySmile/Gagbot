@@ -194,10 +194,10 @@ const getHeadwearRestrictions = (userID) => {
     }
     let wornheadwear = getHeadwear(userID);
     for (let i = 0; i < wornheadwear.length; i++) {
-        if (getHeadwearBlocks(wornheadwear[i]).blockemote) {
+        if (getHeadwearBlocks(wornheadwear[i]) && (getHeadwearBlocks(wornheadwear[i]).blockemote)) {
             allowedperms.canEmote = false
         }
-        if (getHeadwearBlocks(wornheadwear[i]).blockinspect) {
+        if (getHeadwearBlocks(wornheadwear[i]) && (getHeadwearBlocks(wornheadwear[i]).blockinspect)) {
             allowedperms.canInspect = false
         }
     }

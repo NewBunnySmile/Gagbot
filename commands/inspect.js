@@ -4,9 +4,9 @@ const { getChastity, getVibe, getChastityKeys, getChastityTimelock, getArousalDe
 const { getCollar, getCollarPerm, getCollarKeys, getCollarName, getClonedCollarKeysOwned, canAccessCollar } = require('./../functions/collarfunctions.js')
 const { getHeavy } = require('./../functions/heavyfunctions.js')
 const { getCorset } = require('./../functions/corsetfunctions.js')
-const { getHeadwear, getHeadwearName, getHeadwearRestrictions, getLockedHeadgear, deleteHeadwear } = require('./../functions/headwearfunctions.js')
+const { getHeadwear, getHeadwearName, getHeadwearRestrictions, getLockedHeadgear, deleteHeadwear, removeLockedHeadgear } = require('./../functions/headwearfunctions.js')
 const { getPronouns, getPronounsSet } = require('./../functions/pronounfunctions.js');
-const { getWearable, getWearableName, getLockedWearable, deleteWearable } = require('../functions/wearablefunctions.js');
+const { getWearable, getWearableName, getLockedWearable, deleteWearable, removeLockedWearable } = require('../functions/wearablefunctions.js');
 const { canAccessChastityBra } = require('../functions/vibefunctions.js');
 const { getChastityBra } = require('../functions/vibefunctions.js');
 const { getChastityBraName, getChastityBraTimelock } = require('../functions/vibefunctions.js');
@@ -47,11 +47,13 @@ module.exports = {
                 inspectparts.push(`<:Gag:1073495437635506216> Gag: Not currently worn.`)
             }
             // Headwear parts!
+            console.log(getHeadwear(inspectuser.id))
             if (getHeadwear(inspectuser.id).length > 0) {
                 let headout = `👤 Headwear: **`;
                 let lockedheads = getLockedHeadgear(inspectuser.id);
                 getHeadwear(inspectuser.id).forEach((h) => {
-                    if (getHeadwear(inspectuser.id, h) == undefined) {
+                    if (getHeadwearName(inspectuser.id, h) == undefined) {
+                        removeLockedHeadgear(inspectuser.id, h);
                         deleteHeadwear(inspectuser.id, h);
                     }
                     else if (lockedheads.includes(h)) {
@@ -86,9 +88,17 @@ module.exports = {
             if (getWearable(inspectuser.id).length > 0) {
                 let headout = `👗 Apparel: **`;
                 let lockedwears = getLockedWearable(inspectuser.id);
+                let wearablecount = 0;
                 getWearable(inspectuser.id).forEach((h) => {
                     if (getWearableName(inspectuser.id, h) == undefined) {
+                        removeLockedWearable(inspectuser.id, h);
                         deleteWearable(inspectuser.id, h);
+                    }
+                    else if (wearablecount == 15) {
+                        headout = `${headout}**and ${getWearable(inspectuser.id).length - 15} more items...`
+                    }
+                    else if (wearablecount > 15) {
+
                     }
                     else if (lockedwears.includes(h)) {
                         headout = `${headout}*${getWearableName(inspectuser.id, h)}*, `
@@ -96,9 +106,12 @@ module.exports = {
                     else {
                         headout = `${headout}${getWearableName(inspectuser.id, h)}, `
                     }
+                    wearablecount++;
                 })
-                headout = headout.slice(0,-2)
-                headout = `${headout}**`
+                if (wearablecount < 15) {
+                    headout = headout.slice(0,-2)
+                    headout = `${headout}**`
+                }
                 inspectparts.push(headout)
             }
             else {
@@ -268,7 +281,7 @@ module.exports = {
             if (keysheldchastitybra.length > 0) {
                 keysheldchastitybra = keysheldchastitybra.map(k => `<@${k}>`)
                 let keysstring = keysheldchastitybra.join(", ");
-                keysheldtext = `- Chastity bra keys: ${keysstring}\n`
+                keysheldtext = `${keysheldtext}- Chastity bra keys: ${keysstring}\n`
             }
             let keysheldcollar = getCollarKeys(inspectuser.id)
             if (keysheldcollar.length > 0) {

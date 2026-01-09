@@ -700,7 +700,7 @@ const texts_mitten = {
 const texts_struggle = {
     heavy: [
         `USER_TAG squirms in USER_THEIR VAR_C1, trying to squeeze out of it but USER_THEY really didn't think about how challenging that'd be.`,
-        `Despite USER_THEIR best efforts, the VAR_C1 binding USER_TAG's arms (and maybe legs) refuse to budge!`,
+        `Despite USER_THEIR best efforts, the VAR_C1 binding USER_TAG's arms (and maybe legs) refuses to budge!`,
         `The VAR_C1 creaks loudly as USER_TAG *thrashes* in USER_THEIR bondage, trying to escape!`,
         `USER_TAG tries USER_THEIR *best* to get some leverage and escape USER_THEIR bondage, but stops just short of potentially pulling a muscle.`,
         `USER_TAG fights against USER_THEIR VAR_C1, trying to loosen it even a little bit to maybe escape...`,
@@ -1446,7 +1446,7 @@ const texts_unheavy = {
     },
     noheavy: {
         heavyequipped: [
-            `USER_TAG helps TARGET_TAG out of TARGET_THEIR VAR_C2! TARGET_THEY_CAP stretchTARGET_S TARGET_THEIR arms and sighTARGET_S with gratitude!`
+            `USER_TAG helps TARGET_TAG out of TARGET_THEIR VAR_C2! TARGET_THEY_CAP stretchTARGET_ES TARGET_THEIR arms and sighTARGET_S with gratitude!`
         ],
         noheavyequipped: {
             self: [
