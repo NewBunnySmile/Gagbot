@@ -68,7 +68,7 @@ let wearabletypes = [
     { name: "Apron", value: "maid_apron", colorable: true, forbiddenColors: ["Black", "Red", "Purple", "Green", "Orange", "Red", "Pink", "White", "Yellow", "Cyan", "Aqua", "Blue", "Indigo", "Gray", "Brown"] },
     { name: "Latex Apron", value: "maidapron_latex", colorable: true, forbiddenColors: ["Black", "Red", "Purple", "Green", "Orange", "Red", "Pink", "White", "Yellow", "Cyan", "Aqua", "Blue", "Indigo", "Gray", "Brown"] },
     { name: "Maid Headdress", value: "maid_headdress" },
-    
+
     //Dolls and Drones
     { name: "Drone Suit", value: "dronesuit", colorable: true },
     { name: "Latex Drone Suit", value: "dronesuit_latex", colorable: true, uniqueColors: ["Starry", "Shadow"] },
