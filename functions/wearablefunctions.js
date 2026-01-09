@@ -35,7 +35,6 @@ let wearabletypes = [
     { name: "Hood", value: "hood", colorable: true, uniqueColors: ["Leather", "Latex", "Maid", "Hardlight", "Medieval"], forbiddenColors: ["Black", "Red", "Purple", "Green", "Orange", "Red", "Pink", "White", "Yellow", "Cyan", "Aqua", "Blue", "Indigo", "Gray", "Brown"] },
     { name: "Hairpins", value: "Hairpins", colorable: true, uniqueColors: ["Silver", "Gold", "Platinum", "Solar", "Lunar", "Crystal", "Obsidian", "Jade", "Amethyst", "Ruby", "Emerald", "Sapphire"], forbiddenColors: ["Black", "Red", "Purple", "Green", "Orange", "Red", "Pink", "White", "Yellow", "Cyan", "Aqua", "Blue", "Indigo", "Gray", "Brown"] },
     { name: "Hairstick", value: "hairstick" },
-    { name: "Maid Headdress", value: "maid_headdress" },
     { name: "Kitsune Half-Mask", value: "mask_kitsune" },
     { name: "Domino Mask", value: "mask_domino" },
     { name: "Eyeshadow", value: "eyeshadow", colorable: true, uniqueColors: ["Glittery", "Metallic Silver", "Metallic Gold"] },
@@ -68,7 +67,8 @@ let wearabletypes = [
     { name: "Latex Maid Dress", value: "maiddress_latex", colorable: true, uniqueColors: ["Starry", "Shadow", "Gothic", "French", "Cyber"] },
     { name: "Apron", value: "maid_apron", colorable: true, forbiddenColors: ["Black", "Red", "Purple", "Green", "Orange", "Red", "Pink", "White", "Yellow", "Cyan", "Aqua", "Blue", "Indigo", "Gray", "Brown"] },
     { name: "Latex Apron", value: "maidapron_latex", colorable: true, forbiddenColors: ["Black", "Red", "Purple", "Green", "Orange", "Red", "Pink", "White", "Yellow", "Cyan", "Aqua", "Blue", "Indigo", "Gray", "Brown"] },
-
+    { name: "Maid Headdress", value: "maid_headdress" },
+    
     //Dolls and Drones
     { name: "Drone Suit", value: "dronesuit", colorable: true },
     { name: "Latex Drone Suit", value: "dronesuit_latex", colorable: true, uniqueColors: ["Starry", "Shadow"] },
