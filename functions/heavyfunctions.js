@@ -47,7 +47,7 @@ const heavytypes = [
     { name: "Sarcophagus", value: "sarco_mummy", denialCoefficient: 3 },
     { name: "Wooden Horse", value: "wooden_horse", denialCoefficient: 3 },
     { name: "X-Frame", value: "x_frame", denialCoefficient: 2 },
-    { name: "Steel Pole", value: "steel_pole", denialCoefficient: 2.5 },
+    { name: "Dancer's Pole", value: "pole_dancer", denialCoefficient: 2.5 },
     { name: "Leashing Post", value: "leashing_post", denialCoefficient: 2 },
     { name: "Latex Vacbed", value: "vacbed_latex", denialCoefficient: 3.5 },
     { name: "Latex Vaccube", value: "vaccube_latex", denialCoefficient: 4.5 },
@@ -74,17 +74,18 @@ const heavytypes = [
     { name: "Frogtie", value: "rope_frogtie", denialCoefficient: 2.5 },
     { name: "Rope Boxtie", value: "rope_boxtie", denialCoefficient: 2 },
     { name: "Ribbons", value: "ribbons", denialCoefficient: 1.5 },
+    { name: "Suspended Frogtie", value: "rope_suspension_frog", denialCoefficient: 3 },
 
     //Encasement and Wrappings
     { name: "Bandage Wrapping", value: "bandage_wrap", denialCoefficient: 1.5 },
     { name: "Autotape Wrapping", value: "autotape_wrap", denialCoefficient: 2 },
     //{ name: "Slime Coating", value: "encasement_slime", denialCoefficient: 2 },               Names Needed?
     //{ name: "Solidified Rubber Coating", value: "encasement_slime", denialCoefficient: 3 },
+    //{ name: "Crystalline Pillar", value: "encasement_crystal", denialCoefficient: 4 },
     { name: "Latex Sphere", value: "sphere_latex", denialCoefficient: 3.5 },
     { name: "Latex Sleepsack", value: "sleepsack_latex", denialCoefficient: 4 },
     { name: "Duffel Bag", value: "duffel_bag", denialCoefficient: 2 },
     { name: "Shadow Latex Ballsuit", value: "shadow_latex_ball", denialCoefficient: 4 },
-    { name: "Crystalline Pillar", value: "encasement_crystal", denialCoefficient: 4 },
     { name: "Magic Mirror", value: "encasement_mirror", denialCoefficient: 5 },
 
     // Misc Heavy Restraints
@@ -96,6 +97,8 @@ const heavytypes = [
     { name: "Festive Ribbons", value: "ribbons_festive", denialCoefficient: 1.5 },
     { name: "Wrapping Paper", value: "wrapping_paper", denialCoefficient: 2 },
     { name: "Shadow Hands", value: "shadowhands", denialCoefficient: 1.5 },
+    { name: "Entangling Vines", value: "entangling_vines", denialCoefficient: 1.5 },
+    { name: "Bondage Exosuit", value: "exosuit_bondage", denialCoefficient: 5 },
 ];
 
 
