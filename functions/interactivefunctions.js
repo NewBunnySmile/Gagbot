@@ -60,7 +60,7 @@ const handleConsent = async (interaction, user) => {
     const response = await interaction.reply(consentform)
     console.log(response)
     try {
-        const confirmation = await response.resource.message.awaitMessageComponent({ filter: collectorFilter, time: 180_000 });
+        const confirmation = await response.resource.message.awaitMessageComponent({ filter: collectorFilter, time: 300_000 });
         console.log(confirmation);
         assignConsent(testusertarget)
         await interaction.editReply({ content: `Consent form agreed to by <@${testusertarget}>! Please re-run the command to tie!`, components: [] });
@@ -427,7 +427,7 @@ async function handleBondageRemoval(user, target, type, change = false) {
             components: [new ActionRowBuilder().addComponents(...buttons)]
         }).then((mess) => {
             // Create a collector for up to 30 seconds
-            const collector = mess.createMessageComponentCollector({ componentType: ComponentType.Button, time: 30_000, max: 1 })
+            const collector = mess.createMessageComponentCollector({ componentType: ComponentType.Button, time: 300_000, max: 1 })
 
             collector.on('collect', async (i) => {
                 console.log(i)
