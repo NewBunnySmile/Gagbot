@@ -68,7 +68,7 @@ function restartChastityTimers(client) {
 }
 
 async function sendTimelockChastityUnlockMessage(client, wearer, keyholder) {
-  if (process.chastity[wearer].webhookchannel) { 
+  if (process.chastity[wearer]?.webhookchannel) { 
     const channel = await client.channels.fetch(process.chastity[wearer].webhookchannel);
     if (!keyholder) {
       channel.send(`As the timer finally expires, <@${wearer}>'s chastity belt unlocks and falls to the floor!`)
@@ -77,7 +77,6 @@ async function sendTimelockChastityUnlockMessage(client, wearer, keyholder) {
       channel.send(`As the timer finally expires, <@${wearer}>'s chastity belt returns to normal with <@${keyholder}> holding the keys!`)
     };
   }
-  
 }
 
 exports.timelockChastity = timelockChastity;

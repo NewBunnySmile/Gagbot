@@ -135,7 +135,7 @@ module.exports = {
                         if (getChastity(chastitywearer.id)) {
                             // They are in chastity
                             data.chastity = true
-                            if (canAccessChastity(chastitywearer.id, interaction.user.id).access) {
+                            if (canAccessChastity(chastitywearer.id, interaction.user.id, true).access) {
                                 // We have their chastity key
                                 data.key = true
                                 const fumbleResults = rollKeyFumbleN(interaction.user.id, chastitywearer.id, 2);

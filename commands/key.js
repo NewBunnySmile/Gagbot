@@ -335,7 +335,7 @@ module.exports = {
 
                 const collectorFilter = (i) => i.user.id === interaction.user.id;
                 try {
-                    confirmation = await response.resource.message.awaitMessageComponent({ filter: collectorFilter, time: 30_000 });
+                    confirmation = await response.resource.message.awaitMessageComponent({ filter: collectorFilter, time: 300_000 });
 
                     if (confirmation.customId === 'agreetoclonebutton') {
                         // Skip the DM if it's the wearer giving a clone of their key.
@@ -447,7 +447,7 @@ module.exports = {
                 } 
                 catch (err) {
                     console.log(err);
-                    await interaction.editReply({ content: 'Confirmation not received within 30 seconds, cancelling transfer.', components: [] });
+                    await interaction.editReply({ content: 'Confirmation not received within 5 minutes, cancelling transfer.', components: [] });
                     return;
                 }
             }
@@ -561,7 +561,7 @@ module.exports = {
 
                 const collectorFilter = (i) => i.user.id === interaction.user.id;
                 try {
-                    confirmation = await response.resource.message.awaitMessageComponent({ filter: collectorFilter, time: 30_000 });
+                    confirmation = await response.resource.message.awaitMessageComponent({ filter: collectorFilter, time: 300_000 });
 
                     if (confirmation.customId === 'agreetorevokebutton') {
                         let data = {
@@ -603,7 +603,7 @@ module.exports = {
                 } 
                 catch (err) {
                     console.log(err);
-                    await interaction.editReply({ content: 'Confirmation not received within 1 minute, cancelling transfer.', components: [] });
+                    await interaction.editReply({ content: 'Confirmation not received within 5 minutes, cancelling transfer.', components: [] });
                     return;
                 }
             } 
@@ -684,7 +684,7 @@ module.exports = {
 
                 const collectorFilter = (i) => i.user.id === interaction.user.id;
                 try {
-                    confirmation = await response.resource.message.awaitMessageComponent({ filter: collectorFilter, time: 30_000 });
+                    confirmation = await response.resource.message.awaitMessageComponent({ filter: collectorFilter, time: 300_000 });
 
                     if (confirmation.customId === 'agreetogivebutton') {
                         // Skip the DM if the wearer is the giver or receiver, or if they have auto accepting enabled
@@ -828,7 +828,7 @@ module.exports = {
                 } 
                 catch (err) {
                     console.log(err);
-                    await interaction.editReply({ content: 'Confirmation not received within 30 seconds, cancelling transfer.', components: [] });
+                    await interaction.editReply({ content: 'Confirmation not received within 5 minutes, cancelling transfer.', components: [] });
                     return;
                 }
             }

@@ -456,7 +456,7 @@ async function promptCloneChastityKey(user, target, clonekeyholder, bra) {
             components: [new ActionRowBuilder().addComponents(...buttons)]
         }).then((mess) => {
             // Create a collector for up to 30 seconds
-            const collector = mess.createMessageComponentCollector({ componentType: ComponentType.Button, time: 30_000, max: 1 })
+            const collector = mess.createMessageComponentCollector({ componentType: ComponentType.Button, time: 300_000, max: 1 })
 
             collector.on('collect', async (i) => {
                 console.log(i)
@@ -500,7 +500,7 @@ async function promptTransferChastityKey(user, target, newKeyholder) {
             components: [new ActionRowBuilder().addComponents(...buttons)]
         }).then((mess) => {
             // Create a collector for up to 30 seconds
-            const collector = mess.createMessageComponentCollector({ componentType: ComponentType.Button, time: 30_000, max: 1 })
+            const collector = mess.createMessageComponentCollector({ componentType: ComponentType.Button, time: 300_000, max: 1 })
 
             collector.on('collect', async (i) => {
                 console.log(i)
@@ -544,7 +544,7 @@ async function promptCloneChastityBraKey(user, target, clonekeyholder) {
             components: [new ActionRowBuilder().addComponents(...buttons)]
         }).then((mess) => {
             // Create a collector for up to 30 seconds
-            const collector = mess.createMessageComponentCollector({ componentType: ComponentType.Button, time: 30_000, max: 1 })
+            const collector = mess.createMessageComponentCollector({ componentType: ComponentType.Button, time: 300_000, max: 1 })
 
             collector.on('collect', async (i) => {
                 console.log(i)
@@ -588,7 +588,7 @@ async function promptTransferChastityBraKey(user, target, newKeyholder) {
             components: [new ActionRowBuilder().addComponents(...buttons)]
         }).then((mess) => {
             // Create a collector for up to 30 seconds
-            const collector = mess.createMessageComponentCollector({ componentType: ComponentType.Button, time: 30_000, max: 1 })
+            const collector = mess.createMessageComponentCollector({ componentType: ComponentType.Button, time: 300_000, max: 1 })
 
             collector.on('collect', async (i) => {
                 console.log(i)

@@ -87,7 +87,7 @@ module.exports = {
                     interactionuser: interaction.user,
                     targetuser: await interaction.client.users.fetch(collarkeyholder), // To fetch the target user object
                     c1: getHeavy(interaction.user.id)?.type, // heavy bondage type 
-                    c2: getCollarName(interaction.user.id, choice_collartype),
+                    c2: getCollarName(interaction.user.id, choice_collartype) ?? "collar",
                 }
             }
             
