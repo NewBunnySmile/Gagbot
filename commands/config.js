@@ -71,7 +71,14 @@ module.exports = {
 				let data = {
 					title: buttonpressed.name,
 					desctext: buttonpressed.descmodal,
+					placeholder: buttonpressed.placeholder,
 					page: optionparts[2]
+				}
+				if (typeof buttonpressed.customtext == "function") {
+					data.desctext = data.desctext.replace("CUSTOMTEXT", buttonpressed.customtext(interaction.user.id))
+				}
+				if (typeof buttonpressed.placeholder == "function") {
+					data.placeholder = buttonpressed.placeholder(interaction.user.id)
 				}
 
 				// Generate a new modal to give to the user and pass it along. 

@@ -282,7 +282,7 @@ const configoptions = {
         "dollvisorname": {
             name: "Doll Visor Name",
             desc: "Set a custom name for Doll Visor name tags.",
-            descmodal: "What should the Doll Visor change your tag to? Standard format is DOLL-####.",
+            descmodal: "What should your tag display as in Doll Visor? Your default Doll tag is CUSTOMTEXT.",
             choices: [
                 {
                     name: "Set Name",
@@ -293,6 +293,8 @@ const configoptions = {
                     style: ButtonStyle.Primary
                 },
             ],
+            customtext: (userID) => { return `DOLL-${userID.slice(-4)}` },
+            placeholder: (userID) => { return `DOLL-${userID.slice(-4)}` },
             menutype: "choice_textentry",
             default: (userID) => { return `DOLL-${userID.slice(-4)}` },
             disabled: () => { return false }
