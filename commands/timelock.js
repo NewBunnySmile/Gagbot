@@ -287,6 +287,7 @@ module.exports = {
       }
       data[split[2]] = true;
       if (split[2] == "chastitybelt") {
+        console.log(interaction.channel);
         timelockChastity(interaction.client, wearer, keyholder, Math.floor(timelockmodal.unlockTime), access, keyholderAfter, interaction.channel.id)
         await interaction.followUp(getText(data))
       }
