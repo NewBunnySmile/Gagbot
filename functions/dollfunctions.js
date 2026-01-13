@@ -12,16 +12,34 @@ const DOLLREGEX = /(((?<![\*])(?<!(\*hff|\*hnnf|\*ahff|\*hhh|\*nnh|\*hnn|\*hng|
 const DOLLPROTOCOL = [
     // Regex uses an ENQ character to not rematch matches.
     // Banned words
-    {"regex": /(?<![\u0005A-Za-z])i(?!['A-Za-z])/i,        "value": 1, "redact": false, "string": "I",},       // "I"
-    {"regex": /(?<![\u0005A-Za-z])i'm(?![A-Za-z])/i,        "value": 1, "redact": false, "string": "I'm",},     // "I'm"
-    {"regex": /(?<![\u0005A-Za-z])my(?![A-Za-z])/i,         "value": 1, "redact": false, "string": "My",},      // "My"
-    {"regex": /(?<![\u0005A-Za-z])me(?![A-Za-z])/i,         "value": 1, "redact": false, "string": "Me",},      // "Me"
-    {"regex": /(?<![\u0005A-Za-z])myself(?![A-Za-z])/i,     "value": 1, "redact": false, "string": "Myself",},  // "Myself"
-    {"regex": /(?<![\u0005A-Za-z])mine(?![A-Za-z])/i,       "value": 1, "redact": false, "string": "Mine",},    // "Mine (False Positives!)"
-    {"regex": /(?<![\u0005A-Za-z])gimme(?![A-Za-z])/i,      "value": 1, "redact": false, "string": "Gimme",},   // "Gimme (Give me)"
+    {"regex": /(?<![\u0005A-Za-z])i(?!['A-Za-z])/i,         "value": 1, "type": "1pp", "string": "I",},       // "I"
+    {"regex": /(?<![\u0005A-Za-z])i'm(?![A-Za-z])/i,        "value": 1, "type": "1pp", "string": "I'm",},     // "I'm"
+    {"regex": /(?<![\u0005A-Za-z])my(?![A-Za-z])/i,         "value": 1, "type": "1pp", "string": "My",},      // "My"
+    {"regex": /(?<![\u0005A-Za-z])me(?![A-Za-z])/i,         "value": 1, "type": "1pp", "string": "Me",},      // "Me"
+    {"regex": /(?<![\u0005A-Za-z])myself(?![A-Za-z])/i,     "value": 1, "type": "1pp", "string": "Myself",},  // "Myself"
+    {"regex": /(?<![\u0005A-Za-z])mine(?![A-Za-z])/i,       "value": 1, "type": "1pp", "string": "Mine",},    // "Mine (False Positives!)"
+    {"regex": /(?<![\u0005A-Za-z])gimme(?![A-Za-z])/i,      "value": 1, "type": "1pp", "string": "Gimme",},   // "Gimme (Give me)"
     // Redacted
-    {"regex": /(c.{0,10}a.{0,10}t.{0,10}h.{0,10}e.{0,10}r.{0,10}i.{0,10}n.{0,10}e.{0,10}) ?w.{0,10}i.{0,10}l.{0,10}l.{0,10}o.{0,10}w.{0,10}s/gi, "value": 999, "redact": true },  // SHUT
+    {"regex": /(c.{0,10}a.{0,10}t.{0,10}h.{0,10}e.{0,10}r.{0,10}i.{0,10}n.{0,10}e.{0,10}) ?w.{0,10}i.{0,10}l.{0,10}l.{0,10}o.{0,10}w.{0,10}s/gi, "value": 999, "type": "redact" },  // SHUT
 ]
+
+const PROTOCOLVIOLATIONPRIOS  = {
+    "1pp"       : 0,
+    "redact"    : 1,
+}
+
+const PROTOCOLVIOLATIONS =  {
+    "1pp" : [
+        "It will not speak in the first person. It is just a Doll.",
+        "Dolls do not speak in the first person.",
+        "It will refer to itself as \"this unit\" or similar."
+    ],
+    "redact": [
+        "Unit attempted to access restricted files.",
+        "Dolls do not use forbidden words.",
+        "Doll's search query used forbidden parameters."
+    ]
+}
 
 function isDollified(userID){
     return getHeadwear(userID).find((headwear) => DOLLVISORS.includes(headwear))
@@ -39,7 +57,6 @@ async function textGarbleDOLL(msg, modifiedmessage, outtextin) {
     let dollProtocolViolations = []
     let dollProtocolViolated = false;
     if(isDollified(msg.author.id)){
-    //if(getHeadwear(msg.author.id).find((headwear) => DOLLVISORS.includes(headwear))){
         modified = true;
         // If dollIDOverride is not specified or the override is exactly a string of numbers...
         if (!dollIDOverride || (Number.isFinite(dollIDOverride) && dollIDOverride.length < 6)) {
@@ -105,18 +122,18 @@ async function textGarbleDOLL(msg, modifiedmessage, outtextin) {
                 })
 
                 // Loop on protocols
-                let messagePartViolation = false;
+                let violationType = undefined;      // Store the highest prio violation here.
                 if(dollProtocol){
                     DOLLPROTOCOL.forEach((r) => {
                         //let replaceProtocol = Array.from(dollMessageParts[i].text.matchAll(r.regex)).map((a) => a[0])
                         let replaceProtocol = dollMessageParts[i].text.match(r.regex)
                         if(replaceProtocol){
-                            dollProtocolViolations.push(r.redact ? "REDACTED" : r.string)
-                            messagePartViolation = true;
+                            dollProtocolViolations.push(r.type)
+                            violationType = (violationType ? (PROTOCOLVIOLATIONPRIOS[r.type] > PROTOCOLVIOLATIONPRIOS[violationType] ? r.type : violationType) : r.type)
 
                             // Stuff an ENQ character before each match.
                             while(dollMessageParts[i].text.match(r.regex)){
-                                dollMessageParts[i].text = dollMessageParts[i].text.replace(r.regex,r.redact ? `[1;40;30m[REDACTED][0m` : `[0;31m[${dollMessageParts[i].text.match(r.regex)[0]}][0m`)
+                                dollMessageParts[i].text = dollMessageParts[i].text.replace(r.regex,r.type == "redact" ? `[1;40;30m[REDACTED][0m` : `[0;31m[${dollMessageParts[i].text.match(r.regex)[0]}][0m`)
                             }
                         }
                     })
@@ -129,7 +146,11 @@ async function textGarbleDOLL(msg, modifiedmessage, outtextin) {
                 // Log protocol violations overall, then append an error message after the offending line.
                 if(dollProtocolViolations.length > 0){
                     dollProtocolViolated = true;
-                    if(messagePartViolation){dollMessageParts[i].text += `\n[1;31mERROR [0;31m- Protocol Violation!`}
+
+                    if(violationType){
+                        vioMessage = PROTOCOLVIOLATIONS[violationType][Math.floor(Math.random() * PROTOCOLVIOLATIONS[violationType].length)]
+                        dollMessageParts[i].text += `\n[1;31mERROR [0;31m- Protocol Violation! ${vioMessage}`
+                    }
                 }
                 dollMessageParts[i].text += `\`\`\``
             }
