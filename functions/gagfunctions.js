@@ -7,11 +7,9 @@ const { stutterText, getArousedTexts } = require(`./../functions/vibefunctions.j
 const { getVibeEquivalent } = require('./vibefunctions.js');
 const { getHeadwearRestrictions, processHeadwearEmoji, getHeadwearName, getHeadwear, DOLLVISORS } = require('./headwearfunctions.js')
 const { getOption } = require(`./../functions/configfunctions.js`);
-
-//const DOLLREGEX = /(((?<!\*)\*{1})(\*{2})?([^\*]|\*{2})+\*)|(((?<!\_)\_{1})(\_{2})?([^\_]|\_{2})+\_)|\n/g
-// Abomination of a regex for corset compatibility.
-const DOLLREGEX = /(((?<!\*)(?<!(\*hff|\*hnnf|\*ahff|\*hhh|\*nnh|\*hnn|\*hng|\*uah|\*uhf))\*{1})(?!(hff\*|hnnf\*|ahff\*|hhh\*|nnh\*|hnn\*|hng\*|uah\*|uhf\*))(\*{2})?([^\*]|\*{2})+\*)|(((?<!\_)\_{1})(\_{2})?([^\_]|\_{2})+\_)|\n/g
-
+const { getText } = require(`./../functions/textfunctions.js`);
+const { textGarbleDOLL } = require(`./../functions/dollfunctions.js`);
+const { splitMessage } = require(`./../functions/messagefunctions.js`);
 
 // Grab all the command files from the commands directory
 const gagtypes = [];
@@ -161,59 +159,6 @@ const getMittenName = (userID, mittenname) => {
     }
 }
 
-const splitMessage = (text, inputRegex=null) => {
-
-    /*************************************************************************************
-     * Massive Regex, let's break it down:
-     * 
-     * 1.) Match User Tags. (@Dollminatrix)
-     * 2.) Match >////<
-     * 3.) Match Code Blocks
-     * 4.) Match ANSI Colored Username Block ("DOLL-0014:")
-     * 5.) Match ANSI Colors
-     * 6.) Match Italicized Text, WITHOUT false-positives on bolded text.
-     * 7.) Match Italicized Text using '_', WITHOUT false-positives on underlined text.
-     * 8.) Match Website URLs - Stack Overflow-sourced URL matcher plus Doll's HTTP(S) matching.
-     * 9.) Match Emoji - <:Emojiname:000000000000000000>
-     * A.) Match Base Unicode Emoji - My stack is overflowing.
-    **************************************************************************************/
-    //             |-  Tags -| |>///<| |Match code block | |------------ ANSI Color Username Block --------| |-ANSI Colors -| |------------   Match italic text   ------------| |--------  Match underscore italic text --------| |----------------------  Match website URLs     ---------------------------------------------------| |---- Emojis ----| |--- Unicode Emoji -----------------------------------------------|
-    const regex = /(<@[0-9]+>)|(>\/+<)|(```((ansi|js)\n)?)|(\u001b\[[0-9];[0-9][0-9]m([^\u0000-\u0020]+: ?))|(\u001b\[.+?m) ?|((\-#\s+)?((?<!\*)\*{1})(\*{2})?([^\*]|\*{2})+\*)|((\-#\s+)?((?<!\_)\_{1})(\_{2})?([^\_]|\_{2})+\_)|(<?https?\:\/\/[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)>?)|(<a?:[^:]+:[^>]+>)|(\ud83c[\ud000-\udfff]|\ud83d[\ud000-\udfff]|\ud83e[\ud000-\udfff])|\n/g
-
-    let output = [];
-    let deepCopy = text.split()[0]
-    let found = deepCopy.match(inputRegex ? inputRegex : regex)
-
-    for(const x in found){
-
-        index = deepCopy.indexOf(found[x])           // Get the index of the regex token
-
-        if(index > 0){
-            output.push({
-                text: deepCopy.substring(0,index),//garbleTextSegment(deepCopy.substring(0,index)),
-                garble:  true
-            })
-        }
-
-        output.push({
-            text: found[x],
-            garble:  false
-        })
-        // Work on the rest of the string
-        deepCopy = deepCopy.substring(index+found[x].length)
-    }
-    // Garble everything after the final token, if we have anything.
-    if(deepCopy.length > 0){    // Don't append nothing.
-        output.push({
-            text: deepCopy,//garbleTextSegment(deepCopy),
-            garble:  true
-        })
-    }
-
-    // Garble only valid text segments.
-    return output;
-}
-
 const modifymessage = async (msg, threadId) => {
     try {
         console.log(`${msg.channel.guild.name} - ${msg.member.displayName}: ${msg.content}`);
@@ -260,10 +205,11 @@ const modifymessage = async (msg, threadId) => {
         modifiedmessage = dolltreturned.modifiedmessage;
         outtext = dolltreturned.outtext;
         let dollIDDisplay = dolltreturned.dollIDDisplay;
+        let dollProtocol = dolltreturned.dollProtocolViolation ? true : false
 
         // Finally, send it if we modified the message.
         if (modifiedmessage) { 
-            await sendTheMessage(msg, outtext, dollIDDisplay, threadId);
+            await sendTheMessage(msg, outtext, dollIDDisplay, threadId, dollProtocol);
         }
     }
     catch (err) {
@@ -403,95 +349,7 @@ function textGarbleGag(messagein, msg, modifiedmessage, outtextin) {
     return { messageparts: messageparts, modifiedmessage: modified, outtext: outtext }
 }
 
-async function textGarbleDOLL(msg, modifiedmessage, outtextin) {
-    // Handle Dollification
-    let modified = modifiedmessage
-    let outtext = outtextin
-    let dollIDDisplay;
-    let dollID = ``;
-    let dollIDOverride = getOption(msg.author.id, "dollvisorname")
-    let dollIDColor = getOption(msg.author.id, "dollvisorcolor") ?? 34
-    if(getHeadwear(msg.author.id).find((headwear) => DOLLVISORS.includes(headwear))){
-        modified = true;
-        // If dollIDOverride is not specified or the override is exactly a string of numbers...
-        if (!dollIDOverride || (Number.isFinite(dollIDOverride) && dollIDOverride.length < 6)) {
-            dollDigits      = dollIDOverride ? dollIDOverride : `${msg.author.id}`.slice(-4)
-            // Include the tag - Otherwise, there is NO WAY to tell who it is.
-            let dollIDShort     = "DOLL-" + dollDigits
-            dollID          = "DOLL-" + (dollDigits.length >= 4 ? dollDigits : "0".repeat(4 - dollDigits.length) + dollDigits)
-            dollIDColor         = 34
-            // Display names max 32 chars.
-            let truncateDisplay = ""
-            try{
-                truncateDisplay = msg.member.displayName.slice(0,16) + (msg.member.displayName.length > 16 ? "..." : "")
-            }catch(err){
-                console.error(err.message);     // Following is not tested but SHOULD work.
-                truncateDisplay = msg.author.displayName.slice(0,16) + (msg.author.displayName.length > 16 ? "..." : "")
-            }
-            dollIDDisplay       = dollIDShort + ` (${truncateDisplay})`
-        }
-        else {
-            let additionalpart = ``;
-            if (dollIDOverride.length < 25) {
-                let additionallength = 32 - dollIDOverride.length; // max length of name
-                if ((additionallength - 3) > msg.member.displayName.length) {
-                    additionalpart = ` (${msg.member.displayName})`
-                }
-                else {
-                    // Get the length of their name, minus 6 for additional characters to fit into ...
-                    let reducedname = msg.member.displayName.slice(0, Math.min((additionallength - 6), msg.member.displayName.length))
-                    additionalpart = ` (${reducedname}...)`
-                }
-            }
-            dollID = `${dollIDOverride}`
-            if (dollIDOverride.includes(msg.member.displayName)) {
-                dollIDDisplay = `${dollIDOverride}`
-            }
-            else {
-                dollIDDisplay = `${dollIDOverride}${additionalpart}`;
-            }
-        }
-        
-        let dollMessageParts = splitMessage(outtext, DOLLREGEX)     // Reuse splitMessage, but with a different regex.
-        let partstolinkto = Array.from(outtext.matchAll(/(<(@|#)[0-9]+>)|(<?https?\:\/\/[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)>?)/g)).map((a) => a[0]) // Match User tags, channel tags and links
-        
-        // Strip all codeblocks from messages
-        for(let i = 0; i < dollMessageParts.length; i++){
-            if(dollMessageParts[i].garble){
-                dollMessageParts[i].text = dollMessageParts[i].text.replaceAll(/```(js|javascript|ansi)?\s*/g,  "")
-            }
-        }
-        dollMessageParts = dollMessageParts.filter((part) => {return part.text != ""})
-
-        // Put every "garble" messagePart in ANSI.
-        for(let i = 0; i < dollMessageParts.length; i++){
-            if(dollMessageParts[i].garble){
-                // Uncorset
-                dollMessageParts[i].text = dollMessageParts[i].text.replaceAll(/ *-# */g,"")
-                console.log(dollMessageParts[i].text)
-                let replacebolds = Array.from(dollMessageParts[i].text.matchAll(/((\*\*)|(\_\_))[^(\*|\_)]+((\*\*)|(\_\_))/g)).map((a) => a[0])
-                console.log(replacebolds)
-                replacebolds.forEach((b) => {
-                    let replaceb = `[1m${b.slice(2,-2)}[0m` // Capture the part within the bolding
-                    dollMessageParts[i].text = dollMessageParts[i].text.replace(b, replaceb)
-                })
-                dollMessageParts[i].text = `\`\`\`ansi\n[1;${dollIDColor}m${dollID}: [0m${dollMessageParts[i].text}\`\`\``
-            }
-        }
-
-        outtext = dollMessageParts.map(m => m.text).join("")
-        // And now, append with tags and links
-        if (partstolinkto) {
-            outtext = `${outtext}${partstolinkto.join("\n")}`
-        }
-
-        // Merge any code blocks with nothing but whitespace in between.
-        outtext = outtext.replaceAll(/```\s+```ansi/g,"")
-    }
-    return { modifiedmessage: modified, outtext: outtext, dollIDDisplay: dollIDDisplay }
-}
-
-async function sendTheMessage(msg, outtext, dollIDDisplay, threadID) {
+async function sendTheMessage(msg, outtext, dollIDDisplay, threadID, dollProtocol) {
     try {
         // If this is a reply, we want to create a reply in-line because webhooks can't reply. 
         if (msg.type == "19") { 
@@ -570,7 +428,27 @@ async function sendTheMessage(msg, outtext, dollIDDisplay, threadID) {
             // Finally send it!
             messageSend(msg, outtext, msg.member.displayAvatarURL(), (dollIDDisplay ? dollIDDisplay : msg.member.displayName), threadID).then(() => {
                 // Cleanup after sending. 
-                msg.delete();
+                msg.delete().then(() => {
+                    // If the user violates Doll Protocol, do STUFF
+                    if(dollProtocol){
+                        // Gag the doll for being bad.
+                        assignGag(msg.author.id, "ball", 5, msg.author.id)
+
+                        // Send reply
+                        // msg.channel.send("USER has violated their Doll Protocol! Their Doll Visor installs a Ball Gag upon them.");
+
+                        // Build data tree for finding string.
+                        let data = {
+                            textarray: "texts_dollprotocol",
+                            textdata: {
+                                interactionuser: msg.author,
+                                targetuser: msg.author,
+                            }
+                        }
+                        data.levelONE = true;
+                        msg.channel.send(getText(data))
+                    }
+                })
             })
         }
     }

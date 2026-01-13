@@ -372,6 +372,33 @@ const configoptions = {
             menutype: "choice",
             default: "enabled",
             disabled: (userID) => { return false }
+        },
+        "dollforcedprotocol": {
+            name: "Doll Visor Forced Protocol",
+            desc: "Should the Doll Visor punish you for speaking in first person?",
+            //desc: "Should the Doll Visor punish you for speaking in first person?  Punishments escalate with each violation, and can apply mittens and heavy restraints!",
+            choices: [
+                {
+                    name: "No",
+                    helptext: "*Doll Visor will not punish the wearer*",
+                    select_function: (userID) => { return false },
+                    value: "disabled",
+                    style: ButtonStyle.Danger,
+                    uname: "DollVisorPunishNo"
+                },
+                {
+                    name: "Yes",
+                    helptext: "Doll Visor will punish the wearer. This will apply a gag!",
+                    //helptext: "Doll Visor will punish the wearer. This can apply mittens and heavy!",
+                    select_function: (userID) => { return false },
+                    value: "enabled",
+                    style: ButtonStyle.Secondary,
+                    uname: "DollVisorPunish"
+                },
+            ],
+            menutype: "choice",
+            default: "disabled",
+            disabled: (userID) => { return false }
         }
     },
     "Server": {

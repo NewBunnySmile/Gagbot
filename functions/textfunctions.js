@@ -414,6 +414,10 @@ const texts_corset = {
     }
 }
 
+const texts_dollprotocol = {
+    levelONE: ["USER_TAG has violated Doll Protocol!  Before USER_THEY can react, USER_THEIR Doll Visor installs a ball gag moderately tightly between USER_THEIR defective lips!"],
+}
+
 const texts_gag = {
     heavy: {
         self: {
@@ -2151,6 +2155,7 @@ const textarrays = {
     texts_collar: texts_collar,
     texts_collarequip: texts_collarequip,
     texts_corset: texts_corset,
+    texts_dollprotocol: texts_dollprotocol,
     texts_gag: texts_gag,
     texts_headwear: texts_headwear,
     texts_heavy: texts_heavy,
