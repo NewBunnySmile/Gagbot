@@ -417,7 +417,11 @@ const texts_corset = {
 }
 
 const texts_dollprotocol = {
-    levelONE: ["USER_TAG has violated Doll Protocol!  Before USER_THEY can react, USER_THEIR Doll Visor installs a ball gag moderately tightly between USER_THEIR defective lips!"],
+    levelONE: [
+        `USER_TAG has violated Doll Protocol!  Before USER_THEY can react, USER_THEIR Doll Visor installs a ball gag moderately tightly between USER_THEIR defective lips!`,
+        `USER_TAG is defective!  USER_THEIR_CAP Doll Visor installs a ball gag moderately tightly into USER_THEIR mouth to help correct USER_THEIR vocalization subroutines.`,
+        `USER_TAG is a Bad Doll!  USER_THEY_CAP has been equipped with a ball gag to help reinforce correct behavior.  USER_THEY_CAP **will** follow Doll Protocol.`,
+    ],
 }
 
 const texts_gag = {
