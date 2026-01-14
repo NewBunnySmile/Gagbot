@@ -8,8 +8,9 @@ const { getVibeEquivalent } = require('./vibefunctions.js');
 const { getHeadwearRestrictions, processHeadwearEmoji, getHeadwearName, getHeadwear, DOLLVISORS } = require('./headwearfunctions.js')
 const { getOption } = require(`./../functions/configfunctions.js`);
 const { getText } = require(`./../functions/textfunctions.js`);
-const { textGarbleDOLL } = require(`./../functions/dollfunctions.js`);
+const { DOLLMAXPUNISHMENT, textGarbleDOLL } = require(`./../functions/dollfunctions.js`);
 const { splitMessage } = require(`./../functions/messagefunctions.js`);
+const { assignHeavy } = require(`./../functions/heavyfunctions.js`);
 
 // Grab all the command files from the commands directory
 const gagtypes = [];
@@ -159,6 +160,67 @@ const getMittenName = (userID, mittenname) => {
     }
 }
 
+/**********************************************
+ * Punishes a doll.
+ * @param userID - The user's discord ID number
+ * @param amount - How many violations?
+ **********************************************/
+function punishDoll(userID, amount){
+    if (process.dolls == undefined){process.dolls = {}}
+    let doll = process.dolls[userID]
+    if(doll){
+        doll.violations += amount
+        doll.goodDollStreak = 0;        // BAD DOLL
+
+        console.log("BAD DOLL:")
+        console.log(process.dolls[userID])
+        // Compute punishments by dividing violations by punishThresh.
+        let punishThresh = getOption(userID,"dollpunishthresh")
+        let punishments = Math.floor(doll.violations / punishThresh)
+        // Remove punishments from violation score.
+        doll.violations = doll.violations % punishThresh
+
+        let origPunishLevel = doll.punishmentLevel
+        if(punishments > 0){
+            doll.punishmentLevel += punishments
+        }
+
+        // TODO: Set a max on punishment level.
+        doll.punishmentLevel = Math.min(doll.punishmentLevel, DOLLMAXPUNISHMENT)
+
+        let skipped = ((doll.punishmentLevel - origPunishLevel) > 1) ? true : false
+        // Punish the doll according to punishment level.
+        if(punishments > 0){
+            switch(doll.punishmentLevel){
+                case 0:
+                    // Do nothing.
+                    break;
+                case 1:
+                    // Gag the Doll
+                    assignGag(userID, "ball", 4)
+                    break;
+                case 2:
+                    // Gag and Mitten the Doll
+                    assignGag(userID, "ball", 6)
+                    assignMitten(userID, "mittens_cyberdoll")
+                    break;
+                // Drop through to highest punishment.
+                default:
+                case 3:
+                    // Gag, Mittens, Heavy
+                    assignGag(userID, "ball", 8)
+                    assignMitten(userID, "mittens_cyberdoll")
+                    assignHeavy(userID, "hardlight_looselink")
+                    break;
+            }
+        }
+
+        if (process.readytosave == undefined) { process.readytosave = {} }
+        process.readytosave.dolls = true;
+        return {punish: (punishments > 0 ? true : false), punishmentLevel: doll.punishmentLevel, skipped: skipped}
+    }
+}
+
 const modifymessage = async (msg, threadId) => {
     try {
         console.log(`${msg.channel.guild.name} - ${msg.member.displayName}: ${msg.content}`);
@@ -205,7 +267,10 @@ const modifymessage = async (msg, threadId) => {
         modifiedmessage = dolltreturned.modifiedmessage;
         outtext = dolltreturned.outtext;
         let dollIDDisplay = dolltreturned.dollIDDisplay;
-        let dollProtocol = dolltreturned.dollProtocolViolation ? true : false
+        let dollProtocol = dolltreturned.dollProtocolViolations
+
+        // Scrub all control characters used to delineate text.
+        outtext = outtext.replaceAll(/[]/g, "")
 
         // Finally, send it if we modified the message.
         if (modifiedmessage) { 
@@ -431,22 +496,23 @@ async function sendTheMessage(msg, outtext, dollIDDisplay, threadID, dollProtoco
                 msg.delete().then(() => {
                     // If the user violates Doll Protocol, do STUFF
                     if(dollProtocol){
-                        // Gag the doll for being bad.
-                        assignGag(msg.author.id, "ball", 5, msg.author.id)
+                        // Punish the doll for being bad.
+                        let dollPunishment = punishDoll(msg.author.id, dollProtocol);
 
-                        // Send reply
-                        // msg.channel.send("USER has violated their Doll Protocol! Their Doll Visor installs a Ball Gag upon them.");
-
-                        // Build data tree for finding string.
-                        let data = {
-                            textarray: "texts_dollprotocol",
-                            textdata: {
-                                interactionuser: msg.author,
-                                targetuser: msg.author,
+                        // If the doll was actually punished
+                        if(dollPunishment.punish){
+                            // Build data tree for finding string.
+                            let data = {
+                                textarray: "texts_dollprotocol",
+                                textdata: {
+                                    interactionuser: msg.author,
+                                    targetuser: msg.author,
+                                }
                             }
+                            data[`level${dollPunishment.punishmentLevel}`] = true;
+                            //data.skipped = dollPunishment.skipped;
+                            messageSendChannel(getText(data), msg.channel.id)
                         }
-                        data.levelONE = true;
-                        messageSendChannel(getText(data), msg.channel.id)
                     }
                 })
             })
