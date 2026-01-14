@@ -81,7 +81,7 @@ const convertGagText = (type) => {
     return convertgagarr[type];
 }
 
-const assignGag = (userID, gagtype = "ball", intensity = 5, origbinder) => {
+/*const assignGag = (userID, gagtype = "ball", intensity = 5, origbinder) => {
     if (process.gags == undefined) { process.gags = {} }
     let originalbinder = process.gags[userID]?.origbinder
     process.gags[userID] = {
@@ -91,11 +91,57 @@ const assignGag = (userID, gagtype = "ball", intensity = 5, origbinder) => {
     }
     if (process.readytosave == undefined) { process.readytosave = {} }
     process.readytosave.gags = true;
+}*/
+
+const assignGag = (userID, gagtype = "ball", intensity = 5, origbinder) => {
+    if (process.gags == undefined) { process.gags = {} }
+    if (process.gags[userID] == undefined) { process.gags[userID] = []};
+    // Retrieve the index if it is already on the wearer. 
+    let foundgag = process.gags[userID].findIndex((s) => s.gagtype == gagtype);
+    let originalbinder = origbinder;
+    if (foundgag > -1) {
+        originalbinder = process.gags[userID][foundgag].origbinder;
+        process.gags[userID].splice(foundgag, 1);
+    }
+    process.gags[userID].push({
+        gagtype: gagtype,
+        intensity: intensity,
+        origbinder: originalbinder
+    })
+    if (process.readytosave == undefined) { process.readytosave = {} }
+    process.readytosave.gags = true;
 }
 
-const getGag = (userID) => {
+// to ensure compatibility with existing code, this will retrieve the first gag
+// in the list, if not called with an extra param for specific gag. 
+const getGag = (userID, gagbyname) => {
     if (process.gags == undefined) { process.gags = {} }
-    return process.gags[userID]?.gagtype
+    if (process.gags[userID] == undefined) { process.gags[userID] = []};
+    if (gagbyname) {
+        let foundgag = process.gags[userID].find((s) => s.gagtype == gagbyname);
+        return foundgag?.gagtype;
+    }
+    else if (process.gags[userID].length > 0) {
+        return process.gags[userID][0].gagtype;
+    }
+    return undefined;
+}
+
+const getGags = (userID) => {
+    if (process.gags == undefined) { process.gags = {} }
+    return process.gags[userID] ?? [];
+}
+
+const getGagLast = (userID) => {
+    if (process.gags == undefined) { process.gags = {} }
+    if (process.gags[userID] == undefined) { process.gags[userID] = []};
+
+    if (process.gags[userID].length > 0) {
+        return process.gags[userID][process.gags[userID].length - 1].gagtype
+    }
+    else {
+        return undefined
+    }
 }
 
 const getGagBinder = (userID) => {
@@ -105,7 +151,10 @@ const getGagBinder = (userID) => {
 
 const getGagIntensity = (userID) => {
     if (process.gags == undefined) { process.gags = {} }
-    return process.gags[userID]?.intensity
+    if (process.gags[userID] && (process.gags[userID].length > 0)) {
+        return process.gags[userID][0].intensity
+    }
+    else { return undefined }
 }
 
 const deleteGag = (userID) => {
@@ -371,41 +420,39 @@ function textGarbleGag(messagein, msg, modifiedmessage, outtextin) {
     let modified = modifiedmessage
     let outtext = outtextin
     if (process.gags == undefined) { process.gags = {} }
-    if (process.gags[`${msg.author.id}`]) {
+    if (process.gags[msg.author.id] && (process.gags[msg.author.id].length > 0)) {
+        modified = true;
+
         // Grab all the command files from the commands directory
         const gagtypes = [];
         const commandsPath = path.join(__dirname, '..', 'gags');
         const commandFiles = fs.readdirSync(commandsPath).filter(file => file.endsWith('.js'));
 
-        if (commandFiles.includes(process.gags[`${msg.author.id}`].gagtype + ".js")) {
-            modified = true;
-            let gaggarble = require(path.join(commandsPath, `${process.gags[`${msg.author.id}`].gagtype}.js`))
-            let intensity = process.gags[`${msg.author.id}`].intensity ? process.gags[`${msg.author.id}`].intensity : 5
-            if (gaggarble.messagebegin) {
-                try {
-                    outtext = `${gaggarble.messagebegin(msg.content, intensity)}`
-                }
-                catch (err) { console.log(err) }
-            }
-            for (let i = 0; i < messageparts.length; i++) {
-                try {
-                    if (messageparts[i].garble) {
-                        outtext = `${outtext}${gaggarble.garbleText(messageparts[i].text, intensity)}`
+        let msgpartsbegin = [];
+        let msgparts = messageparts.slice(0); // deep clone the message parts array. 
+        let msgpartsend = [];
+        process.gags[msg.author.id].forEach((gag) => {
+            if (commandFiles.includes(`${gag.gagtype}.js`)) {
+                let gaggarble = require(path.join(commandsPath, `${gag.gagtype}.js`))
+                let intensity = gag.intensity ? gag.intensity : 5
+                if (gaggarble.messagebegin) { msgpartsbegin.push(gaggarble.messagebegin(msg.content, intensity)) }
+                for (let i = 0; i < msgparts.length; i++) {
+                    if (msgparts[i].garble) {
+                        let garbled = gaggarble.garbleText(msgparts[i].text, intensity);
+                        if (typeof garbled == "string") {
+                            msgparts[i].text = garbled;
+                        }
+                        else {
+                            msgparts[i] = garbled;
+                        }
                     }
-                    else {
-                        outtext = `${outtext}${messageparts[i].text}`
-                    }
                 }
-                catch (err) { console.log(err) }
+                if (gaggarble.messageend) { msgpartsend.push(gaggarble.messageend(msg.content, intensity)) }
             }
-            if (gaggarble.messageend) {
-                try {
-                    outtext = `${outtext}${gaggarble.messageend(msg.content, intensity)}`
-                }
-                catch (err) { console.log(err) }
-            }
-            
-        }
+        })
+        outtext = `${outtext}${msgpartsbegin.join("\n")}`;
+        outtext = `${outtext}${msgparts.map((m) => m.text).join("")}`;
+        outtext = `${outtext}${msgpartsend.join("\n")}`;
     }
     else {
         let messagetexts = messageparts.map(m => m.text);
@@ -527,6 +574,8 @@ exports.gagtypesset = gagtypesset;
 
 exports.assignGag = assignGag;
 exports.getGag = getGag;
+exports.getGags = getGags;
+exports.getGagLast = getGagLast;
 exports.getGagBinder = getGagBinder;
 exports.getMittenBinder = getMittenBinder;
 exports.getGagIntensity = getGagIntensity;

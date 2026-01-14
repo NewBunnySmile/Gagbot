@@ -1,15 +1,18 @@
 const { convertPronounsText } = require("./pronounfunctions.js");
 const { getWearable } = require("./wearablefunctions.js");
-const { getChastity } = require("./vibefunctions.js");
+const { getChastity, getArousal } = require("./vibefunctions.js");
 
 const texts_chastity = {
     chastitybelt: {
         heavy: {
             chastity: [
-                `USER_TAG squirms in USER_THEIR VAR_C1, trying to adjust USER_THEIR VAR_C2, but it's futile!`
+                `USER_TAG squirms in USER_THEIR VAR_C1, trying to adjust USER_THEIR VAR_C2, but it's futile!`,
+                `USER_TAG wiggles a bit, trying to adjust USER_THEIR VAR_C2, but USER_THEIR VAR_C1 makes it hard to reach...`
             ],
             nochastity: [
-                `USER_TAG squirms in USER_THEIR VAR_C1, trying to put on a VAR_C2, but can't!`
+                `USER_TAG squirms in USER_THEIR VAR_C1, trying to put on a VAR_C2, but can't!`,
+                `USER_TAG shifts USER_THEIR hips, wanting to put USER_THEMSELF in chastity because USER_THEY are a good USER_PRAISEOBJECT, but USER_THEIR VAR_C1 said no.`,
+                `USER_TAG bumps into a VAR_C2, wanting so desperately to put it on USER_THEIR hips, but USER_THEIR VAR_C1 gives USER_THEM no arms with which to work with.`
             ]
         },
         noheavy: {
@@ -24,18 +27,34 @@ const texts_chastity = {
             nochastity: {
                 namedchastity: {
                     key_other: [
-                        `USER_TAG slips into a VAR_C2, slipping on a tiny lock, and then hands TARGET_TAG the key!`
+                        `USER_TAG slips into a VAR_C2, slipping on a tiny lock, and then hands TARGET_TAG the key!`,
+                        `USER_TAG wraps a VAR_C2 around USER_THEIR waist, turns the lock and then presents the key to TARGET_TAG!`,
+                        `USER_TAG whispers a sweet goodbye as USER_THEY lockUSER_S USER_THEMSELF into a VAR_C2, sealing it away until TARGET_TAG says otherwise!`,
+                        { required: (userID) => { return (getArousal(userID) > 10)}, text: `USER_TAG 'calmly' slips a VAR_C2 onto USER_THEIR waist before USER_THEY can think about it. USER_THEY_CAP hands TARGET_TAG the key to keep USER_THEM safe from touching USER_THEMSELF!`},
+                        { required: (userID) => { return (getArousal(userID) > 20)}, text: `USER_TAG feverishly slips a VAR_C2 onto USER_THEIR waist before USER_THEY can regret it! USER_THEY_CAP hands TARGET_TAG the key to keep USER_THEM safe from touching USER_THEMSELF!`},
                     ],
                     key_self: [
-                        `USER_TAG puts a VAR_C2 on and clicks a tiny lock on it before stashing the key for safekeeping!`
+                        `USER_TAG puts a VAR_C2 on and clicks a tiny lock on it before stashing the key for safekeeping!`,
+                        `USER_TAG slips a VAR_C2 on and turns the key, locking USER_THEMSELF away... but USER_THEY still have the key.`,
+                        `USER_TAG whispers a sweet goodbye as USER_THEY wrapUSER_S a VAR_C2 around USER_THEIR waist, sealing USER_THEIR chastity away under lock and key.`,
+                        { required: (userID) => { return (getArousal(userID) > 10)}, text: `Taking calm, deep breaths, USER_TAG wraps a VAR_C2 on USER_THEIR waist before USER_THEY touch there. USER_THEY_CAP still have the key, but at least it's something...`},
+                        { required: (userID) => { return (getArousal(userID) > 20)}, text: `In a vain attempt to be a good USER_PRAISEOBJECT, USER_TAG locks USER_THEMSELF up with a VAR_C2. Though, USER_THEY USER_ISARE still holding the the key.`},
                     ]
                 },
                 nonamedchastity: {
                     key_other: [
-                        `USER_TAG slips into a VAR_C2, slipping on a tiny lock, and then hands TARGET_TAG the key!`
+                        `USER_TAG slips into a VAR_C2, slipping on a tiny lock, and then hands TARGET_TAG the key!`,
+                        `USER_TAG wraps a VAR_C2 around USER_THEIR waist, turns the lock and then presents the key to TARGET_TAG!`,
+                        `USER_TAG whispers a sweet goodbye as USER_THEY lockUSER_S USER_THEMSELF into a VAR_C2, sealing it away until TARGET_TAG says otherwise!`,
+                        { required: (userID) => { return (getArousal(userID) > 10)}, text: `USER_TAG 'calmly' slips a VAR_C2 onto USER_THEIR waist before USER_THEY can think about it. USER_THEY_CAP hands TARGET_TAG the key to keep USER_THEM safe from touching USER_THEMSELF!`},
+                        { required: (userID) => { return (getArousal(userID) > 20)}, text: `USER_TAG feverishly slips a VAR_C2 onto USER_THEIR waist before USER_THEY can regret it! USER_THEY_CAP hands TARGET_TAG the key to keep USER_THEM safe from touching USER_THEMSELF!`},
                     ],
                     key_self: [
-                        `USER_TAG puts a VAR_C2 on and clicks a tiny lock on it before stashing the key for safekeeping!`
+                        `USER_TAG puts a VAR_C2 on and clicks a tiny lock on it before stashing the key for safekeeping!`,
+                        `USER_TAG slips a VAR_C2 on and turns the key, locking USER_THEMSELF away... but USER_THEY still have the key.`,
+                        `USER_TAG whispers a sweet goodbye as USER_THEY wrap a VAR_C2 around USER_THEIR waist, sealing USER_THEIR chastity away under lock and key.`,
+                        { required: (userID) => { return (getArousal(userID) > 10)}, text: `Taking calm, deep breaths, USER_TAG wraps a VAR_C2 on USER_THEIR waist before USER_THEY touch there. USER_THEY_CAP still have the key, but at least it's something...`},
+                        { required: (userID) => { return (getArousal(userID) > 20)}, text: `In a vain attempt to be a good USER_PRAISEOBJECT, USER_TAG locks USER_THEMSELF up with a VAR_C2. Though, USER_THEY USER_ISARE still holding the the key.`},
                     ]
                 },
             }
@@ -44,10 +63,13 @@ const texts_chastity = {
     chastitybra: {
         heavy: {
             chastity: [
-                `USER_TAG squirms in USER_THEIR VAR_C1, trying to adjust USER_THEIR VAR_C2, but it's futile!`
+                `USER_TAG squirms in USER_THEIR VAR_C1, trying to adjust USER_THEIR VAR_C2, but it's futile!`,
+                `USER_TAG wiggles a bit, trying to adjust USER_THEIR VAR_C2, but USER_THEIR VAR_C1 makes it hard to reach...`
             ],
             nochastity: [
-                `USER_TAG squirms in USER_THEIR VAR_C1, trying to put on a VAR_C2, but can't!`
+                `USER_TAG squirms in USER_THEIR VAR_C1, trying to put on a VAR_C2, but can't!`,
+                `USER_TAG shifts USER_THEIR shoulder, wanting to put USER_THEMSELF in chastity because USER_THEY are a good USER_PRAISEOBJECT, but USER_THEIR VAR_C1 said no.`,
+                `USER_TAG bumps into a VAR_C2, wanting so desperately to put it on USER_THEIR chest, but USER_THEIR VAR_C1 gives USER_THEM no arms with which to work with.`
             ]
         },
         noheavy: {
@@ -62,18 +84,34 @@ const texts_chastity = {
             nochastity: {
                 namedchastity: {
                     key_other: [
-                        `USER_TAG slips a VAR_C2 on, also putting on a tiny lock, and then hands TARGET_TAG the key!`
+                        `USER_TAG slips a VAR_C2 on, also putting on a tiny lock, and then hands TARGET_TAG the key!`,
+                        `USER_TAG wraps a VAR_C2 around USER_THEIR chest, turns the lock and then presents the key to TARGET_TAG!`,
+                        `USER_TAG whispers a sweet goodbye as USER_THEY lockUSER_S USER_THEIR breasts into a VAR_C2, sealing them away until TARGET_TAG says otherwise!`,
+                        { required: (userID) => { return (getArousal(userID) > 10)}, text: `USER_TAG 'calmly' slips a VAR_C2 onto USER_THEIR chest before USER_THEY can think about it. USER_THEY_CAP hands TARGET_TAG the key to keep USER_THEM safe from touching USER_THEMSELF!`},
+                        { required: (userID) => { return (getArousal(userID) > 20)}, text: `USER_TAG feverishly slips a VAR_C2 onto USER_THEIR chest before USER_THEY can regret it! USER_THEY_CAP hands TARGET_TAG the key to keep USER_THEM safe from touching USER_THEMSELF!`},
                     ],
                     key_self: [
-                        `USER_TAG puts a VAR_C2 on and clicks a tiny lock on it before stashing the key for safekeeping!`
+                        `USER_TAG puts a VAR_C2 on and clicks a tiny lock on it before stashing the key for safekeeping!`,
+                        `USER_TAG slips a VAR_C2 on and turns the key, locking USER_THEIR breasts away... but USER_THEY still have the key.`,
+                        `USER_TAG whispers a sweet goodbye as USER_THEY wrap a VAR_C2 around USER_THEIR chest, sealing USER_THEIR chastity away under lock and key.`,
+                        { required: (userID) => { return (getArousal(userID) > 10)}, text: `Taking calm, deep breaths, USER_TAG wraps a VAR_C2 on USER_THEIR chest before USER_THEY touch there. USER_THEY_CAP still have the key, but at least it's something...`},
+                        { required: (userID) => { return (getArousal(userID) > 20)}, text: `In a vain attempt to be a good USER_PRAISEOBJECT, USER_TAG locks USER_THEMSELF up with a VAR_C2. Though, USER_THEY USER_ISARE still holding the the key.`},
                     ]
                 },
                 nonamedchastity: {
                     key_other: [
-                        `USER_TAG slips a VAR_C2 on, also putting on a tiny lock, and then hands TARGET_TAG the key!`
+                        `USER_TAG slips a VAR_C2 on, also putting on a tiny lock, and then hands TARGET_TAG the key!`,
+                        `USER_TAG wraps a VAR_C2 around USER_THEIR chest, turns the lock and then presents the key to TARGET_TAG!`,
+                        `USER_TAG whispers a sweet goodbye as USER_THEY lockUSER_S USER_THEIR breasts into a VAR_C2, sealing them away until TARGET_TAG says otherwise!`,
+                        { required: (userID) => { return (getArousal(userID) > 10)}, text: `USER_TAG 'calmly' slips a VAR_C2 onto USER_THEIR chest before USER_THEY can think about it. USER_THEY_CAP hands TARGET_TAG the key to keep USER_THEM safe from touching USER_THEMSELF!`},
+                        { required: (userID) => { return (getArousal(userID) > 20)}, text: `USER_TAG feverishly slips a VAR_C2 onto USER_THEIR chest before USER_THEY can regret it! USER_THEY_CAP hands TARGET_TAG the key to keep USER_THEM safe from touching USER_THEMSELF!`},
                     ],
                     key_self: [
-                        `USER_TAG puts a VAR_C2 on and clicks a tiny lock on it before stashing the key for safekeeping!`
+                        `USER_TAG puts a VAR_C2 on and clicks a tiny lock on it before stashing the key for safekeeping!`,
+                        `USER_TAG slips a VAR_C2 on and turns the key, locking USER_THEIR breasts away... but USER_THEY still have the key.`,
+                        `USER_TAG whispers a sweet goodbye as USER_THEY wrap a VAR_C2 around USER_THEIR chest, sealing USER_THEIR chastity away under lock and key.`,
+                        { required: (userID) => { return (getArousal(userID) > 10)}, text: `Taking calm, deep breaths, USER_TAG wraps a VAR_C2 on USER_THEIR chest before USER_THEY touch there. USER_THEY_CAP still have the key, but at least it's something...`},
+                        { required: (userID) => { return (getArousal(userID) > 20)}, text: `In a vain attempt to be a good USER_PRAISEOBJECT, USER_TAG locks USER_THEMSELF up with a VAR_C2. Though, USER_THEY USER_ISARE still holding the the key.`},
                     ]
                 },
             }
@@ -250,7 +288,7 @@ const texts_collarequip = {
                     notallowed: [
                         `TARGET_TAG's collar does not allow you to put TARGET_THEM in chastity!`
                     ]
-                } 
+                }
             },
             nokey: [
                 `You don't have the key to TARGET_TAG's collar!`
@@ -470,17 +508,29 @@ const texts_gag = {
         },
         nomitten: {
             self: {
-                gag: [
-                    `USER_TAG carefully undoes the straps on USER_THEIR VAR_C4, allowing just a moment to let the drool fall out before replacing it with a VAR_C3, pulling the straps on it VAR_C2 before buckling.`
-                ],
+                gag: {
+                    changetightness: [
+                        `USER_TAG adjusts USER_THEIR VAR_C3, undoing the straps before pulling them VAR_C2 around USER_THEIR head again.`
+                        //`USER_TAG carefully undoes the straps on USER_THEIR VAR_C4, allowing just a moment to let the drool fall out before replacing it with a VAR_C3, pulling the straps on it VAR_C2 before buckling.`
+                    ],
+                    newgag: [
+                        `USER_TAG sucks in what breath USER_THEY can, before adding a VAR_C3 over top of USER_THEIR VAR_C4, pulling the straps VAR_C2 before buckling.`
+                    ]
+                },
                 nogag: [
                     `USER_TAG picks up a VAR_C3, takes a deep breath, and then pushes it between USER_THEIR teeth and pulling the straps VAR_C2 behind USER_THEIR head.`
                 ]
             },
             other: {
-                gag: [
-                    `USER_TAG runs USER_THEIR hands behind TARGET_TAG's head, unbuckling the straps on TARGET_THEIR VAR_C4 and then gently pressing a VAR_C3 between TARGET_THEIR lips again. The straps are then pulled VAR_C2 and buckled again!`
-                ],
+                gag: {
+                    changetightness: [
+                        `USER_TAG adjusts TARGET_TAG's VAR_C3, undoing the straps before pulling them VAR_C2 around TARGET_THEIR head again.`
+                        //`USER_TAG runs USER_THEIR hands behind TARGET_TAG's head, unbuckling the straps on TARGET_THEIR VAR_C4 and then gently pressing a VAR_C3 between TARGET_THEIR lips again. The straps are then pulled VAR_C2 and buckled again!`
+                    ],
+                    newgag: [
+                        `USER_TAG places a VAR_C3 against TARGET_TAG's mouth over top of TARGET_THEIR VAR_C4. The buckles are pulled VAR_C2 around TARGET_THEIR head before they are buckled again.`
+                    ]
+                },
                 nogag: {
                     gentle: [
                         `USER_TAG uses a finger to gently pry open TARGET_TAG's lips before inserting a VAR_C3 between TARGET_THEIR teeth, secured VAR_C2 behind TARGET_THEIR head. A muted meep follows soon after from TARGET_THEM!`,
@@ -551,17 +601,29 @@ const texts_headwear = {
                 ]
             },
             other: {
-                // Ephemeral
-                worn: [
-                    `You are already wearing a VAR_C2!`
-                ],
-                noworn: [
-                    `USER_TAG grabs a VAR_C2 and places it gently on TARGET_TAG's head, securing the straps so it doesn't fall off.`
+                collar: {
+                    maskperm: {
+                        // Ephemeral
+                        worn: [
+                            `You are already wearing a VAR_C2!`
+                        ],
+                        noworn: [
+                            `USER_TAG grabs a VAR_C2 and places it gently on TARGET_TAG's head, securing the straps so it doesn't fall off.`
+                        ]
+                    },
+                    nomaskperm: [
+                        // Ephemeral
+                        `TARGET_TAG's collar does not allow you to mask TARGET_THEM!`
+                    ]
+                },
+                nocollar: [
+                    // Ephemeral
+                    `TARGET_TAG is not wearing a collar!`
                 ]
             }
         }
     }
-} 
+}
 
 // Thank goodness this one is tiny lol
 const texts_heavy = {
@@ -816,7 +878,7 @@ const texts_struggle = {
                 `USER_TAG wiggles USER_THEIR thighs to make USER_THEIR VAR_C4 sit more comfortably. Steel is so *unforgiving.*`,
                 `USER_TAG gropes USER_THEMSELF with USER_THEIR hands, helplessly unable to touch...`,
                 `USER_TAG squirms in USER_THEIR VAR_C4, but no matter how much USER_THEY USER_TRY, USER_THEY just can't feel anything...`,
-                { required: (t) => { return ((getChastity(t.interactionuser.id).timestamp + 7200000) < Date.now())}, text: `USER_TAG sighs as USER_THEY USER_TRY to fumble with USER_THEIR VAR_C4. When was the last time USER_THEY had freedom or relief?`},
+                { required: (t) => { return ((getChastity(t.interactionuser.id).timestamp + 7200000) < Date.now()) }, text: `USER_TAG sighs as USER_THEY USER_TRY to fumble with USER_THEIR VAR_C4. When was the last time USER_THEY had freedom or relief?` },
                 `USER_TAG mews in despair as USER_THEY can't get *any* feeling when touching down there! Poor USER_THEM!`,
                 `USER_TAG tried so hard to touch USER_THEMSELF, and didn't get so far. But in the end, it doesn't even matter.`,
                 `USER_TAG fusses with USER_THEIR belt, but USER_THEY forgot: Good USER_PRAISEOBJECTs ***never*** cum.`,
@@ -941,6 +1003,8 @@ const texts_struggle = {
         `USER_TAG is considering announcing to everyone that USER_THEY lost The Game!`,
         `USER_TAG wants a new pair of handcuffs. Where? On who? Who knows!`,
         `USER_TAG wants a new pair of handcuffs. Probably on USER_THEMSELF. Someone should bind USER_THEM!`,
+        `USER_TAG rubs their wrists. They wonder what it would feel like to be wearing cuffs.`,
+        `USER_TAG blushes slightly as they glance around at all the restraints. Maybe someone will use them on USER_THEM!`,
         `USER_TAG nods as USER_THEY USER_ISARE reminded by USER_THEIR subconscious brain to drink some water!`,
         `USER_TAG tries to imagine how best to adjust USER_THEIR speech when gagged. Perhaps with practice, USER_THEY can figure it out!`,
         `All the keys clanging and bondage restraints strewn about makes USER_TAG swim in happy thoughts!`,
@@ -960,12 +1024,13 @@ const texts_struggle = {
         `All this talk about servitude and the moans from the dungeon's denizens makes it impossible for USER_TAG to focus...`,
         `USER_TAG wants to lay in someone's lap. Or maybe have someone lay in USER_THEIR lap. Maybe both.`,
         `USER_TAG wants to pet a cute kitty. Or a cute doggo. Maybe lots of cute kitties and doggos!`,
+        `USER_TAG wonders what it would be like to be a pet kitty. Or a pet doggo. They blush a little at the thought~`,
         `USER_TAG prepares for battle with a sword and flourishes it. USER_THEY_CAP USER_ISARE going to hunt the legendary sHE!`,
         `USER_TAG sits and looks around patiently because USER_THEY USER_ISARE a **good USER_PRAISEOBJECT!**`,
         // 2 hours in chastity
-        { required: (t) => { return (!isNaN(getChastity(t.interactionuser.id)?.timestamp) && ((getChastity(t.interactionuser.id)?.timestamp + 7200000) < Date.now()))}, text: `USER_TAG absentmindedly fidgets, thinking about the last time USER_THEY could let go...`},
+        { required: (t) => { return (!isNaN(getChastity(t.interactionuser.id)?.timestamp) && ((getChastity(t.interactionuser.id)?.timestamp + 7200000) < Date.now())) }, text: `USER_TAG absentmindedly fidgets, thinking about the last time USER_THEY could let go...` },
         // 24 hours in chastity
-        { required: (t) => { return (!isNaN(getChastity(t.interactionuser.id)?.timestamp) && ((getChastity(t.interactionuser.id)?.timestamp + 86400000) < Date.now()))}, text: `USER_TAG barely remembers what it's like to not be in chastity...`}
+        { required: (t) => { return (!isNaN(getChastity(t.interactionuser.id)?.timestamp) && ((getChastity(t.interactionuser.id)?.timestamp + 86400000) < Date.now())) }, text: `USER_TAG barely remembers what it's like to not be in chastity...` }
     ]
 }
 
@@ -1788,13 +1853,20 @@ const texts_unwear = {
             single: {
                 worn: [
                     `USER_TAG slowly slips out of USER_THEIR VAR_C2, folding it and putting it away for future wear!`,
-                    { only: (t) => { return t.c2.includes("Lipstick") }, text: `USER_TAG uses makeup remover to wipe USER_THEIR VAR_C2 off USER_THEIR lips!`},
-                    { only: (t) => { return t.c2.includes("Kissmark") }, text: `USER_TAG uses makeup remover to wipe away USER_THEIR VAR_C2!`},
-                    { only: (t) => { return t.c2.includes("Eyeshadow") }, text: `USER_TAG uses makeup remover to wipe away USER_THEIR VAR_C2 from USER_THEIR eyes!`},
-                    { only: (t) => { return (t.c2.includes("lasses") || t.c2.includes("Librarian's Spectacles")) }, text: `USER_TAG takes off USER_THEIR VAR_C2 and folds the arms on them before setting them gently to the side!`},
-                    { only: (t) => { return t.c2.includes("attoo") }, text: `USER_TAG uses a bit of magic to erase USER_THEIR VAR_C2!`},
-                    { only: (t) => { return t.c2.includes("Polish") }, text: `USER_TAG uses some nail polish remover to remove USER_THEIR VAR_C2!`},
-                    { only: (t) => { return (t.c2.includes("Heels") || t.c2.includes("Shoes") || t.c2.includes("Boots") || t.c2.includes("Pumps") || t.c2.includes("Anklets") || t.c2.includes("Greaves")) }, text: `USER_TAG slips USER_THEIR VAR_C2 off USER_THEIR feet, putting them away!`},
+                    { only: (t) => { return t.c2.includes("Lipstick") }, text: `USER_TAG uses makeup remover to wipe USER_THEIR VAR_C2 off USER_THEIR lips!` },
+                    { only: (t) => { return t.c2.includes("Kissmark") }, text: `USER_TAG uses makeup remover to wipe away USER_THEIR VAR_C2!` },
+                    { only: (t) => { return t.c2.includes("Eyeshadow") }, text: `USER_TAG uses makeup remover to wipe away USER_THEIR VAR_C2 from USER_THEIR eyes!` },
+                    { only: (t) => { return (t.c2.includes("lasses") || t.c2.includes("Librarian's Spectacles")) }, text: `USER_TAG takes off USER_THEIR VAR_C2 and folds the arms on them before setting them gently to the side!` },
+                    { only: (t) => { return t.c2.includes("attoo") }, text: `USER_TAG uses a bit of magic to erase USER_THEIR VAR_C2!` },
+                    { only: (t) => { return t.c2.includes("Barcode") }, text: `USER_TAG steps into the Doll Terminal, which promptly erases USER_THEIR VAR_C2!` },
+                    { only: (t) => { return t.c2.includes("Polish") }, text: `USER_TAG uses some nail polish remover to remove USER_THEIR VAR_C2!` },
+                    { only: (t) => { return (t.c2.includes("Heels") || t.c2.includes("Shoes") || t.c2.includes("Boots") || t.c2.includes("Pumps") || t.c2.includes("Anklets") || t.c2.includes("Greaves")) }, text: `USER_TAG slips USER_THEIR VAR_C2 off USER_THEIR feet, putting them away!` },
+                    { only: (t) => { return t.c2.includes("Wingbinders") }, text: `USER_TAG reaches around and loosens the straps on USER_THEIR VAR_C2, slowly releasing the tension and allowing USER_THEM to stretch USER_THEIR wings once more!` },
+                    { only: (t) => { return t.c2.includes("Outfit") }, text: `USER_TAG strips out of USER_THEIR VAR_C2, packing the outfit away for the next time USER_THEY need it!` },
+                    { only: (t) => { return t.c2.includes("Suit") }, text: `USER_TAG slips out of USER_THEIR VAR_C2, carefully hanging each piece up and putting it away.` },
+                    { only: (t) => { return t.c2.includes("Magical Girl") }, text: `USER_TAG relaxes and releases USER_THEIR magical transformation. USER_THEIR_CAP VAR_C2 fades away until it is needed again!` },
+                    { only: (t) => { return t.c2.includes("Nametag") }, text: `USER_TAG removes USER_THEIR VAR_C2 to go incognito!` },
+
                 ],
                 // Ephemeral
                 noworn: [
@@ -1815,13 +1887,20 @@ const texts_unwear = {
             single: {
                 worn: [
                     `Slowly, USER_TAG runs USER_THEIR fingers over TARGET_TAG, sensually pulling off TARGET_THEIR VAR_C2 and setting it aside.`,
-                    { only: (t) => { return t.c2.includes("Lipstick") }, text: `USER_TAG uses makeup remover to wipe TARGET_TAG's VAR_C2 off TARGET_THEIR lips!`},
-                    { only: (t) => { return t.c2.includes("Kissmark") }, text: `USER_TAG uses makeup remover to wipe away TARGET_TAG's VAR_C2!`},
-                    { only: (t) => { return t.c2.includes("Eyeshadow") }, text: `USER_TAG uses makeup remover to wipe away TARGET_TAG's VAR_C2 from TARGET_THEIR eyes!`},
-                    { only: (t) => { return (t.c2.includes("lasses") || t.c2.includes("Librarian's Spectacles")) }, text: `USER_TAG takes off TARGET_TAG's VAR_C2 and folds the arms on them before setting them gently to the side!`},
-                    { only: (t) => { return t.c2.includes("attoo") }, text: `USER_TAG uses a bit of magic to erase TARGET_TAG's VAR_C2!`},
-                    { only: (t) => { return t.c2.includes("Polish") }, text: `USER_TAG uses some nail polish remover to remove TARGET_TAG's VAR_C2!`},
-                    { only: (t) => { return (t.c2.includes("Heels") || t.c2.includes("Shoes") || t.c2.includes("Boots") || t.c2.includes("Pumps") || t.c2.includes("Anklets") || t.c2.includes("Greaves")) }, text: `USER_TAG slips TARGET_TAG's VAR_C2 off TARGET_THEIR feet, putting them away!`},
+                    { only: (t) => { return t.c2.includes("Lipstick") }, text: `USER_TAG uses makeup remover to wipe TARGET_TAG's VAR_C2 off TARGET_THEIR lips!` },
+                    { only: (t) => { return t.c2.includes("Kissmark") }, text: `USER_TAG uses makeup remover to wipe away TARGET_TAG's VAR_C2!` },
+                    { only: (t) => { return t.c2.includes("Eyeshadow") }, text: `USER_TAG uses makeup remover to wipe away TARGET_TAG's VAR_C2 from TARGET_THEIR eyes!` },
+                    { only: (t) => { return (t.c2.includes("lasses") || t.c2.includes("Librarian's Spectacles")) }, text: `USER_TAG takes off TARGET_TAG's VAR_C2 and folds the arms on them before setting them gently to the side!` },
+                    { only: (t) => { return t.c2.includes("attoo") }, text: `USER_TAG uses a bit of magic to erase TARGET_TAG's VAR_C2!` },
+                    { only: (t) => { return t.c2.includes("Barcode") }, text: `USER_TAG leads TARGET_TAG into the Doll Terminal, which promptly erases TARGET_THEIR VAR_C2!` },
+                    { only: (t) => { return t.c2.includes("Polish") }, text: `USER_TAG uses some nail polish remover to remove TARGET_TAG's VAR_C2!` },
+                    { only: (t) => { return (t.c2.includes("Heels") || t.c2.includes("Shoes") || t.c2.includes("Boots") || t.c2.includes("Pumps") || t.c2.includes("Anklets") || t.c2.includes("Greaves")) }, text: `USER_TAG slips TARGET_TAG's VAR_C2 off TARGET_THEIR feet, putting them away!` },
+                    { only: (t) => { return t.c2.includes("Wingbinders") }, text: `USER_TAG loosens the straps on TARGET_TAG's VAR_C2, gradually allowing TARGET_THEIR wings to open out and move freely!` },
+                    { only: (t) => { return t.c2.includes("Outfit") }, text: `USER_TAG strips TARGET_TAG out of TARGET_THEIR VAR_C2!` },
+                    { only: (t) => { return t.c2.includes("Suit") }, text: `USER_TAG helps TARGET_TAG remove and hang up TARGET_THEIR VAR_C2!` },
+                    { only: (t) => { return t.c2.includes("Magical Girl") }, text: `In a flash of magic, USER_TAG undoes TARGET_TAG's magical transformation, leaving TARGET_THEIR bereft of TARGET_THEIR VAR_C2!` },
+                    { only: (t) => { return t.c2.includes("Nametag") }, text: `USER_TAG removes TARGET_TAG's VAR_C2!` },
+
                 ],
                 // Ephemeral
                 noworn: [
@@ -2061,14 +2140,21 @@ const texts_wear = {
             ],
             noworn: [
                 `USER_TAG picks up a beautiful VAR_C2 and puts it on! It sits snugly on USER_THEM!`,
-                { only: (t) => { return t.c2.includes("Lipstick") }, text: `USER_TAG pulls out a makeup bag and applies VAR_C2 to USER_THEMSELF!`},
-                { only: (t) => { return t.c2.includes("Kissmark") }, text: `USER_TAG pulls out a makeup bag and carefully scribbles a VAR_C2 on USER_THEMSELF!`},
-                { only: (t) => { return t.c2.includes("Eyeshadow") }, text: `USER_TAG pulls out a makeup bag and applies VAR_C2 to USER_THEIR eyes!`},
-                { only: (t) => { return (t.c2.includes("lasses") || t.c2.includes("Librarian's Spectacles")) }, text: `USER_TAG unfolds a pair of VAR_C2 and puts them on USER_THEIR nose! USER_THEIR_CAP eyes peer through the glass!`},
-                { only: (t) => { return t.c2.includes("attoo") }, text: `USER_TAG uses a tattoo gun to apply a VAR_C2 to USER_THEMSELF!`},
-                { only: (t) => { return t.c2.includes("Polish") }, text: `USER_TAG applies VAR_C2 to USER_THEIR nails! So pretty!`},
-                { only: (t) => { return (t.c2.includes("Heels") || t.c2.includes("Shoes") || t.c2.includes("Boots") || t.c2.includes("Pumps") || t.c2.includes("Anklets") || t.c2.includes("Greaves")) }, text: `USER_TAG slips a pair of VAR_C2 on USER_THEIR feet!`},
-                { required: (t) => { return t.c2.includes("Latex") }, text: `USER_TAG eases into a VAR_C2, carefully smoothing out the wrinkles on USER_THEMSELF! Squeak squeak!`},
+                { only: (t) => { return t.c2.includes("Lipstick") }, text: `USER_TAG pulls out a makeup bag and applies VAR_C2 to USER_THEMSELF!` },
+                { only: (t) => { return t.c2.includes("Kissmark") }, text: `USER_TAG pulls out a makeup bag and carefully scribbles a VAR_C2 on USER_THEMSELF!` },
+                { only: (t) => { return t.c2.includes("Eyeshadow") }, text: `USER_TAG pulls out a makeup bag and applies VAR_C2 to USER_THEIR eyes!` },
+                { only: (t) => { return (t.c2.includes("lasses") || t.c2.includes("Librarian's Spectacles")) }, text: `USER_TAG unfolds a pair of VAR_C2 and puts them on USER_THEIR nose! USER_THEIR_CAP eyes peer through the glass!` },
+                { only: (t) => { return t.c2.includes("attoo") || t.c2.includes("Barcode") }, text: `USER_TAG uses a tattoo gun to apply a VAR_C2 to USER_THEMSELF!` },                
+                { only: (t) => { return t.c2.includes("Barcode") }, text: `USER_TAG allows the Doll Terminal to hold them in place while a mechanical arm applies a VAR_C2 to USER_THEIR!` },
+                { only: (t) => { return t.c2.includes("Polish") }, text: `USER_TAG applies VAR_C2 to USER_THEIR nails! So pretty!` },
+                { only: (t) => { return (t.c2.includes("Heels") || t.c2.includes("Shoes") || t.c2.includes("Boots") || t.c2.includes("Pumps") || t.c2.includes("Anklets") || t.c2.includes("Greaves")) }, text: `USER_TAG slips a pair of VAR_C2 on USER_THEIR feet!` },
+                { only: (t) => { return t.c2.includes("Wingbinders") }, text: `As USER_TAG eases into a pair of VAR_C2 and pulls the straps taut, USER_THEY feelUSER_S it tighten around USER_THEIR wings, gradually locking them away and denying USER_THEM USER_THEIR flight!` },
+                { only: (t) => { return t.c2.includes("Outfit") }, text: `USER_TAG blushes as USER_THEY dresses up in a VAR_C2!` },
+                { only: (t) => { return t.c2.includes("Suit") }, text: `USER_TAG slips into a VAR_C2!` },
+                { only: (t) => { return t.c2.includes("Empress") }, text: `USER_TAG pulls on the VAR_C2 USER_THEY had commissioned! USER_THEY_CAP feel so incredibly light and airy!` },
+                { only: (t) => { return t.c2.includes("Magical Girl") }, text: `Striking a pose, USER_TAG triggers a magical transformation, feeling as USER_THEIR normal clothes disappear and are replaced with a brilliant VAR_C2!` },
+                { only: (t) => { return t.c2.includes("Nametag") }, text: `USER_TAG clips on a VAR_C2! Now all of the server will know what to call USER_THEM!` },
+                { required: (t) => { return t.c2.includes("Latex") }, text: `USER_TAG eases into a VAR_C2, carefully smoothing out the wrinkles on USER_THEMSELF! Squeak squeak!` },
             ]
         },
         other: {
@@ -2078,19 +2164,25 @@ const texts_wear = {
             ],
             noworn: [
                 `USER_TAG helps TARGET_TAG into a VAR_C2, ensuring it all fits snugly!`,
-                { only: (t) => { return t.c2.includes("Lipstick") }, text: `USER_TAG pulls out a makeup bag and applies VAR_C2 to TARGET_TAG!`},
-                { only: (t) => { return (t.c2.includes("Kissmark") && (getWearable(t.interactionuser.id).filter((f) => f.includes("lipstick")).length > 0)) }, text: `USER_TAG kisses TARGET_TAG, leaving a VAR_C2 on USER_THEIR cheek!`},
-                { only: (t) => { return (t.c2.includes("Kissmark") && (getWearable(t.interactionuser.id).filter((f) => f.includes("lipstick")).length == 0)) }, text: `USER_TAG applies some lipstick to USER_THEIR lips, and then kisses TARGET_TAG, leaving a VAR_C2 on TARGET_THEIR cheek! USER_THEY_CAP then removes the lipstick.`},
-                { only: (t) => { return t.c2.includes("Eyeshadow") }, text: `USER_TAG pulls out a makeup bag and applies VAR_C2 to TARGET_TAG's eyes!`},
-                { only: (t) => { return (t.c2.includes("lasses") || t.c2.includes("Librarian's Spectacles")) }, text: `USER_TAG unfolds a pair of VAR_C2 and puts them on TARGET_TAG's nose! TARGET_THEIR_CAP eyes peer through the glass!`},
-                { only: (t) => { return t.c2.includes("attoo") }, text: `USER_TAG uses a tattoo gun to apply a VAR_C2 to TARGET_TAG!`},
-                { only: (t) => { return t.c2.includes("Polish") }, text: `USER_TAG applies VAR_C2 to TARGET_TAG's nails! So pretty!`},
-                { only: (t) => { return (t.c2.includes("Heels") || t.c2.includes("Shoes") || t.c2.includes("Boots") || t.c2.includes("Pumps") || t.c2.includes("Anklets") || t.c2.includes("Greaves")) }, text: `USER_TAG slips a pair of VAR_C2 on TARGET_TAG's feet!`},
-                { required: (t) => { return t.c2.includes("Latex") }, text: `USER_TAG helps TARGET_TAG into a VAR_C2, carefully smoothing out the wrinkles! Squeak squeak!`},
+                { only: (t) => { return t.c2.includes("Lipstick") }, text: `USER_TAG pulls out a makeup bag and applies VAR_C2 to TARGET_TAG!` },
+                { only: (t) => { return (t.c2.includes("Kissmark") && (getWearable(t.interactionuser.id).filter((f) => f.includes("lipstick")).length > 0)) }, text: `USER_TAG kisses TARGET_TAG, leaving a VAR_C2 on USER_THEIR cheek!` },
+                { only: (t) => { return (t.c2.includes("Kissmark") && (getWearable(t.interactionuser.id).filter((f) => f.includes("lipstick")).length == 0)) }, text: `USER_TAG applies some lipstick to USER_THEIR lips, and then kisses TARGET_TAG, leaving a VAR_C2 on TARGET_THEIR cheek! USER_THEY_CAP then removes the lipstick.` },
+                { only: (t) => { return t.c2.includes("Eyeshadow") }, text: `USER_TAG pulls out a makeup bag and applies VAR_C2 to TARGET_TAG's eyes!` },
+                { only: (t) => { return (t.c2.includes("lasses") || t.c2.includes("Librarian's Spectacles")) }, text: `USER_TAG unfolds a pair of VAR_C2 and puts them on TARGET_TAG's nose! TARGET_THEIR_CAP eyes peer through the glass!` },
+                { only: (t) => { return t.c2.includes("attoo") }, text: `USER_TAG uses a tattoo gun to apply a VAR_C2 to TARGET_TAG!` },
+                { only: (t) => { return t.c2.includes("Barcode") }, text: `USER_TAG holds TARGET_TAG in place while a mechanical arm applies a VAR_C2 to TARGET_TAG!` },
+                { only: (t) => { return t.c2.includes("Polish") }, text: `USER_TAG applies VAR_C2 to TARGET_TAG's nails! So pretty!` },
+                { only: (t) => { return (t.c2.includes("Heels") || t.c2.includes("Shoes") || t.c2.includes("Boots") || t.c2.includes("Pumps") || t.c2.includes("Anklets") || t.c2.includes("Greaves")) }, text: `USER_TAG slips a pair of VAR_C2 on TARGET_TAG's feet!` },
+                { only: (t) => { return t.c2.includes("Wingbinders") }, text: `USER_TAG slips TARGET_TAG's into a pair of VAR_C2, feeling them twitch under USER_THEIR fingers as the straps are tightened down!` },
+                { only: (t) => { return t.c2.includes("Outfit") }, text: `USER_TAG dresses TARGET_TAG up in a VAR_C2!` },
+                { only: (t) => { return t.c2.includes("Suit") }, text: `USER_TAG helps TARGET_TAG slip into a VAR_C2!` },
+                { only: (t) => { return t.c2.includes("Magical Girl") }, text: `With a burst of magic, USER_TAG triggers a magical transformation on TARGET_TAG, who now finds USER_THEMSELF wearing a VAR_C2!` },
+                { only: (t) => { return t.c2.includes("Nametag") }, text: `USER_TAG clips a VAR_C2 onto TARGET_TAG! Now everyone will know what USER_TAG wants to call TARGET_THEM!` },
+                { required: (t) => { return t.c2.includes("Latex") }, text: `USER_TAG helps TARGET_TAG into a VAR_C2, carefully smoothing out the wrinkles! Squeak squeak!` },
             ]
         }
     }
-} 
+}
 
 const texts_timelock = {
     timelockengage: {

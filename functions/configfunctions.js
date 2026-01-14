@@ -182,7 +182,7 @@ const configoptions = {
             ],
             menutype: "choice",
             default: 1.00,
-            disabled: (userID) => { return (getOption(userID,"fumbling") == "disabled") }
+            disabled: (userID) => { return (getOption(userID,"arousalsystem") == 0) }
         }
     },
     "General": {
@@ -383,6 +383,14 @@ const configoptions = {
                     select_function: (userID) => { return false },
                     value: "disabled",
                     style: ButtonStyle.Danger,
+                    uname: "DollVisorPunishNo"
+                },
+                {
+                    name: "Warn",
+                    helptext: "Doll Visor will warn on violations, but not punish",
+                    select_function: (userID) => { return false },
+                    value: "warning",
+                    style: ButtonStyle.Secondary,
                     uname: "DollVisorPunishNo"
                 },
                 {

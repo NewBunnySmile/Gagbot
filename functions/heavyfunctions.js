@@ -53,11 +53,12 @@ const heavytypes = [
     { name: "Latex Vacbed", value: "vacbed_latex", denialCoefficient: 3.5 },
     { name: "Latex Vaccube", value: "vaccube_latex", denialCoefficient: 4.5 },
     { name: "Doll Processing Facility", value: "doll_processing", denialCoefficient: 5 },
-    { name: "Doll Storage Unit", value: "doll_storage", denialCoefficient: 5.5 },
+    { name: "Doll Storage Unit", value: "doll_storage", denialCoefficient: 3.5 },
     { name: "Weighted Blanket", value: "blanket_weighted", denialCoefficient: 1.5 },
     { name: "Pile of Cats", value: "catpile", denialCoefficient: 99 }, // Are you ***really*** going to disturb the kitties to let go?
     { name: "Giant Pile of Plushies", value: "plushie_pile", denialCoefficient: 1.5 },
     { name: "Bed Restraints", value: "bedrestraints", denialCoefficient: 6 },
+    { name: "Massage Table Binding", value: "massage_table_binding", denialCoefficient: 2 },
     { name: "Pet Cage", value: "pet_cage", denialCoefficient: 4 },
     { name: "Chair with Cuffs", value: "chaircuffs", denialCoefficient: 3.5 },
     { name: "Resin Coating", value: "resin_coated", denialCoefficient: 4 },

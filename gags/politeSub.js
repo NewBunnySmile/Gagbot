@@ -1,4 +1,4 @@
-const garbleText = (text) => {
+const garbleText = (text, intensity) => {
     let honorifictitles = [
         // Oh god its hard to type these without caps
         "miss",
@@ -33,15 +33,17 @@ const garbleText = (text) => {
         `\n*blushes and mumbles something*\n`
     ]
 
+    let garblemode = false;
     let textout = silenttitles[Math.floor(Math.random() * silenttitles.length)]
 
     honorifictitles.forEach((h) => {
         if ((text.toLowerCase().search(h)) > -1) {
             textout = text;
+            garblemode = true;
         }
     })
 
-    return textout;
+    return { text: textout, garble: garblemode };
 }
 
 exports.garbleText = garbleText;
