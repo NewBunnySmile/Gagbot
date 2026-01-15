@@ -556,6 +556,8 @@ const texts_heavy = {
     ],
     noheavy: [
         `USER_TAG slips into a VAR_C2, rendering USER_THEIR arms and hands completely useless!`,
+        // Doll
+        { only: (t) => { return (t.c2 == "Doll Processing Facility") }, text: `Unable to resist the temptation, USER_TAG throws USER_THEMSELF into a VAR_C2 to become a Doll!`},
         // General Types
         { only: (t) => { return t.c2.includes("Petsuit") || t.c2.includes("Piddlefours") }, text: `USER_TAG slips into a VAR_C2, trapping USER_THEIR arms and legs and forcing them to crawl like a pet!` },
         // Stationary
