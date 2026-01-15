@@ -555,7 +555,35 @@ const texts_heavy = {
         `USER_TAG writhes in USER_THEIR VAR_C1, trying to change USER_THEIR bondage, but may need some help!`
     ],
     noheavy: [
-        `USER_TAG slips into a VAR_C2, rendering USER_THEIR arms and hands completely useless!`
+        `USER_TAG slips into a VAR_C2, rendering USER_THEIR arms and hands completely useless!`,
+        // General Types
+        { only: (t) => { return t.c2.includes("Petsuit") || t.c2.includes("Piddlefours") }, text: `USER_TAG slips into a VAR_C2, trapping USER_THEIR arms and legs and forcing them to crawl like a pet!` },
+        // Stationary
+        { only: (t) => { return t.c2.includes("Display Stand") }, text: `USER_TAG climbs into the VAR_C2, securing USER_THEIR legs before sliding USER_THEIR arms into the tight restraints and locking them in place!` },
+        { only: (t) => { return t.c2.includes("One Bar Prison") }, text: `USER_TAG steps onto the VAR_C2, spreading USER_THEIR legs to stand in the footrests. The pole rises between USER_THEIR's legs, trapping USER_THEM on the stand!` },
+        { only: (t) => { return t.c2.includes("X-Frame") }, text: `USER_TAG steps up to the VAR_C2, bending down to secure USER_THEIR legs to the frame before reaching up and locking USER_THEIR arms into the upper cuffs leaving USER_THEMSELF completely exposed!` },
+        { only: (t) => { return t.c2.includes("Wooden Horse") }, text: `USER_TAG climbs onto the VAR_C2, bending USER_THEIR legs up to cuff them in place against the VAR_C2 before reaching behind USER_THEM and locking USER_THEIR arms into a pair of cuffs!` },
+        { only: (t) => { return t.c2.includes("Latex Encasement") }, text: `USER_TAG steps into the VAR_C2, feeling the latex spread over USER_THEIR feet and begin to climb up USER_THEIR legs. Before long everything below USER_THEIR's neck is covered in a layer of latex!` },
+        { only: (t) => { return t.c2.includes("Dancer's Pole") }, text: `USER_TAG climbs onto the stage and cuffs USER_THEMSELVES to the VAR_C2, swaying to the beat and dancing sensually about the VAR_C2!` },
+        { only: (t) => { return t.c2.includes("Pet Cage") }, text: `USER_TAG crawls into the VAR_C2, blushing as USER_THEY hear the door to the VAR_C2 swing closed behind USER_THEM and lock with a soft click!` },
+        { only: (t) => { return t.c2.includes("Leashing Post") }, text: `USER_TAG walks over to the VAR_C2, clipping on a leash and blushing as USER_THEY kneel down and tie the other end to the VAR_C2!` },
+        // Latex
+        { only: (t) => { return t.c2.includes("Latex Vacbed") }, text: `USER_TAG slides between the sheets of the VAR_C2, allowing them to seal together behind USER_THEM. With a humming sound the air is pumped out, sealing USER_THEM helplessly in place!` },
+        { only: (t) => { return t.c2.includes("Latex Vaccube") }, text: `USER_TAG slips into the VAR_C2 leaving only USER_THEIR head poking out as they kneel in place. With a humming sound the air is pumped out and the latex seals around them, trapping USER_THEM helplessly inside!` },
+        // Furniture
+        { only: (t) => { return t.c2.includes("Bed Restraints") }, text: `Sitting on the bed, USER_TAG leans forward to lock USER_THEIR ankles into the VAR_C2, before lying back and reaching up to lock USER_THEIR arms into the remaining pair of cuffs!` },
+        { only: (t) => { return t.c2.includes("Chair with Cuffs") }, text: `Sitting down in the VAR_C2, USER_TAG leans forward to strap USER_THEIR ankles to the legs, before sliding USER_THEIR arms into cuffs and allowing them to snap shut!` },
+        // Encasement or Wrappings
+        { only: (t) => { return t.c2.includes("Autotape") }, text: `USER_TAG releases a swarm of small drones that zip around USER_THEM, dispensing Autotape and binding USER_THEM into an VAR_C2!` },
+        { only: (t) => { return t.c2.includes("Shadow Latex") }, text: `A swarm of small drones zips around USER_TAG, dispensing Autotape and binding USER_THEM into an VAR_C2!` },
+        // Comfy
+        { only: (t) => { return t.c2.includes("Weighted Blanket") }, text: `As the VAR_C2 settles over them, USER_TAG realises USER_THEY can't bring USER_THEMSELVES to attempt to escape the comfort!` },
+        { only: (t) => { return t.c2.includes("Blanket Burrito") }, text: `Rolling USER_THEMSELVES into a VAR_C2, USER_TAG realises USER_THEY might be trapped by USER_THEIR own comfort!` },
+        { only: (t) => { return t.c2.includes("Toasty Kotatsu") }, text: `As USER_THEY slide into the warmth of the VAR_C2, USER_TAG realises USER_THEY can't bring USER_THEMSELVES to leave the VAR_C2!` },
+        // Misc
+        { only: (t) => { return t.c2.includes("Festive Ribbons") || t.c2.includes("Wrapping Paper")}, text: `USER_THEY carefully wraps USER_THEMSELVES in VAR_C2! Who is the lucky person recieving such a present~?` },
+        { only: (t) => { return t.c2.includes("Magic Mirror") }, text: `USER_TAG places a hand on the VAR_C2, then in a flash of light finds themselves trapped within the reflection!` },
+        { only: (t) => { return t.c2.includes("Pet Cage") }, text: `USER_TAG crawls into the VAR_C2, blushing as USER_THEY hear the door to the VAR_C2 swing closed behind USER_THEM and lock with a soft click!` },
     ]
 }
 
@@ -2068,7 +2096,7 @@ const texts_wear = {
                 { only: (t) => { return t.c2.includes("Kissmark") }, text: `USER_TAG pulls out a makeup bag and carefully scribbles a VAR_C2 on USER_THEMSELF!` },
                 { only: (t) => { return t.c2.includes("Eyeshadow") }, text: `USER_TAG pulls out a makeup bag and applies VAR_C2 to USER_THEIR eyes!` },
                 { only: (t) => { return (t.c2.includes("lasses") || t.c2.includes("Librarian's Spectacles")) }, text: `USER_TAG unfolds a pair of VAR_C2 and puts them on USER_THEIR nose! USER_THEIR_CAP eyes peer through the glass!` },
-                { only: (t) => { return t.c2.includes("attoo") || t.c2.includes("Barcode") }, text: `USER_TAG uses a tattoo gun to apply a VAR_C2 to USER_THEMSELF!` },                
+                { only: (t) => { return t.c2.includes("attoo") || t.c2.includes("Barcode") }, text: `USER_TAG uses a tattoo gun to apply a VAR_C2 to USER_THEMSELF!` },
                 { only: (t) => { return t.c2.includes("Barcode") }, text: `USER_TAG allows the Doll Terminal to hold them in place while a mechanical arm applies a VAR_C2 to USER_THEIR!` },
                 { only: (t) => { return t.c2.includes("Polish") }, text: `USER_TAG applies VAR_C2 to USER_THEIR nails! So pretty!` },
                 { only: (t) => { return (t.c2.includes("Heels") || t.c2.includes("Shoes") || t.c2.includes("Boots") || t.c2.includes("Pumps") || t.c2.includes("Anklets") || t.c2.includes("Greaves")) }, text: `USER_TAG slips a pair of VAR_C2 on USER_THEIR feet!` },
