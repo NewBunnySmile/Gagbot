@@ -90,6 +90,8 @@ let wearabletypes = [
     { name: "Rope Karada", value: "rope_karada", colorable: true },
     { name: "Rope Ties", value: "rope_ties", colorable: true },
     { name: "Shock Module", value: "shock_module" },
+    { name: "Crop", value: "crop"},
+    { name: "Leather Paddle", value: "paddle_leather", colorable: true, uniqueColors: ["Studded"]  },
     { name: "Leash", value: "leash", colorable: true, uniqueColors: ["Hardlight", "Leather", "Rubber", "Magic"] },
     { name: "Nipple Clamps", value: "nippleclamps", colorable: true, uniqueColors: ["Hardlight", "Leather", "Rubber", "Magic", "Crystal"] },
     { name: "Wingbinders", value: "wingbinders", colorable: true, uniqueColors: ["Hardlight", "Steel", "Golden", "Leather", "Rubber", "Cursed"] },
