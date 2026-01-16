@@ -2381,7 +2381,7 @@ const texts_eventfunctions = {
                 // OMNOMNOMNOM
                 `The Costumer Mimic tugs at USER_TAG's outfit hungrily, tearing away and consuming the VAR_C1 that USER_TAG is wearing!`,
                 `The Costumer Mimic's tentacles rip off the VAR_C1 that USER_TAG is wearing, stuffing it into its gaping maw and storing it away!`,
-                `The Costumer Mimic's tongue snakes out to lick at the VAR_C1 that USER_TAG is wearing, dissolving it away before swallowing the remains!`,
+                `The Costumer Mimic's tentacles snake out to swipe across the VAR_C1 that USER_TAG is wearing, dissolving it away before absorbing the remains!`,
             ],
             donestripping: [
                 `Having finished consuming all of their current clothing, the Costumer Mimic begins to dress USER_THEM in its chosen costume.`,
