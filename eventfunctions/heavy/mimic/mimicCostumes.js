@@ -20,7 +20,22 @@ const ponygirl_outfit = new Array ([
     {category: "mittens", itemtowear: "mittens_leather", color: null },
     {category: "headwear", itemtowear: "blindfold_leather", color: null },
     {category: "gag", itemtowear: "ball", color: null },
-    {category: "heavy", itemtowear: "armbinder_latex", color: null },
+    {category: "heavy", itemtowear: "armbinder_leather", color: null },
+]);
+
+const bunnygirl_outfit = new Array ([
+    {category: "wearable", itemtowear: "outfit_playbunny_headwear", color: "Blue" },    
+    {category: "wearable", itemtowear: "outfit_playbunny_collar", color: "White" },
+    {category: "wearable", itemtowear: "suit_outfit", color: "Playbunny" },  // "
+    {category: "wearable", itemtowear: "bunnytights", color: "White" },
+    {category: "wearable", itemtowear: "highheels", color: "Blue" },
+    {category: "wearable", itemtowear: "cuffswrist_bondage", color: "Blue" },
+    {category: "wearable", itemtowear: "cuffsankle_bondage", color: "Blue" },
+    {category: "wearable", itemtowear: "cuffsthigh_bondage", color: "Blue" },
+    {category: "mittens", itemtowear: "mittens_leather", color: null },
+    {category: "gag", itemtowear: "ball", color: null },
+    {category: "headwear", itemtowear: "mask_bunny", color: null },
+    {category: "heavy", itemtowear: "armbinder_leather", color: null },
 ]);
 
 
