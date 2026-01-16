@@ -10,6 +10,22 @@ const silenceMessages = ["-# *Panting heavily*", "-# *Completely out of breath*"
 const specialCharacterCosts = new Map([
   ["!", 4],
   ["-", 0],
+  [".", 0],
+  [",", 0],
+  ["?", 0],
+  ["(", 0],
+  [")", 0],
+  ["[", 0],
+  ["]", 0],
+  ["{", 0],
+  ["}", 0],
+  ["*", 0],
+  ["\\", 0],
+  ["~", 0],
+  ["<", 0],
+  [">", 0],
+  ["'", 0],
+  ["\"", 0],
 ]);
 
 const assignCorset = (user, tightness = 5, origbinder) => {
