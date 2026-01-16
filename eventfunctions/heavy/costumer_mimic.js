@@ -24,7 +24,7 @@ let functiontick = async (userID) => {
     if (process.userevents[userID].costumermimic.costumeidx == undefined) { process.userevents[userID].costumermimic.costumeidx = 0 }
     // Randomly select an outfit from mimicCostumes.js
     if (process.userevents[userID].costumermimic.outfit == undefined) { process.userevents[userID].costumermimic.outfit = mimicCostumes[Math.floor(Math.random() * mimicCostumes.length)]; }
-    let currclothes = getWearable(userID).filter((f) => (!getLockedWearable(userID).includes(f)/* && (f !== "catsuit_latex")*/));
+    let currclothes = getWearable(userID).filter((f) => (!getLockedWearable(userID).includes(f))); // Current clothes that can be removed
 
     // get the user object, if it doesn't exist, go away
     let userobject = await process.client.users.fetch(userID); // The person in the processing terminal!
@@ -51,7 +51,7 @@ let functiontick = async (userID) => {
 
     // Select Item from Chosen Outfit based in index
     let nextitem = mimicCostumes[process.userevents[userID].costumermimic.outfit[process.userevents[userID].costumermimic.costumeidx]];
-    let itemtoequipcolored = "";
+    let itemtoequipcolored = null;
 
     data.heavy = true;
     data.costumemimic = true;
@@ -80,7 +80,7 @@ let functiontick = async (userID) => {
             case "wearable":
                 data.wearable = true;
                 itemtoequipcolored = colourItem(nextitem.itemtowear, nextitem.color);
-                if (itemtoequipcolored) {
+                if (itemtoequipcolored != null) {
                     assignWearable(userID, itemtoequipcolored);
                     data.add = true;
                     messageSendChannel(getText(data), process.recentmessages[userID])
@@ -128,7 +128,7 @@ let functiontick = async (userID) => {
                     data.mitten = true;
                     if (getMitten(userID)) {
                         data.textdata.c1 = getMittenName(undefined, getMitten(userID).getMittenName), // mitten name
-                        data.textdata.c2 = getMittenName(undefined, nextitem.itemtowear), // new mitten name
+                            data.textdata.c2 = getMittenName(undefined, nextitem.itemtowear), // new mitten name
 
                             assignMitten(userID, nextitem.itemtowear, getMitten(userID).origbinder)
 
@@ -149,17 +149,18 @@ let functiontick = async (userID) => {
                 process.userevents[userID].costumermimic.costumeidx++;
                 break;
 
+            // To Be implemented later when needed for Costumer Mimic outfits
             case "chastitybelt":
 
-            break;
-
+                break;
+            // To Be implemented later when needed for Costumer Mimic outfits
             case "chastitybra":
 
-            break;
-
+                break;
+            // To Be implemented later when needed for Costumer Mimic outfits
             case "collar":
 
-            break;
+                break;
 
             default:
                 // Unknown Item Category in Outfit
@@ -174,6 +175,9 @@ let functiontick = async (userID) => {
 
     } else if (nextitem.category == "heavy" || process.userevents[userID].costumermimic.costumeidx >= process.userevents[userID].costumermimic.outfit.length) {
         // Final Stage - Remove Mimic Heavy and spit them out, then apply Outfit Heavy!
+        // heavy item reached or end of outfit reached        
+        
+        // Remove Current Heavy (Mimic)
         removeHeavy(userID);
         data.spitout = true;
 
