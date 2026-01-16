@@ -60,6 +60,7 @@ const gagtypesout = [
     { name: "UwU Gag" },
     { name: "Enchanted Wolf Gag" },
     { name: "L337 Gag" },
+    { name: "Enigma Gag" },
 ]
 
 const mittentypes = [
