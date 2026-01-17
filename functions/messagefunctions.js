@@ -138,7 +138,7 @@ const splitMessage = (text, inputRegex=null) => {
      * 3.) Match Code Blocks
      * 4.) Match ANSI Colored Username Block ("DOLL-0014:")
      * 5.) Match ANSI Colors
-     * 6.) Match Italicized Text, WITHOUT false-positives on bolded text.
+     * 6.) Match Italicized Text, WITHOUT false-positives on bolded text or escaped asterisks.
      * 7.) Match Italicized Text using '_', WITHOUT false-positives on underlined text.
      * 8.) Match Website URLs - Stack Overflow-sourced URL matcher plus Doll's HTTP(S) matching.
      * 9.) Match Emoji - <:Emojiname:000000000000000000>
