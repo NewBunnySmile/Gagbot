@@ -238,7 +238,7 @@ async function textGarbleDOLL(msg, modifiedmessage, outtextin) {
                     
                     // WARN if below punishment threshold. ERROR if exceeded.
                     // CRITICAL if new violations >= punishmentThresh
-                    let violationTier = (totalViolations >= getOption(msg.author.id,"dollpunishthresh")) ? ((dollProtocolViolations >= getOption(msg.author.id,"dollpunishthresh")) ? "CRITICAL" : "ERROR") : "WARN" 
+                    let violationTier = (totalViolations >= getOption(msg.author.id,"dollpunishthresh")) ? ((dollProtocolViolations >= Math.max(getOption(msg.author.id,"dollpunishthresh"),2)) ? "CRITICAL" : "ERROR") : "WARN" 
                     let violationColor = (violationTier == "CRITICAL") ? "31m" : ((violationTier == "ERROR") ? "31m" : "33m")
                     let violationcount = (getOption(msg.author.id,"dollforcedprotocol") == "warning") ? `` : ` (${totalViolations}/${getOption(msg.author.id,"dollpunishthresh")})` // Note, we do not need to check for "No" because the text won't show at all in that case.
                     vioMessage = PROTOCOLVIOLATIONS[dollProtocolVioType][Math.floor(Math.random() * PROTOCOLVIOLATIONS[dollProtocolVioType].length)]
