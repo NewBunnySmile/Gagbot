@@ -11,7 +11,7 @@ const texts_chastity = {
             ],
             nochastity: [
                 `USER_TAG squirms in USER_THEIR VAR_C1, trying to put on a VAR_C2, but can't!`,
-                `USER_TAG shifts USER_THEIR hips, wanting to put USER_THEMSELF in chastity because USER_THEY are a good USER_PRAISEOBJECT, but USER_THEIR VAR_C1 said no.`,
+                `USER_TAG shifts USER_THEIR hips, wanting to put USER_THEMSELF in chastity because USER_THEY USER_ISARE a good USER_PRAISEOBJECT, but USER_THEIR VAR_C1 said no.`,
                 `USER_TAG bumps into a VAR_C2, wanting so desperately to put it on USER_THEIR hips, but USER_THEIR VAR_C1 gives USER_THEM no arms with which to work with.`
             ]
         },
