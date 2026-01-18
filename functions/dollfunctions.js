@@ -246,7 +246,7 @@ async function textGarbleDOLL(msg, modifiedmessage, outtextin) {
                     dollMessageParts[i].text += `\n[1;${violationColor}${violationTier}:[0;${violationColor} Protocol Violation${violationcount} - ${vioMessage}`
                 }else if (dollProtocolViolations == 0 && i == lastDollifiedMessage){
                     let goodDollReturn = rewardDoll(msg.author.id);
-                    console.log(goodDollReturn)
+                    //console.log(goodDollReturn)
                     if(goodDollReturn == "violation")       {dollMessageParts[i].text += `\n[1;36mALERT: [0;36mProtocol Violation count decremented to (${process.dolls[msg.author.id].violations}/${getOption(msg.author.id,"dollpunishthresh")}). It is a Good Doll.`}
                     else if(goodDollReturn == "punishlevel"){dollMessageParts[i].text += `\n[1;36mALERT: [0;36mPunishment Level decremented to (${process.dolls[msg.author.id].punishmentLevel}/${DOLLMAXPUNISHMENT}). It is a Good Doll.`}
                 }
