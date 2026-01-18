@@ -2203,6 +2203,7 @@ const texts_wear = {
             ],
             noworn: [
                 `USER_TAG picks up a beautiful VAR_C2 and puts it on! It sits snugly on USER_THEM!`,
+                { only: (t) => { return t.c2.includes("Leash") }, text: `USER_TAG clips a VAR_C2 onto USER_THEIR collar before letting it dangle teasingly!` },
                 { only: (t) => { return t.c2.includes("Lipstick") }, text: `USER_TAG pulls out a makeup bag and applies VAR_C2 to USER_THEMSELF!` },
                 { only: (t) => { return t.c2.includes("Kissmark") }, text: `USER_TAG pulls out a makeup bag and carefully scribbles a VAR_C2 on USER_THEMSELF!` },
                 { only: (t) => { return t.c2.includes("Eyeshadow") }, text: `USER_TAG pulls out a makeup bag and applies VAR_C2 to USER_THEIR eyes!` },
@@ -2227,6 +2228,7 @@ const texts_wear = {
             ],
             noworn: [
                 `USER_TAG helps TARGET_TAG into a VAR_C2, ensuring it all fits snugly!`,
+                { only: (t) => { return t.c2.includes("Leash") }, text: `USER_TAG pulls out a VAR_C2 and clips it onto to TARGET_TAG's collar!` },
                 { only: (t) => { return t.c2.includes("Lipstick") }, text: `USER_TAG pulls out a makeup bag and applies VAR_C2 to TARGET_TAG!` },
                 { only: (t) => { return (t.c2.includes("Kissmark") && (getWearable(t.interactionuser.id).filter((f) => f.includes("lipstick")).length > 0)) }, text: `USER_TAG kisses TARGET_TAG, leaving a VAR_C2 on USER_THEIR cheek!` },
                 { only: (t) => { return (t.c2.includes("Kissmark") && (getWearable(t.interactionuser.id).filter((f) => f.includes("lipstick")).length == 0)) }, text: `USER_TAG applies some lipstick to USER_THEIR lips, and then kisses TARGET_TAG, leaving a VAR_C2 on TARGET_THEIR cheek! USER_THEY_CAP then removes the lipstick.` },
