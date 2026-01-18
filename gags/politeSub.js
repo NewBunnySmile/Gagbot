@@ -3,27 +3,40 @@ const garbleText = (text, intensity) => {
         // Oh god its hard to type these without caps
         "miss",
         "master",
+        "masters",
         "sir",
-        "ma'am",
+        "sirs",
+        "ma\'am",
         "maam",
         "lady",
+        "ladies",
         "lord",
+        "lords",
         "queen",
+        "queens",
         "king",
+        "kings",
         "mistress",
+        "mistresses",
         "goddess",
+        "goddesses",
         "maitresse",
         "administrator",
+        "administrators",
         "mommy",
+        "mommies",
         "daddy",
+        "daddies",
         "mxtress",
         "overseer",
         "headmaid",
-        "head maid",
+        "head\ maid",
         "mix",
         "duke",
+        "dukes",
         "dame",
-        "count"
+        "count",
+        "overlord"
     ]
 
     let silenttitles = [
@@ -42,12 +55,13 @@ const garbleText = (text, intensity) => {
     let garblemode = false;
     let textout = silenttitles[Math.floor(Math.random() * silenttitles.length)]
 
-    honorifictitles.forEach((h) => {
-        if ((text.toLowerCase().search(h)) > -1) {
-            textout = text;
-            garblemode = true;
-        }
-    })
+    let honorificsmap = honorifictitles.join('|');
+    let regexpattern = new RegExp(`\\b(${honorificsmap})\\b`, "i")
+
+    if (regexpattern.test(text)) {
+        textout = text;
+        garblemode = true;
+    }
 
     return { text: textout, garble: garblemode };
 }

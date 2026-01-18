@@ -5,13 +5,15 @@ const { SlashCommandBuilder, UserSelectMenuBuilder, MessageFlags, TextInputBuild
     ModalBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, LabelBuilder, StringSelectMenuBuilder, 
     StringSelectMenuOptionBuilder, TextDisplayBuilder, ComponentType } = require('discord.js');
 const { getPronouns } = require('./../functions/pronounfunctions.js')
-const { collartypes, getCollarKeyholder } = require('./collarfunctions.js');
+const { collartypes, getCollarKeyholder, canAccessCollar } = require('./collarfunctions.js');
 const { getOption } = require('./../functions/configfunctions.js')
 const { getChastityKeyholder } = require('./../functions/vibefunctions.js')
-const { getHeavyBinder } = require('./../functions/heavyfunctions.js')
+const { getHeavyBinder, convertheavy } = require('./../functions/heavyfunctions.js')
 const { getGagBinder, getMittenBinder } = require('./../functions/gagfunctions.js')
 const { getCorsetBinder } = require('./../functions/corsetfunctions.js')
-const { getHeadwearBinder } = require('./../functions/headwearfunctions.js')
+const { getHeadwearBinder } = require('./../functions/headwearfunctions.js');
+const { configoptions } = require('./configfunctions.js');
+const { canAccessChastity } = require('./vibefunctions.js');
 
 // Generates a consent button which the user will have to agree to. 
 const consentMessage = (interaction, user) => {
@@ -251,17 +253,10 @@ This will lock ${wearer}'s chastity belt for a set period of time. Please config
     
     let accesswhileboundoptions = [
         new StringSelectMenuOptionBuilder()
-                // Label displayed to user
-                .setLabel('Everyone Else')
-                // Description of option
-                .setDescription(`Everyone except ${(interaction.user.id == wearer.id) ? "you" : `${wearer.displayName}`} can vibe and corset ${(interaction.user.id == wearer.id) ? "you" : `${getPronouns(wearer.id, "object")}`}`)
-                // Value returned to you in modal submission
-                .setValue('access_others'),
-        new StringSelectMenuOptionBuilder()
             // Label displayed to user
             .setLabel('Keyholder Only')
             // Description of option
-            .setDescription(`Only the keyholder can access ${(interaction.user.id == wearer.id) ? "your" : `${wearer.displayName}`}'s belt`)
+            .setDescription(`Only the keyholder can access ${(interaction.user.id == wearer.id) ? "your" : `${wearer.displayName}'s`} belt`)
             // Value returned to you in modal submission
             .setValue('access_kh'),
         new StringSelectMenuOptionBuilder()
@@ -272,6 +267,16 @@ This will lock ${wearer}'s chastity belt for a set period of time. Please config
             // Value returned to you in modal submission
             .setValue('access_no'),
     ]
+    
+    if (getOption(wearer.id, "publicaccess") != "disabled") {
+        accesswhileboundoptions.unshift(new StringSelectMenuOptionBuilder()
+            // Label displayed to user
+            .setLabel('Everyone Else')
+            // Description of option
+            .setDescription(`Everyone except ${(interaction.user.id == wearer.id) ? "you" : `${wearer.displayName}`} can vibe and corset ${(interaction.user.id == wearer.id) ? "you" : `${getPronouns(wearer.id, "object")}`}`)
+            // Value returned to you in modal submission
+            .setValue('access_others'))
+    }
 
     /*if (interaction.user.id == wearer.id) {
         accesswhileboundoptions.splice(1,1);
@@ -374,17 +379,10 @@ This will lock ${wearer}'s chastity bra for a set period of time. Please configu
     
     let accesswhileboundoptions = [
         new StringSelectMenuOptionBuilder()
-                // Label displayed to user
-                .setLabel('Everyone Else')
-                // Description of option
-                .setDescription(`Everyone except ${(interaction.user.id == wearer.id) ? "you" : `${wearer.displayName}`} can do things to ${(interaction.user.id == wearer.id) ? "you" : `${getPronouns(wearer.id, "object")}`}`)
-                // Value returned to you in modal submission
-                .setValue('access_others'),
-        new StringSelectMenuOptionBuilder()
             // Label displayed to user
             .setLabel('Keyholder Only')
             // Description of option
-            .setDescription(`Only the keyholder can access ${(interaction.user.id == wearer.id) ? "your" : `${wearer.displayName}`}'s bra`)
+            .setDescription(`Only the keyholder can access ${(interaction.user.id == wearer.id) ? "your" : `${wearer.displayName}'s`} bra`)
             // Value returned to you in modal submission
             .setValue('access_kh'),
         new StringSelectMenuOptionBuilder()
@@ -395,6 +393,16 @@ This will lock ${wearer}'s chastity bra for a set period of time. Please configu
             // Value returned to you in modal submission
             .setValue('access_no'),
     ]
+
+    if (getOption(wearer.id, "publicaccess") != "disabled") {
+        accesswhileboundoptions.unshift(new StringSelectMenuOptionBuilder()
+            // Label displayed to user
+            .setLabel('Everyone Else')
+            // Description of option
+            .setDescription(`Everyone except ${(interaction.user.id == wearer.id) ? "you" : `${wearer.displayName}`} can do things to ${(interaction.user.id == wearer.id) ? "you" : `${getPronouns(wearer.id, "object")}`}`)
+            // Value returned to you in modal submission
+            .setValue('access_others'))
+    }
 
     /*if (interaction.user.id == wearer.id) {
         accesswhileboundoptions.splice(1,1);
@@ -497,17 +505,10 @@ This will lock ${wearer}'s collar for a set period of time. Please configure you
     
     let accesswhileboundoptions = [
         new StringSelectMenuOptionBuilder()
-                // Label displayed to user
-                .setLabel('Everyone Else')
-                // Description of option
-                .setDescription(`Everyone except ${(interaction.user.id == wearer.id) ? "you" : `${wearer.displayName}`} can collarequip ${(interaction.user.id == wearer.id) ? "you" : `${getPronouns(wearer.id, "object")}`}`)
-                // Value returned to you in modal submission
-                .setValue('access_others'),
-        new StringSelectMenuOptionBuilder()
             // Label displayed to user
             .setLabel('Keyholder Only')
             // Description of option
-            .setDescription(`Only the keyholder can access ${(interaction.user.id == wearer.id) ? "your" : `${wearer.displayName}`}'s collar`)
+            .setDescription(`Only the keyholder can access ${(interaction.user.id == wearer.id) ? "your" : `${wearer.displayName}'s`} collar`)
             // Value returned to you in modal submission
             .setValue('access_kh'),
         new StringSelectMenuOptionBuilder()
@@ -518,6 +519,16 @@ This will lock ${wearer}'s collar for a set period of time. Please configure you
             // Value returned to you in modal submission
             .setValue('access_no'),
     ]
+
+    if (getOption(wearer.id, "publicaccess") != "disabled") {
+        accesswhileboundoptions.unshift(new StringSelectMenuOptionBuilder()
+            // Label displayed to user
+            .setLabel('Everyone Else')
+            // Description of option
+            .setDescription(`Everyone except ${(interaction.user.id == wearer.id) ? "you" : `${wearer.displayName}`} can collarequip ${(interaction.user.id == wearer.id) ? "you" : `${getPronouns(wearer.id, "object")}`}`)
+            // Value returned to you in modal submission
+            .setValue('access_others'))
+    }
 
     /*if (interaction.user.id == wearer.id) {
         accesswhileboundoptions.splice(1,1);
@@ -680,9 +691,10 @@ const assignMemeImages = () => {
 function checkBondageRemoval(userID, targetID, type) {
     let useroption = getOption(targetID, "removebondage");
     
-    console.log(useroption);
-    console.log(userID == targetID)
-    console.log((useroption == "all_binder_and_keyholder") && ((getCollarKeyholder(targetID) == userID) || (getChastityKeyholder(targetID) == userID)))
+    console.log(`PERMS`)
+    console.log((useroption == "all_binder_and_keyholder"));
+    console.log(canAccessCollar(userID, targetID, true))
+    console.log((useroption == "all_binder_and_keyholder") && (canAccessChastity(targetID, userID, true).access || canAccessCollar(targetID, userID, true).access))
 
 
     // Return true immediately if it's accepted without question
@@ -693,7 +705,7 @@ function checkBondageRemoval(userID, targetID, type) {
     if (userID == targetID) { return true }
 
     // If keyholder and keyholders allowed, return true 
-    if ((useroption == "all_binder_and_keyholder") && ((getCollarKeyholder(targetID) == userID) || (getChastityKeyholder(targetID) == userID))) {
+    if ((useroption == "all_binder_and_keyholder") && (canAccessChastity(targetID, userID, true).access || canAccessCollar(targetID, userID, true).access)) {
         return true;
     }
 
@@ -717,44 +729,50 @@ function checkBondageRemoval(userID, targetID, type) {
 
 async function handleBondageRemoval(user, target, type, change = false) {
     return new Promise(async (res,rej) => {
-        let buttons = [
-            new ButtonBuilder().setCustomId("denyButton").setLabel("Deny").setStyle(ButtonStyle.Danger),
-            new ButtonBuilder().setCustomId("acceptButton").setLabel("Allow").setStyle(ButtonStyle.Success)
-        ]
-        let dmchannel = await target.createDM();
-        await dmchannel.send({
-            content: `${user} would like to ${change ? "change" : "remove"} your ${type}. Do you want to allow this action?`,
-            components: [new ActionRowBuilder().addComponents(...buttons)]
-        }).then((mess) => {
-            // Create a collector for up to 5 minutes
-            const collector = mess.createMessageComponentCollector({ componentType: ComponentType.Button, time: 300_000, max: 1 })
+        try {
+            let buttons = [
+                new ButtonBuilder().setCustomId("denyButton").setLabel("Deny").setStyle(ButtonStyle.Danger),
+                new ButtonBuilder().setCustomId("acceptButton").setLabel("Allow").setStyle(ButtonStyle.Success)
+            ]
+            let dmchannel = await target.createDM();
+            await dmchannel.send({
+                content: `${user} would like to ${change ? "change" : "remove"} your ${type}. Do you want to allow this action?`,
+                components: [new ActionRowBuilder().addComponents(...buttons)]
+            }).then((mess) => {
+                // Create a collector for up to 5 minutes
+                const collector = mess.createMessageComponentCollector({ componentType: ComponentType.Button, time: 300_000, max: 1 })
 
-            collector.on('collect', async (i) => {
-                console.log(i)
-                if (i.customId == "acceptButton") {
-                    await mess.delete().then(() => {
-                        i.reply(`Confirmed - ${user} is permitted to ${change ? `change your ${type}` : `take your ${type} off`}!`)
-                    })
-                    res(true);
-                }
-                else {
-                    await mess.delete().then(() => {
-                        i.reply(`Rejected - ${user} is blocked from ${change ? `changing your ${type}` : `taking your ${type} off`}!`)
-                    })
-                    rej(true);
-                }
-            })
+                collector.on('collect', async (i) => {
+                    console.log(i)
+                    if (i.customId == "acceptButton") {
+                        await mess.delete().then(() => {
+                            i.reply(`Confirmed - ${user} is permitted to ${change ? `change your ${type}` : `take your ${type} off`}!`)
+                        })
+                        res(true);
+                    }
+                    else {
+                        await mess.delete().then(() => {
+                            i.reply(`Rejected - ${user} is blocked from ${change ? `changing your ${type}` : `taking your ${type} off`}!`)
+                        })
+                        rej(true);
+                    }
+                })
 
-            collector.on('end', async (collected) => {
-                // timed out
-                if (collected.length == 0) {
-                    await mess.delete().then(() => {
-                        i.reply(`Timed out - ${user} is blocked from ${change ? `changing your ${type}` : `taking your ${type} off`}!`)
-                    })
-                    rej(true);
-                }
+                collector.on('end', async (collected) => {
+                    // timed out
+                    if (collected.length == 0) {
+                        await mess.delete().then(() => {
+                            i.reply(`Timed out - ${user} is blocked from ${change ? `changing your ${type}` : `taking your ${type} off`}!`)
+                        })
+                        rej(true);
+                    }
+                })
             })
-        })
+        }
+        catch (err) {
+            console.log("Error sending message, auto reject it.")
+            rej("NoDM")
+        }
     })/*.then(
         (res) => {
             console.log("We got ALLOWED")
@@ -764,6 +782,83 @@ async function handleBondageRemoval(user, target, type, change = false) {
             console.log("We got REJECTED")
             return false
     })*/
+}
+
+async function handleExtremeRestraint(user, target, type, restraint) {
+    return new Promise(async (res,rej) => {
+        let hasOption = getOption(target.id, `extreme-${type}-${restraint}`);
+        if ((!hasOption) || (hasOption == "Enabled") || ((hasOption == "PromptOthers") && (user.id == target.id))) { 
+            res(true)
+            return;
+        } // Either it's Enabled, set to Prompt Others if on self, or it doesn't exist. Go away. 
+
+        if ((hasOption == "Disabled")) {
+            rej("Disabled")
+            return;
+        } // NOPE
+
+        let restraintfullname = ``;
+        switch(type) {
+            case "heavy":
+                restraintfullname = convertheavy(restraint)
+                break;
+            case "gag":
+                restraintfullname = process.gagtypes.find((f) => f.value == restraint)?.name
+                break;
+            default:
+                console.log(`Could not find a restraint by that type.`)
+                rej("Error")
+                break;
+        }
+
+        // We need to ASK
+        let extrahelptext = configoptions["Extreme"][`extreme-${type}-${restraint}`]?.prompttext ?? "Something went wrong retrieving this text."
+        let prompttext = `## ${user} would like to place a ${type} restraint on you: **${restraintfullname}**\n***This is considered an __extreme__ restraint and comes with the following warning label:***\n\n${extrahelptext}\n\nDo you wish to allow this action?`
+        if (user.id == target.id) {
+            prompttext = `## You are attempting to wear the following restraint: **${restraintfullname}**\n***This is considered an __extreme__ restraint and comes with the following warning label:***\n\n${extrahelptext}\n\nDo you wish to allow this action?`
+        }
+        let buttons = [
+            new ButtonBuilder().setCustomId("denyButton").setLabel("Deny").setStyle(ButtonStyle.Danger),
+            new ButtonBuilder().setCustomId("acceptButton").setLabel("Allow").setStyle(ButtonStyle.Success)
+        ]
+        let dmchannel = await target.createDM();
+        await dmchannel.send({
+            content: `${prompttext}`,
+            components: [new ActionRowBuilder().addComponents(...buttons)]
+        }).then((mess) => {
+            // Create a collector for up to 5 minutes
+            const collector = mess.createMessageComponentCollector({ componentType: ComponentType.Button, time: 300_000, max: 1 })
+
+            collector.on('collect', async (i) => {
+                console.log(i)
+                if (i.customId == "acceptButton") {
+                    await mess.delete().then(() => {
+                        i.reply(`Confirmed - ${restraintfullname} will be equipped on you.`)
+                    })
+                    res(true);
+                }
+                else {
+                    await mess.delete().then(() => {
+                        i.reply(`Rejected - ${restraintfullname} will NOT be equipped on you.`)
+                    })
+                    rej(true);
+                }
+            })
+
+            collector.on('end', async (collected) => {
+                // timed out
+                if (collected.length == 0) {
+                    await mess.delete().then(() => {
+                        i.reply(`Timed out - ${restraintfullname} will NOT be equipped on you.`)
+                    })
+                    rej(true);
+                }
+            })
+        }).catch((err) => {
+            console.log(`Error sending message for Extreme Restraint ${type} to ${target}.`)
+            rej("NoDM")
+        })
+    })
 }
 
 exports.consentMessage = consentMessage
@@ -777,5 +872,6 @@ exports.timelockBuildConfirm = timelockBuildConfirm;
 
 exports.handleBondageRemoval = handleBondageRemoval;
 exports.checkBondageRemoval = checkBondageRemoval;
+exports.handleExtremeRestraint = handleExtremeRestraint;
 
 exports.assignMemeImages = assignMemeImages

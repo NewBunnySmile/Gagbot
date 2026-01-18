@@ -1,8 +1,8 @@
 const { SlashCommandBuilder, MessageFlags } = require('discord.js');
 const { calculateTimeout } = require("./../functions/timefunctions.js")
-const { getHeavy, assignHeavy, commandsheavy, convertheavy, heavytypes } = require('./../functions/heavyfunctions.js')
+const { getHeavy, assignHeavy, commandsheavy, convertheavy, heavytypes, getBaseHeavy } = require('./../functions/heavyfunctions.js')
 const { getPronouns } = require('./../functions/pronounfunctions.js')
-const { getConsent, handleConsent } = require('./../functions/interactivefunctions.js')
+const { getConsent, handleConsent, handleExtremeRestraint } = require('./../functions/interactivefunctions.js')
 const { getText } = require("./../functions/textfunctions.js");
 
 module.exports = {
@@ -38,6 +38,7 @@ module.exports = {
 		}
 		else {
 			let heavies = process.heavytypes.filter((f) => (f.name.toLowerCase()).includes(focusedValue.toLowerCase())).slice(0,10)
+            heavies = heavies.filter((f) => !getBaseHeavy(f.value).noself)
 			await interaction.respond(heavies)
 		}
 	},
@@ -70,6 +71,11 @@ module.exports = {
                 }
             }
 
+            // This SHOULD retrieve a custom name if any. 
+            if (getBaseHeavy(heavychoice) && getBaseHeavy(heavychoice).namefunction) {
+                data = getBaseHeavy(heavychoice).namefunction(interaction, data);
+            }
+
             if (data.textdata.c2 == undefined) {
                 // Something went CRITICALLY wrong. Eject, eject!
                 interaction.reply({ content: `Something went wrong with your input. Please let Enraa know with the exact thing you put in the Type field!`, flags: MessageFlags.Ephemeral })
@@ -82,8 +88,26 @@ module.exports = {
             }
             else {
                 data.noheavy = true
-                interaction.reply(getText(data))
-                assignHeavy(interaction.user.id, heavychoice)
+                await interaction.deferReply({ flags: MessageFlags.Ephemeral });
+                await handleExtremeRestraint(interaction.user, interaction.user, "heavy", heavychoice)
+                    .then(async (success) => {
+                        await interaction.followUp({ content: `Equipping ${convertheavy(heavychoice)}`, withResponse: true})
+                        await interaction.followUp(getText(data))
+                        assignHeavy(interaction.user.id, heavychoice, interaction.user.id)
+                    },
+                    async (reject) => {
+                        let nomessage = `You rejected the ${convertheavy(heavychoice)}.`
+                        if (reject == "Disabled") {
+                            nomessage = `${convertheavy(heavychoice)} is currently disabled in your Extreme options - **/config**`
+                        }
+                        if (reject == "Error") {
+                            nomessage = `Something went wrong - Submit a bug report!`
+                        }
+                        if (reject == "NoDM") {
+                            nomessage = `Something went wrong sending a DM to you, or you have DMs from this server disabled. Cannot obtain consent for this restraint.`
+                        }
+                        await interaction.followUp(nomessage)
+                    })
             }
         }
         catch (err) {

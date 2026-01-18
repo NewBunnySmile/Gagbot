@@ -1,10 +1,10 @@
 const { SlashCommandBuilder, MessageFlags } = require('discord.js');
-const { getHeavy, assignHeavy, commandsheavy, convertheavy, heavytypes } = require('./../functions/heavyfunctions.js')
+const { getHeavy, assignHeavy, commandsheavy, convertheavy, heavytypes, getBaseHeavy } = require('./../functions/heavyfunctions.js')
 const { getCollar, getCollarPerm, canAccessCollar } = require('./../functions/collarfunctions.js')
 const { getChastity, assignChastity, chastitytypesoptions, getChastityName, getChastityBraName, chastitybratypesoptions } = require('./../functions/vibefunctions.js')
 const { getMittenName, assignMitten, getMitten, mittentypes } = require('./../functions/gagfunctions.js')
 const { getPronouns } = require('./../functions/pronounfunctions.js')
-const { getConsent, handleConsent } = require('./../functions/interactivefunctions.js')
+const { getConsent, handleConsent, handleExtremeRestraint } = require('./../functions/interactivefunctions.js')
 const { getText } = require("./../functions/textfunctions.js");
 const { getChastityBra } = require('../functions/vibefunctions.js');
 const { assignChastityBra } = require('../functions/vibefunctions.js');
@@ -182,7 +182,13 @@ module.exports = {
             }
 
             if (actiontotake == "heavy") {
-                data.textdata.c3 = convertheavy(bondagetype)
+                // This SHOULD retrieve a custom name if any. 
+                if (getBaseHeavy(bondagetype) && getBaseHeavy(bondagetype).namefunction) {
+                    data = await getBaseHeavy(bondagetype).namefunction(interaction, data);
+                }
+                else {
+                    data.textdata.c3 = convertheavy(bondagetype)
+                }
             }
             else if (actiontotake == "mittens") {
                 data.textdata.c3 = getMittenName(interaction.user.id, bondagetype)
@@ -272,8 +278,26 @@ module.exports = {
                             }
                             else {
                                 data.allowed = true
-                                interaction.reply(getText(data))
-                                assignHeavy(collareduser.id, bondagetype)
+                                await interaction.deferReply({ flags: MessageFlags.Ephemeral });
+                                await handleExtremeRestraint(interaction.user, collareduser, "heavy", bondagetype)
+                                    .then(async (success) => {
+                                        await interaction.followUp({ content: `Equipping ${convertheavy(bondagetype)} onto ${collareduser}!`, withResponse: true})
+                                        await interaction.followUp(getText(data))
+                                        assignHeavy(collareduser.id, bondagetype, interaction.user.id, (data.textdata.c3 != convertheavy(bondagetype)) ? data.textdata.c3 : undefined)
+                                    },
+                                    async (reject) => {
+                                        let nomessage = `${collareduser} rejected the ${convertheavy(bondagetype)}.`
+                                        if (reject == "Disabled") {
+                                            nomessage = `${convertheavy(bondagetype)} is currently disabled in ${collareduser}'s Extreme options.`
+                                        }
+                                        if (reject == "Error") {
+                                            nomessage = `Something went wrong - Submit a bug report!`
+                                        }
+                                        if (reject == "NoDM") {
+                                            nomessage = `Something went wrong sending a DM to ${collareduser}, or ${collareduser} has DMs from this server disabled. Cannot obtain consent for this restraint.`
+                                        }
+                                        await interaction.followUp(nomessage)
+                                    })
                             }
                         }
                         else {
