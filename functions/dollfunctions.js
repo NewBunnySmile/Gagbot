@@ -195,10 +195,8 @@ async function textGarbleDOLL(msg, modifiedmessage, outtextin) {
         // Put every "garble" messagePart in ANSI.
         for(let i = 0; i < dollMessageParts.length; i++){
             if(dollMessageParts[i].garble){
-                //console.log(dollMessageParts[i])
                 // Uncorset
                 dollMessageParts[i].text = dollMessageParts[i].text.replaceAll(/ *-# */g,"")
-                //console.log(dollMessageParts[i].text)
                 let replacebolds = Array.from(dollMessageParts[i].text.matchAll(/((\*\*)|(\_\_))[^(\*|\_)]+((\*\*)|(\_\_))/g)).map((a) => a[0])
                 //console.log(replacebolds)
                 replacebolds.forEach((b) => {
@@ -251,6 +249,11 @@ async function textGarbleDOLL(msg, modifiedmessage, outtextin) {
                 }
                 // Finish the codeblock
                 dollMessageParts[i].text += `\`\`\``
+
+                // Remove the escape from escaped symbols.
+                // * Must NOT be an escaped backslash (negative lookbehind), and must be escaping a character in the set.
+                // * Currently just * and ~ suppported.  Add more later!
+                dollMessageParts[i].text = dollMessageParts[i].text.replaceAll(/(?<!\\)\\(?=[*~])/g,"")
             }
         }
 
@@ -259,11 +262,6 @@ async function textGarbleDOLL(msg, modifiedmessage, outtextin) {
         if (partstolinkto) {
             outtext = `${outtext}${partstolinkto.join("\n")}`
         }
-
-        // Remove the escape from escaped symbols.
-        // * Must NOT be an escaped backslash (negative lookbehind), and must be escaping a character in the set.
-        // * Currently just * and ~ suppported.  Add more later!
-        outtext = outtext.replaceAll(/(?<!\\)\\(?=[*~])/g,"")
 
         // Fix -# attached to the end of a codeblock
         // This results in an extra line break, unfortunately.
