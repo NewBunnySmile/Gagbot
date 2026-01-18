@@ -283,7 +283,7 @@ const configoptions = {
             ],
             menutype: "choice",
             default: "disabled",
-            disabled: (userID) => { return (getOption(userID,"fumbling") == "disabled") } // if true, button is greyed out
+            disabled: (userID) => { return false } // if true, button is greyed out
         },
         "revokeconsent": {
             name: "Revoke Consent",

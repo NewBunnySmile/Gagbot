@@ -92,9 +92,9 @@ const texts_chastity = {
                     ],
                     key_self: [
                         `USER_TAG puts a VAR_C2 on and clicks a tiny lock on it before stashing the key for safekeeping!`,
-                        `USER_TAG slips a VAR_C2 on and turns the key, locking USER_THEIR breasts away... but USER_THEY still have the key.`,
+                        `USER_TAG slips a VAR_C2 on and turns the key, locking USER_THEIR breasts away... but USER_THEY still USER_HAVE the key.`,
                         `USER_TAG whispers a sweet goodbye as USER_THEY wrap a VAR_C2 around USER_THEIR chest, sealing USER_THEIR chastity away under lock and key.`,
-                        { required: (t) => { return (getArousal(t.interactionuser.id) > 10)}, text: `Taking calm, deep breaths, USER_TAG wraps a VAR_C2 on USER_THEIR chest before USER_THEY touch there. USER_THEY_CAP still have the key, but at least it's something...`},
+                        { required: (t) => { return (getArousal(t.interactionuser.id) > 10)}, text: `Taking calm, deep breaths, USER_TAG wraps a VAR_C2 on USER_THEIR chest before USER_THEY touch there. USER_THEY_CAP still USER_HAVE the key, but at least it's something...`},
                         { required: (t) => { return (getArousal(t.interactionuser.id) > 20)}, text: `In a vain attempt to be a good USER_PRAISEOBJECT, USER_TAG locks USER_THEMSELF up with a VAR_C2. Though, USER_THEY USER_ISARE still holding the the key.`},
                     ]
                 },
@@ -108,9 +108,9 @@ const texts_chastity = {
                     ],
                     key_self: [
                         `USER_TAG puts a VAR_C2 on and clicks a tiny lock on it before stashing the key for safekeeping!`,
-                        `USER_TAG slips a VAR_C2 on and turns the key, locking USER_THEIR breasts away... but USER_THEY still have the key.`,
+                        `USER_TAG slips a VAR_C2 on and turns the key, locking USER_THEIR breasts away... but USER_THEY still USER_HAVE the key.`,
                         `USER_TAG whispers a sweet goodbye as USER_THEY wrap a VAR_C2 around USER_THEIR chest, sealing USER_THEIR chastity away under lock and key.`,
-                        { required: (t) => { return (getArousal(t.interactionuser.id) > 10)}, text: `Taking calm, deep breaths, USER_TAG wraps a VAR_C2 on USER_THEIR chest before USER_THEY touch there. USER_THEY_CAP still have the key, but at least it's something...`},
+                        { required: (t) => { return (getArousal(t.interactionuser.id) > 10)}, text: `Taking calm, deep breaths, USER_TAG wraps a VAR_C2 on USER_THEIR chest before USER_THEY touch there. USER_THEY_CAP still USER_HAVE the key, but at least it's something...`},
                         { required: (t) => { return (getArousal(t.interactionuser.id) > 20)}, text: `In a vain attempt to be a good USER_PRAISEOBJECT, USER_TAG locks USER_THEMSELF up with a VAR_C2. Though, USER_THEY USER_ISARE still holding the the key.`},
                     ]
                 },
@@ -211,7 +211,8 @@ const texts_collarequip = {
                     ],
                     allowed: [
                         `USER_TAG pulls a VAR_C3 out and grabs TARGET_TAG, forcing TARGET_THEIR arms and hands into the tight restraint! TARGET_THEY_CAP squirmTARGET_S in protest, but TARGET_THEY can't do anything about it!`,
-                        { only: (t) => { return (t.c3 == "Doll Processing Facility") }, text: `Snickering to USER_THEMSELF, USER_TAG throws TARGET_TAG into a VAR_C3 to become a Doll!`}
+                        { only: (t) => { return (t.c3 == "Doll Processing Facility") }, text: `Snickering to USER_THEMSELF, USER_TAG throws TARGET_TAG into a VAR_C3 to become a Doll!`},
+                        { only: (t) => { return (t.c3.endsWith("'s Lap")) }, text: `USER_TAG pulls TARGET_TAG into USER_THEIR lap, holding TARGET_THEM gently but firmly.` }
                     ],
                     notallowed: [
                         `TARGET_TAG's collar does not allow you to put TARGET_THEM in heavy bondage!`
@@ -837,6 +838,7 @@ const texts_struggle = {
         `USER_TAG tries USER_THEIR *best* to get some leverage and escape USER_THEIR bondage, but stops just short of potentially pulling a muscle.`,
         `USER_TAG fights against USER_THEIR VAR_C1, trying to loosen it even a little bit to maybe escape...`,
         `USER_TAG fights against USER_THEIR VAR_C1, but it doesn't budge even a micrometer...`,
+        { only: (t) => { return (t.c1.endsWith("'s Lap")) }, text: `USER_TAG wiggles a little bit in VAR_C1, but a stern look quickly keeps USER_THEM in check.` }
     ],
     gag: {
         heavy: [
@@ -1038,9 +1040,9 @@ const texts_struggle = {
         `USER_TAG tries to imagine how best to adjust USER_THEIR speech when gagged. Perhaps with practice, USER_THEY can figure it out!`,
         `All the keys clanging and bondage restraints strewn about makes USER_TAG swim in happy thoughts!`,
         `USER_TAG twirls USER_THEIR hair absentmindedly. Someone should tie USER_THEM up with more bondage, tehe!~`,
-        `USER_TAG clears USER_THEIR throat and then begins to speak: The FitnessGram Pacer Test is a multistage aerobic capacity test that progressively gets more difficult as it continues. The 20 meter pacer test will begin in 30 seconds. Line up at the start. The running speed starts slowly but gets faster each minute after you hear this signal bodeboop. A single lap should be completed every time you hear this sound. ding Remember to run in a straight line and run as long as possible. The second time you fail to complete a lap before the sound, your test is over. The test will begin on the word start. On your mark. Get ready!… Start.`,
+        { required: (t) => { return (!getGag(t.interactionuser.id)) }, text: `USER_TAG clears USER_THEIR throat and then begins to speak: The FitnessGram Pacer Test is a multistage aerobic capacity test that progressively gets more difficult as it continues. The 20 meter pacer test will begin in 30 seconds. Line up at the start. The running speed starts slowly but gets faster each minute after you hear this signal bodeboop. A single lap should be completed every time you hear this sound. ding Remember to run in a straight line and run as long as possible. The second time you fail to complete a lap before the sound, your test is over. The test will begin on the word start. On your mark. Get ready!… Start.` },
         `USER_TAG's mind is fantasizing about the cute characters in that last anime USER_THEY watched. Everyone should ask USER_THEM about it!`,
-        `USER_TAG's voice echoes through the halls as USER_THEY monologueUSER_S: ***Tell me, for whom do you fight...***`,
+        { required: (t) => { return (!getGag(t.interactionuser.id)) }, text: `USER_TAG's voice echoes through the halls as USER_THEY monologueUSER_S: ***Tell me, for whom do you fight...***` },
         `USER_TAG wants ice cream. Everyone should have ice cream. USER_THEY_CAP wantUSER_S to know what everyone's favorite flavor is!`,
         `USER_TAG is getting cold feet. Someone should tie USER_THEM up and tickle USER_THEIR feet so they warm up!`,
         `USER_TAG wants hot cocoa and to sit cozily by a fire on a stormy day, just pleasantly reading and enjoying the warm. Under a blankey. So nice...`,
@@ -1053,7 +1055,7 @@ const texts_struggle = {
         `All this talk about servitude and the moans from the dungeon's denizens makes it impossible for USER_TAG to focus...`,
         `USER_TAG wants to lay in someone's lap. Or maybe have someone lay in USER_THEIR lap. Maybe both.`,
         `USER_TAG wants to pet a cute kitty. Or a cute doggo. Maybe lots of cute kitties and doggos!`,
-        `USER_TAG wonders what it would be like to be a pet kitty. Or a pet doggo. They blush a little at the thought~`,
+        `USER_TAG wonders what it would be like to be a pet kitty. Or a pet doggo. USER_THEY_CAP blushUSER_ES a little at the thought~`,
         `USER_TAG prepares for battle with a sword and flourishes it. USER_THEY_CAP USER_ISARE going to hunt the legendary sHE!`,
         `USER_TAG sits and looks around patiently because USER_THEY USER_ISARE a **good USER_PRAISEOBJECT!**`,
         // 2 hours in chastity
@@ -1607,7 +1609,8 @@ const texts_unheadwear = {
 const texts_unheavy = {
     heavy: {
         self: [
-            `USER_TAG wiggles in USER_THEIR VAR_C1, but obviously USER_THEY USER_ISARE *very* helpless and can't get far with taking it off on USER_THEIR own!`
+            `USER_TAG wiggles in USER_THEIR VAR_C1, but obviously USER_THEY USER_ISARE *very* helpless and can't get far with taking it off on USER_THEIR own!`,
+            { only: (t) => { return (t.c1.endsWith("'s Lap")) }, text: `USER_TAG wiggles a bit in VAR_C1, but it's so warm and comfy there...` }
         ],
         other: [
             `USER_TAG brushes up against TARGET_TAG to help TARGET_THEM out of USER_THEIR VAR_C2, but being trapped in a VAR_C1, USER_THEY can't really help TARGET_THEM out much.`
@@ -1618,6 +1621,7 @@ const texts_unheavy = {
             `USER_TAG helps TARGET_TAG out of TARGET_THEIR VAR_C2! TARGET_THEY_CAP stretchTARGET_ES TARGET_THEIR arms and sighTARGET_S with gratitude!`,
             { only: (t) => { return t.c2.includes("Doll Processing") }, text: `USER_TAG fights off an automated arm as USER_THEY rescueUSER_S TARGET_TAG from the VAR_C2!` },
             { only: (t) => { return t.c2.includes("Doll Processing") }, text: `USER_TAG tackles TARGET_TAG, pulling USER_THEM off of the belt of the VAR_C2!` },
+            { only: (t) => { return (t.c2.endsWith("'s Lap")) }, text: `USER_TAG helps TARGET_TAG off of the warm lap TARGET_THEY TARGET_WERE laying on!` }
         ],
         noheavyequipped: {
             self: [
