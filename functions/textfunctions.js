@@ -1811,7 +1811,7 @@ const texts_eventfunctions = {
 						return t.c1.includes("Womb Tattoo") || t.c1.includes("Doll Barcode");
 					},
 					text: `The Mimic senses a VAR_C1 on USER_TAG, and erases it with a burst of magic!`,
-				}, 
+				},
 				{
 					only: (t) => {
 						return t.c2.includes("Polish");
