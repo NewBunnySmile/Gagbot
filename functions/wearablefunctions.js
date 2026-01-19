@@ -21,6 +21,7 @@ let wearabletypes = [
 	{ name: "Witch Hat", value: "witchhat_normal", colorable: true, uniqueColors: ["Flowery", "Ridiculously Big", "Starry"] },
 	{ name: "Crown", value: "crown", colorable: true, uniqueColors: ["Silver", "Gold", "Platinum", "Princess", "Twilight", "Mithril", "Crystal", "Flower", "Laurel"], forbiddenColors: ["Black", "Red", "Purple", "Green", "Orange", "Red", "Pink", "White", "Yellow", "Cyan", "Aqua", "Blue", "Indigo", "Gray", "Brown"] },
 	{ name: "Tiara", value: "tiara", colorable: true, uniqueColors: ["Silver", "Gold", "Platinum", "Princess", "Lunar Crescent", "Sunless", "Crystal"], forbiddenColors: ["Black", "Red", "Purple", "Green", "Orange", "Red", "Pink", "White", "Yellow", "Cyan", "Aqua", "Blue", "Indigo", "Gray", "Brown"] },
+	{ name: "Circlet", value: "circlet", colorable: true, uniqueColors: ["Silver", "Gold", "Platinum", "Crystal"], forbiddenColors: ["Black", "Red", "Purple", "Green", "Orange", "Red", "Pink", "White", "Yellow", "Cyan", "Aqua", "Blue", "Indigo", "Gray", "Brown"] },
 
 	// Glasses and Goggles
 	{ name: "Glasses", value: "glasses", colorable: true, uniqueColors: ["Witchy", "Round", "Starry Night", "Full Frame", "Half-Rimmed", "Open-Framed", "Moonveil"] },
