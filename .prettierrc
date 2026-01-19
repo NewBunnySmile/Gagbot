@@ -3,7 +3,7 @@
   "bracketSameLine": true,
   "objectWrap": "collapse",
   "bracketSpacing": true,
-  "semi": false,
+  "semi": true,
   "experimentalOperatorPosition": "start",
   "experimentalTernaries": false,
   "singleQuote": false,
