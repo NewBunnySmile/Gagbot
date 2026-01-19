@@ -21,6 +21,7 @@ let wearabletypes = [
 	{ name: "Witch Hat", value: "witchhat_normal", colorable: true, uniqueColors: ["Flowery", "Ridiculously Big", "Starry"] },
 	{ name: "Crown", value: "crown", colorable: true, uniqueColors: ["Silver", "Gold", "Platinum", "Princess", "Twilight", "Mithril", "Crystal", "Flower", "Laurel"], forbiddenColors: ["Black", "Red", "Purple", "Green", "Orange", "Red", "Pink", "White", "Yellow", "Cyan", "Aqua", "Blue", "Indigo", "Gray", "Brown"] },
 	{ name: "Tiara", value: "tiara", colorable: true, uniqueColors: ["Silver", "Gold", "Platinum", "Princess", "Lunar Crescent", "Sunless", "Crystal"], forbiddenColors: ["Black", "Red", "Purple", "Green", "Orange", "Red", "Pink", "White", "Yellow", "Cyan", "Aqua", "Blue", "Indigo", "Gray", "Brown"] },
+	{ name: "Circlet", value: "circlet", colorable: true, uniqueColors: ["Silver", "Gold", "Platinum", "Crystal"], forbiddenColors: ["Black", "Red", "Purple", "Green", "Orange", "Red", "Pink", "White", "Yellow", "Cyan", "Aqua", "Blue", "Indigo", "Gray", "Brown"] },
 
 	// Glasses and Goggles
 	{ name: "Glasses", value: "glasses", colorable: true, uniqueColors: ["Witchy", "Round", "Starry Night", "Full Frame", "Half-Rimmed", "Open-Framed", "Moonveil"] },
@@ -33,10 +34,12 @@ let wearabletypes = [
 	{ name: "Headchain", value: "headchain", colorable: true, uniqueColors: ["Silver", "Gold", "Platinum", "Mithril", "Lunar Crescent", "Starveiled", "Elemental", "Crystal"], forbiddenColors: ["Black", "Red", "Purple", "Green", "Orange", "Red", "Pink", "White", "Yellow", "Cyan", "Aqua", "Blue", "Indigo", "Gray", "Brown"] },
 	{ name: "Veil", value: "veil", colorable: true, uniqueColors: ["Stary", "Sheer", "Silk", "Half-Face"], forbiddenColors: ["Black", "Red", "Purple", "Green", "Orange", "Red", "Pink", "White", "Yellow", "Cyan", "Aqua", "Blue", "Indigo", "Gray", "Brown"] },
 	{ name: "Hood", value: "hood", colorable: true, uniqueColors: ["Leather", "Latex", "Maid", "Hardlight", "Medieval"], forbiddenColors: ["Black", "Red", "Purple", "Green", "Orange", "Red", "Pink", "White", "Yellow", "Cyan", "Aqua", "Blue", "Indigo", "Gray", "Brown"] },
-	{ name: "Hairpins", value: "Hairpins", colorable: true, uniqueColors: ["Silver", "Gold", "Platinum", "Solar", "Lunar", "Crystal", "Obsidian", "Jade", "Amethyst", "Ruby", "Emerald", "Sapphire"], forbiddenColors: ["Black", "Red", "Purple", "Green", "Orange", "Red", "Pink", "White", "Yellow", "Cyan", "Aqua", "Blue", "Indigo", "Gray", "Brown"] },
+	{ name: "Hairpins", value: "hairpins", colorable: true, uniqueColors: ["Silver", "Gold", "Platinum", "Solar", "Lunar", "Crystal", "Obsidian", "Jade", "Amethyst", "Ruby", "Emerald", "Sapphire"], forbiddenColors: ["Black", "Red", "Purple", "Green", "Orange", "Red", "Pink", "White", "Yellow", "Cyan", "Aqua", "Blue", "Indigo", "Gray", "Brown"] },
 	{ name: "Hairstick", value: "hairstick" },
 	{ name: "Kitsune Half-Mask", value: "mask_kitsune" },
 	{ name: "Domino Mask", value: "mask_domino" },
+	{ name: "Rogue Mask", value: "roguemask", colorable: true },
+	{ name: "Leather Rogue Mask", value: "roguemask_leather", colorable: true },
 	{ name: "Eyeshadow", value: "eyeshadow", colorable: true, uniqueColors: ["Glittery", "Metallic Silver", "Metallic Gold"] },
 	{ name: "Lipstick", value: "lipstick", colorable: true, uniqueColors: ["Glossy", "Metallic Silver", "Metallic Gold"] },
 	{ name: "Kissmark", value: "kissmark", colorable: true, uniqueColors: ["Glossy", "Metallic Silver", "Metallic Gold"] },
@@ -108,7 +111,7 @@ let wearabletypes = [
 	{ name: "Sukumizu", value: "sukumizu", colorable: true },
 	{ name: "Bikini", value: "bikini", colorable: true, uniqueColors: ["Cow Print", "Skimpy", "Frilly", "Tiger Print", "Leaf", "Dragonscale", "Chainmail", "Yellow Polka-Dot"] },
 	{ name: "Latex Bikini", value: "bikini_latex", colorable: true, uniqueColors: ["Starry", "Shadow", "Cow Print"] },
-	{ name: "Armour", value: "armour", colorable: true, uniqueColors: ["Steel", "Cobalt", "Dragon Scale", "Holy Knight", "Black Knight", "Chainmail", "Crystal"], forbiddenColors: ["Black", "White", "Red", "Purple", "Green", "Orange", "Red", "Pink", "Yellow", "Cyan", "Aqua", "Blue", "Indigo", "Gray", "Brown"] },
+	{ name: "Armour", value: "armour", colorable: true, uniqueColors: ["Steel", "Cobalt", "Dragon Scale", "Holy Knight", "Black Knight", "Chainmail", "Crystal", "Leather"], forbiddenColors: ["Black", "White", "Red", "Purple", "Green", "Orange", "Red", "Pink", "Yellow", "Cyan", "Aqua", "Blue", "Indigo", "Gray", "Brown"] },
 	{ name: "Exhibitionist", value: "exhibitionist" },
 	{ name: "Empress' Robes", value: "empressnewdress" },
 	{ name: "Latex Mermaid Tail", value: "mermaid_latex", colorable: true, uniqueColors: ["Starry", "Shadow"] },
@@ -231,7 +234,7 @@ let wearabletypes = [
 	{ name: "Latex High Waist Leotard", value: "leotard_highwaist_latex", colorable: true, uniqueColors: ["Starry", "Shadow"] },
 
 	// Footwear
-	{ name: "High Heels", value: "highheels", colorable: true },
+	{ name: "High Heels", value: "highheels", colorable: true, uniqueColors: ["Ruby", "Glass"] },
 	{ name: "Latex High Heels", value: "highheels_latex", colorable: true, uniqueColors: ["Starry", "Shadow"] },
 	{ name: "Ballet Heels", value: "balletheels", colorable: true },
 	{ name: "Latex Ballet Heels", value: "balletheels_latex", colorable: true, uniqueColors: ["Starry", "Shadow"] },
@@ -287,7 +290,9 @@ let wearabletypes = [
 	{ name: "Hoshi no Tama", value: "tama" },
 	{ name: "Silk Belt", value: "belt_silk", colorable: true },
 	{ name: "Leather Belt", value: "belt_leather", colorable: true },
-	{ name: "Leather Bandolier", value: "belt_leather" },
+	{ name: "Leather Bandolier", value: "bandolier_leather" },
+	{ name: "", value: "tome", colorable: true, uniqueColors: ["Tome of Bondage", "Cursed Tome", "Shadowy Tome", "Chained Tome", "Gothic Tome", "Angelic Tome"], forbiddenColors: ["Black", "Red", "Purple", "Green", "Orange", "Red", "Pink", "White", "Yellow", "Cyan", "Aqua", "Blue", "Indigo", "Gray", "Brown"] },
+	{ name: "", value: "staff", colorable: true, uniqueColors: ["Staff of Chains", "Caduceus", "Elemental Staff", "Lunar Staff", "Dollmaker's Staff", "Quarterstaff", "Gohei"], forbiddenColors: ["Black", "Red", "Purple", "Green", "Orange", "Red", "Pink", "White", "Yellow", "Cyan", "Aqua", "Blue", "Indigo", "Gray", "Brown"] },
 ];
 
 // Each colorable entry above will have a copy of the following added

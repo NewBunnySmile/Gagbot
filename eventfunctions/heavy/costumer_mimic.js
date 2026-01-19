@@ -13,33 +13,37 @@ const { getWearable, getLockedWearable, deleteWearable, getWearableName, assignW
 //const { mimicCostumes } = require('./mimic/mimicCostumes.js')
 
 // File Containing Costumer Mimic Outfits - Wearables, Headwear, Mittens, Gags, Heavy. Only one Heavy item per outfit, and always at the end.
-const maid_outfit = new Array([
+const maid_outfit = [
     {category: "wearable", itemtowear: "maid_dress", color: "Black" },
-    {category: "wearable", itemtowear: "maid_apron", color: "White" },
+    {category: "wearable", itemtowear: "maid_apron", color: null },
     {category: "wearable", itemtowear: "maid_headdress", color: null },
     {category: "wearable", itemtowear: "garters", color: "White" },
     {category: "wearable", itemtowear: "stockings", color: "White" },
     {category: "mittens", itemtowear: "mittens_maid", color: null },
     {category: "headwear", itemtowear: "mask_kigu_cutemaid", color: null },
+    {category: "collar", itemtowear: "collar_maid", color: null },
+    {category: "chastitybelt", itemtowear: "belt_maid", color: null },
     {category: "gag", itemtowear: "politeSub", color: null },
     {category: "heavy", itemtowear: "straitjacket_maid", color: null },
-]);
+];
 
-const ponygirl_outfit = new Array ([
+const ponygirl_outfit = [
     {category: "wearable", itemtowear: "ponyboots_leather", color: "Red" },
     {category: "wearable", itemtowear: "ponytack_leather", color: "Red" },
-    {category: "wearable", itemtowear: "headharness_leather", color: null },
+    {category: "wearable", itemtowear: "headharness_leather", color: "Red" },
     {category: "wearable", itemtowear: "blinkers_leather", color: "Red" },
     {category: "mittens", itemtowear: "mittens_leather", color: null },
     {category: "headwear", itemtowear: "blindfold_leather", color: null },
     {category: "gag", itemtowear: "ball", color: null },
+    {category: "chastitybelt", itemtowear: "belt_silver", color: null },
+    {category: "chastitybra", itemtowear: "bra_silver", color: null },
+    {category: "collar", itemtowear: "collar_posture", color: null },
     {category: "heavy", itemtowear: "armbinder_leather", color: null },
-]);
+];
 
-const bunnygirl_outfit = new Array ([
-    {category: "wearable", itemtowear: "outfit_playbunny_headwear", color: "Blue" },    
-    //{category: "wearable", itemtowear: "outfit_playbunny_collar", color: "White" },
-    {category: "wearable", itemtowear: "suit_outfit", color: "Playbunny" },  // "
+const bunnygirl_outfit = [
+    {category: "wearable", itemtowear: "outfit_playbunny_headwear", color: "Blue" },  
+    {category: "wearable", itemtowear: "suit_outfit", color: "Playbunny" },  
     {category: "wearable", itemtowear: "bunnytights", color: "White" },
     {category: "wearable", itemtowear: "highheels", color: "Blue" },
     {category: "wearable", itemtowear: "cuffswrist_bondage", color: "Blue" },
@@ -49,13 +53,182 @@ const bunnygirl_outfit = new Array ([
     {category: "gag", itemtowear: "ball", color: null },
     {category: "headwear", itemtowear: "mask_bunny", color: null },
     {category: "heavy", itemtowear: "armbinder_leather", color: null },
-]);
+];
+
+const princess_outfit = [
+    {category: "wearable", itemtowear: "bra_lacy", color: "Pink" },
+    {category: "wearable", itemtowear: "panties_lacy", color: "Pink" },
+    {category: "wearable", itemtowear: "stockings", color: "White" },
+    {category: "wearable", itemtowear: "gartersbelt", color: "White" },
+    {category: "wearable", itemtowear: "princess_dress", color: "Pink" },
+    {category: "wearable", itemtowear: "gloves_opera", color: "White" },
+    {category: "wearable", itemtowear: "highheels", color: "Pink" },
+    {category: "mittens", itemtowear: "mittens_leather", color: null },
+    {category: "headwear", itemtowear: "mask_kigu_🥰", color: null },
+    {category: "wearable", itemtowear: "tiara", color: "Princess" },
+    {category: "collar", itemtowear: "collar_princess", color: null },
+    {category: "gag", itemtowear: "ball", color: null },
+    {category: "heavy", itemtowear: "dress_binding", color: null },
+];
+
+const lewd_princess_outfit = [
+    {category: "wearable", itemtowear: "panties_lacy", color: "Black" },
+    {category: "wearable", itemtowear: "stockings", color: "Black" },
+    {category: "wearable", itemtowear: "gartersbelt", color: "Black" },
+    {category: "wearable", itemtowear: "lingerie_royalicing", color: null },
+    {category: "wearable", itemtowear: "necklace", color: "Silver" },
+    {category: "wearable", itemtowear: "gloves_opera", color: "Black" },
+    {category: "wearable", itemtowear: "highheels", color: "White" },
+    {category: "mittens", itemtowear: "mittens_leather", color: null },
+    {category: "headwear", itemtowear: "mask_kigu_Yesh", color: null },
+    {category: "wearable", itemtowear: "tiara", color: "Princess" },
+    {category: "collar", itemtowear: "collar_princess", color: null },
+    {category: "gag", itemtowear: "ball", color: null },
+    {category: "heavy", itemtowear: "boxbinder_leather", color: null },
+];
+
+const kitsune_outfit = [
+    {category: "wearable", itemtowear: "lingerie", color: "Indigo" },
+    {category: "wearable", itemtowear: "thighhighs", color: "White" },
+    {category: "wearable", itemtowear: "kimono", color: "Indigo" },
+    {category: "wearable", itemtowear: "sleeves_detatched", color: "Indigo" },
+    {category: "wearable", itemtowear: "bigcute_ribbon", color: "Indigo" },    
+    {category: "wearable", itemtowear: "sandals", color: "Indigo" },
+    {category: "wearable", itemtowear: "hairpins", color: "Jade" },
+    {category: "wearable", itemtowear: "mask_kitsune", color: null },
+    {category: "headwear", itemtowear: "mask_fox", color: null },
+    {category: "mittens", itemtowear: "mittens_leather", color: null },
+    {category: "gag", itemtowear: "ball", color: null },
+    {category: "collar", itemtowear: "collar_runic", color: null },
+    {category: "heavy", itemtowear: "ribbons", color: null },
+];
+
+const librarian_outfit = [
+    {category: "wearable", itemtowear: "rope_karada", color: "Red" },
+    {category: "wearable", itemtowear: "pencil_skirt", color: "Brown" },
+    {category: "wearable", itemtowear: "buttonup_blouse", color: "White" },
+    {category: "wearable", itemtowear: "glasses_librarian", color: null },
+    {category: "wearable", itemtowear: "ankleboots", color: "Brown" },
+    {category: "mittens", itemtowear: "mittens_leather", color: null },
+    {category: "headwear", itemtowear: "mask_kigu_shy", color: null },
+    {category: "wearable", itemtowear: "glasses_librarian", color: null },
+    {category: "gag", itemtowear: "silent", color: null },
+    {category: "collar", itemtowear: "collar_posture", color: null },
+    {category: "heavy", itemtowear: "straitjacket_comfy", color: null },
+];
+
+const rogue_outfit = [
+    {category: "wearable", itemtowear: "panties_leather", color: "Gray" },
+    {category: "wearable", itemtowear: "bra_leather", color: "Gray" },
+    {category: "wearable", itemtowear: "gloves_fingerlesselbow", color: "Gray" },
+    {category: "wearable", itemtowear: "bootyshorts_leather", color: "Black" },
+    {category: "wearable", itemtowear: "top_crop_leather", color: "Gray" },
+    {category: "wearable", itemtowear: "roguemask_leather", color: "Gray" },
+    {category: "wearable", itemtowear: "thighhighboots", color: "Gray" },
+    {category: "wearable", itemtowear: "bandolier_leather", color: null },
+    {category: "mittens", itemtowear: "mittens_leather", color: null },
+    {category: "gag", itemtowear: "silent", color: null },
+    {category: "collar", itemtowear: "collar_moon", color: null },
+    {category: "wearable", itemtowear: "cloak", color: "Gray" },
+    {category: "heavy", itemtowear: "straitjacket_comfy", color: null },
+];
+
+const dancer_outfit = [
+    {category: "wearable", itemtowear: "armbands", color: "Gold" },
+    {category: "wearable", itemtowear: "anklets", color: "Gold" },
+    {category: "wearable", itemtowear: "necklace", color: "Gold" },
+    {category: "wearable", itemtowear: "hairpins", color: "Gold" },
+    {category: "wearable", itemtowear: "headchain", color: "Gold" },
+    {category: "wearable", itemtowear: "haremsilks", color: "Cyan" },
+    {category: "wearable", itemtowear: "veil", color: "Half-Face" },
+    {category: "wearable", itemtowear: "sleeves_detatched", color: "Cyan" },
+    {category: "mittens", itemtowear: "mittens_leather", color: null },
+    {category: "gag", itemtowear: "ball", color: null },
+    {category: "collar", itemtowear: "collar_moon", color: null },
+    {category: "headwear", itemtowear: "blindfold_cloth", color: null },
+    {category: "heavy", itemtowear: "displaystand", color: null },
+];
+
+const paladin_outfit = [
+    {category: "wearable", itemtowear: "bodystocking", color: "Black" },
+    {category: "wearable", itemtowear: "harness_leather", color: "Leather" },
+    {category: "wearable", itemtowear: "greaves", color: "Steel" },
+    {category: "wearable", itemtowear: "gauntlet", color: "Steel" },
+    {category: "chastitybelt", itemtowear: "belt_tungsten", color: null },
+    {category: "chastitybra", itemtowear: "bra_tungsten", color: null },
+    {category: "wearable", itemtowear: "armour", color: "Holy Knight" },
+    {category: "wearable", itemtowear: "circlet", color: "Platinum" },
+    {category: "mittens", itemtowear: "mittens_leather", color: null },
+    {category: "gag", itemtowear: "ball", color: null },
+    {category: "collar", itemtowear: "collar_steel", color: null },
+    {category: "heavy", itemtowear: "yoke", color: null },
+];
+
+const ranger_outfit = [
+    {category: "wearable", itemtowear: "bra_lacy", color: "Green" },
+    {category: "wearable", itemtowear: "panties_lacy", color: "Green" },
+    {category: "wearable", itemtowear: "thighhighs", color: "Green" },
+    {category: "wearable", itemtowear: "gloves_fingerlesselbow", color: "Green" },
+    {category: "wearable", itemtowear: "bootyshorts_leather", color: "Brown" },
+    {category: "wearable", itemtowear: "top_halter", color: "Green" },
+    {category: "wearable", itemtowear: "armour", color: "Leather" },
+    {category: "wearable", itemtowear: "kneehighboots", color: "Brown" },
+    {category: "mittens", itemtowear: "mittens_leather", color: null },
+    {category: "gag", itemtowear: "silent", color: null },
+    {category: "collar", itemtowear: "collar_leather", color: null },
+    {category: "wearable", itemtowear: "cloak", color: "Green" },
+    {category: "heavy", itemtowear: "rope_hogtie", color: null },
+];
+
+const healer_outfit = [
+    {category: "headwear", itemtowear: "blindfold_cloth", color: null },
+    {category: "wearable", itemtowear: "bra_lacy", color: "White" },
+    {category: "wearable", itemtowear: "panties_lacy", color: "White" },
+    {category: "wearable", itemtowear: "stockings", color: "White" },
+    {category: "wearable", itemtowear: "gloves_opera", color: "White" }, 
+    {category: "wearable", itemtowear: "shrine_maiden", color: "White" },
+    {category: "wearable", itemtowear: "bigcute_ribbon", color: "Red" },  
+    {category: "wearable", itemtowear: "headchain", color: "Starveiled" },
+    {category: "wearable", itemtowear: "ankleboots", color: "White" },
+    {category: "wearable", itemtowear: "staff", color: "Gohei" },
+    {category: "mittens", itemtowear: "mittens_leather", color: null },
+    {category: "gag", itemtowear: "politeSub", color: null },
+    {category: "collar", itemtowear: "collar_star", color: null },
+    {category: "wearable", itemtowear: "leash", color: "White" },
+    {category: "heavy", itemtowear: "armbinder_ancient", color: null },
+];
+
+const witch_outfit = [
+    {category: "wearable", itemtowear: "bra_lacy", color: "Purple" },
+    {category: "wearable", itemtowear: "panties_lacy", color: "Purple" },
+    {category: "wearable", itemtowear: "stockings", color: "Purple" },
+    {category: "wearable", itemtowear: "gloves_opera", color: "Purple" },    
+    {category: "wearable", itemtowear: "flowy_dress", color: "Purple" },
+    {category: "wearable", itemtowear: "witchhat_normal", color: "Purple" },
+    {category: "wearable", itemtowear: "tome", color: "Shadowy Tome" },
+    {category: "wearable", itemtowear: "thighhighboots", color: "Purple" },
+    {category: "headwear", itemtowear: "blindfold_blackout", color: null },
+    {category: "mittens", itemtowear: "mittens_hardlight", color: null },
+    {category: "gag", itemtowear: "ball", color: null },
+    {category: "collar", itemtowear: "collar_runic", color: null },
+    {category: "heavy", itemtowear: "shadowhands", color: null },
+];
 
 
 const mimicCostumes = {
     maid_outfit: maid_outfit, 
     ponygirl_outfit: ponygirl_outfit, 
-    bunnygirl_outfit: bunnygirl_outfit
+    bunnygirl_outfit: bunnygirl_outfit,
+    princess_outfit: princess_outfit,
+    lewd_princess_outfit: lewd_princess_outfit,
+    kitsune_outfit: kitsune_outfit,
+    librarian_outfit: librarian_outfit,
+    rogue_outfit: rogue_outfit,
+    dancer_outfit: dancer_outfit,
+    paladin_outfit: paladin_outfit,
+    ranger_outfit: ranger_outfit,
+    healer_outfit: healer_outfit,
+    witch_outfit: witch_outfit,
 };
 
 
@@ -101,7 +274,7 @@ let functiontick = async (userID) => {
     console.log(process.userevents[userID].costumermimic)
 
     // Select Item from Chosen Outfit based in index
-    let nextitem = mimicCostumes[process.userevents[userID].costumermimic.outfit][0][process.userevents[userID].costumermimic.costumeidx];
+    let nextitem = mimicCostumes[process.userevents[userID].costumermimic.outfit][process.userevents[userID].costumermimic.costumeidx];
     let itemtoequipcolored = null;
 
     data.heavy = true;
@@ -130,7 +303,7 @@ let functiontick = async (userID) => {
     }
 
     // Apply Outfit Items once stripped until last index of array is reached or a heavy item is found
-    if (process.userevents[userID].costumermimic.stage == 1 && process.userevents[userID].costumermimic.costumeidx < mimicCostumes[process.userevents[userID].costumermimic.outfit][0].length && nextitem.category != "heavy") {
+    if (process.userevents[userID].costumermimic.stage == 1 && process.userevents[userID].costumermimic.costumeidx < mimicCostumes[process.userevents[userID].costumermimic.outfit].length && nextitem.category != "heavy") {
 
         data.applyingOutfit = true;
         switch (nextitem.category) {
@@ -216,7 +389,8 @@ let functiontick = async (userID) => {
                         data.textdata.c1 = getChastityName(undefined, getChastity(userID).getChastityName) ?? "chastity belt", // chastity name
                             data.textdata.c2 = getChastityName(undefined, nextitem.itemtowear), // new chastity name
 
-                            assignChastity(userID, nextitem.itemtowear, getChastity(userID).origbinder)
+                            // Update Chastity Belt Name with new type
+                            process.chastity[userID].chastitytype = nextitem.itemtowear
 
                         data.replace = true;
                     }
@@ -241,8 +415,9 @@ let functiontick = async (userID) => {
                     if (getChastityBra(userID)) {
                         data.textdata.c1 = getChastityBraName(undefined, getChastityBra(userID).getChastityBraName) ?? "chastity bra", // chastity bra name
                             data.textdata.c2 = getChastityBraName(undefined, nextitem.itemtowear), // new chastity bra name
-
-                            assignChastityBra(userID, nextitem.itemtowear, getChastityBra(userID).origbinder)
+                            
+                            // Update Chastity Bra Name with new type
+                            process.chastitybra[userID].chastitytype =  nextitem.itemtowear
 
                         data.replace = true;
                     }
@@ -268,7 +443,8 @@ let functiontick = async (userID) => {
                         data.textdata.c1 = getCollarName(undefined, getCollar(userID).getCollarName) ?? "collar", // collar name
                             data.textdata.c2 = getCollarName(undefined, nextitem.itemtowear), // new collar name
 
-                            assignCollar(userID, nextitem.itemtowear, getCollar(userID).origbinder)
+                            // Update Collar Name with new type
+                            process.collar[userID].collartype = nextitem.itemtowear
 
                         data.replace = true;
                     }
@@ -298,7 +474,7 @@ let functiontick = async (userID) => {
                 break;
         }
 
-    } else if (nextitem.category == "heavy" || process.userevents[userID].costumermimic.costumeidx >= mimicCostumes[process.userevents[userID].costumermimic.outfit][0].length) {
+    } else if (nextitem.category == "heavy" || process.userevents[userID].costumermimic.costumeidx >= mimicCostumes[process.userevents[userID].costumermimic.outfit].length) {
         // Final Stage - Remove Mimic Heavy and spit them out, then apply Outfit Heavy!
         // heavy item reached or end of outfit reached        
 
