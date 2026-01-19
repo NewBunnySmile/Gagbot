@@ -396,7 +396,7 @@ let functiontick = async (userID) => {
                     }
                     else {
                         assignChastity(userID, nextitem.itemtowear, targetobject.id)
-                        data.textdata.c1 = getChastityName(undefined, nextitem.itemtowear), // chastity name
+                        data.textdata.c2 = getChastityName(undefined, nextitem.itemtowear), // chastity name
 
                             assignChastity(userID, nextitem.itemtowear, getChastity(userID).origbinder)
 
@@ -423,7 +423,7 @@ let functiontick = async (userID) => {
                     }
                     else {
                         assignChastityBra(userID, nextitem.itemtowear, targetobject.id)
-                        data.textdata.c1 = getChastityBraName(undefined, nextitem.itemtowear), // chastity bra name
+                        data.textdata.c2 = getChastityBraName(undefined, nextitem.itemtowear), // chastity bra name
 
                             assignChastityBra(userID, nextitem.itemtowear, getChastityBra(userID).origbinder)
 
@@ -450,7 +450,7 @@ let functiontick = async (userID) => {
                     }
                     else {
                         assignCollar(userID, nextitem.itemtowear, targetobject.id)
-                        data.textdata.c1 = getCollarName(undefined, nextitem.itemtowear), // collar name
+                        data.textdata.c2 = getCollarName(undefined, nextitem.itemtowear), // collar name
 
                             assignCollar(userID, nextitem.itemtowear, getCollar(userID).origbinder)
 

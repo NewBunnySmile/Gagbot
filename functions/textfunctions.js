@@ -1736,7 +1736,7 @@ const texts_eventfunctions = {
 			removeclothing: {
 				// It is a good doll, all the clothing removed at proper stage
 				stage1: [
-					`The Doll Processing Facility uses a moderately corrosive substance to eat away at the VAR_C1 that USER_TAG is wearing!`,
+					`The Doll Processing Facility uses some nanomaterial to eat away at the VAR_C1 that USER_TAG is wearing!`,
 					`The Doll Processing Facility's arms rip off the VAR_C1 that was on USER_TAG!`,
 					`The Doll Processing Facility's arms carefully remove the VAR_C1 that was on USER_TAG!`,
 					`The Doll Processing Facility's arms use scissors to cut off the VAR_C1 that USER_TAG is wearing!`,
@@ -1749,7 +1749,7 @@ const texts_eventfunctions = {
 				],
 				// Added before the restraint phase after the facility deemed it was ready to put restraints on the doll!
 				stage2: [
-					`The Doll Processing Facility realizes that there was also a VAR_C1 on USER_TAG. It removes the item with a mildly corrosive substance!`,
+					`The Doll Processing Facility realizes that there was also a VAR_C1 on USER_TAG. It removes the item using some nanomaterial!`,
 					`The Doll Processing Facility's belt stops for a second, and a set of arms rip off the VAR_C1 on USER_TAG.`,
 					`The Doll Processing Facility appears to make an "oops" sound as it realizes USER_TAG is still wearing a VAR_C1. It removes the item posthaste!`,
 					{
@@ -1806,6 +1806,24 @@ const texts_eventfunctions = {
 				`The Costumer Mimic tugs at USER_TAG's outfit hungrily, tearing away and consuming the VAR_C1 that USER_TAG is wearing!`,
 				`The Costumer Mimic's tentacles rip off the VAR_C1 that USER_TAG is wearing, stuffing it into its gaping maw and storing it away!`,
 				`The Costumer Mimic's tentacles snake out to swipe across the VAR_C1 that USER_TAG is wearing, dissolving it away before absorbing the remains!`,
+				{
+					only: (t) => {
+						return t.c1.includes("Lipstick") || t.c1.includes("Eyeshadow");
+					},
+					text: `The Mimic realizes USER_TAG is wearing VAR_C1. It wipes it off it with a damp rag!`,
+				},
+				{
+					only: (t) => {
+						return t.c1.includes("Womb Tattoo") || t.c1.includes("Doll Barcode");
+					},
+					text: `The Mimic senses a VAR_C1 on USER_TAG, and erases it with a burst of magic!`,
+				},
+				{
+					only: (t) => {
+						return t.c2.includes("Polish");
+					},
+					text: `The Costumer Mimic's tentacles secrete some liquid that washes away USER_TAG's VAR_C1!`,
+				},
 			],
 			donestripping: [`Having finished consuming all of USER_TAG's current clothing, the Costumer Mimic begins to dress USER_THEM in its chosen costume.`, `Now that USER_TAG is stripped bare, the Costumer Mimic begins to dress USER_THEM in one of its preferred costumes.`, `With a satisfied hum, the Costumer Mimic finishes consuming USER_TAG's clothing and begins to dress USER_THEM in the costume it has chosen.`],
 			applyingOutfit: {
@@ -1881,14 +1899,14 @@ order as specified on the relevant texts string, which should
 be referenced in the beginning of the data function. 
 For example, to retrieve the chastity text with no heavy bondage,
 chastity, held by self, you should construct the data like this:
-    data: {
-        textarray: "texts_chastity", // the array to retrieve from
-        textdata: { interactionuser, targetuser, ...c1, c2, etc } // see convertPronounsText function
+	data: {
+		textarray: "texts_chastity", // the array to retrieve from
+		textdata: { interactionuser, targetuser, ...c1, c2, etc } // see convertPronounsText function
 
-        noheavy: true,
-        chastity: true,
-        key_self: true
-    }
+		noheavy: true,
+		chastity: true,
+		key_self: true
+	}
 These properties are constructed dynamically with a for... in loop 
 and then retrieved from the array using texts_chastity["noheavy"]["chastity"]["key_self"] 
 to get the particular array of texts for that condition. 
@@ -1913,9 +1931,9 @@ const getText = (data) => {
 			return prev[curr];
 		}, textarrays[textarray]);
 		/* so what is this thing doing? 
-            It is iterating over each property and then returning the object at the named property.
-            This should always end with an array AS LONG AS THE INPUT OBJECT IS CONSTRUCTED
-            EXACTLY THE WAY THE TREE IS SET UP */
+			It is iterating over each property and then returning the object at the named property.
+			This should always end with an array AS LONG AS THE INPUT OBJECT IS CONSTRUCTED
+			EXACTLY THE WAY THE TREE IS SET UP */
 		if (Array.isArray(sentencearr)) {
 			// Within the array, we want to handle the following cases:
 			// - Standard strings
