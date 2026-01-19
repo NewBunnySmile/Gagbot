@@ -37,7 +37,7 @@ const texts_chastity = {
                         `USER_TAG puts a VAR_C2 on and clicks a tiny lock on it before stashing the key for safekeeping!`,
                         `USER_TAG slips a VAR_C2 on and turns the key, locking USER_THEMSELF away... but USER_THEY still USER_HAVE the key.`,
                         `USER_TAG whispers a sweet goodbye as USER_THEY wrapUSER_S a VAR_C2 around USER_THEIR waist, sealing USER_THEIR chastity away under lock and key.`,
-                        { required: (t) => { return (getArousal(t.interactionuser.id) > 10) }, text: `Taking calm, deep breaths, USER_TAG wraps a VAR_C2 on USER_THEIR waist before USER_THEY touch there. USER_THEY_CAP still have the key, but at least it's something...` },
+                        { required: (t) => { return (getArousal(t.interactionuser.id) > 10) }, text: `Taking calm, deep breaths, USER_TAG wraps a VAR_C2 on USER_THEIR waist before USER_THEY touch there. USER_THEY_CAP still USER_HAVE the key, but at least it's something...` },
                         { required: (t) => { return (getArousal(t.interactionuser.id) > 20) }, text: `In a vain attempt to be a good USER_PRAISEOBJECT, USER_TAG locks USER_THEMSELF up with a VAR_C2. Though, USER_THEY USER_ISARE still holding the the key.` },
                     ]
                 },
@@ -53,7 +53,7 @@ const texts_chastity = {
                         `USER_TAG puts a VAR_C2 on and clicks a tiny lock on it before stashing the key for safekeeping!`,
                         `USER_TAG slips a VAR_C2 on and turns the key, locking USER_THEMSELF away... but USER_THEY still USER_HAVE the key.`,
                         `USER_TAG whispers a sweet goodbye as USER_THEY wrapUSER_S a VAR_C2 around USER_THEIR waist, sealing USER_THEIR chastity away under lock and key.`,
-                        { required: (t) => { return (getArousal(t.interactionuser.id) > 10) }, text: `Taking calm, deep breaths, USER_TAG wraps a VAR_C2 on USER_THEIR waist before USER_THEY touch there. USER_THEY_CAP still have the key, but at least it's something...` },
+                        { required: (t) => { return (getArousal(t.interactionuser.id) > 10) }, text: `Taking calm, deep breaths, USER_TAG wraps a VAR_C2 on USER_THEIR waist before USER_THEY touch there. USER_THEY_CAP still USER_HAVE the key, but at least it's something...` },
                         { required: (t) => { return (getArousal(t.interactionuser.id) > 20) }, text: `In a vain attempt to be a good USER_PRAISEOBJECT, USER_TAG locks USER_THEMSELF up with a VAR_C2. Though, USER_THEY USER_ISARE still holding the the key.` },
                     ]
                 },
@@ -1080,7 +1080,7 @@ const texts_struggle = {
         `All this talk about servitude and the moans from the dungeon's denizens makes it impossible for USER_TAG to focus...`,
         `USER_TAG wants to lay in someone's lap. Or maybe have someone lay in USER_THEIR lap. Maybe both.`,
         `USER_TAG wants to pet a cute kitty. Or a cute doggo. Maybe lots of cute kitties and doggos!`,
-        `USER_TAG wonders what it would be like to be a pet kitty. Or a pet doggo. USER_THEY blushes a little at the thought~`,
+        `USER_TAG wonders what it would be like to be a pet kitty. Or a pet doggo. USER_THEY blushUSER_ES a little at the thought~`,
         `USER_TAG prepares for battle with a sword and flourishes it. USER_THEY_CAP USER_ISARE going to hunt the legendary sHE!`,
         `USER_TAG sits and looks around patiently because USER_THEY USER_ISARE a **good USER_PRAISEOBJECT!**`,
         // 2 hours in chastity
