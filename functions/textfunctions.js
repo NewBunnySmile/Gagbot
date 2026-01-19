@@ -1730,7 +1730,7 @@ const texts_eventfunctions = {
 			removeclothing: {
 				// It is a good doll, all the clothing removed at proper stage
 				stage1: [
-					`The Doll Processing Facility uses a moderately corrosive substance to eat away at the VAR_C1 that USER_TAG is wearing!`,
+					`The Doll Processing Facility uses some nanomaterial to eat away at the VAR_C1 that USER_TAG is wearing!`,
 					`The Doll Processing Facility's arms rip off the VAR_C1 that was on USER_TAG!`,
 					`The Doll Processing Facility's arms carefully remove the VAR_C1 that was on USER_TAG!`,
 					`The Doll Processing Facility's arms use scissors to cut off the VAR_C1 that USER_TAG is wearing!`,
@@ -1743,7 +1743,7 @@ const texts_eventfunctions = {
 				],
 				// Added before the restraint phase after the facility deemed it was ready to put restraints on the doll!
 				stage2: [
-					`The Doll Processing Facility realizes that there was also a VAR_C1 on USER_TAG. It removes the item with a mildly corrosive substance!`,
+					`The Doll Processing Facility realizes that there was also a VAR_C1 on USER_TAG. It removes the item using some nanomaterial!`,
 					`The Doll Processing Facility's belt stops for a second, and a set of arms rip off the VAR_C1 on USER_TAG.`,
 					`The Doll Processing Facility appears to make an "oops" sound as it realizes USER_TAG is still wearing a VAR_C1. It removes the item posthaste!`,
 					{
