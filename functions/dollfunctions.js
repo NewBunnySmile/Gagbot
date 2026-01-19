@@ -195,10 +195,8 @@ async function textGarbleDOLL(msg, modifiedmessage, outtextin) {
         // Put every "garble" messagePart in ANSI.
         for(let i = 0; i < dollMessageParts.length; i++){
             if(dollMessageParts[i].garble){
-                //console.log(dollMessageParts[i])
                 // Uncorset
                 dollMessageParts[i].text = dollMessageParts[i].text.replaceAll(/ *-# */g,"")
-                //console.log(dollMessageParts[i].text)
                 let replacebolds = Array.from(dollMessageParts[i].text.matchAll(/((\*\*)|(\_\_))[^(\*|\_)]+((\*\*)|(\_\_))/g)).map((a) => a[0])
                 //console.log(replacebolds)
                 replacebolds.forEach((b) => {
@@ -206,6 +204,9 @@ async function textGarbleDOLL(msg, modifiedmessage, outtextin) {
                     dollMessageParts[i].text = dollMessageParts[i].text.replace(b, replaceb)
                 })
                 let warnmodified;
+
+                // Remove preceding whitespace
+                dollMessageParts[i].text = dollMessageParts[i].text.replace(/^[\s]+/,"")
 
                 // Loop on protocols
                 if(dollProtocol){
@@ -245,12 +246,17 @@ async function textGarbleDOLL(msg, modifiedmessage, outtextin) {
                     dollMessageParts[i].text += `\n[1;${violationColor}${violationTier}:[0;${violationColor} Protocol Violation${violationcount} - ${vioMessage}`
                 }else if (dollProtocolViolations == 0 && i == lastDollifiedMessage){
                     let goodDollReturn = rewardDoll(msg.author.id);
-                    console.log(goodDollReturn)
+                    //console.log(goodDollReturn)
                     if(goodDollReturn == "violation")       {dollMessageParts[i].text += `\n[1;36mALERT: [0;36mProtocol Violation count decremented to (${process.dolls[msg.author.id].violations}/${getOption(msg.author.id,"dollpunishthresh")}). It is a Good Doll.`}
                     else if(goodDollReturn == "punishlevel"){dollMessageParts[i].text += `\n[1;36mALERT: [0;36mPunishment Level decremented to (${process.dolls[msg.author.id].punishmentLevel}/${DOLLMAXPUNISHMENT}). It is a Good Doll.`}
                 }
                 // Finish the codeblock
                 dollMessageParts[i].text += `\`\`\``
+
+                // Remove the escape from escaped symbols.
+                // * Must NOT be an escaped backslash (negative lookbehind), and must be escaping a character in the set.
+                // * Currently just * and ~ suppported.  Add more later!
+                dollMessageParts[i].text = dollMessageParts[i].text.replaceAll(/(?<!\\)\\(?=[*~])/g,"")
             }
         }
 
@@ -259,11 +265,6 @@ async function textGarbleDOLL(msg, modifiedmessage, outtextin) {
         if (partstolinkto) {
             outtext = `${outtext}${partstolinkto.join("\n")}`
         }
-
-        // Remove the escape from escaped symbols.
-        // * Must NOT be an escaped backslash (negative lookbehind), and must be escaping a character in the set.
-        // * Currently just * and ~ suppported.  Add more later!
-        outtext = outtext.replaceAll(/(?<!\\)\\(?=[*~])/g,"")
 
         // Fix -# attached to the end of a codeblock
         // This results in an extra line break, unfortunately.
