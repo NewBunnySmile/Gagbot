@@ -23,7 +23,7 @@ const maid_outfit = [
     {category: "headwear", itemtowear: "mask_kigu_cutemaid", color: null },
     {category: "collar", itemtowear: "collar_maid", color: null },
     {category: "chastitybelt", itemtowear: "belt_maid", color: null },
-    {category: "gag", itemtowear: "politesub", color: null },
+    {category: "gag", itemtowear: "politeSub", color: null },
     {category: "heavy", itemtowear: "straitjacket_maid", color: null },
 ];
 
@@ -192,7 +192,7 @@ const healer_outfit = [
     {category: "wearable", itemtowear: "ankleboots", color: "White" },
     {category: "wearable", itemtowear: "staff", color: "Gohei" },
     {category: "mittens", itemtowear: "mittens_leather", color: null },
-    {category: "gag", itemtowear: "politesub", color: null },
+    {category: "gag", itemtowear: "politeSub", color: null },
     {category: "collar", itemtowear: "collar_star", color: null },
     {category: "wearable", itemtowear: "leash", color: "White" },
     {category: "heavy", itemtowear: "armbinder_ancient", color: null },
@@ -209,7 +209,7 @@ const witch_outfit = [
     {category: "wearable", itemtowear: "thighhighboots", color: "Purple" },
     {category: "headwear", itemtowear: "blindfold_blackout", color: null },
     {category: "mittens", itemtowear: "mittens_hardlight", color: null },
-    {category: "gag", itemtowear: "Ball", color: null },
+    {category: "gag", itemtowear: "ball", color: null },
     {category: "collar", itemtowear: "collar_runic", color: null },
     {category: "heavy", itemtowear: "shadowhands", color: null },
 ];
