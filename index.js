@@ -151,6 +151,7 @@ client.on("clientReady", async () => {
         console.log(`Modals: [${Array.from(modalHandlers.keys()).join(", ")}]`);
         console.log(`Components: [${Array.from(componentHandlers.keys()).join(", ")}]`);
         console.log(`Autocompletes: [${Array.from(autocompletehandlers.keys()).join(", ")}]`);
+        console.log("This is a test to prove is changed!")
         // Load emoji into the application's emoji manager
         loadEmoji(client);
 
