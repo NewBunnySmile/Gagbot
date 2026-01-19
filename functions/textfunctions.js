@@ -1800,6 +1800,24 @@ const texts_eventfunctions = {
 				`The Costumer Mimic tugs at USER_TAG's outfit hungrily, tearing away and consuming the VAR_C1 that USER_TAG is wearing!`,
 				`The Costumer Mimic's tentacles rip off the VAR_C1 that USER_TAG is wearing, stuffing it into its gaping maw and storing it away!`,
 				`The Costumer Mimic's tentacles snake out to swipe across the VAR_C1 that USER_TAG is wearing, dissolving it away before absorbing the remains!`,
+				{
+					only: (t) => {
+						return t.c1.includes("Lipstick") || t.c1.includes("Eyeshadow");
+					},
+					text: `The Mimic realizes USER_TAG is wearing VAR_C1. It wipes it off it with a damp rag!`,
+				},
+				{
+					only: (t) => {
+						return t.c1.includes("Womb Tattoo") || t.c1.includes("Doll Barcode");
+					},
+					text: `The Mimic senses a VAR_C1 on USER_TAG, and erases it with a burst of magic!`,
+				}, 
+				{
+					only: (t) => {
+						return t.c2.includes("Polish");
+					},
+					text: `The Costumer Mimic's tentacles secrete some liquid that washes away USER_TAG's VAR_C1!`,
+				},
 			],
 			donestripping: [`Having finished consuming all of USER_TAG's current clothing, the Costumer Mimic begins to dress USER_THEM in its chosen costume.`, `Now that USER_TAG is stripped bare, the Costumer Mimic begins to dress USER_THEM in one of its preferred costumes.`, `With a satisfied hum, the Costumer Mimic finishes consuming USER_TAG's clothing and begins to dress USER_THEM in the costume it has chosen.`],
 			applyingOutfit: {
@@ -1875,14 +1893,14 @@ order as specified on the relevant texts string, which should
 be referenced in the beginning of the data function. 
 For example, to retrieve the chastity text with no heavy bondage,
 chastity, held by self, you should construct the data like this:
-    data: {
-        textarray: "texts_chastity", // the array to retrieve from
-        textdata: { interactionuser, targetuser, ...c1, c2, etc } // see convertPronounsText function
+	data: {
+		textarray: "texts_chastity", // the array to retrieve from
+		textdata: { interactionuser, targetuser, ...c1, c2, etc } // see convertPronounsText function
 
-        noheavy: true,
-        chastity: true,
-        key_self: true
-    }
+		noheavy: true,
+		chastity: true,
+		key_self: true
+	}
 These properties are constructed dynamically with a for... in loop 
 and then retrieved from the array using texts_chastity["noheavy"]["chastity"]["key_self"] 
 to get the particular array of texts for that condition. 
@@ -1907,9 +1925,9 @@ const getText = (data) => {
 			return prev[curr];
 		}, textarrays[textarray]);
 		/* so what is this thing doing? 
-            It is iterating over each property and then returning the object at the named property.
-            This should always end with an array AS LONG AS THE INPUT OBJECT IS CONSTRUCTED
-            EXACTLY THE WAY THE TREE IS SET UP */
+			It is iterating over each property and then returning the object at the named property.
+			This should always end with an array AS LONG AS THE INPUT OBJECT IS CONSTRUCTED
+			EXACTLY THE WAY THE TREE IS SET UP */
 		if (Array.isArray(sentencearr)) {
 			// Within the array, we want to handle the following cases:
 			// - Standard strings
