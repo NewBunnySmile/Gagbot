@@ -247,6 +247,7 @@ const mimicCostumes = {
     ranger_outfit: ranger_outfit,
     healer_outfit: healer_outfit,
     witch_outfit: witch_outfit,
+    angel_outfit: angel_outfit,
 };
 
 
