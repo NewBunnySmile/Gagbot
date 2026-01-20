@@ -213,6 +213,25 @@ const witch_outfit = [
     { category: "heavy", itemtowear: "shadowhands", color: null },
 ];
 
+const angel_outfit = [
+    { category: "headwear", itemtowear: "blindfold_cloth", color: null },
+    { category: "wearable", itemtowear: "halo", color: "Angelic" },
+    { category: "wearable", itemtowear: "Wings", color: "Angelic" },
+    { category: "wearable", itemtowear: "wingbinders", color: "White" },
+    { category: "wearable", itemtowear: "armbands", color: "Platinum" },
+    { category: "wearable", itemtowear: "anklets", color: "Platinum" },
+    { category: "wearable", itemtowear: "headchain", color: "Platinum" },
+    { category: "chastitybelt", itemtowear: "belt_featherlight", color: null },
+    { category: "chastitybra", itemtowear: "bra_featherlight", color: null },
+    { category: "wearable", itemtowear: "nightie_sheer", color: "White" },
+    { category: "wearable", itemtowear: "tome", color: "Angelic Tome" },
+    { category: "mittens", itemtowear: "mittens_hardlight", color: null },
+    { category: "gag", itemtowear: "politeSub", color: null },
+    { category: "collar", itemtowear: "collar_star", color: null },
+    { category: "wearable", itemtowear: "leash", color: "White" },
+    { category: "heavy", itemtowear: "scavengersdaughter", color: null },
+];
+
 
 const mimicCostumes = {
     maid_outfit: maid_outfit,
