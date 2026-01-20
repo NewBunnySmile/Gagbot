@@ -45,7 +45,7 @@ module.exports = {
 				await handleConsent(interaction, interaction.user.id);
 				return;
 			}
-            let interactionuser = interaction.user
+			let interactionuser = interaction.user;
 			let gagtype = interaction.options.getString("gag") ? interaction.options.getString("gag") : "ball";
 			let gagintensity = interaction.options.getNumber("intensity") ? interaction.options.getNumber("intensity") : 5;
 			let currentgag = getGag(gaggeduser.id, gagtype);
@@ -105,14 +105,14 @@ module.exports = {
 				return;
 			}
 
-            // REFLECT
-            if (gaggeduser.id == process.client.user.id) {
-                data.gagreflect = true;
-                data.textdata.interactionuser = process.client.user
-                data.textdata.targetuser = interaction.user
-                interactionuser = process.client.user;
-                gaggeduser = interaction.user;
-            }
+			// REFLECT
+			if (gaggeduser.id == process.client.user.id) {
+				data.gagreflect = true;
+				data.textdata.interactionuser = process.client.user;
+				data.textdata.targetuser = interaction.user;
+				interactionuser = process.client.user;
+				gaggeduser = interaction.user;
+			}
 
 			if (getHeavy(interactionuser.id)) {
 				// in heavy bondage, cant equip

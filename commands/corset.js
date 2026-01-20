@@ -39,14 +39,14 @@ module.exports = {
 					c2: tightness, // corset tightness
 				},
 			};
-            // REFLECT
-            if (corsetuser.id == process.client.user.id) {
-                data.gagreflect = true;
-                data.textdata.interactionuser = process.client.user
-                data.textdata.targetuser = interaction.user
-                interaction.reply({ content: `Gagbot recognizes what you're attempting to do. Cheeky.`, flags: MessageFlags.Ephemeral });
+			// REFLECT
+			if (corsetuser.id == process.client.user.id) {
+				data.gagreflect = true;
+				data.textdata.interactionuser = process.client.user;
+				data.textdata.targetuser = interaction.user;
+				interaction.reply({ content: `Gagbot recognizes what you're attempting to do. Cheeky.`, flags: MessageFlags.Ephemeral });
 				return;
-            }
+			}
 			if (getHeavy(interaction.user.id)) {
 				// In heavy bondage, fail
 				data.heavy = true;

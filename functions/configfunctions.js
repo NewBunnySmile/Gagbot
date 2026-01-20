@@ -689,7 +689,7 @@ const configoptions = {
 				return false;
 			},
 		},
-        "extreme-heavy-costumer_mimic_latex": {
+		"extreme-heavy-costumer_mimic_latex": {
 			name: "Heavy - Costumer Mimic (Latex)",
 			desc: "Changes you into a latex themed outfit. Can include other extreme restraints.",
 			prompttext: `Costumer Mimics can change you into a a random outfit, which may include other extreme restraints such as the Polite Sub gag. The resulting outfit does not adjust to anything worn and cannot be influenced once tossed in.`,

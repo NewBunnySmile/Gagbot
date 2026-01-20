@@ -27,7 +27,7 @@ const heavytypes = [
 	{ name: "Maid Straitjacket", value: "straitjacket_maid", denialCoefficient: 3.5 },
 	{ name: "Maid Punishment Straitjacket", value: "straitjacket_maidpunishment", denialCoefficient: 4.5 },
 	{ name: "Doll Straitjacket", value: "straitjacket_doll", denialCoefficient: 3.5 },
-    { name: "Latex Straitjacket", value: "straitjacket_latex", denialCoefficient: 4 },
+	{ name: "Latex Straitjacket", value: "straitjacket_latex", denialCoefficient: 4 },
 	{ name: "Shadow Latex Straitjacket", value: "straitjacket_shadowlatex", denialCoefficient: 4 },
 	{ name: "Asylum Straitjacket", value: "straitjacket_asylum", denialCoefficient: 5 },
 	{ name: "Black Hole Straitjacket", value: "straitjacket_blackhole", denialCoefficient: 4.5 },
@@ -37,8 +37,8 @@ const heavytypes = [
 	{ name: "Leather Petsuit", value: "petsuit_leather", denialCoefficient: 2.5 },
 	{ name: "Alchemical Petsuit", value: "petsuit_latex", denialCoefficient: 2.5 },
 	{ name: "Autotape Petsuit", value: "petsuit_tape", denialCoefficient: 2.5 },
-    { name: "Latex Petsuit", value: "petsuit_latex", denialCoefficient: 3 },
-    { name: "Seamless Latex Petsuit", value: "petsuit_seamlesslatex", denialCoefficient: 3 },
+	{ name: "Latex Petsuit", value: "petsuit_latex", denialCoefficient: 3 },
+	{ name: "Seamless Latex Petsuit", value: "petsuit_seamlesslatex", denialCoefficient: 3 },
 	{ name: "Shadow Latex Petsuit", value: "petsuit_shadowlatex", denialCoefficient: 3 },
 	{ name: "Bast Petsuit", value: "petsuit_bast", denialCoefficient: 3 },
 	{ name: "Nevermere Punishment Suit", value: "petsuit_nevermere", denialCoefficient: 3.5 },
@@ -107,7 +107,7 @@ const heavytypes = [
 	{ name: "Bondage Exosuit", value: "exosuit_bondage", denialCoefficient: 5 },
 	{ name: "Sticky Glue", value: "stickyglue_bondage", denialCoefficient: 5 },
 	{ name: "Costumer Mimic", value: "costumer_mimic", denialCoefficient: 5 },
-    { name: "Costumer Mimic (Latex)", value: "costumer_mimic_latex", denialCoefficient: 5 },
+	{ name: "Costumer Mimic (Latex)", value: "costumer_mimic_latex", denialCoefficient: 5 },
 
 	// Heavy Restraints with unique name functions
 	{

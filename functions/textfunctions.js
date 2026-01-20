@@ -347,28 +347,26 @@ const texts_gag = {
 			},
 		},
 	},
-    gagreflect: {
-        noheavy: {
-            nomitten: {
-                other: {
-                    gag: {
-                        changetightness: [
-                            `TARGET_TAG is cheeky and tries to gag USER_TAG, but USER_TAG gets the upper hand and adjusts the tightness on the VAR_C4 that TARGET_THEY TARGET_ISARE wearing, pulling the straps VAR_C2.`,
-                            //`USER_TAG runs USER_THEIR hands behind TARGET_TAG's head, unbuckling the straps on TARGET_THEIR VAR_C4 and then gently pressing a VAR_C3 between TARGET_THEIR lips again. The straps are then pulled VAR_C2 and buckled again!`
-                        ],
-                        newgag: [`USER_TAG looks at TARGET_TAG flatly as it instead takes the VAR_C3 and puts it on TARGET_THEM over top of the VAR_C4.`],
-                    },
-                    nogag: {
-                        gentle: [`USER_TAG grabs the VAR_C3 and then uses a robotic arm to gently caress TARGET_TAG's cheek, before putting it on TARGET_THEM, pulling the straps VAR_C2 and buckling them.`],
-                        forceful: [
-                            `TARGET_TAG tries to gag USER_TAG, but USER_TAG's deft agility allows it to wrestle the gag out of TARGET_THEIR hands before shoving it into TARGET_THEIR mouth instead.`
-                        ],
-                        requesting: [`TARGET_TAG presents a gag to USER_TAG. It is somewhat unamused and points at TARGET_THEM to wear it instead. TARGET_THEY_CAP feelTARGET_S compelled to obey the order.`],
-                    },
-                }
-            }
-        }
-    }
+	gagreflect: {
+		noheavy: {
+			nomitten: {
+				other: {
+					gag: {
+						changetightness: [
+							`TARGET_TAG is cheeky and tries to gag USER_TAG, but USER_TAG gets the upper hand and adjusts the tightness on the VAR_C4 that TARGET_THEY TARGET_ISARE wearing, pulling the straps VAR_C2.`,
+							//`USER_TAG runs USER_THEIR hands behind TARGET_TAG's head, unbuckling the straps on TARGET_THEIR VAR_C4 and then gently pressing a VAR_C3 between TARGET_THEIR lips again. The straps are then pulled VAR_C2 and buckled again!`
+						],
+						newgag: [`USER_TAG looks at TARGET_TAG flatly as it instead takes the VAR_C3 and puts it on TARGET_THEM over top of the VAR_C4.`],
+					},
+					nogag: {
+						gentle: [`USER_TAG grabs the VAR_C3 and then uses a robotic arm to gently caress TARGET_TAG's cheek, before putting it on TARGET_THEM, pulling the straps VAR_C2 and buckling them.`],
+						forceful: [`TARGET_TAG tries to gag USER_TAG, but USER_TAG's deft agility allows it to wrestle the gag out of TARGET_THEIR hands before shoving it into TARGET_THEIR mouth instead.`],
+						requesting: [`TARGET_TAG presents a gag to USER_TAG. It is somewhat unamused and points at TARGET_THEM to wear it instead. TARGET_THEY_CAP feelTARGET_S compelled to obey the order.`],
+					},
+				},
+			},
+		},
+	},
 };
 
 // Headwear stuff

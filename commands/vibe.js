@@ -78,7 +78,7 @@ module.exports = {
                 data.textdata.targetuser = interaction.user
                 interaction.reply({ content: `Gagbot recognizes what you're attempting to do. Cheeky.`, flags: MessageFlags.Ephemeral });
 				return;
-            }
+			}
 
 			if (getHeavy(interaction.user.id)) {
 				// We are in heavy bondage

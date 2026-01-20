@@ -316,7 +316,7 @@ module.exports = {
 			// Now construct the pages - we want pages of 1000 characters or fewer. If a part causes a page to exceed that,
 			// we want to use a new page button eventually to handle this.
 			outtext = `${titletext}${inspectparts.join("\n")}`;
-			interaction.reply({ content: outtext.slice(0,1999), flags: MessageFlags.Ephemeral });
+			interaction.reply({ content: outtext.slice(0, 1999), flags: MessageFlags.Ephemeral });
 			console.log(`Inspect text generated was ${outtext.length} characters long.`);
 		} catch (err) {
 			console.log(err);

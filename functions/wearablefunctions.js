@@ -246,7 +246,7 @@ let wearabletypes = [
 	{ name: "Cowboy Boots", value: "cowboyboots", colorable: true },
 	{ name: "Knee High Boots", value: "kneehighboots", colorable: true },
 	{ name: "Thigh High Boots", value: "thighhighboots", colorable: true },
-    { name: "Latex Thigh High Boots", value: "thighhighboots_latex", colorable: true },
+	{ name: "Latex Thigh High Boots", value: "thighhighboots_latex", colorable: true },
 	{ name: "Platform Heels", value: "platformheels", colorable: true },
 	{ name: "Pumps", value: "pumps", colorable: true },
 	{ name: "Anklets", value: "anklets", colorable: true, uniqueColors: ["Silver", "Gold", "Platinum", "Cobalt", "Black"], forbiddenColors: ["Black", "Red", "Purple", "Green", "Orange", "Red", "Pink", "White", "Yellow", "Cyan", "Aqua", "Blue", "Indigo", "Gray", "Brown"] },
