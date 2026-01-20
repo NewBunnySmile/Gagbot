@@ -32,7 +32,7 @@ let wearabletypes = [
 
 	// Misc Head, Face and Hair Accessories
 	{ name: "Headchain", value: "headchain", colorable: true, uniqueColors: ["Silver", "Gold", "Platinum", "Mithril", "Lunar Crescent", "Starveiled", "Elemental", "Crystal"], forbiddenColors: ["Black", "Red", "Purple", "Green", "Orange", "Red", "Pink", "White", "Yellow", "Cyan", "Aqua", "Blue", "Indigo", "Gray", "Brown"] },
-	{ name: "Veil", value: "veil", colorable: true, uniqueColors: ["Stary", "Sheer", "Silk", "Half-Face"], forbiddenColors: ["Black", "Red", "Purple", "Green", "Orange", "Red", "Pink", "White", "Yellow", "Cyan", "Aqua", "Blue", "Indigo", "Gray", "Brown"] },
+	{ name: "Veil", value: "veil", colorable: true, uniqueColors: ["Starry", "Sheer", "Silk", "Half-Face"], forbiddenColors: ["Black", "Red", "Purple", "Green", "Orange", "Red", "Pink", "White", "Yellow", "Cyan", "Aqua", "Blue", "Indigo", "Gray", "Brown"] },
 	{ name: "Hood", value: "hood", colorable: true, uniqueColors: ["Leather", "Latex", "Maid", "Hardlight", "Medieval"], forbiddenColors: ["Black", "Red", "Purple", "Green", "Orange", "Red", "Pink", "White", "Yellow", "Cyan", "Aqua", "Blue", "Indigo", "Gray", "Brown"] },
 	{ name: "Hairpins", value: "hairpins", colorable: true, uniqueColors: ["Silver", "Gold", "Platinum", "Solar", "Lunar", "Crystal", "Obsidian", "Jade", "Amethyst", "Ruby", "Emerald", "Sapphire"], forbiddenColors: ["Black", "Red", "Purple", "Green", "Orange", "Red", "Pink", "White", "Yellow", "Cyan", "Aqua", "Blue", "Indigo", "Gray", "Brown"] },
 	{ name: "Hairstick", value: "hairstick" },
@@ -246,6 +246,7 @@ let wearabletypes = [
 	{ name: "Cowboy Boots", value: "cowboyboots", colorable: true },
 	{ name: "Knee High Boots", value: "kneehighboots", colorable: true },
 	{ name: "Thigh High Boots", value: "thighhighboots", colorable: true },
+	{ name: "Latex Thigh High Boots", value: "thighhighboots_latex", colorable: true },
 	{ name: "Platform Heels", value: "platformheels", colorable: true },
 	{ name: "Pumps", value: "pumps", colorable: true },
 	{ name: "Anklets", value: "anklets", colorable: true, uniqueColors: ["Silver", "Gold", "Platinum", "Cobalt", "Black"], forbiddenColors: ["Black", "Red", "Purple", "Green", "Orange", "Red", "Pink", "White", "Yellow", "Cyan", "Aqua", "Blue", "Indigo", "Gray", "Brown"] },

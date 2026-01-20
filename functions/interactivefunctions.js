@@ -53,6 +53,9 @@ const getConsent = (user) => {
 	if (process.consented == undefined) {
 		process.consented = {};
 	}
+	if (user === process.client.user.id) {
+		return { mainconsent: true }; // Lol, trying to gag us.
+	}
 	return process.consented[user];
 };
 

@@ -250,7 +250,6 @@ const mimicCostumes = {
     angel_outfit: angel_outfit,
 };
 
-
 // Costumer Mimic Event Function
 // Rapidly strips the victim of all unprotected clothing and restraints
 // Then it will slowly apply a random outfit and set of restraints!
@@ -364,10 +363,8 @@ let functiontick = async (userID) => {
                 if (!getGag(userID) || (getGag(userID) && (getGag(userID).getGagName != nextitem.itemtowear))) {
                     data.gag = true;
                     data.textdata.c1 = convertGagText(nextitem.itemtowear), // gag name
-
-                        // Apply the gag    
-                        assignGag(userID, nextitem.itemtowear, Math.floor(Math.random() * 10) + 1, process.userevents[userID].costumermimic.origbinder)
-
+                    // Apply the gag    
+                    assignGag(userID, nextitem.itemtowear, Math.floor(Math.random() * 10) + 1, process.userevents[userID].costumermimic.origbinder)
                     data.add = true;
                     messageSendChannel(getText(data), process.recentmessages[userID])
                 }
@@ -381,17 +378,13 @@ let functiontick = async (userID) => {
                     if (getMitten(userID)) {
                         data.textdata.c1 = getMittenName(undefined, getMitten(userID).mittenname) ?? "mittens", // mitten name
                             data.textdata.c2 = getMittenName(undefined, nextitem.itemtowear), // new mitten name
-
                             assignMitten(userID, nextitem.itemtowear, getMitten(userID).origbinder)
 
                         data.replace = true;
                     }
                     else {
-                        assignMitten(userID, nextitem.itemtowear, targetobject.id)
                         data.textdata.c1 = getMittenName(undefined, nextitem.itemtowear), // mitten name
-
-                            assignMitten(userID, nextitem.itemtowear, getMitten(userID).origbinder)
-
+                        assignMitten(userID, nextitem.itemtowear, process.userevents[userID].costumermimic.origbinder)
                         data.add = true;
                     }
                     messageSendChannel(getText(data), process.recentmessages[userID]);
@@ -414,10 +407,9 @@ let functiontick = async (userID) => {
                         data.replace = true;
                     }
                     else {
-                        // Apply New Chastity Belt
-                        assignChastity(userID, targetobject.id, nextitem.itemtowear)
                         data.textdata.c2 = getChastityName(undefined, nextitem.itemtowear), // chastity name
-                            data.add = true;
+                        assignChastity(userID, process.userevents[userID].costumermimic.origbinder, nextitem.itemtowear)
+                        data.add = true;
                     }
                     messageSendChannel(getText(data), process.recentmessages[userID]);
 
@@ -439,10 +431,9 @@ let functiontick = async (userID) => {
                         data.replace = true;
                     }
                     else {
-                        // Apply New Chastity Bra
-                        assignChastityBra(userID, targetobject.id, nextitem.itemtowear)
                         data.textdata.c2 = getChastityBraName(undefined, nextitem.itemtowear), // chastity bra name
-                            data.add = true;
+                        assignChastityBra(userID, process.userevents[userID].costumermimic.origbinder, nextitem.itemtowear)
+                        data.add = true;
                     }
                     messageSendChannel(getText(data), process.recentmessages[userID]);
 
@@ -464,10 +455,9 @@ let functiontick = async (userID) => {
                         data.replace = true;
                     }
                     else {
-                        // Apply New Collar
-                        assignCollar(userID, targetobject.id, {}, false, nextitem.itemtowear)
                         data.textdata.c2 = getCollarName(undefined, nextitem.itemtowear), // collar name
-                            data.add = true;
+                        assignCollar(userID, process.userevents[userID].costumermimic.origbinder, { }, false, nextitem.itemtowear)
+                        data.add = true;
                     }
                     messageSendChannel(getText(data), process.recentmessages[userID]);
 

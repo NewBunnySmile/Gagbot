@@ -54,6 +54,7 @@ let processdatatoload = [
     { textname: "headwearusers.txt", processvar: "headwear", default: {} },
     { textname: "discardedkeys.txt", processvar: "discardedKeys", default: [] },
     { textname: "configs.txt", processvar: "configs", default: {}},
+    { textname: "outfits.txt", processvar: "outfits", default: {}},
     { textname: "dollusers.txt", processvar: "dolls", default: {}},
     { textname: "wearables.txt", processvar: "wearable", default: {}},
     { textname: "webhooks.txt", processvar: "webhookstoload", default: {}}
@@ -225,6 +226,10 @@ client.on('interactionCreate', async (interaction) => {
             }
             else if (interaction.customId.startsWith("list_")) {
                 let configfunc = require(`./commands/list.js`)
+                configfunc.interactionresponse(interaction);  
+            }
+            else if (interaction.customId.startsWith("outfitter_")) {
+                let configfunc = require(`./commands/outfit.js`)
                 configfunc.interactionresponse(interaction);  
             }
             const [key, ...args] = interaction.customId.split("-");

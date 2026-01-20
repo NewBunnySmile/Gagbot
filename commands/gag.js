@@ -45,6 +45,7 @@ module.exports = {
 				await handleConsent(interaction, interaction.user.id);
 				return;
 			}
+			let interactionuser = interaction.user;
 			let gagtype = interaction.options.getString("gag") ? interaction.options.getString("gag") : "ball";
 			let gagintensity = interaction.options.getNumber("intensity") ? interaction.options.getNumber("intensity") : 5;
 			let currentgag = getGag(gaggeduser.id, gagtype);
@@ -104,13 +105,22 @@ module.exports = {
 				return;
 			}
 
-			if (getHeavy(interaction.user.id)) {
+			// REFLECT
+			if (gaggeduser.id == process.client.user.id) {
+				data.gagreflect = true;
+				data.textdata.interactionuser = process.client.user;
+				data.textdata.targetuser = interaction.user;
+				interactionuser = process.client.user;
+				gaggeduser = interaction.user;
+			}
+
+			if (getHeavy(interactionuser.id)) {
 				// in heavy bondage, cant equip
 				data.heavy = true;
-				if (interaction.user == gaggeduser) {
+				if (interactionuser == gaggeduser) {
 					// gagging self
 					data.self = true;
-					if (getGag(interaction.user.id)) {
+					if (getGag(interactionuser.id)) {
 						// has a gag already
 						data.gag = true;
 						interaction.reply(getText(data));
@@ -132,11 +142,11 @@ module.exports = {
 						interaction.reply(getText(data));
 					}
 				}
-			} else if (getMitten(interaction.user.id)) {
+			} else if (getMitten(interactionuser.id)) {
 				// We are wearing mittens, we can't hold onto the straps!
 				data.noheavy = true;
 				data.mitten = true;
-				if (interaction.user.id != gaggeduser.id) {
+				if (interactionuser.id != gaggeduser.id) {
 					data.other = true; // yes, this is backwards, sorry.
 					if (getGag(gaggeduser.id)) {
 						data.gag = true;
@@ -153,7 +163,7 @@ module.exports = {
 				// We have fingers!
 				data.noheavy = true;
 				data.nomitten = true;
-				if (interaction.user.id == gaggeduser.id) {
+				if (interactionuser.id == gaggeduser.id) {
 					// Gagging ourself
 					data.self = true;
 					if (getGag(gaggeduser.id)) {
@@ -163,16 +173,16 @@ module.exports = {
 							// We are already gagged with that kind. Remove and put it at the end of the list!
 							data.changetightness = true;
 							interaction.reply(getText(data));
-							assignGag(gaggeduser.id, gagtype, gagintensity, interaction.user.id);
+							assignGag(gaggeduser.id, gagtype, gagintensity, interactionuser.id);
 						} else {
 							// We are NOT gagged with this kind.
 							data.newgag = true;
 							await interaction.deferReply({ flags: MessageFlags.Ephemeral });
-							await handleExtremeRestraint(interaction.user, gaggeduser, "gag", gagtype).then(
+							await handleExtremeRestraint(interactionuser, gaggeduser, "gag", gagtype).then(
 								async (success) => {
 									await interaction.followUp({ content: `Equipping ${gagname}`, withResponse: true });
 									await interaction.followUp(getText(data));
-									assignGag(gaggeduser.id, gagtype, gagintensity, interaction.user.id);
+									assignGag(gaggeduser.id, gagtype, gagintensity, interactionuser.id);
 								},
 								async (reject) => {
 									let nomessage = `You rejected the ${gagname}.`;
@@ -193,11 +203,11 @@ module.exports = {
 						// Not already gagged, lets put one on
 						data.nogag = true;
 						await interaction.deferReply({ flags: MessageFlags.Ephemeral });
-						await handleExtremeRestraint(interaction.user, gaggeduser, "gag", gagtype).then(
+						await handleExtremeRestraint(interactionuser, gaggeduser, "gag", gagtype).then(
 							async (success) => {
 								await interaction.followUp({ content: `Equipping ${gagname}`, withResponse: true });
 								await interaction.followUp(getText(data));
-								assignGag(gaggeduser.id, gagtype, gagintensity, interaction.user.id);
+								assignGag(gaggeduser.id, gagtype, gagintensity, interactionuser.id);
 							},
 							async (reject) => {
 								let nomessage = `You rejected the ${gagname}.`;
@@ -225,20 +235,20 @@ module.exports = {
 							// We are already gagged with that kind. Remove and put it at the end of the list!
 							data.changetightness = true;
 							// Now lets make sure the wearer wants that.
-							if (checkBondageRemoval(interaction.user.id, gaggeduser.id, "gag") == true) {
+							if (checkBondageRemoval(interactionuser.id, gaggeduser.id, "gag") == true) {
 								// Allowed immediately, lets go
 								interaction.reply(getText(data));
-								assignGag(gaggeduser.id, gagtype, gagintensity, interaction.user.id);
+								assignGag(gaggeduser.id, gagtype, gagintensity, interactionuser.id);
 							} else {
 								// We need to ask first.
 								let datatogeneric = Object.assign({}, data.textdata);
 								datatogeneric.c1 = "gag";
 								interaction.reply({ content: getTextGeneric("changebind", datatogeneric), flags: MessageFlags.Ephemeral });
-								let canRemove = await handleBondageRemoval(interaction.user, gaggeduser, "gag", true).then(
+								let canRemove = await handleBondageRemoval(interactionuser, gaggeduser, "gag", true).then(
 									async (res) => {
 										await interaction.editReply(getTextGeneric("changebind_accept", datatogeneric));
 										await interaction.followUp(getText(data));
-										assignGag(gaggeduser.id, gagtype, gagintensity, interaction.user.id);
+										assignGag(gaggeduser.id, gagtype, gagintensity, interactionuser.id);
 									},
 									async (rej) => {
 										await interaction.editReply(getTextGeneric("changebind_decline", datatogeneric));
@@ -249,14 +259,14 @@ module.exports = {
 							// We are NOT gagged with this kind.
 							data.newgag = true;
 							// Now lets make sure the wearer wants that.
-							if (checkBondageRemoval(interaction.user.id, gaggeduser.id, "gag") == true) {
+							if (checkBondageRemoval(interactionuser.id, gaggeduser.id, "gag") == true) {
 								// Allowed immediately, lets go
 								await interaction.deferReply({ flags: MessageFlags.Ephemeral });
-								await handleExtremeRestraint(interaction.user, gaggeduser, "gag", gagtype).then(
+								await handleExtremeRestraint(interactionuser, gaggeduser, "gag", gagtype).then(
 									async (success) => {
 										await interaction.followUp({ content: `Equipping ${gagname}`, withResponse: true });
 										await interaction.followUp(getText(data));
-										assignGag(gaggeduser.id, gagtype, gagintensity, interaction.user.id);
+										assignGag(gaggeduser.id, gagtype, gagintensity, interactionuser.id);
 									},
 									async (reject) => {
 										let nomessage = `${gaggeduser} rejected the ${gagname}.`;
@@ -277,14 +287,14 @@ module.exports = {
 								let datatogeneric = Object.assign({}, data.textdata);
 								datatogeneric.c1 = "gag";
 								interaction.reply({ content: getTextGeneric("changebind", datatogeneric), flags: MessageFlags.Ephemeral });
-								let canRemove = await handleBondageRemoval(interaction.user, gaggeduser, "gag", true).then(
+								let canRemove = await handleBondageRemoval(interactionuser, gaggeduser, "gag", true).then(
 									async (res) => {
 										await interaction.editReply(getTextGeneric("changebind_accept", datatogeneric));
-										await handleExtremeRestraint(interaction.user, gaggeduser, "gag", gagtype).then(
+										await handleExtremeRestraint(interactionuser, gaggeduser, "gag", gagtype).then(
 											async (success) => {
 												await interaction.followUp({ content: `Equipping ${gagname}`, withResponse: true });
 												await interaction.followUp(getText(data));
-												assignGag(gaggeduser.id, gagtype, gagintensity, interaction.user.id);
+												assignGag(gaggeduser.id, gagtype, gagintensity, interactionuser.id);
 											},
 											async (reject) => {
 												let nomessage = `${gaggeduser} rejected the ${gagname}.`;
@@ -313,11 +323,11 @@ module.exports = {
 						data.nogag = true;
 						data[tone] = true;
 						await interaction.deferReply({ flags: MessageFlags.Ephemeral });
-						await handleExtremeRestraint(interaction.user, gaggeduser, "gag", gagtype).then(
+						await handleExtremeRestraint(interactionuser, gaggeduser, "gag", gagtype).then(
 							async (success) => {
 								await interaction.followUp({ content: `Equipping ${gagname}`, withResponse: true });
 								await interaction.followUp(getText(data));
-								assignGag(gaggeduser.id, gagtype, gagintensity, interaction.user.id);
+								assignGag(gaggeduser.id, gagtype, gagintensity, interactionuser.id);
 							},
 							async (reject) => {
 								let nomessage = `${gaggeduser} rejected the ${gagname}.`;

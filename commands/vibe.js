@@ -71,6 +71,15 @@ module.exports = {
 				return;
 			}
 
+			// REFLECT
+			if (targetuser.id == process.client.user.id) {
+				data.gagreflect = true;
+				data.textdata.interactionuser = process.client.user;
+				data.textdata.targetuser = interaction.user;
+				interaction.reply({ content: `Gagbot recognizes what you're attempting to do. Cheeky.`, flags: MessageFlags.Ephemeral });
+				return;
+			}
+
 			if (getHeavy(interaction.user.id)) {
 				// We are in heavy bondage
 				data.heavy = true;
