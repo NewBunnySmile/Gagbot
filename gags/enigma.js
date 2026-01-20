@@ -1,4 +1,4 @@
-const lockedCharacters = "\\'\",.?~!()[]{}<>*";
+const lockedCharacters = "\\'\",.?~!()[]{}<>*-#";
 
 function garbleText(text, intensity) {
 	return text
