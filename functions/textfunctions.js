@@ -1820,7 +1820,7 @@ const texts_eventfunctions = {
 				},
 				{
 					only: (t) => {
-						return t.c2.includes("Polish");
+						return t.c1.includes("Polish");
 					},
 					text: `The Costumer Mimic's tentacles secrete some liquid that washes away USER_TAG's VAR_C1!`,
 				},

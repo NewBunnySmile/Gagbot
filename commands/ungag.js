@@ -155,7 +155,6 @@ module.exports = {
 									interaction.reply(getText(data));
 									deleteGag(gaggeduser.id);
 								}
-								interaction.reply(getText(data));
 							} else {
 								// We need to ask first.
 								let datatogeneric = Object.assign({}, data.textdata);
@@ -164,17 +163,15 @@ module.exports = {
 								let canRemove = await handleBondageRemoval(interaction.user, gaggeduser, "gag").then(
 									async (res) => {
 										await interaction.editReply(getTextGeneric("unbind_accept", datatogeneric));
-										await interaction.followUp(getText(data));
 										if (gagtoremove) {
 											data.single = true;
-											interaction.reply(getText(data));
+											await interaction.followUp(getText(data));
 											deleteGag(gaggeduser.id, gagtoremove);
 										} else {
 											data.multiple = true;
-											interaction.reply(getText(data));
+											await interaction.followUp(getText(data));
 											deleteGag(gaggeduser.id);
 										}
-										interaction.reply(getText(data));
 									},
 									async (rej) => {
 										await interaction.editReply(getTextGeneric("unbind_decline", datatogeneric));
