@@ -136,6 +136,7 @@ const rogue_outfit = [
 const dancer_outfit = [
     { category: "headwear", itemtowear: "blindfold_cloth", color: null },
     { category: "wearable", itemtowear: "armbands", color: "Gold" },
+    { category: "wearable", itemtowear: "bracelets", color: "Gold" },
     { category: "wearable", itemtowear: "anklets", color: "Gold" },
     { category: "wearable", itemtowear: "necklace", color: "Gold" },
     { category: "wearable", itemtowear: "hairpins", color: "Gold" },
@@ -249,19 +250,19 @@ const mermaid_outfit = [
 
 
 const mimicCostumes = {
-    //maid_outfit: maid_outfit,
-    //ponygirl_outfit: ponygirl_outfit,
-    //bunnygirl_outfit: bunnygirl_outfit,
-    //princess_outfit: princess_outfit,
-    //lewd_princess_outfit: lewd_princess_outfit,
-    //kitsune_outfit: kitsune_outfit,
-    //librarian_outfit: librarian_outfit,
-    //rogue_outfit: rogue_outfit,
-    //dancer_outfit: dancer_outfit,
-    //paladin_outfit: paladin_outfit,
-    //ranger_outfit: ranger_outfit,
-    //healer_outfit: healer_outfit,
-    //witch_outfit: witch_outfit,
+    maid_outfit: maid_outfit,
+    ponygirl_outfit: ponygirl_outfit,
+    bunnygirl_outfit: bunnygirl_outfit,
+    princess_outfit: princess_outfit,
+    lewd_princess_outfit: lewd_princess_outfit,
+    kitsune_outfit: kitsune_outfit,
+    librarian_outfit: librarian_outfit,
+    rogue_outfit: rogue_outfit,
+    dancer_outfit: dancer_outfit,
+    paladin_outfit: paladin_outfit,
+    ranger_outfit: ranger_outfit,
+    healer_outfit: healer_outfit,
+    witch_outfit: witch_outfit,
     angel_outfit: angel_outfit,
     mermaid_outfit: mermaid_outfit,
 };
@@ -292,7 +293,8 @@ let functiontick = async (userID) => {
 
     // Only update a max of once every 20 seconds. 
     if ((process.userevents[userID].costumermimic.nextupdate ?? 0) < Date.now()) {
-        process.userevents[userID].costumermimic.nextupdate = Date.now() + 20000;
+        process.userevents[userID].costumermimic.nextupdate = Date.now() + 5000; // Test Speed
+        //process.userevents[userID].costumermimic.nextupdate = Date.now() + 20000;
     }
     else { return };
 
