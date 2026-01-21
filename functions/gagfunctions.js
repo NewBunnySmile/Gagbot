@@ -305,6 +305,11 @@ function punishDoll(userID, amount) {
 const modifymessage = async (msg, threadId) => {
 	try {
 		console.log(`${msg.channel.guild.name} - ${msg.member.displayName}: ${msg.content}`);
+
+
+		let messageTree = new MessageAST(msg.content)
+
+
 		// Mark modified message or not
 		let modifiedmessage = false;
 		let outtext = ``;
