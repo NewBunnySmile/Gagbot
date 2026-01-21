@@ -1367,7 +1367,7 @@ function generateConfigModal(interaction, menuset = "General", page, statustext)
 				pagecomponents.push(buttonsection);
 			}
 		});
-		if ((Object.keys(configoptions[menuset]).length > 4) && menuset != "Server") {
+		if (Object.keys(configoptions[menuset]).length > 4 && menuset != "Server") {
 			let optionbuttons = [
 				// Page Down
 				new ButtonBuilder()
@@ -1835,7 +1835,7 @@ async function createWebhook(interaction, channel) {
 		// Check if a Gagbot webhook already exists. This is used for human emoji.
 		let existingwebhooks = await channel.fetchWebhooks();
 		let webhook;
-        let botwebhook;
+		let botwebhook;
 		let humanwebhook;
 		// Use a user-made webhook first if available
 		existingwebhooks.forEach((w) => {
@@ -1846,13 +1846,13 @@ async function createWebhook(interaction, channel) {
 				humanwebhook = true;
 			}
 		});
-		// Create a webhook for ourselves. This is used for bot emoji. 
-        existingwebhooks.forEach((w) => {
-            if (w.applicationId == interaction.client.user.id) {
-                botwebhook = w;
-                humanwebhook = false;
-            }
-        });
+		// Create a webhook for ourselves. This is used for bot emoji.
+		existingwebhooks.forEach((w) => {
+			if (w.applicationId == interaction.client.user.id) {
+				botwebhook = w;
+				humanwebhook = false;
+			}
+		});
 		// A gagbot webhook does not exist. Create one.
 		if (!botwebhook) {
 			botwebhook = await channel.createWebhook({ name: "Gagbot Webhook (Bot)", reason: "Auto-generated Webhook for Bot Emoji" });
@@ -1909,14 +1909,15 @@ function loadWebhooks(client) {
 			if (process.webhook == undefined) {
 				process.webhook = {};
 			}
-            if (process.webhookstoload[w].human) {
-                if (process.webhook[w] == undefined) { process.webhook[w] = {} }
-                process.webhook[w].human = await client.fetchWebhook(process.webhookstoload[w].human);
-                process.webhook[w].bot = await client.fetchWebhook(process.webhookstoload[w].bot);
-            }
-            else {
-                process.webhook[w] = await client.fetchWebhook(process.webhookstoload[w]);
-            }
+			if (process.webhookstoload[w].human) {
+				if (process.webhook[w] == undefined) {
+					process.webhook[w] = {};
+				}
+				process.webhook[w].human = await client.fetchWebhook(process.webhookstoload[w].human);
+				process.webhook[w].bot = await client.fetchWebhook(process.webhookstoload[w].bot);
+			} else {
+				process.webhook[w] = await client.fetchWebhook(process.webhookstoload[w]);
+			}
 		} catch (err) {
 			// Webhook is invalid. Delete it. We'll catch issues later.
 			console.log(err);

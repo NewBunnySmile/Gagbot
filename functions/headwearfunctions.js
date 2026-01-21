@@ -19,8 +19,8 @@ const headweartypes = [
 	//Kigus
 	{ name: "Kigu Mask (😀)", value: "mask_kigu_😀", blockinspect: true, blockemote: true, replaceemote: "😀" },
 	{ name: "Kigu Mask (🥰)", value: "mask_kigu_🥰", blockinspect: true, blockemote: true, replaceemote: "🥰" },
-    // Note, emoji are denoted with EMOJI_xxx. These are replaced during the emoji replacer function
-    // This cannot be done ahead of time due to how this is loaded before the bot logs in.
+	// Note, emoji are denoted with EMOJI_xxx. These are replaced during the emoji replacer function
+	// This cannot be done ahead of time due to how this is loaded before the bot logs in.
 	{ name: "Kigu Mask (Yesh)", value: "mask_kigu_Yesh", blockinspect: true, blockemote: true, replaceemote: "EMOJI_yesh" },
 	{ name: "Kigu Mask (Miku)", value: "mask_kigu_miku", blockinspect: true, blockemote: true, replaceemote: "EMOJI_miku" },
 	{ name: "Kigu Mask (Teto)", value: "mask_kigu_teto", blockinspect: true, blockemote: true, replaceemote: "EMOJI_tetowoah" },
@@ -232,12 +232,11 @@ const processHeadwearEmoji = (userID, text, dollvisoroverride) => {
 	let wornheadwear = getHeadwear(userID);
 	for (let i = 0; i < wornheadwear.length; i++) {
 		if (getHeadwearBlocks(wornheadwear[i]) && getHeadwearBlocks(wornheadwear[i]).replaceemote != undefined) {
-            if (getHeadwearBlocks(wornheadwear[i]).replaceemote.startsWith("EMOJI_")) {
-                replaceemote = process.emojis[getHeadwearBlocks(wornheadwear[i]).replaceemote.replace("EMOJI_","")];
-            }
-            else {
-                replaceemote = getHeadwearBlocks(wornheadwear[i]).replaceemote;
-            }
+			if (getHeadwearBlocks(wornheadwear[i]).replaceemote.startsWith("EMOJI_")) {
+				replaceemote = process.emojis[getHeadwearBlocks(wornheadwear[i]).replaceemote.replace("EMOJI_", "")];
+			} else {
+				replaceemote = getHeadwearBlocks(wornheadwear[i]).replaceemote;
+			}
 		}
 	}
 

@@ -310,7 +310,7 @@ const modifymessage = async (msg, threadId) => {
 		let replaceemojireturn = replaceEmoji(msg, replacingtext, modifiedmessage);
 		modifiedmessage = replaceemojireturn.modifiedmessage;
 		replacingtext = replaceemojireturn.replacingtext;
-        let replacedemoji = modifiedmessage; // Only true if no emoji allowed or bot emoji
+		let replacedemoji = modifiedmessage; // Only true if no emoji allowed or bot emoji
 
 		// See if this message can be skipped. Messages containing only emoji do NOT need to be processed,
 		// But only if NOT wearing a headwear that replaces it in previous step.

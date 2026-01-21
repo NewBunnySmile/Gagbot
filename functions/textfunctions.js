@@ -588,7 +588,13 @@ const texts_key = {
 
 // This follows an inconsistent flat structure - consider reworking in the future.
 const texts_letgo = {
-	orgasm: [`USER_TAG is overwhelmed with pleasure, clenching USER_THEIR thighs in an earth-shattering orgasm!`, `USER_TAG convulses, finally reaching the peak and then rolls over limply, swimming in the sensation!`, `USER_TAG's breath seizes up as it all bursts, leaving a crumpled frame behind!`, `USER_TAG twitches USER_THEIR hips and thighs, finally! USER_THEY_CAP layUSER_S down, basking in the afterglow!`, `Like a dam bursting, USER_TAG thrashes out as USER_THEY finally reachUSER_ES the top!`],
+	orgasm: [
+		`USER_TAG is overwhelmed with pleasure, clenching USER_THEIR thighs in an earth-shattering orgasm!`,
+		`USER_TAG convulses, finally reaching the peak and then rolls over limply, swimming in the sensation!`,
+		`USER_TAG's breath seizes up as it all bursts, leaving a crumpled frame behind!`,
+		`USER_TAG twitches USER_THEIR hips and thighs, finally! USER_THEY_CAP layUSER_S down, basking in the afterglow!`,
+		`Like a dam bursting, USER_TAG thrashes out as USER_THEY finally reachUSER_ES the top!`,
+	],
 	chastity: [
 		`USER_TAG tries to get over the edge but is denied by USER_THEIR steel prison!`,
 		`USER_TAG frantically *claws* at USER_THEIR chastity belt, but it offers no sensation!`,

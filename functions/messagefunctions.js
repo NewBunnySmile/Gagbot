@@ -35,15 +35,13 @@ const messageSend = async (msg, str, avatarURL, username, threadId, botemoji) =>
 	let channel_id = threadId ? msg.channel.parentId : msg.channel.id;
 	// New webhook method - human emoji
 	if (process.webhook[channel_id]) {
-        if (process.webhook[channel_id].human && botemoji) {
-            webhookClient = process.webhook[channel_id].bot
-        }
-        else if (process.webhook[channel_id].human && !botemoji) {
-            webhookClient = process.webhook[channel_id].human
-        }
-        else {
-            webhookClient = process.webhook[channel_id]
-        }
+		if (process.webhook[channel_id].human && botemoji) {
+			webhookClient = process.webhook[channel_id].bot;
+		} else if (process.webhook[channel_id].human && !botemoji) {
+			webhookClient = process.webhook[channel_id].human;
+		} else {
+			webhookClient = process.webhook[channel_id];
+		}
 		webhookClient.send({ threadId: threadId, content: str, username: username, avatarURL: avatarURL, allowedMentions: { parse: [] } }).then(() => {
 			return true;
 		});
@@ -63,14 +61,12 @@ const messageSendImg = async (msg, str, avatarURL, username, threadId, attachs, 
 	// New webhook method
 	if (process.webhook[channel_id]) {
 		if (process.webhook[channel_id].human && botemoji) {
-            webhookClient = process.webhook[channel_id].bot
-        }
-        else if (process.webhook[channel_id].human && !botemoji) {
-            webhookClient = process.webhook[channel_id].human
-        }
-        else {
-            webhookClient = process.webhook[channel_id]
-        }
+			webhookClient = process.webhook[channel_id].bot;
+		} else if (process.webhook[channel_id].human && !botemoji) {
+			webhookClient = process.webhook[channel_id].human;
+		} else {
+			webhookClient = process.webhook[channel_id];
+		}
 		let attachments = [];
 		attachs.forEach((f) => {
 			attachments.push(new AttachmentBuilder(`./downloaded/${f.name}`, { name: f.name, spoiler: f.spoiler }));
