@@ -210,129 +210,129 @@ const texts_collarequip = {
 						// General Types
 						{
 							only: (t) => {
-								return t.c3.includes("Petsuit") || t.c2.includes("Piddlefours")
+								return t.c3.includes("Petsuit") || t.c2.includes("Piddlefours");
 							},
-							text: `USER_TAG pushes TARGET_TAG to their knees before kneeling down USER_THEMSELF and slipping TARGET_THEIR limbs into a VAR_C3, forcing TARGET_THEM to crawl around like a pet!`
+							text: `USER_TAG pushes TARGET_TAG to their knees before kneeling down USER_THEMSELF and slipping TARGET_THEIR limbs into a VAR_C3, forcing TARGET_THEM to crawl around like a pet!`,
 						},
 						// Stationary
 						{
 							only: (t) => {
-								return t.c3.includes("Display Stand")
+								return t.c3.includes("Display Stand");
 							},
-							text: `USER_TAG lifts TARGET_TAG into the VAR_C3, securing TARGET_THEIR legs before guiding TARGET_THEIR arms into the rigid cuffs, locking them in place! TARGET_THEIR_CAP body is held in a strict, ramrod position!`
+							text: `USER_TAG lifts TARGET_TAG into the VAR_C3, securing TARGET_THEIR legs before guiding TARGET_THEIR arms into the rigid cuffs, locking them in place! TARGET_THEIR_CAP body is held in a strict, ramrod position!`,
 						},
 						{
 							only: (t) => {
-								return t.c3.includes("One Bar Prison")
+								return t.c3.includes("One Bar Prison");
 							},
-							text: `USER_TAG guides TARGET_TAG onto the VAR_C3, forcing TARGET_THEM to spread TARGET_THEIR legs to stand in the footrests before holding TARGET_THEM in place as the pole rises between TARGET_THEIR's legs, trapping TARGET_THEM in place!`
+							text: `USER_TAG guides TARGET_TAG onto the VAR_C3, forcing TARGET_THEM to spread TARGET_THEIR legs to stand in the footrests before holding TARGET_THEM in place as the pole rises between TARGET_THEIR's legs, trapping TARGET_THEM in place!`,
 						},
 						{
 							only: (t) => {
-								return t.c3.includes("X-Frame")
+								return t.c3.includes("X-Frame");
 							},
-							text: `USER_TAG presses TARGET_TAG up against the VAR_C3, reaching up and locking TARGET_THEIR arms into the upper cuffs. Then after trapping TARGET_TAG, USER_THEM bends down to lock TARGET_THEIR legs to the frame, leaving TARGET_THEMSELF completely exposed!`
+							text: `USER_TAG presses TARGET_TAG up against the VAR_C3, reaching up and locking TARGET_THEIR arms into the upper cuffs. Then after trapping TARGET_TAG, USER_THEM bends down to lock TARGET_THEIR legs to the frame, leaving TARGET_THEMSELF completely exposed!`,
 						},
 						{
 							only: (t) => {
-								return t.c3.includes("Wooden Horse")
+								return t.c3.includes("Wooden Horse");
 							},
-							text: `TARGET_TAG helps USER_TAG climb onto the VAR_C3, securing TARGET_THEIR legs into the cuffs and then reaching over and securing TARGET_THEIR wrists into the front cuffs! Stepping back to enjoy the sight of TARGET_TAG squirming as TARGET_THEIR_CAP weight presses the top edge of the frame into TARGET_THEIR crotch!`
+							text: `TARGET_TAG helps USER_TAG climb onto the VAR_C3, securing TARGET_THEIR legs into the cuffs and then reaching over and securing TARGET_THEIR wrists into the front cuffs! Stepping back to enjoy the sight of TARGET_TAG squirming as TARGET_THEIR_CAP weight presses the top edge of the frame into TARGET_THEIR crotch!`,
 						},
 						{
 							only: (t) => {
-								return t.c3.includes("Latex Encasement")
+								return t.c3.includes("Latex Encasement");
 							},
-							text: `USER_TAG guides TARGET_TAG into a latex puddle, watching as it spreads over TARGET_THEIR feet and begins to climb up TARGET_THEIR legs. Before long everything below TARGET_THEIR neck is covered in a layer of latex!`
+							text: `USER_TAG guides TARGET_TAG into a latex puddle, watching as it spreads over TARGET_THEIR feet and begins to climb up TARGET_THEIR legs. Before long everything below TARGET_THEIR neck is covered in a layer of latex!`,
 						},
 						{
 							only: (t) => {
-								return t.c3.includes("Dancer's Pole")
+								return t.c3.includes("Dancer's Pole");
 							},
-							text: `USER_TAG helps TARGET_TAG climb onto the stage and cuffs TARGET_THEMSELF to the VAR_C3, swatting TARGET_THEM on the ass before climbing down and settling into a comfortable seat to watch TARGET_TAG dancing sensually for their enjoyment~!`
+							text: `USER_TAG helps TARGET_TAG climb onto the stage and cuffs TARGET_THEMSELF to the VAR_C3, swatting TARGET_THEM on the ass before climbing down and settling into a comfortable seat to watch TARGET_TAG dancing sensually for their enjoyment~!`,
 						},
 						{
 							only: (t) => {
-								return t.c3.includes("Pet Cage")
+								return t.c3.includes("Pet Cage");
 							},
-							text: `USER_TAG opens the door and gestures for TARGET_TAG to crawl into the VAR_C3, swinging the door closed behind TARGET_THEM and locking it in place with a soft but final click!`
+							text: `USER_TAG opens the door and gestures for TARGET_TAG to crawl into the VAR_C3, swinging the door closed behind TARGET_THEM and locking it in place with a soft but final click!`,
 						},
 						{
 							only: (t) => {
-								return t.c3.includes("Leashing Post")
+								return t.c3.includes("Leashing Post");
 							},
-							text: `USER_TAG leads TARGET_TAG over to the VAR_C3, forcing TARGET_THEM to kneel down before leashing TARGET_THEM securely to the VAR_C3!`
+							text: `USER_TAG leads TARGET_TAG over to the VAR_C3, forcing TARGET_THEM to kneel down before leashing TARGET_THEM securely to the VAR_C3!`,
 						},
 						// Latex
 						{
 							only: (t) => {
-								return t.c3.includes("Latex Vacbed")
+								return t.c3.includes("Latex Vacbed");
 							},
-							text: `USER_TAG lifts the upper sheet of the VAR_C3, waiting while TARGET_TAG slides into the VAR_C3, before dropping it back in place and allowing the sheets to seal together around TARGET_THEM. With a humming sound the air is pumped out, sealing TARGET_TAG helplessly in place!`
+							text: `USER_TAG lifts the upper sheet of the VAR_C3, waiting while TARGET_TAG slides into the VAR_C3, before dropping it back in place and allowing the sheets to seal together around TARGET_THEM. With a humming sound the air is pumped out, sealing TARGET_TAG helplessly in place!`,
 						},
 						{
 							only: (t) => {
-								return t.c3.includes("Latex Vaccube")
+								return t.c3.includes("Latex Vaccube");
 							},
-							text: `USER_TAG helps TARGET_TAG slip into the VAR_C3, leaving only TARGET_THEIR head poking out as TARGET_THEY kneel within the cube. With a humming sound the air is pumped out and the latex seals around TARGET_THEM, trapping TARGET_THEM helplessly inside!`
+							text: `USER_TAG helps TARGET_TAG slip into the VAR_C3, leaving only TARGET_THEIR head poking out as TARGET_THEY kneel within the cube. With a humming sound the air is pumped out and the latex seals around TARGET_THEM, trapping TARGET_THEM helplessly inside!`,
 						},
 						// Furniture
 						{
 							only: (t) => {
-								return t.c3.includes("Bed Restraints")
+								return t.c3.includes("Bed Restraints");
 							},
-							text: `Guiding TARGET_TAG to stretch out on the bed, USER_TAG leans over to lock TARGET_THEIR ankles into the VAR_C3 before straddling TARGET_THEM and reaching up to lock TARGET_THEIR arms into the remaining pair of cuffs, leaving TARGET_THEM helplessly spread out beneath USER_THEM~!`
+							text: `Guiding TARGET_TAG to stretch out on the bed, USER_TAG leans over to lock TARGET_THEIR ankles into the VAR_C3 before straddling TARGET_THEM and reaching up to lock TARGET_THEIR arms into the remaining pair of cuffs, leaving TARGET_THEM helplessly spread out beneath USER_THEM~!`,
 						},
 						{
 							only: (t) => {
-								return t.c3.includes("Chair with Cuffs")
+								return t.c3.includes("Chair with Cuffs");
 							},
-							text: `Sitting TARGET_TAG down in the VAR_C3, USER_TAG kneels and slips TARGET_THEIR ankles into the ankle cuffs, before standing up and walking around to slip TARGET_THEIR arms into cuffs behind TARGET_THEM and snaping them shut!`
+							text: `Sitting TARGET_TAG down in the VAR_C3, USER_TAG kneels and slips TARGET_THEIR ankles into the ankle cuffs, before standing up and walking around to slip TARGET_THEIR arms into cuffs behind TARGET_THEM and snaping them shut!`,
 						},
 						// Encasement or Wrappings
 						{
 							only: (t) => {
-								return t.c3.includes("Autotape")
+								return t.c3.includes("Autotape");
 							},
-							text: `USER_TAG releases a swarm of small drones that zip around TARGET_TAG, dispensing Autotape and binding TARGET_THEM into an VAR_C3!`
+							text: `USER_TAG releases a swarm of small drones that zip around TARGET_TAG, dispensing Autotape and binding TARGET_THEM into an VAR_C3!`,
 						},
 						{
 							only: (t) => {
-								return t.c3.includes("Bandage")
+								return t.c3.includes("Bandage");
 							},
-							text: `USER_TAG pulls out a roll of VAR_C3 and begins to wind them around TARGET_TAG! Soon enough TARGET_THEY are completely mummified by the VAR_C3!`
+							text: `USER_TAG pulls out a roll of VAR_C3 and begins to wind them around TARGET_TAG! Soon enough TARGET_THEY are completely mummified by the VAR_C3!`,
 						},
 						// Comfy
 						{
 							only: (t) => {
-								return t.c3.includes("Weighted Blanket")
+								return t.c3.includes("Weighted Blanket");
 							},
-							text: `USER_TAG tosses a VAR_C3 over TARGET_TAG! It is so comfy that TARGET_THEY can't bring themselves to wriggle out from under the extremely heavy blanket!`
+							text: `USER_TAG tosses a VAR_C3 over TARGET_TAG! It is so comfy that TARGET_THEY can't bring themselves to wriggle out from under the extremely heavy blanket!`,
 						},
 						{
 							only: (t) => {
-								return t.c3.includes("Blanket Burrito")
+								return t.c3.includes("Blanket Burrito");
 							},
-							text: `USER_TAG wraps TARGET_TAG up into a VAR_C3! It doesn't take TARGET_TAG long before TARGT_THEY realise USER_TAG has trapped TARGET_THEM in a warm comfy prison!`
+							text: `USER_TAG wraps TARGET_TAG up into a VAR_C3! It doesn't take TARGET_TAG long before TARGT_THEY realise USER_TAG has trapped TARGET_THEM in a warm comfy prison!`,
 						},
 						{
 							only: (t) => {
-								return t.c3.includes("Toasty Kotatsu")
+								return t.c3.includes("Toasty Kotatsu");
 							},
-							text: `As USER_TAG helps TARGET_TAG slide into the warmth of the VAR_C3, TARGET_TAG realises TARGET_THEY can't bring TARGET_THEMSELF to leave the VAR_C3!`
+							text: `As USER_TAG helps TARGET_TAG slide into the warmth of the VAR_C3, TARGET_TAG realises TARGET_THEY can't bring TARGET_THEMSELF to leave the VAR_C3!`,
 						},
 						// Misc
 						{
 							only: (t) => {
-								return (t.c3.includes("Festive Ribbons") || t.c3.includes("Wrapping Paper"))
+								return t.c3.includes("Festive Ribbons") || t.c3.includes("Wrapping Paper");
 							},
-							text: `USER_TAG carefully wraps TARGET_TAG in VAR_C2! Who are they planning to gift such a present too~?`
+							text: `USER_TAG carefully wraps TARGET_TAG in VAR_C2! Who are they planning to gift such a present too~?`,
 						},
 						{
 							only: (t) => {
-								return t.c3.includes("Magic Mirror")
+								return t.c3.includes("Magic Mirror");
 							},
-							text: `USER_TAG pushes TARGET_TAG backwards into a VAR_C2! As TARGET_THEY touch it the Mirror emits a bright flash of light, and TARGET_TAG finds themselves trapped within the reflection!`
+							text: `USER_TAG pushes TARGET_TAG backwards into a VAR_C2! As TARGET_THEY touch it the Mirror emits a bright flash of light, and TARGET_TAG finds themselves trapped within the reflection!`,
 						},
 						{
 							only: (t) => {
@@ -763,9 +763,9 @@ const texts_heavy = {
 		},
 		{
 			only: (t) => {
-				return t.c3.includes("Bandage")
+				return t.c3.includes("Bandage");
 			},
-			text: `USER_TAG pulls out a roll of VAR_C3 and enchants them to wind around USER_THEMSELF! Soon enough USER_THEY are completely mummified by the VAR_C3!`
+			text: `USER_TAG pulls out a roll of VAR_C3 and enchants them to wind around USER_THEMSELF! Soon enough USER_THEY are completely mummified by the VAR_C3!`,
 		},
 		// Comfy
 		{
