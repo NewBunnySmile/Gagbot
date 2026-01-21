@@ -12,6 +12,9 @@ const { DOLLMAXPUNISHMENT, textGarbleDOLL } = require(`./../functions/dollfuncti
 const { splitMessage } = require(`./../functions/messagefunctions.js`);
 const { assignHeavy } = require(`./../functions/heavyfunctions.js`);
 
+
+const { MessageAST } = require(`./../functions/message_ast.js`)
+
 // Grab all the command files from the commands directory
 const gagtypes = [];
 const commandsPath = path.join(__dirname, "..", "gags");
