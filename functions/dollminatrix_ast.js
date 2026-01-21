@@ -428,7 +428,6 @@ const runOldTests = () => {
     console.log("Edited:\n" +unpackMessage(dollSTRAST))
 }
 
-
 // Run unit tests on MessageAST
 ////////////////////////////////////
 const testClass_MessageAST = () => {
@@ -465,4 +464,5 @@ const testClass_MessageAST = () => {
 }
 
 
-testClass_MessageAST();
+
+exports.MessageAST = MessageAST
