@@ -34,20 +34,20 @@ function rollKeyFumble(keyholder, locked, maxFumbles = 1) {
 			fumbleChance = nextFumbleChance;
 
 			// fumbling is frustrating
-			const penalties = frustrationPenalties.get(user) ?? [];
-			penalties.push({ timestamp: now, value: 15, decay: 2 });
-			frustrationPenalties.set(user, penalties);
+			const penalties = frustrationPenalties.get(keyholder) ?? [];
+			penalties.push({ timestamp: Date.now(), value: 15, decay: 2 });
+			frustrationPenalties.set(keyholder, penalties);
 		} else {
-			setUserVar(keyholder, "blessing", 0);
+			if (i == 0) setUserVar(keyholder, "blessing", 0);
 			return i;
 		}
 	}
+	return maxFumbles;
 }
 
 // return of 0 = never, 1+ = always
 function getFumbleChance(keyholder, locked) {
 	if (!config.getDynamicArousal(keyholder)) return 0;
-	if (config.getKeyLossDisabled(keyholder)) return 0;
 	if (keyholder != locked && (!config.getKeyFumblingOthers(keyholder) || !config.getKeyFumblingOthers(locked))) return 0;
 	let chance = FUMBLE_AROUSAL_POTENCY * Math.log(1 + FUMBLE_AROUSAL_COEFFICIENT * getArousal(keyholder)) + calcFrustration(keyholder);
 
