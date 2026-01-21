@@ -833,7 +833,7 @@ const configoptions = {
 				return false;
 			},
 		},
-        "extreme-gag-clockmaker": {
+		"extreme-gag-clockmaker": {
 			name: "Gag - Clockmaker's Gag",
 			desc: "Limits communication to regular intervals",
 			prompttext: `The Clockmaker's Gag will force you to speak only in regular timed intervals.`,
