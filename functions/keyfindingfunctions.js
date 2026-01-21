@@ -5,7 +5,7 @@ const { getMitten } = require("./gagfunctions");
 const fs = require("fs");
 const { getUserVar, setUserVar } = require("./usercontext");
 const { getHeavy } = require("./heavyfunctions");
-const { config } = require("./configfunctions");
+const { config, getOption } = require("./configfunctions");
 const { findChastityBraKey } = require("./vibefunctions");
 const { messageSendChannel } = require("./messagefunctions.js");
 const { PermissionsBitField } = require("discord.js");
@@ -31,6 +31,10 @@ function rollKeyFumble(keyholder, locked) {
 
 // use this if the same action causes multiple rolls to not trigger timeout before being done
 function rollKeyFumbleN(keyholder, locked, n) {
+	// Do NOT even attempt a fumble if the wearer has disabled this.
+	if (getOption(locked, "fumbling") == "disabled") {
+		return Array(n).fill(false);
+	}
 	const fumbleChance = getFumbleChance(keyholder, locked);
 	if (!fumbleChance) return Array(n).fill(false);
 	const results = [];

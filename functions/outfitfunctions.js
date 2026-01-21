@@ -253,11 +253,11 @@ async function generateOutfitModal(userID, menu, page, options) {
 					}
 					if (k == "gag") {
 						let emoji = getHeavy(userID) || getMitten(userID) ? "⚠️" : "✅";
-						textdisplay = `${textdisplay}<:Gag:1073495437635506216> Gag: ${emoji}, `;
+						textdisplay = `${textdisplay}${process.emojis.gag} Gag: ${emoji}, `;
 					}
 					if (k == "mitten") {
 						let emoji = getHeavy(userID) || getMitten(userID) ? "⚠️" : "✅";
-						textdisplay = `${textdisplay}<:mittens:1452425463757803783> Mitten: ${emoji}, `;
+						textdisplay = `${textdisplay}${process.emojis.mitten} Mitten: ${emoji}, `;
 					}
 					if (k == "headwear") {
 						let emoji = getHeavy(userID) || getMitten(userID) ? "⚠️" : "✅";
@@ -265,27 +265,27 @@ async function generateOutfitModal(userID, menu, page, options) {
 					}
 					if (k == "collar") {
 						let emoji = getHeavy(userID) || (!canAccessCollar(userID, userID, true).access && canAccessCollar(userID, userID, true).hascollar) ? "⚠️" : "✅";
-						textdisplay = `${textdisplay}<:collar:1449984183261986939> Collar: ${emoji}, `;
+						textdisplay = `${textdisplay}${process.emojis.collar} Collar: ${emoji}, `;
 					}
 					if (k == "heavy") {
 						let emoji = getHeavy(userID) ? "⚠️" : "✅";
-						textdisplay = `${textdisplay}<:Armbinder:1073495590656286760> Heavy: ${emoji}, `;
+						textdisplay = `${textdisplay}${process.emojis.armbinder} Heavy: ${emoji}, `;
 					}
 					if (k == "corset") {
 						let emoji = getHeavy(userID) || (!canAccessChastity(userID, userID, true).access && canAccessChastity(userID, userID, true).hasbelt) ? "⚠️" : "✅";
-						textdisplay = `${textdisplay}<:corset:1451126998192881684> Corset: ${emoji}, `;
+						textdisplay = `${textdisplay}${process.emojis.corset} Corset: ${emoji}, `;
 					}
 					if (k == "chastity") {
 						let emoji = getHeavy(userID) || (!canAccessChastity(userID, userID, true).access && canAccessChastity(userID, userID, true).hasbelt) ? "⚠️" : "✅";
-						textdisplay = `${textdisplay}<:Chastity:1073495208861380629> Chastity: ${emoji}, `;
+						textdisplay = `${textdisplay}${process.emojis.chastity} Chastity: ${emoji}, `;
 					}
 					if (k == "chastitybra") {
 						let emoji = getHeavy(userID) || (!canAccessChastityBra(userID, userID, true).access && canAccessChastityBra(userID, userID, true).hasbelt) ? "⚠️" : "✅";
-						textdisplay = `${textdisplay}<:chastitybra:1457992137164718152> Chastity Bra: ${emoji}, `;
+						textdisplay = `${textdisplay}${process.emojis.chastitybra} Chastity Bra: ${emoji}, `;
 					}
 					if (k == "vibe") {
 						let emoji = getHeavy(userID) || (!canAccessChastity(userID, userID, true).access && canAccessChastity(userID, userID, true).hasbelt) ? "⚠️" : "✅";
-						textdisplay = `${textdisplay}<:MagicWand:1073504682540011520> Vibrator: ${emoji}, `;
+						textdisplay = `${textdisplay}${process.emojis.wand} Vibrator: ${emoji}, `;
 					}
 				});
 			} else {

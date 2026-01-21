@@ -226,17 +226,17 @@ module.exports = {
 				if (chosenrestrainttoclone == "collar" && getCollar(wearertoclone.id) && canAccessCollar(wearertoclone.id, interaction.user.id, undefined, true).access) {
 					canclone = true;
 					chosenrestraintreadable = "collar";
-					choiceemoji = "<:collar:1449984183261986939>";
+					choiceemoji = `${process.emojis.collar}`;
 				}
 				if (chosenrestrainttoclone == "chastitybelt" && getChastity(wearertoclone.id) && canAccessChastity(wearertoclone.id, interaction.user.id, undefined, true).access) {
 					canclone = true;
 					chosenrestraintreadable = "chastity belt";
-					choiceemoji = "<:Chastity:1073495208861380629>";
+					choiceemoji = `${process.emojis.chastity}`;
 				}
 				if (chosenrestrainttoclone == "chastitybra" && getChastityBra(wearertoclone.id) && canAccessChastityBra(wearertoclone.id, interaction.user.id, undefined, true).access) {
 					canclone = true;
 					chosenrestraintreadable = "chastity bra";
-					choiceemoji = "<:chastitybra:1457992137164718152>";
+					choiceemoji = `${process.emojis.chastitybra}`;
 				}
 				if (!canclone) {
 					interaction.reply({ content: `You do not have the keys for ${wearertoclone}'s ${chosenrestrainttoclone}.`, flags: MessageFlags.Ephemeral });
@@ -398,33 +398,33 @@ module.exports = {
 				if (typeofrestraint == "collar" && getCollar(wearer.id) && canAccessCollar(wearer.id, interaction.user.id, undefined, true).access) {
 					canrevoke = true;
 					typeofrestraintreadable = "collar";
-					choiceemoji = "<:collar:1449984183261986939>";
+					choiceemoji = `${process.emojis.collar}`;
 				}
 				if (typeofrestraint == "chastitybelt" && getChastity(wearer.id) && canAccessChastity(wearer.id, interaction.user.id, undefined, true).access) {
 					canrevoke = true;
 					typeofrestraintreadable = "chastity belt";
-					choiceemoji = "<:Chastity:1073495208861380629>";
+					choiceemoji = `${process.emojis.chastity}`;
 				}
 				if (typeofrestraint == "chastitybra" && getChastityBra(wearer.id) && canAccessChastityBra(wearer.id, interaction.user.id, undefined, true).access) {
 					canrevoke = true;
 					typeofrestraintreadable = "chastity bra";
-					choiceemoji = "<:chastitybra:1457992137164718152>";
+					choiceemoji = `${process.emojis.chastitybra}`;
 				}
 				// Allow cloned key to be revoked if the cloned keyholder is the interaction user.
 				if (typeofrestraint == "collar" && getCollar(wearer.id) && canAccessCollar(wearer.id, interaction.user.id).access && clonedkeyholder == interaction.user) {
 					canrevoke = true;
 					typeofrestraintreadable = "collar";
-					choiceemoji = "<:collar:1449984183261986939>";
+					choiceemoji = `${process.emojis.collar}`;
 				}
 				if (typeofrestraint == "chastitybelt" && getChastity(wearer.id) && canAccessChastity(wearer.id, interaction.user.id).access && clonedkeyholder == interaction.user) {
 					canrevoke = true;
 					typeofrestraintreadable = "chastity belt";
-					choiceemoji = "<:Chastity:1073495208861380629>";
+					choiceemoji = `${process.emojis.chastity}`;
 				}
 				if (typeofrestraint == "chastitybra" && getChastityBra(wearer.id) && canAccessChastityBra(wearer.id, interaction.user.id).access && clonedkeyholder == interaction.user) {
 					canrevoke = true;
 					typeofrestraintreadable = "chastity bra";
-					choiceemoji = "<:chastitybra:1457992137164718152>";
+					choiceemoji = `${process.emojis.chastitybra}`;
 				}
 				if (clonedkeyholder == interaction.user) {
 					isclone = true;
@@ -521,17 +521,17 @@ module.exports = {
 				if (restraint == "collar" && getCollar(wearer.id) && canAccessCollar(wearer.id, interaction.user.id, undefined, true)) {
 					cangive = true;
 					chosenrestraintreadable = "collar";
-					choiceemoji = "<:collar:1449984183261986939>";
+					choiceemoji = `${process.emojis.collar}`;
 				}
 				if (restraint == "chastitybelt" && getChastity(wearer.id) && canAccessChastity(wearer.id, interaction.user.id, undefined, true)) {
 					cangive = true;
 					chosenrestraintreadable = "chastity belt";
-					choiceemoji = "<:Chastity:1073495208861380629>";
+					choiceemoji = `${process.emojis.chastity}`;
 				}
 				if (restraint == "chastitybra" && getChastityBra(wearer.id) && canAccessChastityBra(wearer.id, interaction.user.id, undefined, true)) {
 					cangive = true;
 					chosenrestraintreadable = "chastity bra";
-					choiceemoji = "<:chastitybra:1457992137164718152>";
+					choiceemoji = `${process.emojis.chastitybra}`;
 				}
 				if (!cangive) {
 					interaction.reply({ content: `You do not have the keys for ${wearer}'s ${restraint}.`, flags: MessageFlags.Ephemeral });

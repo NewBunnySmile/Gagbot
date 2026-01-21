@@ -37,14 +37,14 @@ module.exports = {
 			// Gag status
 			// You can easily feel if you're gagged, so no restrictions here
 			if (getGag(inspectuser.id)) {
-				let inspecttext = `<:Gag:1073495437635506216> Gag: **`;
+				let inspecttext = `${process.emojis.gag} Gag: **`;
 				getGags(inspectuser.id).forEach((g) => {
 					inspecttext = `${inspecttext}${convertGagText(g.gagtype)} (${g.intensity}), `;
 				});
 				inspecttext = `${inspecttext.slice(0, -2)}**`;
 				inspectparts.push(inspecttext);
 			} else {
-				inspectparts.push(`<:Gag:1073495437635506216> Gag: Not currently worn.`);
+				inspectparts.push(`${process.emojis.gag} Gag: Not currently worn.`);
 			}
 			// Headwear parts!
 			console.log(getHeadwear(inspectuser.id));
@@ -71,12 +71,12 @@ module.exports = {
 			// You can easily feel if you're wearing mittens, so no restrictions
 			if (getMitten(inspectuser.id)) {
 				if (getMittenName(inspectuser.id)) {
-					inspectparts.push(`<:mittens:1452425463757803783> Mittens: **${getMittenName(inspectuser.id)}**`);
+					inspectparts.push(`${process.emojis.mitten} Mittens: **${getMittenName(inspectuser.id)}**`);
 				} else {
-					inspectparts.push(`<:mittens:1452425463757803783> Mittens: **WORN**`);
+					inspectparts.push(`${process.emojis.mitten} Mittens: **WORN**`);
 				}
 			} else {
-				inspectparts.push(`<:mittens:1452425463757803783> Mittens: Not currently worn.`);
+				inspectparts.push(`${process.emojis.mitten} Mittens: Not currently worn.`);
 			}
 			// Wearable status
 			// You probably can't really tell what you're wearing but...
@@ -109,12 +109,12 @@ module.exports = {
 			// Vibe status
 			if (getVibe(inspectuser.id)) {
 				inspectparts.push(
-					`<:MagicWand:1073504682540011520> Vibrators/toys: **${getVibe(inspectuser.id)
+					`${process.emojis.wand} Vibrators/toys: **${getVibe(inspectuser.id)
 						.map((vibe) => `${vibe.vibetype} (${vibe.intensity})`)
 						.join(", ")}**`,
 				);
 			} else {
-				inspectparts.push(`<:MagicWand:1073504682540011520> Vibrator: Not currently worn.`);
+				inspectparts.push(`${process.emojis.wand} Vibrator: Not currently worn.`);
 			}
 			// Arousal status
 			// You can *definitely* tell how horny you are, so no restrictions
@@ -145,19 +145,19 @@ module.exports = {
 				}
 				if (!headwearrestrictions.canInspect) {
 					// Wearer is blind - they can only tell its on and locked. Nothing more.
-					inspectparts.push(`<:Chastity:1073495208861380629> Chastity Belt: **${currentchastitybelt}**\n-# ‎   ⤷ ${lockemoji} **Locked (blind)**`);
+					inspectparts.push(`${process.emojis.chastity} Chastity Belt: **${currentchastitybelt}**\n-# ‎   ⤷ ${lockemoji} **Locked (blind)**`);
 				} else if (getChastity(inspectuser.id).keyholder == "discarded") {
-					inspectparts.push(`<:Chastity:1073495208861380629> Chastity Belt: **${currentchastitybelt}**\n-# ‎   ⤷ ${lockemoji} **Keys are Missing!**`);
+					inspectparts.push(`${process.emojis.chastity} Chastity Belt: **${currentchastitybelt}**\n-# ‎   ⤷ ${lockemoji} **Keys are Missing!**`);
 				} else if (getChastityTimelock(inspectuser.id)) {
-					inspectparts.push(`<:Chastity:1073495208861380629> Chastity Belt: **${currentchastitybelt}**\n-# ‎   ⤷ ${lockemoji} **${timelockedtext} until ${getChastityTimelock(inspectuser.id, true)}**`);
+					inspectparts.push(`${process.emojis.chastity} Chastity Belt: **${currentchastitybelt}**\n-# ‎   ⤷ ${lockemoji} **${timelockedtext} until ${getChastityTimelock(inspectuser.id, true)}**`);
 				} else if (getChastity(inspectuser.id).keyholder == inspectuser.id) {
 					// Self bound!
-					inspectparts.push(`<:Chastity:1073495208861380629> Chastity Belt: **${currentchastitybelt}**\n-# ‎   ⤷ ${lockemoji} **Self-bound!**`);
+					inspectparts.push(`${process.emojis.chastity} Chastity Belt: **${currentchastitybelt}**\n-# ‎   ⤷ ${lockemoji} **Self-bound!**`);
 				} else {
-					inspectparts.push(`<:Chastity:1073495208861380629> Chastity Belt: **${currentchastitybelt}**\n-# ‎   ⤷ ${lockemoji} **Key held by <@${getChastity(inspectuser.id).keyholder}>**`);
+					inspectparts.push(`${process.emojis.chastity} Chastity Belt: **${currentchastitybelt}**\n-# ‎   ⤷ ${lockemoji} **Key held by <@${getChastity(inspectuser.id).keyholder}>**`);
 				}
 			} else {
-				inspectparts.push(`<:Chastity:1073495208861380629> Chastity Belt: Not currently worn.`);
+				inspectparts.push(`${process.emojis.chastity} Chastity Belt: Not currently worn.`);
 			}
 			// Chastity Bra status.
 			// You'll be able to tell that it's locked, but nothing more.
@@ -178,41 +178,41 @@ module.exports = {
 				}
 				if (!headwearrestrictions.canInspect) {
 					// Wearer is blind - they can only tell its on and locked. Nothing more.
-					inspectparts.push(`<:chastitybra:1457992137164718152> Chastity Bra: **${currentchastitybelt}**\n-# ‎   ⤷ ${lockemoji} **Locked (blind)**`);
+					inspectparts.push(`${process.emojis.chastitybra} Chastity Bra: **${currentchastitybelt}**\n-# ‎   ⤷ ${lockemoji} **Locked (blind)**`);
 				} else if (getChastityBra(inspectuser.id).keyholder == "discarded") {
-					inspectparts.push(`<:chastitybra:1457992137164718152> Chastity Bra: **${currentchastitybelt}**\n-# ‎   ⤷ ${lockemoji} **Keys are Missing!**`);
+					inspectparts.push(`${process.emojis.chastitybra} Chastity Bra: **${currentchastitybelt}**\n-# ‎   ⤷ ${lockemoji} **Keys are Missing!**`);
 				} else if (getChastityBraTimelock(inspectuser.id)) {
-					inspectparts.push(`<:chastitybra:1457992137164718152> Chastity Bra: **${currentchastitybelt}**\n-# ‎   ⤷ ${lockemoji} **${timelockedtext} until ${getChastityTimelock(inspectuser.id, true)}**`);
+					inspectparts.push(`${process.emojis.chastitybra} Chastity Bra: **${currentchastitybelt}**\n-# ‎   ⤷ ${lockemoji} **${timelockedtext} until ${getChastityTimelock(inspectuser.id, true)}**`);
 				} else if (getChastityBra(inspectuser.id).keyholder == inspectuser.id) {
 					// Self bound!
-					inspectparts.push(`<:chastitybra:1457992137164718152> Chastity Bra: **${currentchastitybelt}**\n-# ‎   ⤷ ${lockemoji} **Self-bound!**`);
+					inspectparts.push(`${process.emojis.chastitybra} Chastity Bra: **${currentchastitybelt}**\n-# ‎   ⤷ ${lockemoji} **Self-bound!**`);
 				} else {
-					inspectparts.push(`<:chastitybra:1457992137164718152> Chastity Bra: **${currentchastitybelt}**\n-# ‎   ⤷ ${lockemoji} **Key held by <@${getChastityBra(inspectuser.id).keyholder}>**`);
+					inspectparts.push(`${process.emojis.chastitybra} Chastity Bra: **${currentchastitybelt}**\n-# ‎   ⤷ ${lockemoji} **Key held by <@${getChastityBra(inspectuser.id).keyholder}>**`);
 				}
 			} else {
-				inspectparts.push(`<:chastitybra:1457992137164718152> Chastity Bra: Not currently worn.`);
+				inspectparts.push(`${process.emojis.chastitybra} Chastity Bra: Not currently worn.`);
 			}
 			// Corset status
 			// Can probably easily tell how tight it is by how shallow your breathing is. No restrictions.
 			if (getCorset(inspectuser.id)) {
 				if (getCorset(inspectuser.id).tightness > 10) {
-					inspectparts.push(`<:corset:1451126998192881684> Corset: **Laced beyond reason to a string length of ${getCorset(inspectuser.id).tightness}**`);
+					inspectparts.push(`${process.emojis.corset} Corset: **Laced beyond reason to a string length of ${getCorset(inspectuser.id).tightness}**`);
 				} else if (getCorset(inspectuser.id).tightness > 7) {
-					inspectparts.push(`<:corset:1451126998192881684> Corset: **Laced tightly to a string length of ${getCorset(inspectuser.id).tightness}**`);
+					inspectparts.push(`${process.emojis.corset} Corset: **Laced tightly to a string length of ${getCorset(inspectuser.id).tightness}**`);
 				} else if (getCorset(inspectuser.id).tightness > 4) {
-					inspectparts.push(`<:corset:1451126998192881684> Corset: **Laced moderately to a string length of ${getCorset(inspectuser.id).tightness}**`);
+					inspectparts.push(`${process.emojis.corset} Corset: **Laced moderately to a string length of ${getCorset(inspectuser.id).tightness}**`);
 				} else {
-					inspectparts.push(`<:corset:1451126998192881684> Corset: **Laced loosely to a string length of ${getCorset(inspectuser.id).tightness}**`);
+					inspectparts.push(`${process.emojis.corset} Corset: **Laced loosely to a string length of ${getCorset(inspectuser.id).tightness}**`);
 				}
 			} else {
-				inspectparts.push(`<:corset:1451126998192881684> Corset: Not currently worn.`);
+				inspectparts.push(`${process.emojis.corset} Corset: Not currently worn.`);
 			}
 			// Heavy Bondage status
 			// Bendy arms are uncomfortable! Easy to tell! No restrictions!
 			if (getHeavy(inspectuser.id)) {
-				inspectparts.push(`<:Armbinder:1073495590656286760> Heavy Bondage: **${getHeavy(inspectuser.id).type}**`);
+				inspectparts.push(`${process.emojis.armbinder} Heavy Bondage: **${getHeavy(inspectuser.id).type}**`);
 			} else {
-				inspectparts.push(`<:Armbinder:1073495590656286760> Heavy Bondage: Not currently worn.`);
+				inspectparts.push(`${process.emojis.armbinder} Heavy Bondage: Not currently worn.`);
 			}
 			// Collar status
 			// You'll be able to tell that it's locked, but nothing more.
@@ -234,33 +234,33 @@ module.exports = {
 				}
 				if (!headwearrestrictions.canInspect) {
 					// Wearer is blind - they can only tell its on and locked. Nothing more.
-					collarparts.push(`<:collar:1449984183261986939> Collar: **${currentcollartext}**\n-# ‎   ⤷ ${lockemoji} **Locked (blind)**`);
+					collarparts.push(`${process.emojis.collar} Collar: **${currentcollartext}**\n-# ‎   ⤷ ${lockemoji} **Locked (blind)**`);
 				} else if (getCollar(inspectuser.id).keyholder == "discarded") {
 					// Self bound!
 					if (getCollar(inspectuser.id).keyholder_only) {
-						collarparts.push(`<:collar:1449984183261986939> Collar: **${currentcollartext}**\n-# ‎   ⤷ ${lockemoji} **Keys are Missing!**`);
+						collarparts.push(`${process.emojis.collar} Collar: **${currentcollartext}**\n-# ‎   ⤷ ${lockemoji} **Keys are Missing!**`);
 					} else {
-						collarparts.push(`<:collar:1449984183261986939> Collar: **${currentcollartext}**\n-# ‎   ⤷ ${lockemoji} **Keys are Missing! Free Use!**`);
+						collarparts.push(`${process.emojis.collar} Collar: **${currentcollartext}**\n-# ‎   ⤷ ${lockemoji} **Keys are Missing! Free Use!**`);
 					}
 				} else if (getCollarTimelock(inspectuser.id)) {
-					inspectparts.push(`<:collar:1449984183261986939> Collar: **${currentcollartext}**\n-# ‎   ⤷ ${lockemoji} **${timelockedtext} until ${getCollarTimelock(inspectuser.id, true)}**`);
+					inspectparts.push(`${process.emojis.collar} Collar: **${currentcollartext}**\n-# ‎   ⤷ ${lockemoji} **${timelockedtext} until ${getCollarTimelock(inspectuser.id, true)}**`);
 				} else if (!getCollar(inspectuser.id).keyholder_only) {
 					// Free use!
 					if (getCollar(inspectuser.id).keyholder == inspectuser.id) {
-						collarparts.push(`<:collar:1449984183261986939> Collar: **${currentcollartext}**\n-# ‎   ⤷ ${lockemoji} **Self-bound and free use!**`);
+						collarparts.push(`${process.emojis.collar} Collar: **${currentcollartext}**\n-# ‎   ⤷ ${lockemoji} **Self-bound and free use!**`);
 					} else {
-						collarparts.push(`<:collar:1449984183261986939> Collar: **${currentcollartext}**\n-# ‎   ⤷ ${lockemoji} **Key held by <@${getCollar(inspectuser.id).keyholder}>, free use!**`);
+						collarparts.push(`${process.emojis.collar} Collar: **${currentcollartext}**\n-# ‎   ⤷ ${lockemoji} **Key held by <@${getCollar(inspectuser.id).keyholder}>, free use!**`);
 					}
 				} else if (getCollar(inspectuser.id).keyholder == inspectuser.id) {
 					// Self bound!
-					collarparts.push(`<:collar:1449984183261986939> Collar: **${currentcollartext}**\n-# ‎   ⤷ ${lockemoji} **Self-bound!**`);
+					collarparts.push(`${process.emojis.collar} Collar: **${currentcollartext}**\n-# ‎   ⤷ ${lockemoji} **Self-bound!**`);
 				} else {
-					collarparts.push(`<:collar:1449984183261986939> Collar: **${currentcollartext}**\n-# ‎   ⤷ ${lockemoji} **Key held by <@${getCollar(inspectuser.id).keyholder}>**`);
+					collarparts.push(`${process.emojis.collar} Collar: **${currentcollartext}**\n-# ‎   ⤷ ${lockemoji} **Key held by <@${getCollar(inspectuser.id).keyholder}>**`);
 				}
 				// Output Collar Perms
 				collarparts.push(`-# Mittens: ${getCollarPerm(inspectuser.id, "mitten") ? "YES" : "NO"}, Chastity: ${getCollarPerm(inspectuser.id, "chastity") ? "YES" : "NO"}, Heavy: ${getCollarPerm(inspectuser.id, "heavy") ? "YES" : "NO"}, Masks: ${getCollarPerm(inspectuser.id, "mask") ? "YES" : "NO"}`);
 			} else {
-				collarparts.push(`<:collar:1449984183261986939> Collar: Not currently worn.`);
+				collarparts.push(`${process.emojis.collar} Collar: Not currently worn.`);
 			}
 			inspectparts.push(collarparts.join("\n"));
 			inspectparts.push(" ");

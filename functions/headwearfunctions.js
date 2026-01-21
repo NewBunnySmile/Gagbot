@@ -19,14 +19,16 @@ const headweartypes = [
 	//Kigus
 	{ name: "Kigu Mask (😀)", value: "mask_kigu_😀", blockinspect: true, blockemote: true, replaceemote: "😀" },
 	{ name: "Kigu Mask (🥰)", value: "mask_kigu_🥰", blockinspect: true, blockemote: true, replaceemote: "🥰" },
-	{ name: "Kigu Mask (Yesh)", value: "mask_kigu_Yesh", blockinspect: true, blockemote: true, replaceemote: "<:Yesh:1448775211838341251>" },
-	{ name: "Kigu Mask (Miku)", value: "mask_kigu_miku", blockinspect: true, blockemote: true, replaceemote: "<:miku:1455804527570718832>" },
-	{ name: "Kigu Mask (Teto)", value: "mask_kigu_teto", blockinspect: true, blockemote: true, replaceemote: "<:tetowoah:1455805527199056125>" },
-	{ name: "Kigu Mask (Sadistic Maid)", value: "mask_kigu_sadisticmaid", blockinspect: true, blockemote: true, replaceemote: "<:sadisticmaid:1244055266815774730>" },
-	{ name: "Kigu Mask (Cute Maid)", value: "mask_kigu_cutemaid", blockinspect: true, blockemote: true, replaceemote: "<:cutemaid:1244055369169502209>" },
-	{ name: "Kigu Mask (Happy Maid)", value: "mask_kigu_happymaid", blockinspect: true, blockemote: true, replaceemote: "<:happymaid:1244055447900655666>" },
-	{ name: "Kigu Mask (Shy)", value: "mask_kigu_shy", blockinspect: true, blockemote: true, replaceemote: "<:ShyUmmm:1457443930131009641>" },
-	{ name: "Kigu Mask (Cursed Epicenter)", value: "mask_kigu_epicenter", blockinspect: true, blockemote: true, replaceemote: "<:EpicenterCursed:1167683745428549632>" },
+	// Note, emoji are denoted with EMOJI_xxx. These are replaced during the emoji replacer function
+	// This cannot be done ahead of time due to how this is loaded before the bot logs in.
+	{ name: "Kigu Mask (Yesh)", value: "mask_kigu_Yesh", blockinspect: true, blockemote: true, replaceemote: "EMOJI_yesh" },
+	{ name: "Kigu Mask (Miku)", value: "mask_kigu_miku", blockinspect: true, blockemote: true, replaceemote: "EMOJI_miku" },
+	{ name: "Kigu Mask (Teto)", value: "mask_kigu_teto", blockinspect: true, blockemote: true, replaceemote: "EMOJI_tetowoah" },
+	{ name: "Kigu Mask (Sadistic Maid)", value: "mask_kigu_sadisticmaid", blockinspect: true, blockemote: true, replaceemote: "EMOJI_sadisticmaid" },
+	{ name: "Kigu Mask (Cute Maid)", value: "mask_kigu_cutemaid", blockinspect: true, blockemote: true, replaceemote: "EMOJI_cutemaid" },
+	{ name: "Kigu Mask (Happy Maid)", value: "mask_kigu_happymaid", blockinspect: true, blockemote: true, replaceemote: "EMOJI_happymaid" },
+	{ name: "Kigu Mask (Shy)", value: "mask_kigu_shy", blockinspect: true, blockemote: true, replaceemote: "EMOJI_shyumm" },
+	{ name: "Kigu Mask (Cursed Epicenter)", value: "mask_kigu_epicenter", blockinspect: true, blockemote: true, replaceemote: "EMOJI_epicentercursed" },
 
 	// Masks
 	{ name: "Sheep Mask", value: "mask_sheep", blockinspect: true, blockemote: true, replaceemote: "🐑" },
@@ -230,7 +232,11 @@ const processHeadwearEmoji = (userID, text, dollvisoroverride) => {
 	let wornheadwear = getHeadwear(userID);
 	for (let i = 0; i < wornheadwear.length; i++) {
 		if (getHeadwearBlocks(wornheadwear[i]) && getHeadwearBlocks(wornheadwear[i]).replaceemote != undefined) {
-			replaceemote = getHeadwearBlocks(wornheadwear[i]).replaceemote;
+			if (getHeadwearBlocks(wornheadwear[i]).replaceemote.startsWith("EMOJI_")) {
+				replaceemote = process.emojis[getHeadwearBlocks(wornheadwear[i]).replaceemote.replace("EMOJI_", "")];
+			} else {
+				replaceemote = getHeadwearBlocks(wornheadwear[i]).replaceemote;
+			}
 		}
 	}
 

@@ -310,6 +310,7 @@ const modifymessage = async (msg, threadId) => {
 		let replaceemojireturn = replaceEmoji(msg, replacingtext, modifiedmessage);
 		modifiedmessage = replaceemojireturn.modifiedmessage;
 		replacingtext = replaceemojireturn.replacingtext;
+		let replacedemoji = modifiedmessage; // Only true if no emoji allowed or bot emoji
 
 		// See if this message can be skipped. Messages containing only emoji do NOT need to be processed,
 		// But only if NOT wearing a headwear that replaces it in previous step.
@@ -352,7 +353,7 @@ const modifymessage = async (msg, threadId) => {
 
 		// Finally, send it if we modified the message.
 		if (modifiedmessage) {
-			await sendTheMessage(msg, outtext, dollIDDisplay, threadId, dollProtocol);
+			await sendTheMessage(msg, outtext, dollIDDisplay, threadId, dollProtocol, replacedemoji);
 		}
 	} catch (err) {
 		console.log(err);
@@ -439,7 +440,7 @@ function textGarbleCorset(messagein, msg, modifiedmessage, threadId) {
 			messageparts.splice(toRemove[i], 1);
 		}
 		if (hadParts && messageparts.length == 0) {
-			messageSend(msg, silenceMessage(), msg.member.displayAvatarURL(), msg.member.displayName, threadId).then(() => msg.delete());
+			messageSend(msg, silenceMessage(), msg.member.displayAvatarURL(), msg.member.displayName, threadId, modified).then(() => msg.delete());
 			corseted = true;
 			return { corseted: corseted };
 		}
@@ -504,7 +505,7 @@ function textGarbleGag(messagein, msg, modifiedmessage, outtextin) {
 	return { messageparts: messageparts, modifiedmessage: modified, outtext: outtext };
 }
 
-async function sendTheMessage(msg, outtext, dollIDDisplay, threadID, dollProtocol) {
+async function sendTheMessage(msg, outtext, dollIDDisplay, threadID, dollProtocol, modified) {
 	try {
 		// If this is a reply, we want to create a reply in-line because webhooks can't reply.
 		if (msg.type == "19") {
@@ -558,7 +559,7 @@ async function sendTheMessage(msg, outtext, dollIDDisplay, threadID, dollProtoco
 			}
 			Promise.all(promisearr).then(async (v) => {
 				// Send it!
-				messageSendImg(msg, outtext, msg.member.displayAvatarURL(), dollIDDisplay ? dollIDDisplay : msg.member.displayName, threadID, attachments).then(() => {
+				messageSendImg(msg, outtext, msg.member.displayAvatarURL(), dollIDDisplay ? dollIDDisplay : msg.member.displayName, threadID, attachments, modified).then(() => {
 					// Cleanup after sending
 					msg.delete().then(() => {
 						attachments.forEach((attach) => {
@@ -587,7 +588,7 @@ async function sendTheMessage(msg, outtext, dollIDDisplay, threadID, dollProtoco
 				outtext = "Something went wrong. Ping <@125093095405518850> and let her know!";
 			}
 			// Finally send it!
-			messageSend(msg, outtext, msg.member.displayAvatarURL(), dollIDDisplay ? dollIDDisplay : msg.member.displayName, threadID).then(() => {
+			messageSend(msg, outtext, msg.member.displayAvatarURL(), dollIDDisplay ? dollIDDisplay : msg.member.displayName, threadID, modified).then(() => {
 				// Cleanup after sending.
 				msg.delete().then(() => {
 					// If the user violates Doll Protocol, do STUFF

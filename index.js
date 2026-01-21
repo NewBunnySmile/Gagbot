@@ -33,7 +33,8 @@ process.on('SIGINT', () => {
         process.abort();
     }
 });
-
+// If they never changed from the default in .env.md, use base directory. 
+if (process.env.GAGBOTFILEDIRECTORY === "Z:\\Somewhere\\I\\Belong\\") { process.env.GAGBOTFILEDIRECTORY = "." }
 let GagbotSavedFileDirectory = process.env.GAGBOTFILEDIRECTORY ? process.env.GAGBOTFILEDIRECTORY : __dirname
 
 process.GagbotSavedFileDirectory = GagbotSavedFileDirectory // Because honestly, I dont know WHY global stuff in index.js can't be accessble everywhere
@@ -94,13 +95,6 @@ try {
 } catch (err) { 
     console.log(err);
 }
-
-// Fixing code because I'm a terrible coder
-Object.keys(process.mitten).forEach((m) => {
-    if (process.mitten[m] === true) {
-        assignMitten(m, undefined);
-    }
-})
 
 // Later loaders for autocompletes
 gagtypesset();
