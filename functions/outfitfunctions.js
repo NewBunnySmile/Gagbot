@@ -738,7 +738,7 @@ async function inspectModal(userID, inspectuserIDin, menu, page) {
 
         // Chastity Belt
         if (getChastity(inspectuserID)) {
-            let chastitylockemoji = canAccessChastity(inspectuserID, inspectuserID).access ? "🔑" : "🔒";
+            let chastitylockemoji = canAccessChastity(userID, inspectuserID).access ? "🔑" : "🔒";
             if (!headwearrestrictions.canInspect) { chastitylockemoji = "❓" }
             let currentchastitybelt = getChastityName(inspectuserID) ?? "Standard Chastity Belt"
             let chastitykeyholderinfo = getChastity(inspectuserID).keyholder
@@ -770,7 +770,7 @@ async function inspectModal(userID, inspectuserIDin, menu, page) {
         }
         // Chastity Bra
         if (getChastityBra(inspectuserID)) {
-            let chastitybralockemoji = canAccessChastityBra(inspectuserID, inspectuserID).access ? "🔑" : "🔒";
+            let chastitybralockemoji = canAccessChastityBra(userID, inspectuserID).access ? "🔑" : "🔒";
             if (!headwearrestrictions.canInspect) { chastitybralockemoji = "❓" }
             let currentbrachastitybelt = getChastityBraName(inspectuserID) ?? "Standard Chastity Bra"
             let chastitybrakeyholderinfo = getChastityBra(inspectuserID).keyholder
@@ -802,7 +802,7 @@ async function inspectModal(userID, inspectuserIDin, menu, page) {
         }
         // Collar
         if (getCollar(inspectuserID)) {
-            let collarlockemoji = canAccessCollar(inspectuserID, inspectuserID).access ? "🔑" : "🔒";
+            let collarlockemoji = canAccessCollar(userID, inspectuserID).access ? "🔑" : "🔒";
             if (!headwearrestrictions.canInspect) { collarlockemoji = "❓" }
             let collarname = getCollarName(inspectuserID) ?? "Standard Collar"
             let collarkeyholderinfo = getCollar(inspectuserID).keyholder
@@ -895,7 +895,7 @@ async function inspectModal(userID, inspectuserIDin, menu, page) {
         let keyedrestraints = `### Keyed Restraints:`
         // Chastity Belt
         if (getChastity(inspectuserID)) {
-            let chastitylockemoji = canAccessChastity(inspectuserID, inspectuserID).access ? "🔑" : "🔒";
+            let chastitylockemoji = canAccessChastity(userID, inspectuserID).access ? "🔑" : "🔒";
             if (!headwearrestrictions.canInspect) { chastitylockemoji = "❓" }
             let currentchastitybelt = getChastityName(inspectuserID) ?? "Standard Chastity Belt"
             let chastitykeyholderinfo = getChastity(inspectuserID).keyholder
@@ -933,7 +933,7 @@ async function inspectModal(userID, inspectuserIDin, menu, page) {
         }
         // Chastity Bra
         if (getChastityBra(inspectuserID)) {
-            let chastitybralockemoji = canAccessChastityBra(inspectuserID, inspectuserID).access ? "🔑" : "🔒";
+            let chastitybralockemoji = canAccessChastityBra(userID, inspectuserID).access ? "🔑" : "🔒";
             if (!headwearrestrictions.canInspect) { chastitybralockemoji = "❓" }
             let currentbrachastitybelt = getChastityBraName(inspectuserID, getChastityBra(inspectuserID).chastitytype) ?? "Standard Chastity Bra"
             let chastitybrakeyholderinfo = getChastityBra(inspectuserID).keyholder
@@ -971,7 +971,7 @@ async function inspectModal(userID, inspectuserIDin, menu, page) {
         }
         // Collar
         if (getCollar(inspectuserID)) {
-            let collarlockemoji = canAccessCollar(inspectuserID, inspectuserID).access ? "🔑" : "🔒";
+            let collarlockemoji = canAccessCollar(userID, inspectuserID).access ? "🔑" : "🔒";
             if (!headwearrestrictions.canInspect) { collarlockemoji = "❓" }
             let collarname = getCollarName(inspectuserID) ?? "Standard Collar"
             let collarkeyholderinfo = getCollar(inspectuserID).keyholder
