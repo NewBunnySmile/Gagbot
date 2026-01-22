@@ -1044,6 +1044,12 @@ const texts_struggle = {
 			},
 			text: `USER_TAG's voice echoes through the halls as USER_THEY monologueUSER_S: ***Tell me, for whom do you fight...***`,
 		},
+		{
+			required: (t) => {
+				return !(process.gags && process.gags[t.interactionuser.id]);
+			},
+			text: `USER_TAG pauses for a second, then begins to speak in a sultry tone: Hello Ladies~. Look at your outfit, now back to me, now back to your outfit, now back to me. Sadly, your outfit can't be mine~. But if you jumped into a Mimic instead of using the /wear command, it could look close to mine! Look down, back up, where are you? In my RP Thread! What's in your hand, back at me. I have it, it's the keys to your Collar and Belt! Look again, the keys are now vibes! Look down again, Back up. Where are you? Strapped in Display Stand! Now Cum for me~. Anything is possible when you dress using a Mimic and not by yourself! I'm on a (wooden) horse!`
+		},
 		`USER_TAG wants ice cream. Everyone should have ice cream. USER_THEY_CAP wantUSER_S to know what everyone's favorite flavor is!`,
 		`USER_TAG is getting cold feet. Someone should tie USER_THEM up and tickle USER_THEIR feet so they warm up!`,
 		`USER_TAG wants hot cocoa and to sit cozily by a fire on a stormy day, just pleasantly reading and enjoying the warm. Under a blankey. So nice...`,
