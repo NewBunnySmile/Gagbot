@@ -57,7 +57,7 @@ const ORGASM_LIMIT = 10;
 // the rate of arousal decay without orgasms when unbelted
 const UNBELTED_DECAY = 0.2;
 // the maximum frustration that can be reached
-const MAX_FRUSTRATION = 1; // Set to 1 to effectively neuter frustration
+const MAX_FRUSTRATION = 50;
 // by how much arousal randomness is biased upwards
 const RANDOM_BIAS = 1;
 // by how much vibe intensity is scaled for the arousal model
