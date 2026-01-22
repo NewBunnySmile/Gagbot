@@ -92,7 +92,6 @@ function corsetLimitWords(text, parent, user, msgModified) {
 		if (word.length == 0) {
 			if (!silence) newwordsinmessage.push(word);
 		} else {
-			console.log(word)
 			let capitals = 0;
 			for (const char of word) {
 				if (/[A-Z]/.test(char)) capitals++;

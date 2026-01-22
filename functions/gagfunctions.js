@@ -11,13 +11,13 @@ const { getText } = require(`./../functions/textfunctions.js`);
 const { DOLLMAXPUNISHMENT, textGarbleDOLL } = require(`./../functions/dollfunctions.js`);
 const { splitMessage } = require(`./../functions/messagefunctions.js`);
 const { assignHeavy } = require(`./../functions/heavyfunctions.js`);
-
 const { MessageAST } = require(`./../functions/message_ast.js`);
 
 // Grab all the command files from the commands directory
 const gagtypes = [];
 const commandsPath = path.join(__dirname, "..", "gags");
 const commandFiles = fs.readdirSync(commandsPath).filter((file) => file.endsWith(".js"));
+const SKIPREGEX = /^((<a?:[^:]+:[^>]+>)|(\ud83c[\ud000-\udfff]|\ud83d[\ud000-\udfff]|\ud83e[\ud000-\udfff])|\s|\n)+$/
 
 // Push the gag name over to the choice array.
 for (const file of commandFiles) {
@@ -307,40 +307,32 @@ const modifymessage = async (msg, threadId) => {
 
 		// TODO - remove this var
 		let outtext = ``												// Message to send.
-		let messageTree = new MessageAST(msg.content);					// Build AST from message
-		let messageTreeModified = {"modified":false, "corseted":false}	// Store a boolean in an object to allow pass by reference.
+		let msgTree = new MessageAST(msg.content);					// Build AST from message
+		let msgTreeMods = {"modified":false, "emojiModified":false, "corseted":false}	// Store a boolean in an object to allow pass by reference.
 
-		processHeadwearEmoji(msg.author.id, messageTree, messageTreeModified, getOption(msg.author.id, "dollvisorname"))
-
-		let replacedemoji = messageTreeModified.modified; // Only true if no emoji allowed or bot emoji
+		processHeadwearEmoji(msg.author.id, msgTree, msgTreeMods, getOption(msg.author.id, "dollvisorname"))
 
 		// See if this message can be skipped. Messages containing only emoji do NOT need to be processed,
 		// But only if NOT wearing a headwear that replaces it in previous step.
-		if (!messageTreeModified.modified && msg.content.match(/^((<a?:[^:]+:[^>]+>)|(\ud83c[\ud000-\udfff]|\ud83d[\ud000-\udfff]|\ud83e[\ud000-\udfff])|\s|\n)+$/)) return;
+		if (!msgTreeMods.modified && msg.content.match(SKIPREGEX)) return;
 
-		// Handle weird exceptions for links
-		//messageparts = handleLinkExceptions(messageparts);
+		textGarbleVibrator(msg, msgTree, msgTreeMods);			// Handle arousal effects (Stutter, gasps.)
+		textGarbleCorset(msg, msgTree, msgTreeMods, threadId);	// Handle corset.
+		if (msgTreeMods.corseted) {return;}						// Abort if the message got corseted - message handled elsewhere.
+		textGarbleGag(msg, msgTree, msgTreeMods);				// Text garbling due to Gag
 
-		// Text garbling due to Arousal
-		textGarbleVibrator(msg, messageTree, messageTreeModified);
 
-		// Text limiting and modifying due to Corset
-		textGarbleCorset(msg, messageTree, messageTreeModified, threadId);
-		if (messageTreeModified.corseted) {return;}
-
-		// // Text garbling due to Gag
-		// let gagreturned = textGarbleGag(messageparts, msg, modifiedmessage, outtext);
 		// messageparts = gagreturned.messageparts;
 		// modifiedmessage = gagreturned.modifiedmessage;
 		// outtext = gagreturned.outtext;
 
 
 		// Convert the AST back to a string.
-		outtext = messageTree.toString()
+		outtext = msgTree.toString()
 
 		// Text garbling due to Doll visors
-		let dolltreturned = await textGarbleDOLL(msg, messageTreeModified.modified, outtext);
-		messageTreeModified.modified = dolltreturned.modifiedmessage;
+		let dolltreturned = await textGarbleDOLL(msg, msgTreeMods.modified, outtext);
+		msgTreeMods.modified = dolltreturned.modifiedmessage;
 		outtext = dolltreturned.outtext;
 		let dollIDDisplay = dolltreturned.dollIDDisplay;
 		let dollProtocol = dolltreturned.dollProtocolViolations;
@@ -349,8 +341,8 @@ const modifymessage = async (msg, threadId) => {
 		outtext = outtext.replaceAll(/[]/g, "");
 
 		// Finally, send it if we modified the message.
-		if (messageTreeModified.modified) {
-			await sendTheMessage(msg, outtext, dollIDDisplay, threadId, dollProtocol, replacedemoji);
+		if (msgTreeMods.modified) {
+			await sendTheMessage(msg, outtext, dollIDDisplay, threadId, dollProtocol, msgTreeMods.emojiModified );
 		}
 	} catch (err) {
 		console.log(err);
@@ -400,7 +392,6 @@ function textGarbleVibrator(msg, msgTree, msgModified) {
 function textGarbleCorset(msg, msgTree, msgModified, threadId) {
 	// Now corset any words, using an amount to start with.
 	let corset = getCorset(msg.author.id)
-	console.log(corset)
 	if (corset) {
 
 		const hadParts = msgTree.toString() != ""
@@ -421,61 +412,51 @@ function textGarbleCorset(msg, msgTree, msgModified, threadId) {
 	return;
 }
 
-function textGarbleGag(messagein, msg, modifiedmessage, outtextin) {
+function textGarbleGag(msg, msgTree, msgTreeMods) {
 	// Gags now
-	let messageparts = messagein;
-	let modified = modifiedmessage;
-	let outtext = outtextin;
+	//let outtext = outtextin;
 	if (process.gags == undefined) {
 		process.gags = {};
 	}
 	if (process.gags[msg.author.id] && process.gags[msg.author.id].length > 0) {
-		modified = true;
+		msgTreeMods.modified = true;
 
 		// Grab all the command files from the commands directory
-		const gagtypes = [];
 		const commandsPath = path.join(__dirname, "..", "gags");
 		const commandFiles = fs.readdirSync(commandsPath).filter((file) => file.endsWith(".js"));
 
-		let msgpartsbegin = [];
-		let msgparts = messageparts.slice(0); // deep clone the message parts array.
-		let msgpartsend = [];
+		// let msgpartsbegin = [];
+		// let msgparts = messageparts.slice(0); // deep clone the message parts array.
+		// let msgpartsend = [];
 		process.gags[msg.author.id].forEach((gag) => {
 			if (commandFiles.includes(`${gag.gagtype}.js`)) {
 				let gaggarble = require(path.join(commandsPath, `${gag.gagtype}.js`));
 				let intensity = gag.intensity ? gag.intensity : 5;
-				if (gaggarble.messagebegin) {
-					let out = gaggarble.messagebegin(msg.content, intensity, msgparts);
-					if (typeof out == "string") {
-						msgpartsbegin.push(out);
-					} else {
-						// Do further changes here I guess if necessary.
-						msgparts = out.msgparts;
-					}
-				}
-				for (let i = 0; i < msgparts.length; i++) {
-					if (msgparts[i].garble && gaggarble.garbleText) {
-						let garbled = gaggarble.garbleText(msgparts[i].text, intensity);
-						if (typeof garbled == "string") {
-							msgparts[i].text = garbled;
-						} else {
-							msgparts[i] = garbled;
-						}
-					}
-				}
+
+				// TODO - Message Begin
+				// if (gaggarble.messagebegin) {
+				// 	let out = gaggarble.messagebegin(msg.content, intensity, msgparts);
+				// 	if (typeof out == "string") {
+				// 		msgpartsbegin.push(out);
+				// 	} else {
+				// 		// Do further changes here I guess if necessary.
+				// 		msgparts = out.msgparts;
+				// 	}
+				// }
+
+				msgTree.callFunc(gaggarble.garbleText,true,"rawText",[intensity])		// Run garble on all IC segments.
+
+				// TODO - Message End
 				if (gaggarble.messageend) {
-					msgpartsend.push(gaggarble.messageend(msg.content, intensity));
+					msgTree.rebuild(`${msgTree.toString()}${gaggarble.messageend(msg, intensity)}`)
+					//msgpartsend.push(gaggarble.messageend(msg.content, intensity));
 				}
 			}
 		});
-		outtext = `${outtext}${msgpartsbegin.join("\n")}`;
-		outtext = `${outtext}${msgparts.map((m) => m.text).join("")}`;
-		outtext = `${outtext}${msgpartsend.join("\n")}`;
-	} else {
-		let messagetexts = messageparts.map((m) => m.text);
-		outtext = messagetexts.join("");
+		// outtext = `${outtext}${msgpartsbegin.join("\n")}`;
+		// outtext = `${outtext}${msgparts.map((m) => m.text).join("")}`;
+		// outtext = `${outtext}${msgpartsend.join("\n")}`;
 	}
-	return { messageparts: messageparts, modifiedmessage: modified, outtext: outtext };
 }
 
 async function sendTheMessage(msg, outtext, dollIDDisplay, threadID, dollProtocol, modified) {

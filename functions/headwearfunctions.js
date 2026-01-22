@@ -229,6 +229,7 @@ const getHeadwearRestrictions = (userID) => {
 const replaceEmoji = (text, parent, replaceEmoji, msgModified, matchFound) => {
 	if(text !== replaceEmoji){
 		msgModified.modified = true;
+		msgModified.emojiModified = true;
 		return replaceEmoji;
 	}else{
 		matchFound.found = true;

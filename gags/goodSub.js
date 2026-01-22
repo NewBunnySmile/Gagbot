@@ -1,6 +1,6 @@
 const { convertPronounsText } = require("./../functions/pronounfunctions.js");
 
-const garbleText = (text, intensity) => {
+const garbleText = (text, parent, intensity) => {
 	let inputNumber = text.length;
 	let output = ""; // Empty target output, dont change
 	//Replacement lines
@@ -61,7 +61,7 @@ const messageend = (msg, intensity) => {
 
 	// Add "I am a good girl!" to the list
 	if (msg.member) {
-		endsoundList.push(convertPronounsText(`I am a good USER_PRAISEOBJECT!`, { interactionuser: msg.member.id, targetuser: msg.member.id }));
+		endsoundList.push(convertPronounsText(`I am a good USER_PRAISEOBJECT!`, { interactionuser: msg.member, targetuser: msg.member }));
 	}
 
 	if (intensity > 5) {
