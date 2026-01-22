@@ -336,8 +336,9 @@ const modifyMessage = (message, inFunction, icOnly = true, type = "rawText", arg
 			let modify = Array.isArray(type) ? (type.includes(message[x].type)) : (type == message[x].type)
 			if (modify) {
 				console.log(args)
-				message[x].text = inFunction(message[x].text, ...args);
-				//if(ret){message[x].text = inFunction(message[x].text, ...args)}
+				let ret = inFunction(message[x].text, ...args);
+				//message[x].text = inFunction(message[x].text, ...args);
+				if(ret !== undefined){message[x].text = inFunction(message[x].text, ...args)}
 			}
 		}
 	}

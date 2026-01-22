@@ -314,8 +314,6 @@ const modifymessage = async (msg, threadId) => {
 
 		let replacedemoji = messageTreeModified.modified; // Only true if no emoji allowed or bot emoji
 
-		console.log("AFTER PROCESS: "+messageTree.toString())
-
 		// See if this message can be skipped. Messages containing only emoji do NOT need to be processed,
 		// But only if NOT wearing a headwear that replaces it in previous step.
 		if (!messageTreeModified.modified && msg.content.match(/^((<a?:[^:]+:[^>]+>)|(\ud83c[\ud000-\udfff]|\ud83d[\ud000-\udfff]|\ud83e[\ud000-\udfff])|\s|\n)+$/)) return;
@@ -327,9 +325,7 @@ const modifymessage = async (msg, threadId) => {
 		//messageparts = handleLinkExceptions(messageparts);
 
 		// // Text garbling due to Arousal
-		// let vibereturned = textGarbleVibrator(messageparts, msg, modifiedmessage);
-		// messageparts = vibereturned.messageparts;
-		// modifiedmessage = vibereturned.modifiedmessage;
+		//textGarbleVibrator(msg, messageTree, messageTreeModified);
 
 		// // Text limiting and modifying due to Corset
 		// let corsetreturned = textGarbleCorset(messageparts, msg, modifiedmessage, threadId);
@@ -383,10 +379,8 @@ function handleLinkExceptions(messagein) {
 	return messageparts;
 }
 
-function textGarbleVibrator(messagein, msg, modifiedmessage) {
+function textGarbleVibrator(msg, msgTree, msgModified) {
 	const intensity = getVibeEquivalent(msg.author.id);
-	let messageparts = messagein;
-	let modified = modifiedmessage;
 	if (intensity) {
 		const arousedtexts = getArousedTexts(msg.author.id);
 

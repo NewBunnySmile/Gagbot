@@ -226,13 +226,12 @@ const getHeadwearRestrictions = (userID) => {
 };
 
 
-const replaceEmoji = (text, replaceEmoji, matchFound) => {
-	console.log("OLD: "+text)
-	console.log("NEW: "+replaceEmoji)
+const replaceEmoji = (text, replaceEmoji, msgModified, matchFound) => {
 	if(text !== replaceEmoji){
-		console.log("we got here")
-		matchFound.modified = true;
+		msgModified.modified = true;
 		return replaceEmoji;
+	}else{
+		matchFound.found = true;
 	}
 }
 // Removes all emoji, optionally using an assigned emoji if they are wearing a mask with it!
@@ -252,9 +251,11 @@ const processHeadwearEmoji = (userID, msgTree, msgModified, dollvisoroverride) =
 		}
 	}
 	// Replace all instances of the emoji
-	msgTree.callFunc(replaceEmoji,true,["emoji","unicodeEmoji"],[replaceemote,msgModified])
+	let matchFound = { "found": false}
+	msgTree.callFunc(replaceEmoji,true,["emoji","unicodeEmoji"],[replaceemote,msgModified,matchFound])
 
-	if (replaceemote && !msgModified.modified) {
+	// If there is a forced emote, and it wasn't found in the message, and there were no emotes AT ALL, add one.
+	if (replaceemote && !msgModified.modified && !matchFound.found) {
 		msgTree.rebuild(`${msgTree.toString()} ${replaceemote}`)
 		msgModified.modified = true;
 	}
