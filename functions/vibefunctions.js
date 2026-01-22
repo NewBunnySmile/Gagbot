@@ -1288,6 +1288,7 @@ exports.getVibeEquivalent = getVibeEquivalent;
 exports.getArousalDescription = getArousalDescription;
 exports.getArousalChangeDescription = getArousalChangeDescription;
 exports.getArousalBar = getArousalBar;
+exports.calcDenialCoefficient = calcDenialCoefficient;
 exports.calcFrustration = calcFrustration;
 exports.getArousal = getArousal;
 exports.addArousal = addArousal;

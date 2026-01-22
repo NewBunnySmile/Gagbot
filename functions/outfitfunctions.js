@@ -25,6 +25,7 @@ const { getPronounsSet } = require("./pronounfunctions");
 const { getChastityBraKeys } = require("./vibefunctions");
 const { getClonedChastityKeysOwned } = require("./vibefunctions");
 const { getClonedChastityBraKeysOwned } = require("./vibefunctions");
+const { calcDenialCoefficient } = require("./vibefunctions");
 
 function getOutfits(userID) {
 	if (process.outfits == undefined) {
@@ -858,6 +859,9 @@ async function inspectModal(userID, inspectuserIDin, menu, page) {
         let bartext = ``;
         if (getArousal(inspectuserID) > 2.0) {
             bartext = `\n💞 Arousal: ${getArousalBar(inspectuserID).bar} (${getArousalBar(inspectuserID).percentage}%)`
+            if (calcDenialCoefficient(inspectuserID) > 1) {
+                bartext = `${bartext}\n-# ‎ (Current Denial: **${Math.round(calcDenialCoefficient(inspectuserID) * 100)}%**)`
+            }
         }
 
         let collated = `${wearingtext}${clothingtext}${bartext}`;
