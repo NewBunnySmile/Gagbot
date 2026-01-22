@@ -197,7 +197,15 @@ const texts_collarequip = {
 					nonamedmitten: { alreadyworn: [`TARGET_TAG is already wearing mittens!`], allowed: [`USER_TAG grabs TARGET_TAG's hands, shoving a pair of mittens on, and putting a lock on the straps, sealing away TARGET_THEIR hands!`], notallowed: [`TARGET_TAG's collar does not allow you to mitten TARGET_THEM!`] },
 				},
 				heavybondage: {
-					alreadyworn: [`TARGET_TAG is already in bondage, wearing a VAR_C2!`],
+					alreadyworn: [
+						`TARGET_TAG is already in bondage, wearing a VAR_C2!`,
+						{
+							only: (t) => {
+								return t.c2.endsWith("'s Lap");
+							},
+							text: `TARGET_TAG is already trapped in VAR_C2, and it would be rude to interrupt.`,
+						},
+					],
 					allowed: [
 						`USER_TAG pulls a VAR_C3 out and grabs TARGET_TAG, forcing TARGET_THEIR arms and hands into the tight restraint! TARGET_THEY_CAP squirmTARGET_S in protest, but TARGET_THEY can't do anything about it!`,
 						// Doll
