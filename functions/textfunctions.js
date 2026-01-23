@@ -1973,7 +1973,7 @@ const texts_eventfunctions = {
 			donestripping: {
 				remainingitems: {
 					multiple: [`The Costumer Mimic lets out a satisfied hum as USER_TAG's VAR_C1 are all removed, leaving USER_THEM completely naked! The mimic begins dressing USER_THEM promptly.`],
-					single: [`The Costumer Mimic lets out a satisfied hum as USER_TAG's VAR_C1 is removed, leaving USER_THEM completely naked! The mimic begins dressing USER_THEM promptly.`]
+					single: [ `The Costumer Mimic lets out a satisfied hum as USER_TAG's VAR_C1 is removed, leaving USER_THEM completely naked! The mimic begins dressing USER_THEM promptly.`]
 				},
 				noneremaining: [
 					`As the Costumer Mimic finishes consuming their clothing, USER_TAG is left completely bare and the Mimic can begin to dress USER_THEM in its chosen costume!`,
