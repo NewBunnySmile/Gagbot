@@ -97,6 +97,13 @@ class MessageAST {
         // This searches for any instance of "# " or "-# " that either
         // starts with a new line or the beginning of the string, and ends with a \n.
         output = output.replaceAll(/(\n|^)(\-)?\#\s\n/g, "") 
+
+        // Corset breathing is somehow generating [Object object].
+        // I am not sure how to fix it, it seems to be the only thing that causes this
+        // Dollminatrix can cry and rip out my patchwork after applying percussive maintenace 
+        // to the corset function probably. 
+        let outofbreath = ["-# *Panting heavily*", "-# *Completely out of breath*", "-# *Desperately gasping for air*", "-# *About to pass out*"]
+        output = output.replace("[Object object]", outofbreath[Math.random(Math.floor(outofbreath.length * Math.random()))])
 		return output;
 	}
 }
