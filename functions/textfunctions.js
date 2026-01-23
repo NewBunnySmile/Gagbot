@@ -905,7 +905,35 @@ const texts_struggle = {
 		heavy: [`Try as USER_THEY might, USER_TAG cannot spit out the VAR_C2 USER_THEY USER_ISARE wearing!`, `USER_TAG noms on USER_THEIR VAR_C2, trying to loosen it and maybe get it out of USER_THEIR mouth!`, `USER_TAG tries to push USER_THEIR VAR_C2 out with USER_THEIR tongue! It had no effect!`],
 		noheavy: {
 			// Using open hand, wrists, etc. 50% chance to use with mittens, 50% chance to use with free hands
-			nofingers: [`USER_TAG paws at USER_THEIR VAR_C2 with USER_THEIR wrist, trying to slip it off.`, `USER_TAG uses the palm of USER_THEIR hand and brushes it against USER_THEIR VAR_C2`, `USER_TAG sighs into USER_THEIR VAR_C2, happily thinking about how nice it is to not be able to speak!`],
+			nofingers: [
+				`USER_TAG paws at USER_THEIR VAR_C2 with USER_THEIR wrist, trying to slip it off.`,
+				`USER_TAG uses the palm of USER_THEIR hand and brushes it against USER_THEIR VAR_C2`,
+				`USER_TAG sighs into USER_THEIR VAR_C2, happily thinking about how nice it is to not be able to speak!`,
+				{
+					required: (t) => {
+						return t.c1.includes("Polite");
+					},
+					text: `USER_TAG sighs happily into USER_THEIR VAR_C2, thinking about the importance of politeness when speaking with others!`,
+				},
+				{
+					required: (t) => {
+						return t.c1.includes("Good");
+					},
+					text: `USER_TAG giggles into USER_THEIR VAR_C2, any thoughts of removing the gag fading away because USER_THEY existUSER_S to *serve*!`,
+				},
+				{
+					required: (t) => {
+						return t.c1.includes("Clock");
+					},
+					text: `USER_TAG fidgets with USER_THEIR VAR_C2, but it appears that the clockwork renders removal impossible at this time!`,
+				},
+				{
+					required: (t) => {
+						return t.c1.includes("Censor");
+					},
+					text: `USER_TAG ████ at USER_THEIR ██████████ ███, trying to ████ ██ ███ to no avail!`,
+				},
+			],
 			// In mittens, so definitely no fingers. 50% chance to use with mittens, 0% chance with free hands
 			mitten: [`USER_TAG uses the wrist straps on USER_THEIR VAR_C3 to try to hook under USER_THEIR VAR_C2, but can't really get any leverage.`, `USER_TAG brushes the stuffing portion of USER_THEIR VAR_C2 with USER_THEIR VAR_C3. USER_THEY_CAP look very cute.`],
 			// Able to use fingers. 50% chance to use with free hands, 0% chance to use with mittens
