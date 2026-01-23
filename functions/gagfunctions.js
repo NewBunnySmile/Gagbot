@@ -306,7 +306,7 @@ const modifymessage = async (msg, threadId) => {
 		console.log(`${msg.channel.guild.name} - ${msg.member.displayName}: ${msg.content}`);
 
 		// TODO - remove this var
-		let outtext = ``												// Message to send.
+		let outtext = ``											// Message to send.
 		let msgTree = new MessageAST(msg.content);					// Build AST from message
 		let msgTreeMods = {"modified":false, "emojiModified":false, "corseted":false}	// Store a boolean in an object to allow pass by reference.
 
@@ -320,12 +320,6 @@ const modifymessage = async (msg, threadId) => {
 		textGarbleCorset(msg, msgTree, msgTreeMods, threadId);	// Handle corset.
 		if (msgTreeMods.corseted) {return;}						// Abort if the message got corseted - message handled elsewhere.
 		textGarbleGag(msg, msgTree, msgTreeMods);				// Text garbling due to Gag
-
-
-		// messageparts = gagreturned.messageparts;
-		// modifiedmessage = gagreturned.modifiedmessage;
-		// outtext = gagreturned.outtext;
-
 
 		// Convert the AST back to a string.
 		outtext = msgTree.toString()
@@ -414,48 +408,41 @@ function textGarbleCorset(msg, msgTree, msgModified, threadId) {
 
 function textGarbleGag(msg, msgTree, msgTreeMods) {
 	// Gags now
-	//let outtext = outtextin;
 	if (process.gags == undefined) {
 		process.gags = {};
 	}
 	if (process.gags[msg.author.id] && process.gags[msg.author.id].length > 0) {
-		msgTreeMods.modified = true;
-
+		
 		// Grab all the command files from the commands directory
 		const commandsPath = path.join(__dirname, "..", "gags");
 		const commandFiles = fs.readdirSync(commandsPath).filter((file) => file.endsWith(".js"));
 
-		// let msgpartsbegin = [];
-		// let msgparts = messageparts.slice(0); // deep clone the message parts array.
-		// let msgpartsend = [];
 		process.gags[msg.author.id].forEach((gag) => {
 			if (commandFiles.includes(`${gag.gagtype}.js`)) {
 				let gaggarble = require(path.join(commandsPath, `${gag.gagtype}.js`));
 				let intensity = gag.intensity ? gag.intensity : 5;
 
 				// TODO - Message Begin
-				// if (gaggarble.messagebegin) {
-				// 	let out = gaggarble.messagebegin(msg.content, intensity, msgparts);
-				// 	if (typeof out == "string") {
-				// 		msgpartsbegin.push(out);
-				// 	} else {
-				// 		// Do further changes here I guess if necessary.
-				// 		msgparts = out.msgparts;
-				// 	}
-				// }
-
-				msgTree.callFunc(gaggarble.garbleText,true,"rawText",[intensity])		// Run garble on all IC segments.
-
-				// TODO - Message End
-				if (gaggarble.messageend) {
+				if (gaggarble.messagebegin) {
+					let out = gaggarble.messagebegin(msg, msgTree, msgTreeMods, intensity);
+					if (typeof out == "string") {
+						msgTree.rebuild(`${out}${msgTree.toString()}`)
+						msgTreeMods.modified = true;
+					} else {
+						// Do further changes here I guess if necessary.
+						//msgparts = out.msgparts;
+					}
+				}
+				if(gaggarble.garbleText){
+					msgTree.callFunc(gaggarble.garbleText,true,"rawText",[intensity])		// Run garble on all IC segments.
+					msgTreeMods.modified = true;
+				}
+				if (gaggarble.messageend) {												// Run messageEnd
 					msgTree.rebuild(`${msgTree.toString()}${gaggarble.messageend(msg, intensity)}`)
-					//msgpartsend.push(gaggarble.messageend(msg.content, intensity));
+					msgTreeMods.modified = true;
 				}
 			}
 		});
-		// outtext = `${outtext}${msgpartsbegin.join("\n")}`;
-		// outtext = `${outtext}${msgparts.map((m) => m.text).join("")}`;
-		// outtext = `${outtext}${msgpartsend.join("\n")}`;
 	}
 }
 

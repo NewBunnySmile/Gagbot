@@ -39,6 +39,7 @@ class MessageAST {
 	 * @param args - Additional arguments to pass into inFunction, AFTER text and parent.
 	 **************************************************/
 	callFunc(inFunction, icOnly = true, type = "rawText", args = []) {
+		if(!inFunction){return;}
 		// Call a helper due to scope issues with recursive functions
 		modifyMessage(this, this, inFunction, icOnly, type, args);
 		return this; // Allow chaining
@@ -532,7 +533,7 @@ const test_callFunc = () => {
 	console.log(testAST_2)
 }
 
-testClass_MessageAST();
-test_callFunc();
+//testClass_MessageAST();
+//test_callFunc();
 
 exports.MessageAST = MessageAST;
