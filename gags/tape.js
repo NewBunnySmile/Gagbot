@@ -126,6 +126,9 @@ const garbleText = (text, parent, intensity) => {
 	}
 
 	// For high intensity, prepend "-#"
+	if(intensity >= 8){
+		parent.parent.subscript = -1
+	}
 
 	return output;
 };
