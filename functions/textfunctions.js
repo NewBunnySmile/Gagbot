@@ -334,13 +334,13 @@ const texts_collarequip = {
 							only: (t) => {
 								return t.c3.includes("Festive Ribbons") || t.c3.includes("Wrapping Paper");
 							},
-							text: `USER_TAG carefully wraps TARGET_TAG in VAR_C2! Who are they planning to gift such a present too~?`,
+							text: `USER_TAG carefully wraps TARGET_TAG in VAR_C3! Who are they planning to gift such a present too~?`,
 						},
 						{
 							only: (t) => {
 								return t.c3.includes("Magic Mirror");
 							},
-							text: `USER_TAG pushes TARGET_TAG backwards into a VAR_C2! As TARGET_THEY touch it the Mirror emits a bright flash of light, and TARGET_TAG finds themselves trapped within the reflection!`,
+							text: `USER_TAG pushes TARGET_TAG backwards into a VAR_C3! As TARGET_THEY touch it the Mirror emits a bright flash of light, and TARGET_TAG finds themselves trapped within the reflection!`,
 						},
 						{
 							only: (t) => {
@@ -350,9 +350,9 @@ const texts_collarequip = {
 						},
 						{
 							only: (t) => {
-								return t.c2.includes("Mimic");
+								return t.c3.includes("Mimic");
 							},
-							text: `With a cheeky grin, USER_TAG tosses TARGET_TAG towards a resting VAR_C2! It snaps open and drags TARGET_THEM inside with its tentacles before slamming shut and sealing with a resounding click!`,
+							text: `With a cheeky grin, USER_TAG tosses TARGET_TAG towards a resting VAR_C3! It snaps open and drags TARGET_THEM inside with its tentacles before slamming shut and sealing with a resounding click!`,
 						},
 					],
 					notallowed: [`TARGET_TAG's collar does not allow you to put TARGET_THEM in heavy bondage!`],
@@ -911,25 +911,25 @@ const texts_struggle = {
 				`USER_TAG sighs into USER_THEIR VAR_C2, happily thinking about how nice it is to not be able to speak!`,
 				{
 					required: (t) => {
-						return t.c1.includes("Polite");
+						return t.c2.includes("Polite");
 					},
 					text: `USER_TAG sighs happily into USER_THEIR VAR_C2, thinking about the importance of politeness when speaking with others!`,
 				},
 				{
 					required: (t) => {
-						return t.c1.includes("Good");
+						return t.c2.includes("Good");
 					},
 					text: `USER_TAG giggles into USER_THEIR VAR_C2, any thoughts of removing the gag fading away because USER_THEY existUSER_S to *serve*!`,
 				},
 				{
 					required: (t) => {
-						return t.c1.includes("Clock");
+						return t.c2.includes("Clock");
 					},
 					text: `USER_TAG fidgets with USER_THEIR VAR_C2, but it appears that the clockwork renders removal impossible at this time!`,
 				},
 				{
 					required: (t) => {
-						return t.c1.includes("Censor");
+						return t.c2.includes("Censor");
 					},
 					text: `USER_TAG ████ at USER_THEIR ██████████ ███, trying to ████ ██ ███ to no avail!`,
 				},
