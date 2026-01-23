@@ -3,7 +3,7 @@
  * ~ Punyo
  ***************************/
 
-const garbleText = (text, intensity) => {
+const garbleText = (text, parent, intensity) => {
 	let output = "-# ";
 	let leakedSound = 0;
 

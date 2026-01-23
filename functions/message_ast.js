@@ -125,6 +125,10 @@ const messageSplit_AST = (text, parent) => {
 };
 
 
+/**************************************************
+ * Helper function to add parents to nodes.
+ * @param text      - Raw text of the discord message.
+ *************************************************/
 const configureParent = (dollAST, parent) =>  {
 	for (let x = 0; x < dollAST.length; x++) {
 		dollAST[x].parent = parent
