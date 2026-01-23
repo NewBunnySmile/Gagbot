@@ -202,19 +202,19 @@ const texts_collarequip = {
 						`USER_TAG pulls a VAR_C3 out and grabs TARGET_TAG, forcing TARGET_THEIR arms and hands into the tight restraint! TARGET_THEY_CAP squirmTARGET_S in protest, but TARGET_THEY can't do anything about it!`,
 						{
 							only: (t) => {
-								return t.textdata.c3 == "Doll Processing Facility";
+								return t.c3 == "Doll Processing Facility";
 							},
 							text: `Snickering to USER_THEMSELF, USER_TAG throws TARGET_TAG into a VAR_C3 to become a Doll!`,
 						},
 						{
 							only: (t) => {
-								return t.textdata.c3.endsWith("'s Lap");
+								return t.c3.endsWith("'s Lap");
 							},
 							text: `USER_TAG pulls TARGET_TAG into USER_THEIR lap, holding TARGET_THEM gently but firmly.`,
 						},
 						{
 							only: (t) => {
-								return t.c2.includes("Mimic");
+								return t.c3.includes("Mimic");
 							},
 							text: `With a cheeky grin, USER_TAG tosses TARGET_TAG towards a resting VAR_C2! It snaps open and drags TARGET_THEM inside with its tentacles before slamming shut and sealing with a resounding click!`,
 						},
