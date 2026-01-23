@@ -259,6 +259,7 @@ const processHeadwearEmoji = (userID, msgTree, msgModified, dollvisoroverride) =
 	if (replaceemote && !msgModified.modified && !matchFound.found) {
 		msgTree.rebuild(`${msgTree.toString()} ${replaceemote}`)
 		msgModified.modified = true;
+		msgModified.emojiModified = true;
 	}
 
 	if (msgTree.toString().length == 0) {
