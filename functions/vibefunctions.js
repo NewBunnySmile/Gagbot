@@ -110,6 +110,7 @@ const chastitytypes = [
 	{ name: "Chastity Belt of Eternal Denial", value: "belt_eternal", growthCoefficient: 0.5, decayCoefficient: 0.2, denialCoefficient: 2000 },
 	{ name: "Queensbelt", value: "belt_queen", growthCoefficient: 0.5, decayCoefficient: 0.2, denialCoefficient: 10 },
 	{ name: "Starmetal Belt", value: "belt_starmetal", growthCoefficient: 0.5, decayCoefficient: 0.2, denialCoefficient: 7.5 },
+	{ name: "Timekeeper's Belt", value: "belt_timekeeper", growthCoefficient: 0.1, decayCoefficient: 0.1, denialCoefficient: 10, timescale: 0.1, minDecay: -0.1, maxDecay: 0.1 },
 ];
 
 const chastitybratypes = [
