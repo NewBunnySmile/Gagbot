@@ -16,8 +16,8 @@ const { getUserVar } = require("./usercontext.js");
 // NOTE: canUnequip is currently checked in functions that remove/assign chastity and those functions return if it succeeded, but the text responses are not yet updated
 // probably makes more sense to make custom text responses for the belts/bras that use this that explain why it failed
 
-const TRAITS = ["growthCoefficient", "decayCoefficient", "denialCoefficient", "timescale", "minVibe", "maxVibe", "minArousal", "maxArousal", "minGrowth", "maxGrowth", "minDecay", "maxDecay", "onOrgasm", "onFailedOrgasm", "onEquip", "onUnequip", "onFumble", "afterArousalChange", "canUnequip"];
-const SAVEABLE_TRAITS = ["growthCoefficient", "decayCoefficient", "denialCoefficient", "timescale", "minVibe", "minArousal", "maxVibe", "maxArousal", "minGrowth", "maxGrowth", "minDecay", "maxDecay"];
+const TRAITS = ["growthCoefficient", "decayCoefficient", "denialCoefficient", "timescale", "minVibe", "maxVibe", "minArousal", "maxArousal", "minGrowth", "maxGrowth", "minDecay", "maxDecay", "orgasmCooldown", "orgasmArousalLeft", "onOrgasm", "onFailedOrgasm", "onEquip", "onUnequip", "onFumble", "afterArousalChange", "canUnequip"];
+const SAVEABLE_TRAITS = ["growthCoefficient", "decayCoefficient", "denialCoefficient", "timescale", "minVibe", "minArousal", "maxVibe", "maxArousal", "minGrowth", "maxGrowth", "minDecay", "maxDecay", "orgasmCooldown", "orgasmArousalLeft"];
 const NO_CHASTITY = {
 	growthCoefficient: 1,
 	decayCoefficient: 1,
@@ -31,6 +31,8 @@ const NO_CHASTITY = {
 	maxGrowth: null,
 	minDecay: null,
 	maxDecay: null,
+	orgasmCooldown: 1,
+	orgasmArousalLeft: 0,
 	onOrgasm(user, prevArousal) {},
 	onFailedOrgasm(user, prevArousal) {},
 	onEquip(user) {},
@@ -55,6 +57,8 @@ const DEFAULT_BELT = {
 	maxGrowth: null,
 	minDecay: null,
 	maxDecay: null,
+	orgasmCooldown: 1,
+	orgasmArousalLeft: 0,
 	onOrgasm(user, prevArousal) {},
 	onFailedOrgasm(user, prevArousal) {},
 	onEquip(user) {},
@@ -79,6 +83,8 @@ const DEFAULT_BRA = {
 	maxGrowth: null,
 	minDecay: null,
 	maxDecay: null,
+	orgasmCooldown: 1,
+	orgasmArousalLeft: 0,
 	onOrgasm(user, prevArousal) {},
 	onFailedOrgasm(user, prevArousal) {},
 	onEquip(user) {},
@@ -440,6 +446,8 @@ function getCombinedTraits(user, belt = undefined, bra = undefined) {
 		maxGrowth: min(beltTraits.maxGrowth, braTraits.maxGrowth),
 		minDecay: max(beltTraits.minDecay, braTraits.minDecay),
 		maxDecay: min(beltTraits.maxDecay, braTraits.maxDecay),
+		orgasmCooldown: beltTraits.orgasmCooldown * braTraits.orgasmCooldown,
+		orgasmArousalLeft: beltTraits.orgasmArousalLeft + braTraits.orgasmArousalLeft,
 		onOrgasm(user, prevArousal) {
 			beltTraits.onOrgasm(user, prevArousal);
 			braTraits.onOrgasm(user, prevArousal);
@@ -1355,7 +1363,7 @@ function tryOrgasm(user) {
 	const orgasmLimit = ORGASM_LIMIT;
 
 	if ((arousal * (RANDOM_BIAS + Math.random())) / (RANDOM_BIAS + 1) >= orgasmLimit * denialCoefficient) {
-		setArousalCooldown(user);
+		setArousalCooldown(user, traits.orgasmCooldown, traits.orgasmArousalLeft);
 		if (chastity) {
 			chastity.timestamp = (chastity.timestamp + now) / 2;
 			if (process.readytosave == undefined) {
@@ -1376,12 +1384,12 @@ function tryOrgasm(user) {
 	return false;
 }
 
-function setArousalCooldown(user) {
+function setArousalCooldown(user, cooldownModifier = 1, arousalLeft = 0) {
 	const now = Date.now();
-	process.arousal[user].timestamp = now + ORGASM_COOLDOWN;
+	process.arousal[user].timestamp = now + ORGASM_COOLDOWN * cooldownModifier;
 	const old = process.arousal[user].arousal;
-	process.arousal[user].arousal = 0;
-	getCombinedTraits(user).afterArousalChange(user, old, 0);
+	process.arousal[user].arousal *= arousalLeft;
+	getCombinedTraits(user).afterArousalChange(user, old, process.arousal[user].arousal);
 }
 
 // modify when more things affect it
