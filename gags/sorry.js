@@ -14,37 +14,27 @@ const apologies = [
 ];
 
 const affirmations = [
-    `\nI am enough.\n`, 
-    `\nI do fantastic work.\n`, 
-    `\nMy actions are good enough.\n`, 
-    `\nI am a great person.\n`, 
-    `\nI am beautiful.\n`, 
-    `\nI am cute.\n`, 
+    `I am enough.`, 
+    `I do fantastic work.`, 
+    `My actions are good enough.`, 
+    `I am a great person.`, 
+    `I am beautiful.`, 
+    `I am cute.`, 
 ];
 
-const messagebegin = (msgcontent, intensity, msgparts) => {
+const messagebegin = (msg, msgTree, msgTreeMods, intensity) => {
 	let apologiesmap = apologies.join("|");
 	let regexpattern = new RegExp(`\\b(${apologiesmap})\\b`, "i");
 
-	if (!regexpattern.test(msgcontent)) {
-		// They did not apologize, no need to do anything. 
-		return { msgparts: msgparts };
+
+	if (!regexpattern.test(msg.content)) {
+		// They did not apologize, no need to do anything.
+		return;
 	} else {
-		let msgpartschanged = msgparts.slice(0);
-		let silented = false;
-		for (let i = 0; i < msgpartschanged.length; i++) {
-			// Twiddle their thumbs
-			if (!silented && msgpartschanged[i].garble && msgpartschanged[i].text.length > 0 && !msgpartschanged[i].text.match(/^\s*$/)) {
-				msgpartschanged[i].text = affirmations[Math.floor(Math.random() * affirmations.length)];
-				msgpartschanged[i].garble = false;
-				silented = true;
-			}
-			// Theyve been silenced, no more speech.
-			else if (msgpartschanged[i].garble) {
-				msgpartschanged[i].text = "";
-			}
-		}
-		return { msgparts: msgpartschanged };
+		let silenced = {"isSilenced": false}								// Store a bool in an object to pass by reference.
+		msgTree.callFunc(impoliteSub,true,["rawText","moan"],[silenced])	// Run a function on the tree.
+		if(silenced.isSilenced){msgTreeMods.modified = true;}				// If the function caught anything, the message is modified.
+		return;
 	}
 };
 
@@ -52,7 +42,7 @@ const messagebegin = (msgcontent, intensity, msgparts) => {
 const impoliteSub = (text, parent, silent) => {
 	if(!silent.isSilenced){
 		silent.isSilenced = true;
-		return affirmations[Math.floor(Math.random() * silenttitles.length)];
+		return affirmations[Math.floor(Math.random() * affirmations.length)];
 	}else{
 		return "";
 	}

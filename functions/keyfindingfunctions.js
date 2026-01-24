@@ -10,6 +10,7 @@ const { findChastityBraKey } = require("./vibefunctions");
 const { messageSendChannel } = require("./messagefunctions.js");
 const { PermissionsBitField } = require("discord.js");
 const { frustrationPenalties } = require("./vibefunctions.js");
+const { getCombinedTraits } = require("./vibefunctions.js");
 
 const MAX_FUMBLE_CHANCE = 0.95;
 const FUMBLE_AROUSAL_POTENCY = 11.7;
@@ -51,16 +52,18 @@ function rollKeyFumble(keyholder, locked, maxFumbles = 1) {
 			// if it was the first attempt, clear their saved up blessing
 			if (i == 0) setUserVar(keyholder, "blessing", 0);
 			// return how many fumbles it took before a success
+			getCombinedTraits(locked).onFumble(locked, keyholder, i);
 			return i;
 		}
 	}
 	// succeeding returns early so if we get here they failed every time
+	getCombinedTraits(locked).onFumble(locked, keyholder, maxFumbles);
 	return maxFumbles;
 }
 
 function getFumbleChance(keyholder, locked) {
 	// cannot fumble if disabled
-	if (!config.getDisabledKeyFumbling(locked)) return 0;
+	if (config.getDisabledKeyFumbling(locked)) return 0;
 	// ... or if not using the dynamic arousal system
 	if (!config.getDynamicArousal(keyholder)) return 0;
 	// ... or if it's someone else and either has disable fumbling for others
