@@ -14,6 +14,8 @@ const collartypes = [
 	{ name: "Nevermere Tracking Collar", value: "collar_nevermere" },
 	{ name: "Steel Collar", value: "collar_steel" },
 	{ name: "Kitty Collar", value: "collar_kitty" },
+	{ name: "Puppy Collar", value: "collar_puppy" },
+	{ name: "Inari Collar", value: "collar_inari" },
 	{ name: "Sheep Collar", value: "collar_sheep" },
 	{ name: "Potion Collar", value: "collar_potion" },
 	{ name: "Princess Collar", value: "collar_princess" },

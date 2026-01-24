@@ -239,7 +239,7 @@ const texts_collarequip = {
 							only: (t) => {
 								return t.c3.includes("X-Frame");
 							},
-							text: `USER_TAG presses TARGET_TAG up against the VAR_C3, reaching up and locking TARGET_THEIR arms into the upper cuffs. Then after trapping TARGET_TAG, USER_THEM bends down to lock TARGET_THEIR legs to the frame, leaving TARGET_THEMSELF completely exposed!`,
+							text: `USER_TAG presses TARGET_TAG up against the VAR_C3, reaching up and locking TARGET_THEIR arms into the upper cuffs. Then after trapping TARGET_THEM, USER_THEY bendUSER_S down to lock TARGET_THEIR legs to the frame, leaving TARGET_THEM completely exposed!`,
 						},
 						{
 							only: (t) => {
@@ -257,7 +257,7 @@ const texts_collarequip = {
 							only: (t) => {
 								return t.c3.includes("Dancer's Pole");
 							},
-							text: `USER_TAG helps TARGET_TAG climb onto the stage and cuffs TARGET_THEMSELF to the VAR_C3, swatting TARGET_THEM on the ass before climbing down and settling into a comfortable seat to watch TARGET_TAG dancing sensually for their enjoyment~!`,
+							text: `USER_TAG helps TARGET_TAG climb onto the stage and cuffs TARGET_THEMSELF to the VAR_C3, swatting TARGET_THEM on the ass before climbing down and settling into a comfortable seat to watch TARGET_TAG dancing sensually for USER_THEIR enjoyment~!`,
 						},
 						{
 							only: (t) => {
@@ -308,7 +308,7 @@ const texts_collarequip = {
 							only: (t) => {
 								return t.c3.includes("Bandage");
 							},
-							text: `USER_TAG pulls out a roll of VAR_C3 and begins to wind them around TARGET_TAG! Soon enough TARGET_THEY are completely mummified by the VAR_C3!`,
+							text: `USER_TAG pulls out a roll of VAR_C3 and begins to wind them around TARGET_TAG! Soon enough TARGET_THEY TARGET_ISARE completely mummified by the VAR_C3!`,
 						},
 						// Comfy
 						{
@@ -340,7 +340,7 @@ const texts_collarequip = {
 							only: (t) => {
 								return t.c3.includes("Magic Mirror");
 							},
-							text: `USER_TAG pushes TARGET_TAG backwards into a VAR_C3! As TARGET_THEY touch it the Mirror emits a bright flash of light, and TARGET_TAG finds themselves trapped within the reflection!`,
+							text: `USER_TAG pushes TARGET_TAG backwards into a VAR_C3! As TARGET_THEY touches it the Mirror emits a bright flash of light, and TARGET_TAG finds themselves trapped within the reflection!`,
 						},
 						{
 							only: (t) => {
@@ -734,7 +734,7 @@ const texts_heavy = {
 			only: (t) => {
 				return t.c2.includes("Leashing Post");
 			},
-			text: `USER_TAG walks over to the VAR_C2, clipping on a leash and blushing as USER_THEY kneel down and tie the other end to the VAR_C2!`,
+			text: `USER_TAG walks over to the VAR_C2, clipping on a leash and blushing as USER_THEY kneelUSER_S down and tieUSER_S the other end to the VAR_C2!`,
 		},
 		// Latex
 		{
@@ -773,7 +773,7 @@ const texts_heavy = {
 			only: (t) => {
 				return t.c2.includes("Bandage");
 			},
-			text: `USER_TAG pulls out a roll of VAR_C2 and enchants them to wind around USER_THEMSELF! Soon enough USER_THEY are completely mummified by the VAR_C3!`,
+			text: `USER_TAG pulls out a roll of VAR_C2 and enchants them to wind around USER_THEMSELF! Soon enough USER_THEY USER_ISARE completely mummified by the VAR_C3!`,
 		},
 		// Comfy
 		{
@@ -894,6 +894,109 @@ const texts_struggle = {
 		`USER_TAG tries USER_THEIR *best* to get some leverage and escape USER_THEIR bondage, but stops just short of potentially pulling a muscle.`,
 		`USER_TAG fights against USER_THEIR VAR_C1, trying to loosen it even a little bit to maybe escape...`,
 		`USER_TAG fights against USER_THEIR VAR_C1, but it doesn't budge even a micrometer...`,
+		// Doll
+		{
+			only: (t) => {
+				return t.c1 == "Doll Processing Facility";
+			},
+			text: `USER_TAG fights against the VAR_C1 as USER_THEY USER_ISARE moved along the belt, but it refuses to acknowledge USER_THEIR struggle! After all, USER_THEY USER_ISARE just a Doll.`,
+		},
+		// General Types
+		{
+			required: (t) => {
+				return t.c1.includes("Petsuit") || t.c1.includes("Piddlefours");
+			},
+			text: `USER_TAG squirms helplessly on the floor in USER_THEIR VAR_C1, any helpful implements kept well out of the reach of pets~!`,
+		},
+		// Stationary
+		{
+			required: (t) => {
+				return t.c1.includes("Display Stand");
+			},
+			text: `USER_TAG squirms in the VAR_C1, but the cuffs lock USER_THEM in place, forcing USER_THEM to maintain USER_THEIR posture and keeping USER_THEM helpless and on display!`,
+		},
+		{
+			required: (t) => {
+				return t.c1.includes("One Bar Prison");
+			},
+			text: `USER_TAG squirms atop the VAR_C1, failing to gain the extra height needed to escape the bar cruelly trapping USER_THEM in place!`,
+		},
+		{
+			required: (t) => {
+				return t.c1.includes("Wooden Horse");
+			},
+			text: `USER_TAG squirms atop the VAR_C1, every attempt to tug at USER_THEIR cuffs grinding USER_THEIR crotch into the ridge!`,
+		},
+		{
+			only: (t) => {
+				return t.c1.includes("Dancer's Pole");
+			},
+			text: `USER_TAG tugs on USER_THEIR cuffs but the VAR_C1 holds firm, leaving USER_THEM no choice but to continue dancing for USER_THEIR audience!`,
+		},
+		{
+			only: (t) => {
+				return t.c1.includes("Pet Cage");
+			},
+			text: `USER_TAG squirms inside the VAR_C1, knowing that there is nothing USER_THEY can do to release the lock from inside!`,
+		},
+		{
+			required: (t) => {
+				return t.c1.includes("Leashing Post");
+			},
+			text: `USER_TAG tugs against USER_THEIR leash, but the VAR_C1 anchors USER_THEM in place!`,
+		},
+		// Latex
+		{
+			required: (t) => {
+				return t.c1.includes("Latex");
+			},
+			text: `USER_TAG strains against the VAR_C1, the latex stretching and squeaking as USER_THEY doUSER_ES so! But no matter how far USER_THEY twistUSER_S or bendUSER_S the latex, it always pulls USER_THEM back into position`,
+		},
+		// Furniture
+		{
+			required: (t) => {
+				return t.c1.includes("Bed Restraints") || t.c1.includes("X-Frame");
+			},
+			text: `USER_TAG tugs against the cuffs holding USER_THEM stretched out, but the VAR_C1 offers no slack!`,
+		},
+		// Encasement or Wrappings
+		{
+			required: (t) => {
+				return t.c1.includes("Autotape");
+			},
+			text: `USER_TAG struggles against the VAR_C1, but the Autotape is too sticky to come loose that easily!`,
+		},
+		{
+			required: (t) => {
+				return t.c1.includes("Bandage");
+			},
+			text: `USER_TAG squirms in the VAR_C1, but USER_THEY makeUSER_S no progress in escaping USER_THEIR mummification!!`,
+		},
+		// Comfy
+		{
+			required: (t) => {
+				return t.c1.includes("Weighted Blanket");
+			},
+			text: `The comfortable weight of the VAR_C1 saps USER_TAG's desire to try and escape! Surely 5 more minutes wouldn't hurt?`,
+		},
+		{
+			required: (t) => {
+				return t.c1.includes("Blanket Burrito");
+			},
+			text: `Rolled up in the VAR_C1, USER_TAG is too warm and comfortable to want to escape!`,
+		},
+		{
+			required: (t) => {
+				return t.c1.includes("Toasty Kotatsu");
+			},
+			text: `As USER_THEY relaxUSER_ES under the VAR_C1, USER_TAG realises USER_THEY can't bring USER_THEMSELF to leave the comfortable warmth!`,
+		},
+		{
+			only: (t) => {
+				return t.c1.includes("Mimic");
+			},
+			text: `USER_TAG struggles against the tentacles of the VAR_C1 to no avail! It seems USER_THEY will be trapped inside until it has finished with USER_THEM!`,
+		},
 		{
 			only: (t) => {
 				return t.c1.endsWith("'s Lap");
