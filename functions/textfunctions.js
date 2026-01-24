@@ -734,7 +734,7 @@ const texts_heavy = {
 			only: (t) => {
 				return t.c2.includes("Leashing Post");
 			},
-			text: `USER_TAG walks over to the VAR_C2, clipping on a leash and blushing as USER_THEY kneel down and tie the other end to the VAR_C2!`,
+			text: `USER_TAG walks over to the VAR_C2, clipping on a leash and blushing as USER_THEY kneels down and ties the other end to the VAR_C2!`,
 		},
 		// Latex
 		{
@@ -773,7 +773,7 @@ const texts_heavy = {
 			only: (t) => {
 				return t.c2.includes("Bandage");
 			},
-			text: `USER_TAG pulls out a roll of VAR_C2 and enchants them to wind around USER_THEMSELF! Soon enough USER_THEY are completely mummified by the VAR_C3!`,
+			text: `USER_TAG pulls out a roll of VAR_C2 and enchants them to wind around USER_THEMSELF! Soon enough USER_THEY USER_ISARE completely mummified by the VAR_C3!`,
 		},
 		// Comfy
 		{
@@ -923,24 +923,18 @@ const texts_struggle = {
 		},
 		{
 			required: (t) => {
-				return t.c1.includes("X-Frame");
-			},
-			text: `USER_TAG steps up to the VAR_C1, bending down to secure USER_THEIR legs to the frame before reaching up and locking USER_THEIR arms into the upper cuffs leaving USER_THEMSELF completely exposed!`,
-		},
-		{
-			required: (t) => {
 				return t.c1.includes("Wooden Horse");
 			},
-			text: `USER_TAG climbs onto the VAR_C1, bending down to secure USER_THEIR legs into the cuffs and then laying over the frame and slipping USER_THEIR wrists into the front cuffs! USER_THEIR_CAP weight presses the top edge of the frame into USER_THEIR crotch!`,
+			text: `USER_TAG squirms atop the VAR_C1, every attempt to tug at USER_THEIR cuffs grinding USER_THEIR crotch into the ridge!`,
 		},
 		{
-			required: (t) => {
+			only: (t) => {
 				return t.c1.includes("Dancer's Pole");
 			},
 			text: `USER_TAG tugs on USER_THEIR cuffs but the VAR_C1 holds firm, leaving USER_THEM no choice but to continue dancing for USER_THEIR audience!`,
 		},
 		{
-			required: (t) => {
+			only: (t) => {
 				return t.c1.includes("Pet Cage");
 			},
 			text: `USER_TAG squirms inside the VAR_C1, knowing that there is nothing USER_THEY can do to release the lock from inside!`,
@@ -956,7 +950,7 @@ const texts_struggle = {
 			required: (t) => {
 				return t.c1.includes("Latex");
 			},
-			text: `USER_TAG strains against the VAR_C1, the latex stretching and squeaking as they do so! But no matter how far USER_THEY twist or bend the latex always drags USER_THEM back into position`,
+			text: `USER_TAG strains against the VAR_C1, the latex stretching and squeaking as they do so! But no matter how far USER_THEY twists or bends the latex always drags USER_THEM back into position`,
 		},
 		// Furniture
 		{
@@ -976,7 +970,7 @@ const texts_struggle = {
 			required: (t) => {
 				return t.c1.includes("Bandage");
 			},
-			text: `USER_TAG squirms in the VAR_C1, but USER_THEY make no progress in escaping USER_THEIR mummification!!`,
+			text: `USER_TAG squirms in the VAR_C1, but USER_THEY makes no progress in escaping USER_THEIR mummification!!`,
 		},
 		// Comfy
 		{
@@ -998,10 +992,10 @@ const texts_struggle = {
 			text: `As USER_THEY relax under the VAR_C1, USER_TAG realise USER_THEY can't bring USER_THEMSELF to leave the comfortable warmth!`,
 		},
 		{
-			required: (t) => {
+			only: (t) => {
 				return t.c1.includes("Mimic");
 			},
-			text: `USER_TAG struggles against the tentacles of the VAR_C1 to no avail! It seems USER_THEY will be trapped inside until it has finished with them!`,
+			text: `USER_TAG struggles against the tentacles of the VAR_C1 to no avail! It seems USER_THEY will be trapped inside until it has finished with USER_THEM!`,
 		},
 		{
 			only: (t) => {
