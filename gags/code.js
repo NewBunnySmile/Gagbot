@@ -132,7 +132,7 @@ const codingConstruct = () => {
 	return readtext;
 };
 
-const garbleText = (text, intensity) => {
+const garbleText = (text, parent, intensity) => {
 	let newtextparts = text.split(" ");
 	let outtext = "";
 	let codingconstruct = codingConstruct();
