@@ -49,7 +49,7 @@ const garbleText = (text, parent, intensity) => {
 	while (inputNumber > 0) {
 		inputNumber -= Math.floor(Math.random * 10 + 21);
 		// replacer function to output, removing $[input[i]} removes the original word
-		output = `${output}\n${gagSoundList[Math.floor(Math.random() * gagSoundList.length)]} \n`;
+		output = `${output}${gagSoundList[Math.floor(Math.random() * gagSoundList.length)]}`;
 	}
 
 	return output; //Return
@@ -57,7 +57,7 @@ const garbleText = (text, parent, intensity) => {
 
 const messageend = (msg, intensity) => {
 	// Sounds to append
-	let endsoundList = ["I serve", "Ever yours", "I obey", "Please treat me well <3"];
+	let endsoundList = ["\nI serve", "\nEver yours", "\nI obey", "\nPlease treat me well <3"];
 
 	// Add "I am a good girl!" to the list
 	if (msg.member) {
