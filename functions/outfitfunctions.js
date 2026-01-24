@@ -3,7 +3,7 @@ const { StringSelectMenuOptionBuilder } = require("@discordjs/builders");
 const { StringSelectMenuBuilder } = require("@discordjs/builders");
 const { ButtonBuilder } = require("@discordjs/builders");
 const { TextDisplayBuilder, MessageFlags, ButtonStyle, ActionRow, SectionBuilder, LabelBuilder, TextInputStyle } = require("discord.js");
-const { getWearable, getLockedWearable, getWearableName } = require("./wearablefunctions");
+const { getWearable, getLockedWearable, getWearableName, getBaseWearable } = require("./wearablefunctions");
 const { getGags, getMitten, getGag, convertGagText, getMittenName } = require("./gagfunctions");
 const { getCollar, canAccessCollar, getCollarName, getCollarTimelock, getCollarPerm, getCollarKeys, getClonedCollarKeysOwned } = require("./collarfunctions");
 const { getCorset } = require("./corsetfunctions");
@@ -715,7 +715,7 @@ async function inspectModal(userID, inspectuserIDin, menu, page) {
     // Now do stuff per page
     if (menu == "overview") {
         let headwearrestrictions = getHeadwearRestrictions(userID);
-        let wearingtext = `### Worn Restraints:`;
+        let wearingtext = `## Worn Restraints:`;
         // Gags
         if (getGag(inspectuserID)) {
             wearingtext = `${wearingtext}\n${process.emojis.gag} Gags: **${getGags(inspectuserID).map((g) => { return `${convertGagText(g.gagtype)} (${g.intensity})`}).join(", ")}**`
@@ -839,19 +839,19 @@ async function inspectModal(userID, inspectuserIDin, menu, page) {
             wearingtext = `${wearingtext}\n-# Mittens: ${getCollarPerm(inspectuserID, "mitten") ? "✅" : "⛔"}, Chastity: ${getCollarPerm(inspectuserID, "chastity") ? "✅" : "⛔"}, Heavy: ${getCollarPerm(inspectuserID, "heavy") ? "✅" : "⛔"}, Masks: ${getCollarPerm(inspectuserID, "mask") ? "✅" : "⛔"}`
         }
 
-        if (wearingtext === `### Worn Restraints:`) { 
+        if (wearingtext === `## Worn Restraints:`) { 
             wearingtext = `${wearingtext}\n\nNothing is worn at the moment.`
         }
         wearingtext = `${wearingtext}\n`
 
-        let clothingtext = `### Worn Apparel:\n`;
+        let clothingtext = `## Worn Apparel:\n`;
         if (getWearable(inspectuserID).length > 0) {
             clothingtext = `${clothingtext}**${getWearable(inspectuserID).map((h) => (!getLockedWearable(inspectuserID).includes(h) ? getWearableName(undefined, h) : `*${getWearableName(undefined, h)}*`)).slice(0,15).join(", ")}**`
             if (getWearable(inspectuserID).length > 15) {
                 clothingtext = `${clothingtext}... *and ${getWearable(inspectuserID).length - 15} more item${(getWearable(inspectuserID).length - 15) == 1 ? "" : "s"}.*`
             }
         }
-        if (clothingtext === `### Worn Apparel:\n`) { 
+        if (clothingtext === `## Worn Apparel:\n`) { 
             clothingtext = `${clothingtext}\nNothing is worn at the moment`
         }
         clothingtext = `${clothingtext}\n`
@@ -874,7 +874,7 @@ async function inspectModal(userID, inspectuserIDin, menu, page) {
     }
     else if (menu == "restraints") {
         let headwearrestrictions = getHeadwearRestrictions(userID);
-        let wearingtext = `### Regular Worn Restraints:`;
+        let wearingtext = `## Regular Worn Restraints:`;
         // Gags
         if (getGag(inspectuserID)) {
             wearingtext = `${wearingtext}\n${process.emojis.gag} Gags: **${getGags(inspectuserID).map((g) => { return `${convertGagText(g.gagtype)} (${g.intensity})`}).join(", ")}**`
@@ -900,7 +900,7 @@ async function inspectModal(userID, inspectuserIDin, menu, page) {
             wearingtext = `${wearingtext}\n${process.emojis.armbinder} Heavy Bondage: **${getHeavy(inspectuserID).type}**`
         }
 
-        let keyedrestraints = `### Keyed Restraints:`
+        let keyedrestraints = `## Keyed Restraints:`
         // Chastity Belt
         if (getChastity(inspectuserID)) {
             let chastitylockemoji = canAccessChastity(inspectuserID, userID).access ? "🔑" : "🔒";
@@ -1017,12 +1017,12 @@ async function inspectModal(userID, inspectuserIDin, menu, page) {
             keyedrestraints = `${keyedrestraints}\n-# Mittens: ${getCollarPerm(inspectuserID, "mitten") ? "✅" : "⛔"}, Chastity: ${getCollarPerm(inspectuserID, "chastity") ? "✅" : "⛔"}, Heavy: ${getCollarPerm(inspectuserID, "heavy") ? "✅" : "⛔"}, Masks: ${getCollarPerm(inspectuserID, "mask") ? "✅" : "⛔"}`
         }
 
-        if (wearingtext === `### Regular Worn Restraints:`) { 
+        if (wearingtext === `## Regular Worn Restraints:`) { 
             wearingtext = `${wearingtext}\n\nNothing is worn at the moment.`
         }
         wearingtext = `${wearingtext}\n`
 
-        if (keyedrestraints === `### Keyed Restraints:`) { 
+        if (keyedrestraints === `## Keyed Restraints:`) { 
             keyedrestraints = `${keyedrestraints}\n\nNo keyed restraints worn at the moment.`
         }
         keyedrestraints = `${keyedrestraints}\n`
@@ -1037,9 +1037,49 @@ async function inspectModal(userID, inspectuserIDin, menu, page) {
     }
     else if (menu == "wearable") {
         let headwearrestrictions = getHeadwearRestrictions(userID);
-        let clothingtext = `### Worn Apparel:\n`;
+        let clothingtext = `## Worn Apparel:`;
         if (getWearable(inspectuserID).length > 0) {
-            clothingtext = `${clothingtext}**${getWearable(inspectuserID).map((h) => (!getLockedWearable(inspectuserID).includes(h) ? getWearableName(undefined, h) : `*${getWearableName(undefined, h)}*`)).join(", ")}**`
+            let wearablescategories = {
+                Hat: [],
+                "Head/Hair Accessories": [],
+                Glasses: [],
+                Cosplay: [],
+                Doll: [],
+                Bondage: [],
+                Dresses: [],
+                "Upper Body": [],
+                "Lower Body": [],
+                Undergarments: [],
+                Footwear: [],
+                Hands: [],
+                Misc: [],
+                "Body Part": [],
+                Other: []
+            }
+            getWearable(inspectuserID).map((w) => { return getBaseWearable(w) }).forEach((basewearable) => {
+                if (basewearable.category && Object.keys(wearablescategories).includes(basewearable.category)) {
+                    wearablescategories[basewearable.category].push(basewearable.value)
+                }
+                else {
+                    wearablescategories.Other.push(basewearable.value)
+                }
+            })
+            for (category in wearablescategories) {
+                if (wearablescategories[category].length > 0) {
+                    let remaininglength = (1800 - clothingtext.length);
+                    let newtexttoadd = `\n### ${category}\n`;
+                    wearablescategories[category].sort().forEach((w) => {
+                        if (newtexttoadd.length < remaininglength) {
+                            newtexttoadd = `${newtexttoadd}${!getLockedWearable(inspectuserID).includes(w) ? getWearableName(undefined, w) : `*${getWearableName(undefined, w)}*`}, `
+                        }
+                    })
+                    if (newtexttoadd != `\n### ${category}`) {
+                        clothingtext = `${clothingtext}${newtexttoadd.slice(0,-2)}`
+                    }
+                }
+            }
+
+            //clothingtext = `${clothingtext}**${getWearable(inspectuserID).map((h) => (!getLockedWearable(inspectuserID).includes(h) ? getWearableName(undefined, h) : `*${getWearableName(undefined, h)}*`)).join(", ")}**`
         }
         if (clothingtext.length > 1800) {
             clothingtext = `${clothingtext.slice(0,1800)}...` // We'll make a more elegant overflow solution later. 
@@ -1100,10 +1140,10 @@ async function inspectModal(userID, inspectuserIDin, menu, page) {
             keysheldtext = `${keysheldtext}- ${process.emojis.collarclone} Cloned collar keys: ${keysstring}`;
         }
         if (keysheldtext.length > 0) {
-            keysheldtext = `### Keys Held\n${keysheldtext}`
+            keysheldtext = `## Keys Held\n${keysheldtext}`
         }
         else {
-            keysheldtext = `### Keys Held\nNo keys held at the moment`
+            keysheldtext = `## Keys Held\nNo keys held at the moment`
         }
 
         let collated = `${keysheldtext}`;
