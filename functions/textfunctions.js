@@ -321,7 +321,7 @@ const texts_collarequip = {
 							only: (t) => {
 								return t.c3.includes("Blanket Burrito");
 							},
-							text: `USER_TAG wraps TARGET_TAG up into a VAR_C3! It doesn't take TARGET_TAG long before TARGT_THEY realise USER_TAG has trapped TARGET_THEM in a warm comfy prison!`,
+							text: `USER_TAG wraps TARGET_TAG up into a VAR_C3! It doesn't take TARGET_TAG long before TARGET_THEY realise USER_TAG has trapped TARGET_THEM in a warm comfy prison!`,
 						},
 						{
 							only: (t) => {
