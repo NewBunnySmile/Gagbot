@@ -2212,6 +2212,7 @@ const texts_eventfunctions = {
 				cuffs_cyberdoll: [`The Doll Processing Facility wraps cuffs around the USER_TAG Doll's wrists and ankles. Their digital display glows green as they activate and link up to the harness, providing further restraint points.`],
 				doll_heels: [`The Doll Processing Facility grips the USER_TAG Doll gently to lift it up before slipping a pair of Doll Heels on its feet, forcing it to stand taller. A display light glows green on the shoes.`],
 				cyberdoll_barcode: [`The Doll Processing Facility uses a flash-ink process to engrave an identifying barcode on USER_TAG Doll's body somewhere. It will be registered with the Doll Asset Management system.`],
+				existing_barcode: [`The Doll Processing Facility scans an existing barcode somewhere on USER_TAG Doll's body. Welcome back VAR_C2~.`],
 			},
 			donestripping: [`Having finished removing all of the wrong clothing on the new Doll, the Doll Processing Facility's belt pushes USER_TAG along to the Restraints section to adorn USER_THEM in appropriate Cyber Doll Integration.`],
 			applyingrestraints: {
@@ -2220,7 +2221,7 @@ const texts_eventfunctions = {
 				chastitybra: { replace: [`The Doll Processing Facility destroys the locking mechanism on USER_TAG's VAR_C1. It falls to the floor with a clang, but USER_THEY getUSER_S no moment to enjoy the freedom as USER_THEIR breasts are wrapped in a Cyber Doll Bra.`], add: [`The Doll Processing Facility wraps a Cyber Doll Bra around USER_TAG's chest. The digital display on it glows as it integrates with the rest of the Doll's systems. It is a chaste Doll.`] },
 				collar: { replace: [`The Doll Processing Facility undoes the collar on the Doll vaguely resembling USER_TAG. The collar is taken away as USER_THEIR neck is quickly readorned with a Cyber Doll Collar.`], add: [`The Doll Processing Facility forces USER_TAG to lean forward as it wraps a Cyber Doll Collar around USER_TAG's throat. It beeps as it integrates with the rest of the Doll's restraints. It will not escape.`] },
 				headwear: { add: [`The Doll Processing Facility installs a Doll Visor on the USER_TAG Doll. It's face now has a clear colored glass sheen across it. A beep indicates the speech protocols have been activated on it.`] },
-				done: [`Having reached the end of the Restraints section, the Doll moves along the belt, nearly to USER_THEIR destination.`],
+				done: [`Having reached the end of the Restraints section, VAR_C2 moves along the belt, nearly to USER_THEIR destination.`],
 			},
 			processingcomplete: [`As USER_TAG reaches the end of the Doll Processing Facility, USER_THEY USER_ISARE finally released. USER_THEY_CAP USER_ISARE no longer human. USER_THEY_CAP USER_ISARE just a Doll. USER_THEY_CAP serveUSER_S the Dollmaker.`],
 		},
