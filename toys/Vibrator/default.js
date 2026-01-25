@@ -1,4 +1,4 @@
-const { canAccessChastity } = require("../../functions/vibefunctions")
+const { canAccessChastity, addArousal } = require("../../functions/vibefunctions")
 
 // These values are used whenever they're unspecified on the vibe in this folder.
 // Arousal gain per intensity for this vibe type
@@ -18,6 +18,12 @@ exports.canUnequip = (data) => { return (!canAccessChastity(data.userID, data.ke
 
 // Condition to force unequip on refresh
 exports.forceUnequip = (data) => { return false }
+
+// Condition to allow modification
+this.canModify = (data) => { return (!canAccessChastity(data.userID, data.keyholderID).hasbelt || canAccessChastity(data.userID, data.keyholderID).access) };
+
+// Action when equipping
+this.onEquip = (data) => { addArousal(data.userID, data.intensity / 2) };
 
 // Calculation for effective arousal
 // Note, this should be used for checks more focused around the vibe - it will be

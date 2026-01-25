@@ -12,6 +12,7 @@ const { arousedtexts } = require("../vibes/aroused/aroused_texts.js");
 const { config } = require("./configfunctions.js");
 const { getOption, getBotOption } = require(`./configfunctions.js`);
 const { getUserVar, setUserVar } = require("./usercontext.js");
+const { getToys } = require("./toyfunctions.js");
 
 // NOTE: canUnequip is currently checked in functions that remove/assign chastity and those functions return if it succeeded, but the text responses are not yet updated
 // probably makes more sense to make custom text responses for the belts/bras that use this that explain why it failed
@@ -1275,13 +1276,13 @@ function updateArousalValues() {
 			// if the timestamp is in the future the user is cooling off from an orgasm or similar and should be skipped
 			if (arousal.timestamp > now) continue;
 			const traits = getCombinedTraits(user);
-			const vibes = getVibe(user);
+			const vibes = getToys(user);
 			// if no vibe effect, growth coefficient will be 0
 			// otherwise add the effects of the vibes and multiply it with the growth coefficient from belt and bra, and scale it so it ends up in a good range
             let vibegains = vibes.reduce((prev, currVibe) => { 
                 let vibedata = { intensity: currVibe.intensity }
                 return prev + process.toytypes[currVibe.type].calcVibeEffect(vibedata) 
-            })
+            }, 0)
 			const growthCoefficient = !vibes && (!traits.minVibe ? 0 : traits.growthCoefficient) * bounded(traits.minVibe * VIBE_SCALING, vibegains, traits.maxVibe * VIBE_SCALING);
 			const next = calcNextArousal(traits, time, arousal.arousal, arousal.prev, growthCoefficient, traits.decayCoefficient * UNBELTED_DECAY);
 			// set the values to the new ones
@@ -1414,7 +1415,7 @@ function setArousalCooldown(user, cooldownModifier = 1, arousalLeft = 0) {
 
 // modify when more things affect it
 function calcStaticVibeIntensity(user) {
-	const vibes = getVibe(user);
+	const vibes = getToys(user);
 	if (!vibes) return 0;
 	return vibes.reduce((prev, currVibe) => {
         let vibedata = { intensity: currVibe.intensity }

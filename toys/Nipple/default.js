@@ -19,6 +19,9 @@ exports.canUnequip = (data) => { return (!canAccessChastityBra(data.userID, data
 // Condition to force unequip on refresh
 exports.forceUnequip = (data) => { return false }
 
+// Condition to allow modification
+this.canModify = (data) => { return (!canAccessChastityBra(data.userID, data.keyholderID).hasbelt || canAccessChastityBra(data.userID, data.keyholderID).access) };
+
 // Calculation for effective arousal
 // Note, this should be used for checks more focused around the vibe - it will be
 // further multiplied by the chastity's checks for this, if applicable. 

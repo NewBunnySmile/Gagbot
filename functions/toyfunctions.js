@@ -23,6 +23,7 @@ const toytypes = [
 
 // Imports each toy in ./toys and makes them accessible as objects
 // in process.toyslist mapped to their respective ids.
+// Toys are constructed as default -> class -> specific toy, overwriting in that order.
 function setUpToys() {
     let toys = {}
     let toysfunctionsroot = path.join(__dirname, "..", "toys");
@@ -42,13 +43,19 @@ function setUpToys() {
                     toydefaultoverrides.forEach((override) => {
                         newtoy[override] = toydefaults[override]
                     })
+                    // Overwrite with specific toy's values, if specified. 
                     let specifictoy = require(`${toysinfolderpath}/${t}`);
                     let specifictoyoverrides = Object.keys(specifictoy);
                     specifictoyoverrides.forEach((specificover) => {
                         newtoy[specificover] = specifictoy[specificover]
                     })
                     if (process.toytypes == undefined) { process.toytypes = {} };
+                    // Push to toytypes for reference by toy functions
                     process.toytypes[t.replace(".js", "")] = newtoy;
+                    // Push to autocompletes system for reference in /toy and /untoy
+                    if (process.autocompletes == undefined) { process.autocompletes = {} }
+                    if (process.autocompletes.toys == undefined) { process.autocompletes.toys = [] }
+                    process.autocompletes.toys.push({ name: newtoy.toyname, value: t.replace(".js", "") })
                 }
             })
         }
@@ -67,6 +74,87 @@ function canRemoveToy(userID, placerID, toy) {
     return (process.toytypes && process.toytypes[toy] && process.toytypes[toy].canUnequip({ userID: userID, placerID: placerID }))
 }
 
+function assignToy (user, keyholder, intensity, toytype = "bullet_vibe", origbinder) {
+    let vibe = process.toytypes[toytype];
+    if (!vibe) { return "NoToy" }
+    if ((getOption(user, "arousalsystem") == "disabled") && (vibe.vibescale() > 0)) {
+        return "NoArousal"; // Do not add a toy that can increase arousal, thats bad. 
+    }
+    if (process.toys == undefined) { process.toys = {} }
+    if (process.toys[user] == undefined) { process.toys[user] = [] }
+    let toy = process.toys[user].find((toy) => { toy.type == toytype })
+    // Toy already exists, modify it to the new intensity, if allowed. 
+    if (toy) {
+        if (vibe.canModify({ userID: user, keyholderID: keyholder ?? user })) {
+            toy.intensity = intensity
+            if (process.readytosave == undefined) {
+                process.readytosave = {};
+            }
+            process.readytosave.toys = true;
+            return "Success"
+        }
+        else {
+            return "NoModify";
+        }
+    }
+    // Toy does not exist, add it! 
+    else {
+        if (vibe.canEquip({ userID: user, keyholderID: keyholder ?? user })) {
+            process.toys[user].push({
+                type: toytype,
+                intensity: intensity,
+                origbinder: origbinder
+            })
+            vibe.onEquip({ userID: user, intensity: intensity })
+            if (process.readytosave == undefined) {
+                process.readytosave = {};
+            }
+            process.readytosave.toys = true;
+            return "Success"
+        }
+        else {
+            return "NoEquip"
+        }
+    }
+}
+
+// This should always return an array of toys no matter who its invoked for!
+function getToys (user) {
+    if (process.toys == undefined) { process.toys = {} }
+    if (process.toys[user] == undefined) { process.toys[user] = [] }
+    return process.toys[user];
+}
+
+function getSpecificToy(user, toytype) {
+    if (process.toys == undefined) { process.toys = {} }
+    if (process.toys[user] == undefined) { process.toys[user] = [] }
+    return process.toys[user].find((toy) => toy.type == toytype);
+}
+
+function getBaseToy(toytype) {
+    return process.toytypes[toytype];
+}
+
+function removeToy(user, toytype) {
+    if (process.toys == undefined) { process.toys = {} }
+    if (process.toys[user] == undefined) { process.toys[user] = [] }
+    let index = process.toys[user].findIndex((toy) => toy.type == toytype)
+    if (index > -1) {
+        process.toys[user].splice(index, 1);
+    }
+    if (process.readytosave == undefined) {
+        process.readytosave = {};
+    }
+    process.readytosave.toys = true;
+}
 
 
 exports.setUpToys = setUpToys;
+
+exports.canPlaceToy = canPlaceToy;
+exports.canRemoveToy = canRemoveToy;
+exports.assignToy = assignToy;
+exports.getToys = getToys;
+exports.getSpecificToy = getSpecificToy;
+exports.removeToy = removeToy;
+exports.getBaseToy = getBaseToy;

@@ -17,6 +17,7 @@ const { loadEmoji } = require("./functions/messagefunctions.js");
 const { loadWearables } = require("./functions/wearablefunctions.js");
 const { knownServer, setGlobalCommands, loadWebhooks, getBotOption } = require('./functions/configfunctions.js');
 const { getAllJoinedGuilds } = require('./functions/configfunctions.js');
+const { setUpToys } = require('./functions/toyfunctions.js');
 
 // Prevent node from killing us immediately when we do the next line.
 process.stdin.resume();
@@ -102,6 +103,8 @@ loadHeavyTypes();
 loadHeadwearTypes();
 loadWearables();
 assignMemeImages();
+
+setUpToys()
 
 // Grab all the command files from the commands directory
 const commands = new Map();
