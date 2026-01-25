@@ -278,23 +278,23 @@ const cheerleader_outfit = [
 
 
 const mimicCostumes = {
-    //maid_outfit: maid_outfit,
-    //ponygirl_outfit: ponygirl_outfit,
-    //bunnygirl_outfit: bunnygirl_outfit,
-    //princess_outfit: princess_outfit,
-    //lewd_princess_outfit: lewd_princess_outfit,
-    //kitsune_outfit: kitsune_outfit,
-    //librarian_outfit: librarian_outfit,
-    //rogue_outfit: rogue_outfit,
-    //dancer_outfit: dancer_outfit,
-    //paladin_outfit: paladin_outfit,
-    //ranger_outfit: ranger_outfit,
-    //healer_outfit: healer_outfit,
-    //witch_outfit: witch_outfit,
-    //angel_outfit: angel_outfit,
-    //mermaid_outfit: mermaid_outfit,
+    maid_outfit: maid_outfit,
+    ponygirl_outfit: ponygirl_outfit,
+    bunnygirl_outfit: bunnygirl_outfit,
+    princess_outfit: princess_outfit,
+    lewd_princess_outfit: lewd_princess_outfit,
+    kitsune_outfit: kitsune_outfit,
+    librarian_outfit: librarian_outfit,
+    rogue_outfit: rogue_outfit,
+    dancer_outfit: dancer_outfit,
+    paladin_outfit: paladin_outfit,
+    ranger_outfit: ranger_outfit,
+    healer_outfit: healer_outfit,
+    witch_outfit: witch_outfit,
+    angel_outfit: angel_outfit,
+    mermaid_outfit: mermaid_outfit,
     mer_maid_outfit: mer_maid_outfit,
-    //cheerleader_outfit: cheerleader_outfit,
+    cheerleader_outfit: cheerleader_outfit,
 };
 
 //*/ Shuffler Application
@@ -339,8 +339,8 @@ let functiontick = async (userID) => {
 
     // Only update a max of once every 20 seconds. 
     if ((process.userevents[userID].costumermimic.nextupdate ?? 0) < Date.now()) {
-        process.userevents[userID].costumermimic.nextupdate = Date.now() + 3000; // Test Speed
-        //process.userevents[userID].costumermimic.nextupdate = Date.now() + 20000;
+        //process.userevents[userID].costumermimic.nextupdate = Date.now() + 3000; // Test Speed
+        process.userevents[userID].costumermimic.nextupdate = Date.now() + 20000;
     }
     else { return };
 
