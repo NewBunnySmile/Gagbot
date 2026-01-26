@@ -25,6 +25,9 @@ function Toy() {
     // Condition to force unequip on refresh
     this.forceUnequip = (data) => { return false }
 
+    // Condition to check if wearer is wearing a potential blocker
+    this.blocker = (data) => { return false }
+
     // Condition to allow modification
     this.canModify = (data) => { return true };
 

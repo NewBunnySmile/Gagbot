@@ -26,6 +26,7 @@ const { getChastityBraKeys } = require("./vibefunctions");
 const { getClonedChastityKeysOwned } = require("./vibefunctions");
 const { getClonedChastityBraKeysOwned } = require("./vibefunctions");
 const { calcDenialCoefficient } = require("./vibefunctions");
+const { getToys, getBaseToy } = require("./toyfunctions");
 
 function getOutfits(userID) {
 	if (process.outfits == undefined) {
@@ -66,7 +67,7 @@ function assignOutfit(userID, slot, options) {
 		}
 		optionbit++;
 		if (options.charAt(optionbit) == 1) {
-			storedobject.vibe = getVibe(userID);
+			storedobject.vibe = getToys(userID);
 		}
 		optionbit++;
 		if (options.charAt(optionbit) == 1) {
@@ -192,8 +193,8 @@ function restoreOutfit(userID, storedobject) {
 				process.readytosave.chastitybra = true;
 			}
 		}
-		if (k == "vibe") {
-			getVibe(userID);
+		/*if (k == "vibe") { // Disabling toys since now there are multiple different conditions that can apply. 
+			getToys(userID);
 			if (!getHeavy(userID) && (canAccessChastity(userID, userID, true).access || !canAccessChastity(userID, userID, true).hasbelt)) {
 				process.vibe[userID] = storedobject.vibe;
 				if (process.readytosave == undefined) {
@@ -201,7 +202,7 @@ function restoreOutfit(userID, storedobject) {
 				}
 				process.readytosave.vibe = true;
 			}
-		}
+		}*/
 	});
 }
 
@@ -291,10 +292,10 @@ async function generateOutfitModal(userID, menu, page, options) {
 						let emoji = getHeavy(userID) || (!canAccessChastityBra(userID, userID, true).access && canAccessChastityBra(userID, userID, true).hasbelt) ? "⚠️" : "✅";
 						textdisplay = `${textdisplay}${process.emojis.chastitybra} Chastity Bra: ${emoji}, `;
 					}
-					if (k == "vibe") {
+					/*if (k == "vibe") {
 						let emoji = getHeavy(userID) || (!canAccessChastity(userID, userID, true).access && canAccessChastity(userID, userID, true).hasbelt) ? "⚠️" : "✅";
-						textdisplay = `${textdisplay}${process.emojis.wand} Vibrator: ${emoji}, `;
-					}
+						textdisplay = `${textdisplay}${process.emojis.wand} Toys: ${emoji}, `;
+					}*/
 				});
 			} else {
 				textdisplay = `${textdisplay}\n-# No Outfit Saved--`;
@@ -464,12 +465,12 @@ async function generateOutfitModal(userID, menu, page, options) {
 		bitselector++;
 
 		// Vibrator section
-		texts = `### Vibrators:\n`;
-		if (!getVibe(userID)) {
+		/*texts = `### Toys:\n`;
+		if (!getToys(userID)) {
 			texts = `${texts}Not worn`;
 		} else {
-			texts = `${texts}${getVibe(userID)
-				.map((v) => v.vibetype)
+			texts = `${texts}${getToys(userID)
+				.map((v) => getBaseToy(v.type).toyname)
 				.join(", ")}`;
 		}
 		pagecomponents.push(
@@ -481,9 +482,9 @@ async function generateOutfitModal(userID, menu, page, options) {
 						.setLabel(options.slice(bitselector, bitselector + 1) == "1" ? `Save` : `Disabled`)
 						.setStyle(options.slice(bitselector, bitselector + 1) == "1" ? ButtonStyle.Success : ButtonStyle.Danger)
 						// Block if element doesn't exist
-						.setDisabled(!getVibe(userID)),
+						.setDisabled(!getToys(userID)),
 				),
-		);
+		);*/
 		bitselector++;
 
 		// Chastity Belt section
@@ -733,8 +734,8 @@ async function inspectModal(userID, inspectuserIDin, menu, page) {
             wearingtext = `${wearingtext}\n${process.emojis.corset} Corset: **Laced with strings at length ${getCorset(inspectuserID).tightness}**`
         }
         // Vibe
-        if (getVibe(inspectuserID)) {
-            wearingtext = `${wearingtext}\n${process.emojis.wand} Toys: **${getVibe(inspectuserID).map((vibe) => `${vibe.vibetype} (${vibe.intensity})`).join(", ")}**`
+        if (getToys(inspectuserID)) {
+            wearingtext = `${wearingtext}\n${process.emojis.wand} Toys: **${getToys(inspectuserID).map((vibe) => `${getBaseToy(vibe.type).toyname} (${vibe.intensity})`).join(", ")}**`
         }
         // Heavy Bondage
         if (getHeavy(inspectuserID)) {
@@ -892,8 +893,8 @@ async function inspectModal(userID, inspectuserIDin, menu, page) {
             wearingtext = `${wearingtext}\n${process.emojis.corset} Corset: **Laced with strings at length ${getCorset(inspectuserID).tightness}**`
         }
         // Vibe
-        if (getVibe(inspectuserID)) {
-            wearingtext = `${wearingtext}\n${process.emojis.wand} Toys: **${getVibe(inspectuserID).map((vibe) => `${vibe.vibetype} (${vibe.intensity})`).join(", ")}**`
+        if (getToys(inspectuserID)) {
+            wearingtext = `${wearingtext}\n${process.emojis.wand} Toys: **${getToys(inspectuserID).map((vibe) => `${getBaseToy(vibe.type).toyname} (${vibe.intensity})`).join(", ")}**`
         }
         // Heavy Bondage
         if (getHeavy(inspectuserID)) {

@@ -950,7 +950,7 @@ const texts_struggle = {
 			required: (t) => {
 				return t.c1.includes("Latex");
 			},
-			text: `USER_TAG strains against the VAR_C1, the latex stretching and squeaking as USER_THEY doUSER_ES so! But no matter how far USER_THEY twistUSER_S or bendUSER_S the latex, it always pulls USER_THEM back into position`,
+			text: `USER_TAG strains against the VAR_C1, the latex stretching and squeaking as USER_THEY doUSER_ES so! But no matter how far USER_THEY twistUSER_S or bendUSER_S the latex, it always pulls USER_THEM back into position.`,
 		},
 		// Furniture
 		{
@@ -1010,7 +1010,7 @@ const texts_struggle = {
 			// Using open hand, wrists, etc. 50% chance to use with mittens, 50% chance to use with free hands
 			nofingers: [
 				`USER_TAG paws at USER_THEIR VAR_C2 with USER_THEIR wrist, trying to slip it off.`,
-				`USER_TAG uses the palm of USER_THEIR hand and brushes it against USER_THEIR VAR_C2`,
+				`USER_TAG uses the palm of USER_THEIR hand and brushes it against USER_THEIR VAR_C2.`,
 				`USER_TAG sighs into USER_THEIR VAR_C2, happily thinking about how nice it is to not be able to speak!`,
 				{
 					required: (t) => {
@@ -1220,6 +1220,396 @@ const texts_struggle = {
 		},
 	],
 };
+
+const texts_toy = {
+    heavy: {
+        self: {
+            access: {
+                "Nipple Vibrator": [
+                    `USER_TAG twists USER_THEIR chest over to a pair of VAR_C2, but struggles to put them on because USER_THEY USER_HAVE no arms!`
+                ],
+                "Vibrator": [
+                    `USER_TAG bucks USER_THEIR hips over towards a VAR_C2, but can't slip it in because USER_THEY USER_HAVE no hands to work with!`
+                ],
+                default: [
+                    `USER_TAG attempts to use reality defying magic to add a VAR_C2 to USER_THEMSELF, but can't because of USER_THEIR VAR_C1! (This is a bug, report)`
+                ]
+            },
+            noaccess: {
+                "Nipple Vibrator": [
+                    `USER_TAG twists USER_THEIR chest over to a pair of VAR_C2, but even if USER_THEY USER_HAVE had USER_THEIR arms, USER_THEY wouldn't be able to unlock USER_THEIR chastity bra to put them on!`
+                ],
+                "Vibrator": [
+                    `USER_TAG bucks USER_THEIR hips over towards a VAR_C2 despite USER_THEIR VAR_C1, but USER_THEIR chastity belt prevents USER_THEM from putting the toy inside anyway.`
+                ],
+                default: [
+                    `USER_TAG attempts to use reality defying magic to add a VAR_C2 to USER_THEMSELF, but even if USER_THEY USER_WERE not in a VAR_C1, USER_THEY wouldn't be able to add it! (This is a bug, report)`
+                ]
+            }
+        },
+        other: {
+            access: {
+                "Nipple Vibrator": [
+                    `USER_TAG twists USER_THEIR chest over to a pair of VAR_C2, but struggles to put them on TARGET_TAG because USER_THEY USER_HAVE no arms!`
+                ],
+                "Vibrator": [
+                    `USER_TAG bucks USER_THEIR hips over towards a VAR_C2, but can't slip it into TARGET_TAG because USER_THEY USER_HAVE no hands to work with!`
+                ],
+                default: [
+                    `USER_TAG attempts to use reality defying magic to add a VAR_C2 to TARGET_TAG, but can't because of USER_THEIR VAR_C1! (This is a bug, report)`
+                ]
+            },
+            noaccess: {
+                "Nipple Vibrator": [
+                    `USER_TAG twists USER_THEIR chest over to a pair of VAR_C2, but even if USER_THEY USER_HAVE had USER_THEIR arms, USER_THEY wouldn't be able to unlock TARGET_TAG's chastity bra to put them on TARGET_THEM!`
+                ],
+                "Vibrator": [
+                    `USER_TAG bucks USER_THEIR hips over towards a VAR_C2 despite USER_THEIR VAR_C1, but TARGET_TAG's chastity belt prevents USER_THEM from putting the toy inside anyway.`
+                ],
+                default: [
+                    `USER_TAG attempts to use reality defying magic to add a VAR_C2 to TARGET_TAG, but even if USER_THEY USER_WERE not in a VAR_C1, USER_THEY wouldn't be able to add it! (This is a bug, report)`
+                ]
+            }
+        }
+    },
+    noheavy: {
+        self: {
+            toy: {
+                blocker: {
+                    access: {
+                        "Nipple Vibrator": {
+                            fumble: {
+                                keyloss: {
+                                    keyholder: [
+                                        `USER_TAG tries to put the key in USER_THEIR bra to change the settings on the VAR_C2, but the key slips and falls somewhere. It's nowhere to be seen.`
+                                    ], 
+                                    clone: [
+                                        `USER_TAG tries to put the key in USER_THEIR bra to change the settings on the VAR_C2, but the key slips and falls on the floor. The pieces are scattered about.`
+                                    ] 
+                                },
+                                nokeyloss: [
+                                    `USER_TAG tries to put the key in USER_THEIR bra to adjust the VAR_C2, but the key slips! Thankfully, USER_THEY didn't lose it!`
+                                ]
+                            },
+                            nofumble: [
+                                `USER_TAG puts the key in USER_THEIR bra, unlocking it and adjusting the VAR_C2 to VAR_C3 power! USER_THEY_CAP then closeUSER_S and lockUSER_S USER_THEMSELF back up.`
+                            ]
+                        },
+                        "Vibrator": {
+                            fumble: {
+                                keyloss: {
+                                    keyholder: [
+                                        `USER_TAG tries to put the key in USER_THEIR belt to change the settings on the VAR_C2, but the key slips and falls somewhere. It's nowhere to be seen.`
+                                    ], 
+                                    clone: [
+                                        `USER_TAG tries to put the key in USER_THEIR belt to change the settings on the VAR_C2, but the key slips and falls on the floor. The pieces are scattered about.`
+                                    ] 
+                                },
+                                nokeyloss: [
+                                    `USER_TAG tries to put the key in USER_THEIR belt to adjust the VAR_C2, but the key slips! Thankfully, USER_THEY didn't lose it!`
+                                ]
+                            },
+                            nofumble: [
+                                `USER_TAG puts the key in USER_THEIR belt, unlocking it and adjusting the VAR_C2 to VAR_C3 power! USER_THEY_CAP then closeUSER_S and lockUSER_S USER_THEMSELF back up.`
+                            ]
+                        },
+                        default: {
+                            fumble: {
+                                keyloss: {
+                                    keyholder: [
+                                        `USER_TAG tries to put the key in *something* to change the settings on the VAR_C2, but the key slips and falls somewhere. It's nowhere to be seen. (This is a bug, report)`
+                                    ], 
+                                    clone: [
+                                        `USER_TAG tries to put the key in *something* to change the settings on the VAR_C2, but the key slips and falls on the floor. The pieces are scattered about. (This is a bug, report)`
+                                    ] 
+                                },
+                                nokeyloss: [
+                                    `USER_TAG tries to put the key in *something* to adjust the VAR_C2, but the key slips! Thankfully, USER_THEY didn't lose it! (This is a bug, report)`
+                                ]
+                            },
+                            nofumble: [
+                                `USER_TAG puts the key in *something*, unlocking it and adjusting the VAR_C2 to VAR_C3 power! (This is a bug, report)`
+                            ]
+                        }
+                    },
+                    noaccess: {
+                        "Nipple Vibrator": [
+                            `USER_TAG tries as USER_THEY might, but is unable to unlock USER_THEIR chastity bra to adjust USER_THEIR VAR_C2.`
+                        ],
+                        "Vibrator": [
+                            `USER_TAG tries as USER_THEY might, but is unable to unlock USER_THEIR chastity belt to adjust USER_THEIR VAR_C2.`
+                        ],
+                        default: [
+                            `USER_TAG tries to adjust USER_THEIR VAR_C2, but some kind of reality-defying magic prevents USER_THEM! (This is a bug, report)`
+                        ],
+                    }
+                },
+                noblocker: {
+                    "Nipple Vibrator": [
+                        `USER_TAG carefully adjusts the VAR_C2 on USER_THEIR breasts, changing them to VAR_C3!`
+                    ],
+                    "Vibrator": [
+                        `USER_TAG taps a button on the VAR_C2 USER_THEY USER_ISARE wearing! It vibrates at a strength of VAR_C3!`
+                    ],
+                    default: [
+                        `USER_TAG causes fuzzy shifting in the universe adjusting USER_THEIR VAR_C2 to VAR_C3! (This is a bug, report!)`
+                    ]
+                }
+            },
+            notoy: {
+                blocker: {
+                    access: {
+                        "Nipple Vibrator": {
+                            fumble: {
+                                keyloss: {
+                                    keyholder: [
+                                        `USER_TAG tries to put the key in USER_THEIR bra to add a VAR_C2, but the key slips and falls somewhere. It's nowhere to be seen.`
+                                    ], 
+                                    clone: [
+                                        `USER_TAG tries to put the key in USER_THEIR bra to add a VAR_C2, but the key slips and falls on the floor. The pieces are scattered about.`
+                                    ] 
+                                },
+                                nokeyloss: [
+                                    `USER_TAG tries to put the key in USER_THEIR bra to add a VAR_C2, but the key slips! Thankfully, USER_THEY didn't lose it!`
+                                ]
+                            },
+                            nofumble: [
+                                `USER_TAG puts the key in USER_THEIR bra, unlocking it and adding a VAR_C2, turned up to VAR_C3! USER_THEY_CAP then closeUSER_S and lockUSER_S USER_THEMSELF back up.`
+                            ]
+                        },
+                        "Vibrator": {
+                            fumble: {
+                                keyloss: {
+                                    keyholder: [
+                                        `USER_TAG tries to put the key in USER_THEIR belt to add a VAR_C2, but the key slips and falls somewhere. It's nowhere to be seen.`
+                                    ], 
+                                    clone: [
+                                        `USER_TAG tries to put the key in USER_THEIR belt to add a VAR_C2, but the key slips and falls on the floor. The pieces are scattered about.`
+                                    ] 
+                                },
+                                nokeyloss: [
+                                    `USER_TAG tries to put the key in USER_THEIR belt to add a VAR_C2, but the key slips! Thankfully, USER_THEY didn't lose it!`
+                                ]
+                            },
+                            nofumble: [
+                                `USER_TAG puts the key in USER_THEIR belt, unlocking it and adding a VAR_C2, turned up to VAR_C3! USER_THEY_CAP then closeUSER_S and lockUSER_S USER_THEMSELF back up.`
+                            ]
+                        },
+                        default: {
+                            fumble: {
+                                keyloss: {
+                                    keyholder: [
+                                        `USER_TAG tries to put the key in *something* to add a VAR_C2, but the key slips and falls somewhere. It's nowhere to be seen. (This is a bug, report)`
+                                    ], 
+                                    clone: [
+                                        `USER_TAG tries to put the key in *something* to add a VAR_C2, but the key slips and falls on the floor. The pieces are scattered about. (This is a bug, report)`
+                                    ] 
+                                },
+                                nokeyloss: [
+                                    `USER_TAG tries to put the key in *something* to add a VAR_C2, but the key slips! Thankfully, USER_THEY didn't lose it! (This is a bug, report)`
+                                ]
+                            },
+                            nofumble: [
+                                `USER_TAG puts the key in *something*, unlocking it to add a VAR_C2 at VAR_C3 power! (This is a bug, report)`
+                            ]
+                        }
+                    },
+                    noaccess: {
+                        "Nipple Vibrator": [
+                            `USER_TAG tries as USER_THEY might, but is unable to unlock USER_THEIR chastity bra to add a VAR_C2.`
+                        ],
+                        "Vibrator": [
+                            `USER_TAG tries as USER_THEY might, but is unable to unlock USER_THEIR chastity belt to add a VAR_C2.`
+                        ],
+                        default: [
+                            `USER_TAG tries to add a VAR_C2, but some kind of reality-defying magic prevents USER_THEM! (This is a bug, report)`
+                        ],
+                    }
+                },
+                noblocker: {
+                    "Nipple Vibrator": [
+                        `USER_TAG grabs a pair of VAR_C2 and places them gingerly on USER_THEIR breasts!`
+                    ],
+                    "Vibrator": [
+                        `USER_TAG grabs a VAR_C2 and inserts it into USER_THEMSELF!`
+                    ],
+                    default: [
+                        `USER_TAG potentially summons a black hole putting on a VAR_C2! (This is a bug, report!)`
+                    ]
+                }
+            }
+        },
+        other: {
+            toy: {
+                blocker: {
+                    access: {
+                        "Nipple Vibrator": {
+                            fumble: {
+                                keyloss: {
+                                    keyholder: [
+                                        `USER_TAG tries to put the key in TARGET_TAG's bra to change the settings on the VAR_C2, but the key slips and falls somewhere. It's nowhere to be seen.`
+                                    ], 
+                                    clone: [
+                                        `USER_TAG tries to put the key in TARGET_TAG's bra to change the settings on the VAR_C2, but the key slips and falls on the floor. The pieces are scattered about.`
+                                    ] 
+                                },
+                                nokeyloss: [
+                                    `USER_TAG tries to put the key in TARGET_TAG's bra to adjust the VAR_C2, but the key slips! Thankfully, USER_THEY didn't lose it!`
+                                ]
+                            },
+                            nofumble: [
+                                `USER_TAG puts the key in TARGET_TAG's bra, unlocking it and adjusting the VAR_C2 to VAR_C3 power! USER_THEY_CAP then closeUSER_S and lockUSER_S TARGET_THEM back up.`
+                            ]
+                        },
+                        "Vibrator": {
+                            fumble: {
+                                keyloss: {
+                                    keyholder: [
+                                        `USER_TAG tries to put the key in TARGET_TAG's belt to change the settings on the VAR_C2, but the key slips and falls somewhere. It's nowhere to be seen.`
+                                    ], 
+                                    clone: [
+                                        `USER_TAG tries to put the key in TARGET_TAG's belt to change the settings on the VAR_C2, but the key slips and falls on the floor. The pieces are scattered about.`
+                                    ] 
+                                },
+                                nokeyloss: [
+                                    `USER_TAG tries to put the key in TARGET_TAG's belt to adjust the VAR_C2, but the key slips! Thankfully, USER_THEY didn't lose it!`
+                                ]
+                            },
+                            nofumble: [
+                                `USER_TAG puts the key in TARGET_TAG's belt, unlocking it and adjusting the VAR_C2 to VAR_C3 power! USER_THEY_CAP then closeUSER_S and lockUSER_S TARGET_THEM back up.`
+                            ]
+                        },
+                        default: {
+                            fumble: {
+                                keyloss: {
+                                    keyholder: [
+                                        `USER_TAG tries to put the key in *something* on TARGET_TAG to change the settings on the VAR_C2, but the key slips and falls somewhere. It's nowhere to be seen. (This is a bug, report)`
+                                    ], 
+                                    clone: [
+                                        `USER_TAG tries to put the key in *something* on TARGET_TAG to change the settings on the VAR_C2, but the key slips and falls on the floor. The pieces are scattered about. (This is a bug, report)`
+                                    ] 
+                                },
+                                nokeyloss: [
+                                    `USER_TAG tries to put the key in *something* on TARGET_TAG to adjust the VAR_C2, but the key slips! Thankfully, USER_THEY didn't lose it! (This is a bug, report)`
+                                ]
+                            },
+                            nofumble: [
+                                `USER_TAG puts the key in *something* on TARGET_TAG, unlocking it and adjusting the VAR_C2 to VAR_C3 power! (This is a bug, report)`
+                            ]
+                        }
+                    },
+                    noaccess: {
+                        "Nipple Vibrator": [
+                            `USER_TAG tries as USER_THEY might, but is unable to unlock TARGET_TAG's chastity bra to adjust USER_THEIR VAR_C2.`
+                        ],
+                        "Vibrator": [
+                            `USER_TAG tries as USER_THEY might, but is unable to unlock TARGET_TAG's chastity belt to adjust USER_THEIR VAR_C2.`
+                        ],
+                        default: [
+                            `USER_TAG tries to adjust TARGET_TAG's VAR_C2, but some kind of reality-defying magic prevents USER_THEM! (This is a bug, report)`
+                        ],
+                    }
+                },
+                noblocker: {
+                    "Nipple Vibrator": [
+                        `USER_TAG carefully adjusts the VAR_C2 on TARGET_TAG's breasts, changing them to VAR_C3!`
+                    ],
+                    "Vibrator": [
+                        `USER_TAG taps a button on the VAR_C2 TARGET_TAG is wearing! It vibrates at a strength of VAR_C3!`
+                    ],
+                    default: [
+                        `USER_TAG causes fuzzy shifting in the universe adjusting TARGET_TAG's VAR_C2 to VAR_C3! (This is a bug, report!)`
+                    ]
+                }
+            },
+            notoy: {
+                blocker: {
+                    access: {
+                        "Nipple Vibrator": {
+                            fumble: {
+                                keyloss: {
+                                    keyholder: [
+                                        `USER_TAG tries to put the key in TARGET_TAG's bra to add a VAR_C2, but the key slips and falls somewhere. It's nowhere to be seen.`
+                                    ], 
+                                    clone: [
+                                        `USER_TAG tries to put the key in TARGET_TAG's bra to add a VAR_C2, but the key slips and falls on the floor. The pieces are scattered about.`
+                                    ] 
+                                },
+                                nokeyloss: [
+                                    `USER_TAG tries to put the key in TARGET_TAG's bra to add a VAR_C2, but the key slips! Thankfully, USER_THEY didn't lose it!`
+                                ]
+                            },
+                            nofumble: [
+                                `USER_TAG puts the key in TARGET_TAG's bra, unlocking it and adding a VAR_C2, turned up to VAR_C3! USER_THEY_CAP then closeUSER_S and lockUSER_S TARGET_THEM back up.`
+                            ]
+                        },
+                        "Vibrator": {
+                            fumble: {
+                                keyloss: {
+                                    keyholder: [
+                                        `USER_TAG tries to put the key in TARGET_TAG's belt to add a VAR_C2, but the key slips and falls somewhere. It's nowhere to be seen.`
+                                    ], 
+                                    clone: [
+                                        `USER_TAG tries to put the key in TARGET_TAG's belt to add a VAR_C2, but the key slips and falls on the floor. The pieces are scattered about.`
+                                    ] 
+                                },
+                                nokeyloss: [
+                                    `USER_TAG tries to put the key in TARGET_TAG's belt to add a VAR_C2, but the key slips! Thankfully, USER_THEY didn't lose it!`
+                                ]
+                            },
+                            nofumble: [
+                                `USER_TAG puts the key in TARGET_TAG's belt, unlocking it and adding a VAR_C2, turned up to VAR_C3! USER_THEY_CAP then closeUSER_S and lockUSER_S TARGET_THEM back up.`
+                            ]
+                        },
+                        default: {
+                            fumble: {
+                                keyloss: {
+                                    keyholder: [
+                                        `USER_TAG tries to put the key in *something* on TARGET_TAG to add a VAR_C2, but the key slips and falls somewhere. It's nowhere to be seen. (This is a bug, report)`
+                                    ], 
+                                    clone: [
+                                        `USER_TAG tries to put the key in *something* on TARGET_TAG to add a VAR_C2, but the key slips and falls on the floor. The pieces are scattered about. (This is a bug, report)`
+                                    ] 
+                                },
+                                nokeyloss: [
+                                    `USER_TAG tries to put the key in *something* on TARGET_TAG to add a VAR_C2, but the key slips! Thankfully, USER_THEY didn't lose it! (This is a bug, report)`
+                                ]
+                            },
+                            nofumble: [
+                                `USER_TAG puts the key in *something* on TARGET_TAG, unlocking it to add a VAR_C2 at VAR_C3 power! (This is a bug, report)`
+                            ]
+                        }
+                    },
+                    noaccess: {
+                        "Nipple Vibrator": [
+                            `USER_TAG tries as USER_THEY might, but is unable to unlock TARGET_TAG's chastity bra to add a VAR_C2.`
+                        ],
+                        "Vibrator": [
+                            `USER_TAG tries as USER_THEY might, but is unable to unlock TARGET_TAG's chastity belt to add a VAR_C2.`
+                        ],
+                        default: [
+                            `USER_TAG tries to add a VAR_C2 to TARGET_TAG, but some kind of reality-defying magic prevents USER_THEM! (This is a bug, report)`
+                        ],
+                    }
+                },
+                noblocker: {
+                    "Nipple Vibrator": [
+                        `USER_TAG grabs a pair of VAR_C2 and places them gingerly on USER_THEIR breasts!`
+                    ],
+                    "Vibrator": [
+                        `USER_TAG grabs a VAR_C2 and inserts it into USER_THEMSELF!`
+                    ],
+                    default: [
+                        `USER_TAG potentially summons a black hole putting on a VAR_C2! (This is a bug, report!)`
+                    ]
+                }
+            }
+        }
+    },
+    toyreflect: [
+        `Gagbot recognizes what you're attempting to do. Cheeky.`
+    ]
+}
 
 const texts_unchastity = {
 	chastitybelt: {
@@ -1571,6 +1961,238 @@ const texts_unmitten = {
 	// Idk why the structure was like this - Ephemeral
 	otherother: [`USER_TAG is not wearing mittens!`],
 };
+
+const texts_untoy = {
+    heavy: {
+        self: {
+            access: {
+                "Nipple Vibrator": [
+                    `USER_TAG twists USER_THEIR chest to take off USER_THEIR VAR_C2, but because USER_THEY USER_HAVE no arms, USER_THEY can't get very far!`
+                ],
+                "Vibrator": [
+                    `USER_TAG bucks USER_THEIR hips to take off USER_THEIR VAR_C2, but can't because USER_THEY USER_HAVE no hands to work with!`
+                ],
+                default: [
+                    `USER_TAG attempts to use reality defying magic to take off USER_THEIR VAR_C2, but can't because of USER_THEIR VAR_C1! (This is a bug, report)`
+                ]
+            },
+            noaccess: {
+                "Nipple Vibrator": [
+                    `USER_TAG twists USER_THEIR chest to remove USER_THEIR VAR_C2, but even if USER_THEY USER_HAVE had USER_THEIR arms, USER_THEY wouldn't be able to unlock USER_THEIR chastity bra to put them on!`
+                ],
+                "Vibrator": [
+                    `USER_TAG bucks USER_THEIR hips to remove USER_THEIR VAR_C2 despite USER_THEIR VAR_C1, but USER_THEIR chastity belt prevents USER_THEM from getting to it.`
+                ],
+                default: [
+                    `USER_TAG attempts to use reality defying magic to remove USER_THEIR VAR_C2 from USER_THEMSELF, but even if USER_THEY USER_WERE not in a VAR_C1, USER_THEY wouldn't be able to remove it! (This is a bug, report)`
+                ]
+            }
+        },
+        other: {
+            access: {
+                "Nipple Vibrator": [
+                    `USER_TAG twists USER_THEIR chest to remove TARGET_TAG's VAR_C2, but struggles to remove them because USER_THEY USER_HAVE no arms!`
+                ],
+                "Vibrator": [
+                    `USER_TAG bucks USER_THEIR hips over towards TARGET_TAG to remove USER_THEIR VAR_C2, but USER_THEY USER_HAVE no hands to work with!`
+                ],
+                default: [
+                    `USER_TAG attempts to use reality defying magic to remove the VAR_C2 on TARGET_TAG, but can't because of USER_THEIR VAR_C1! (This is a bug, report)`
+                ]
+            },
+            noaccess: {
+                "Nipple Vibrator": [
+                    `USER_TAG twists USER_THEIR chest over to remove the VAR_C2 from TARGET_TAG, but even if USER_THEY USER_HAVE had USER_THEIR arms, USER_THEY wouldn't be able to unlock TARGET_THEIR chastity bra to get to them!`
+                ],
+                "Vibrator": [
+                    `USER_TAG bucks USER_THEIR hips over towards TARGET_TAG to remove TARGET_THEIR VAR_C2 despite USER_THEIR VAR_C1. TARGET_THEIR_CAP chastity belt prevents USER_THEM from removing the toy anyway, though.`
+                ],
+                default: [
+                    `USER_TAG attempts to use reality defying magic to remove a VAR_C2 from TARGET_TAG, but even if USER_THEY USER_WERE not in a VAR_C1, USER_THEY wouldn't be able to remove it! (This is a bug, report)`
+                ]
+            }
+        }
+    },
+    noheavy: {
+        self: {
+            toy: {
+                blocker: {
+                    access: {
+                        "Nipple Vibrator": {
+                            fumble: {
+                                keyloss: {
+                                    keyholder: [
+                                        `USER_TAG tries to put the key in USER_THEIR bra to remove USER_THEIR VAR_C2, but the key slips and falls somewhere. It's nowhere to be seen.`
+                                    ], 
+                                    clone: [
+                                        `USER_TAG tries to put the key in USER_THEIR bra to remove USER_THEIR VAR_C2, but the key slips and falls on the floor. The pieces are scattered about.`
+                                    ] 
+                                },
+                                nokeyloss: [
+                                    `USER_TAG tries to put the key in USER_THEIR bra to remove USER_THEIR VAR_C2, but the key slips! Thankfully, USER_THEY didn't lose it!`
+                                ]
+                            },
+                            nofumble: [
+                                `USER_TAG puts the key in USER_THEIR bra, unlocking it and removing their VAR_C2! USER_THEY_CAP then closeUSER_S and lockUSER_S USER_THEMSELF back up.`
+                            ]
+                        },
+                        "Vibrator": {
+                            fumble: {
+                                keyloss: {
+                                    keyholder: [
+                                        `USER_TAG tries to put the key in USER_THEIR belt to remove USER_THEIR VAR_C2, but the key slips and falls somewhere. It's nowhere to be seen.`
+                                    ], 
+                                    clone: [
+                                        `USER_TAG tries to put the key in USER_THEIR belt to remove USER_THEIR VAR_C2, but the key slips and falls on the floor. The pieces are scattered about.`
+                                    ] 
+                                },
+                                nokeyloss: [
+                                    `USER_TAG tries to put the key in USER_THEIR belt to remove USER_THEIR VAR_C2, but the key slips! Thankfully, USER_THEY didn't lose it!`
+                                ]
+                            },
+                            nofumble: [
+                                `USER_TAG puts the key in USER_THEIR belt, unlocking it removing their VAR_C2! USER_THEY_CAP then closeUSER_S and lockUSER_S USER_THEMSELF back up.`
+                            ]
+                        },
+                        default: {
+                            fumble: {
+                                keyloss: {
+                                    keyholder: [
+                                        `USER_TAG tries to put the key in *something* to remove USER_THEIR VAR_C2, but the key slips and falls somewhere. It's nowhere to be seen. (This is a bug, report)`
+                                    ], 
+                                    clone: [
+                                        `USER_TAG tries to put the key in *something* to remove USER_THEIR VAR_C2, but the key slips and falls on the floor. The pieces are scattered about. (This is a bug, report)`
+                                    ] 
+                                },
+                                nokeyloss: [
+                                    `USER_TAG tries to put the key in *something* to remove USER_THEIR VAR_C2, but the key slips! Thankfully, USER_THEY didn't lose it! (This is a bug, report)`
+                                ]
+                            },
+                            nofumble: [
+                                `USER_TAG puts the key in *something*, unlocking it and removing USER_THEIR VAR_C2 to VAR_C3 power! (This is a bug, report)`
+                            ]
+                        }
+                    },
+                    noaccess: {
+                        "Nipple Vibrator": [
+                            `USER_TAG tries as USER_THEY might, but is unable to unlock USER_THEIR chastity bra to remove USER_THEIR VAR_C2.`
+                        ],
+                        "Vibrator": [
+                            `USER_TAG tries as USER_THEY might, but is unable to unlock USER_THEIR chastity belt to remove USER_THEIR VAR_C2.`
+                        ],
+                        default: [
+                            `USER_TAG tries to remove USER_THEIR VAR_C2, but some kind of reality-defying magic prevents USER_THEM! (This is a bug, report)`
+                        ],
+                    }
+                },
+                noblocker: {
+                    "Nipple Vibrator": [
+                        `USER_TAG removes the teasing VAR_C2 from USER_THEIR breasts. The sensation continues to haunt USER_THEM as USER_THEY putUSER_S them away.`
+                    ],
+                    "Vibrator": [
+                        `USER_TAG gently removes the VAR_C2 from inside USER_THEM and puts it away. `
+                    ],
+                    default: [
+                        `USER_TAG materializes a tear in reality to remove the VAR_C2 from USER_THEM! (This is a bug, report)`
+                    ],
+                }
+            },
+            notoy: [
+                `You are not wearing a VAR_C2!`
+            ]
+        },
+        other: {
+            toy: {
+                blocker: {
+                    access: {
+                        "Nipple Vibrator": {
+                            fumble: {
+                                keyloss: {
+                                    keyholder: [
+                                        `USER_TAG tries to put the key in TARGET_TAG's bra to remove TARGET_THEIR VAR_C2, but the key slips and falls somewhere. It's nowhere to be seen.`
+                                    ], 
+                                    clone: [
+                                        `USER_TAG tries to put the key in TARGET_TAG's bra to remove TARGET_THEIR VAR_C2, but the key slips and falls on the floor. The pieces are scattered about.`
+                                    ] 
+                                },
+                                nokeyloss: [
+                                    `USER_TAG tries to put the key in TARGET_TAG's bra to remove TARGET_THEIR VAR_C2, but the key slips! Thankfully, USER_THEY didn't lose it!`
+                                ]
+                            },
+                            nofumble: [
+                                `USER_TAG puts the key in TARGET_TAG's bra, unlocking it and removing the VAR_C2! USER_THEY_CAP then closeUSER_S and lockUSER_S TARGET_THEM back up.`
+                            ]
+                        },
+                        "Vibrator": {
+                            fumble: {
+                                keyloss: {
+                                    keyholder: [
+                                        `USER_TAG tries to put the key in TARGET_TAG's belt to remove TARGET_THEIR VAR_C2, but the key slips and falls somewhere. It's nowhere to be seen.`
+                                    ], 
+                                    clone: [
+                                        `USER_TAG tries to put the key in TARGET_TAG's belt to remove TARGET_THEIR VAR_C2, but the key slips and falls on the floor. The pieces are scattered about.`
+                                    ] 
+                                },
+                                nokeyloss: [
+                                    `USER_TAG tries to put the key in TARGET_TAG's belt to remove TARGET_THEIR VAR_C2, but the key slips! Thankfully, USER_THEY didn't lose it!`
+                                ]
+                            },
+                            nofumble: [
+                                `USER_TAG puts the key in TARGET_TAG's belt, unlocking it and removing the VAR_C2! USER_THEY_CAP then closeUSER_S and lockUSER_S TARGET_THEM back up.`
+                            ]
+                        },
+                        default: {
+                            fumble: {
+                                keyloss: {
+                                    keyholder: [
+                                        `USER_TAG tries to put the key in *something* on TARGET_TAG to remove TARGET_THEIR VAR_C2, but the key slips and falls somewhere. It's nowhere to be seen. (This is a bug, report)`
+                                    ], 
+                                    clone: [
+                                        `USER_TAG tries to put the key in *something* on TARGET_TAG to remove TARGET_THEIR VAR_C2, but the key slips and falls on the floor. The pieces are scattered about. (This is a bug, report)`
+                                    ] 
+                                },
+                                nokeyloss: [
+                                    `USER_TAG tries to put the key in *something* on TARGET_TAG to remove TARGET_THEIR VAR_C2, but the key slips! Thankfully, USER_THEY didn't lose it! (This is a bug, report)`
+                                ]
+                            },
+                            nofumble: [
+                                `USER_TAG puts the key in *something* on TARGET_TAG, unlocking it and removing TARGET_THEIR VAR_C2! (This is a bug, report)`
+                            ]
+                        }
+                    },
+                    noaccess: {
+                        "Nipple Vibrator": [
+                            `USER_TAG tries as USER_THEY might, but is unable to unlock TARGET_TAG's chastity bra to remove USER_THEIR VAR_C2.`
+                        ],
+                        "Vibrator": [
+                            `USER_TAG tries as USER_THEY might, but is unable to unlock TARGET_TAG's chastity belt to remove USER_THEIR VAR_C2.`
+                        ],
+                        default: [
+                            `USER_TAG tries to remove TARGET_TAG's VAR_C2, but some kind of reality-defying magic prevents USER_THEM! (This is a bug, report)`
+                        ],
+                    }
+                },
+                noblocker: {
+                    "Nipple Vibrator": [
+                        `USER_TAG removes the teasing VAR_C2 from TARGET_TAG's breasts. The sensation continues to haunt TARGET_THEM as USER_THEY putUSER_S them away.`
+                    ],
+                    "Vibrator": [
+                        `USER_TAG gently removes the VAR_C2 from inside TARGET_TAG and puts it away. `
+                    ],
+                    default: [
+                        `USER_TAG materializes a tear in reality to remove the VAR_C2 from TARGET_TAG! (This is a bug, report)`
+                    ],
+                }
+            },
+            notoy: [
+                `TARGET_TAG is not wearing a VAR_C2!`
+            ]
+        }
+    },
+    toyreflect: [
+        `Gagbot recognizes what you're attempting to do. Cheeky.`
+    ]
+}
 
 const texts_unvibe = {
 	heavy: {
@@ -2296,6 +2918,7 @@ const textarrays = {
 	texts_letgo: texts_letgo,
 	texts_mitten: texts_mitten,
 	texts_struggle: texts_struggle,
+    texts_toy: texts_toy,
 	texts_unchastity: texts_unchastity,
 	texts_uncollar: texts_uncollar,
 	texts_uncorset: texts_uncorset,
@@ -2303,6 +2926,7 @@ const textarrays = {
 	texts_unheadwear: texts_unheadwear,
 	texts_unheavy: texts_unheavy,
 	texts_unmitten: texts_unmitten,
+    texts_untoy: texts_untoy,
 	texts_unvibe: texts_unvibe,
 	texts_unwear: texts_unwear,
 	texts_vibe: texts_vibe,

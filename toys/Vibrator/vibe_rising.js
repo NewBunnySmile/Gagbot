@@ -4,6 +4,8 @@
 // arousal gain over the period of time. 
 // We will use performance.now() to calculate this as we do not need to know
 // the exact timespan. 
-exports.calcVibeEffect = function (data) { return (data.intensity * this.vibescale * 2 * (1 / (performance.now % 120000)))}
+exports.calcVibeEffect = function (data) { 
+    return (data.intensity * this.vibescale() * 3.0 * ((performance.now() % 300000) / 300000))
+}
 
 exports.toyname = "Rising Vibe"

@@ -46,7 +46,9 @@ exports.onEquip = (data) => { addArousal(data.userID, data.intensity / 2) };
 // Calculation for effective arousal
 // Note, this should be used for checks more focused around the vibe - it will be
 // further multiplied by the chastity's checks for this, if applicable. 
-exports.calcVibeEffect = function (data) { return data.intensity * this.vibescale }
+exports.calcVibeEffect = function (data) { 
+    return data.intensity * this.vibescale()
+}
 
 // Name for the toy!
 exports.toyname = "Default Vibrator"

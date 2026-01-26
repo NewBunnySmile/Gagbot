@@ -1,5 +1,6 @@
 const fs = require("fs");
 const path = require("path");
+const { getOption } = require("./configfunctions");
 
 const toytypes = [
     // Vibes
