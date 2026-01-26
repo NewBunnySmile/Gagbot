@@ -1,7 +1,7 @@
 const fs = require("fs");
 const path = require("path");
 const https = require("https");
-const { messageSend, messageSendImg, messageSendChannel } = require(`./../functions/messagefunctions.js`);
+const { messageSend, messageSendImg, messageSendChannel, runMessageEvents } = require(`./../functions/messagefunctions.js`);
 const { getCorset, corsetLimitWords, silenceMessage } = require(`./../functions/corsetfunctions.js`);
 const { stutterText, getArousedTexts } = require(`./../functions/vibefunctions.js`);
 const { getVibeEquivalent } = require("./vibefunctions.js");
@@ -255,6 +255,9 @@ function punishDoll(userID, amount) {
 		console.log(process.dolls[userID]);
 		// Compute punishments by dividing violations by punishThresh.
 		let punishThresh = getOption(userID, "dollpunishthresh");
+        if (getHeadwear(userID).find((headwear) => headwear === "dollmaker_visor")) {
+            punishThresh = 2; // Forced to 2 if dollmakers visor
+        }
 		let punishments = Math.floor(doll.violations / punishThresh);
 		// Remove punishments from violation score.
 		doll.violations = doll.violations % punishThresh;
@@ -336,6 +339,9 @@ const modifymessage = async (msg, threadId) => {
 
 		// Scrub all control characters used to delineate text.
 		outtext = outtext.replaceAll(/[]/g, "");
+
+        // Iterate through any speech events in process.msgfunctions
+        runMessageEvents({ msg: msg, msgcontent: msg.content, outtext: outtext })
 
 		// Finally, send it if we modified the message.
 		if (msgTreeMods.modified) {

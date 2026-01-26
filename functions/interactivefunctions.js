@@ -18,7 +18,7 @@ const consentMessage = (interaction, user) => {
 	let outtext = `# Consent to being Bound
 <@${process.env.CLIENTID}> is a bot which facilitates restraints in this channel, which have certain effects on you as you wear them, primarily centered around some form of speech impairment. Effects will only apply within this channel. 
 Restraints and toys used include the following:
-- Gags, Corsets and Vibrators: Impair and modify speech in various ways
+- Gags, Corsets and Toys: Impair and modify speech in various ways
 - Mittens and Chastity: Restrict modifying these settings
 - Heavy Bondage: Restrict modifying any setting
 - Headwear and Apparel: Generally cosmetic, but certain pieces can do inhibiting effects

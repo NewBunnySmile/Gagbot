@@ -17,6 +17,7 @@ const { loadEmoji } = require("./functions/messagefunctions.js");
 const { loadWearables } = require("./functions/wearablefunctions.js");
 const { knownServer, setGlobalCommands, loadWebhooks, getBotOption } = require('./functions/configfunctions.js');
 const { getAllJoinedGuilds } = require('./functions/configfunctions.js');
+const { setUpToys } = require('./functions/toyfunctions.js');
 
 // Prevent node from killing us immediately when we do the next line.
 process.stdin.resume();
@@ -44,7 +45,8 @@ let processdatatoload = [
     { textname: "mittenedusers.txt", processvar: "mitten", default: {} },
     { textname: "chastityusers.txt", processvar: "chastity", default: {} },
     { textname: "chastitybrausers.txt", processvar: "chastitybra", default: {} },
-    { textname: "vibeusers.txt", processvar: "vibe", default: {} },
+    //{ textname: "vibeusers.txt", processvar: "vibe", default: {} },
+    { textname: "toyusers.txt", processvar: "toys", default: {} },
     { textname: "collarusers.txt", processvar: "collar", default: {} },
     { textname: "heavyusers.txt", processvar: "heavy", default: {} },
     { textname: "pronounsusers.txt", processvar: "pronouns", default: {} },
@@ -102,6 +104,8 @@ loadHeavyTypes();
 loadHeadwearTypes();
 loadWearables();
 assignMemeImages();
+
+setUpToys()
 
 // Grab all the command files from the commands directory
 const commands = new Map();

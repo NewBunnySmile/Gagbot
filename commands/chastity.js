@@ -11,7 +11,7 @@ const { assignChastityBra, getChastityBraName } = require("../functions/vibefunc
 module.exports = {
 	data: new SlashCommandBuilder()
 		.setName("chastity")
-		.setDescription("Put yourself in chastity, locking /vibe settings")
+		.setDescription("Put yourself in chastity, locking /toy settings")
 		.addUserOption((opt) => opt.setName("keyholder").setDescription("Keyholder (leave blank to lock yourself)"))
 		.addStringOption((opt) => opt.setName("braorbelt").setDescription("Chastity belt or bra?").setChoices({ name: "Chastity Belt", value: "chastitybelt" }, { name: "Chastity Bra", value: "chastitybra" }))
 		.addStringOption((opt) => opt.setName("type").setDescription("What flavor of cruel chastity to wear...").setAutocomplete(true)),

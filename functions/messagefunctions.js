@@ -1,6 +1,11 @@
 const { WebhookClient, AttachmentBuilder, PermissionsBitField } = require("discord.js");
 const fs = require("fs");
 const path = require("path");
+const { getToys } = require("./toyfunctions");
+const { getWearable } = require("./wearablefunctions");
+const { getHeavy } = require("./heavyfunctions");
+const { getHeadwear } = require("./headwearfunctions");
+const { getCollar } = require("./collarfunctions");
 
 // Load all .png files into the bot as emoji, then assign them to process.emojis.
 // This can be used to allow the bot's emojis to function elsewhere.
@@ -167,6 +172,69 @@ const splitMessage = (text, inputRegex = null) => {
 	return output;
 };
 
+function runMessageEvents(data) {
+	// Gags
+	/*if (process.gags) {
+		Object.keys(process.gags).forEach((userid) => {
+			getGags(userid).forEach((g) => {
+				if (process.msgfunctions.gags && process.msgfunctions.gags[g.gagtype]) {
+					process.msgfunctions.gags[g.gagtype](userid, data);
+				}
+			});
+		});
+	}*/ // This will cause a circular to have it. 
+	// Headwear
+	if (process.headwear) {
+        getHeadwear(data.msg.author.id).forEach((h) => {
+            if (process.msgfunctions.headwear && process.msgfunctions.headwear[h]) {
+                process.msgfunctions.headwear[h](data.msg.author.id, data);
+            }
+        });
+	}
+	// Mittens
+	/*if (process.mitten) {
+		Object.keys(process.mitten).forEach((userid) => {
+			if (getMitten(userid)) {
+				if (process.msgfunctions.mitten && process.msgfunctions.mitten[getMitten(userid).mittenname]) {
+					process.msgfunctions.mitten[getMitten(userid).mittenname](userid, data);
+				}
+			}
+		});
+	}*/ // This will cause a circular to have it. 
+	// Heavy Bondage
+	if (process.heavy) {
+        if (getHeavy(data.msg.author.id)) {
+            if (process.msgfunctions.heavy && process.msgfunctions.heavy[getHeavy(data.msg.author.id).typeval]) {
+                process.msgfunctions.heavy[getHeavy(data.msg.author.id).typeval](data.msg.author.id, data);
+            }
+        }
+	}
+	// Wearables
+	if (process.wearable) {
+        getWearable(data.msg.author.id).forEach((h) => {
+            if (process.msgfunctions.wearable && process.msgfunctions.wearable[h]) {
+                process.msgfunctions.wearable[h](data.msg.author.id, data);
+            }
+        });
+	}
+    // Toys
+    if (process.toys) {
+        getToys(data.msg.author.id).forEach((h) => {
+            if (process.msgfunctions.toys && process.msgfunctions.toys[h.type]) {
+                process.msgfunctions.toys[h.type](data.msg.author.id, data);
+            }
+        });
+	}
+    // Collars
+    if (process.collar) {
+        if (getCollar(data.msg.author.id)) {
+            if (process.msgfunctions.collar && process.msgfunctions.collar[getCollar(data.msg.author.id).collartype]) {
+                process.msgfunctions.collar[getCollar(data.msg.author.id).collartype](data.msg.author.id, data);
+            }
+        }
+	}
+}
+
 exports.splitMessage = splitMessage;
 
 exports.messageSend = messageSend;
@@ -177,3 +245,5 @@ exports.loadEmoji = loadEmoji;
 exports.splitMessage = splitMessage;
 
 exports.messageSendChannel = messageSendChannel;
+
+exports.runMessageEvents = runMessageEvents;

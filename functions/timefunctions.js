@@ -8,6 +8,8 @@ const { getGags, getMitten } = require("./gagfunctions.js");
 const { getHeadwear } = require("./headwearfunctions.js");
 const { getHeavy } = require("./heavyfunctions.js");
 const { getWearable } = require("./wearablefunctions.js");
+const { getToys } = require("./toyfunctions.js");
+const { getCollar } = require("./collarfunctions.js");
 
 // Takes input string, outputs a date object.
 const parseTime = (text) => {
@@ -128,9 +130,9 @@ const saveFiles = () => {
 					filepath = `${process.GagbotSavedFileDirectory}/arousal.txt`;
 					processvar = "arousal";
 					break;
-				case "vibe":
-					filepath = `${process.GagbotSavedFileDirectory}/vibeusers.txt`;
-					processvar = "vibe";
+				case "toys":
+					filepath = `${process.GagbotSavedFileDirectory}/toyusers.txt`;
+					processvar = "toys";
 					break;
 				case "collar":
 					filepath = `${process.GagbotSavedFileDirectory}/collarusers.txt`;
@@ -197,15 +199,20 @@ const saveFiles = () => {
 // Assigns each function to a process variable for reference later.
 function importFileNames() {
 	process.eventfunctions = {};
+    process.msgfunctions = {};
 	let eventfunctionsfolders = fs.readdirSync(path.resolve(__dirname, "..", "eventfunctions"));
 	eventfunctionsfolders.forEach((f) => {
 		process.eventfunctions[f] = {};
+        process.msgfunctions[f] = {};
 		let eventfunctionsfiles = fs.readdirSync(path.resolve(__dirname, "..", "eventfunctions", f));
 		eventfunctionsfiles.forEach((file) => {
 			let functionfile = require(path.resolve(__dirname, "..", "eventfunctions", f, file));
 			if (typeof functionfile.functiontick === "function") {
 				process.eventfunctions[f][file.replace(".js", "")] = functionfile.functiontick;
 			}
+            if (typeof functionfile.msgfunction === "function") {
+                process.msgfunctions[f][file.replace(".js", "")] = functionfile.msgfunction;
+            }
 		});
 	});
 }
@@ -290,6 +297,26 @@ function runProcessedEvents() {
 					process.eventfunctions.wearable[h](userid);
 				}
 			});
+		});
+	}
+    // Toys
+    if (process.toys) {
+		Object.keys(process.toys).forEach((userid) => {
+			getToys(userid).forEach((h) => {
+				if (process.eventfunctions.toys && process.eventfunctions.toys[h.type]) {
+					process.eventfunctions.toys[h.type](userid);
+				}
+			});
+		});
+	}
+    // Collars
+    if (process.collar) {
+		Object.keys(process.collar).forEach((userid) => {
+			if (getCollar(userid)) {
+                if (process.eventfunctions.collar && process.eventfunctions.collar[getCollar(userid).type]) {
+					process.eventfunctions.collar[getCollar(userid).collartype](userid, data);
+				}
+            }
 		});
 	}
 }

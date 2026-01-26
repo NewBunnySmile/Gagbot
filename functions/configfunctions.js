@@ -818,6 +818,54 @@ const configoptions = {
 				return false;
 			},
 		},
+        "extreme-mask-dollmaker_visor": {
+			name: "Mask - Dollmaker's Visor",
+			desc: "Forces DOLL-#### syntax, it/its pronouns and at least WARN protocol.",
+			prompttext: `The Dollmaker's Visor is a variant of the Doll Visor as it was originally designed. It will deliberately ignore your customizations for visors and enforce the following settings:\n-Doll Name will be DOLL-####\n-Pronouns will be it/its\n-Punishment Protocol will be set to WARN, if it is disabled\n-Punishment Threshold will be set to 2`,
+			choices: [
+				{
+					name: "Disabled",
+					helptext: "*Dollmaker's Visor is disabled*",
+					select_function: (interaction, serverID) => {
+						return false;
+					},
+					value: "Disabled",
+					style: ButtonStyle.Danger,
+				},
+				{
+					name: "Prompt",
+					helptext: "You will be prompted when this is put on you",
+					select_function: (interaction, serverID) => {
+						return false;
+					},
+					value: "Prompt",
+					style: ButtonStyle.Secondary,
+				},
+				{
+					name: "Prompt (Others)",
+					helptext: "You will be prompted when others put this on you",
+					select_function: (interaction, serverID) => {
+						return false;
+					},
+					value: "PromptOthers",
+					style: ButtonStyle.Secondary,
+				},
+				{
+					name: "Enabled",
+					helptext: "⚠️ You will automatically accept this restraint",
+					select_function: (interaction, serverID) => {
+						return false;
+					},
+					value: "Enabled",
+					style: ButtonStyle.Secondary,
+				},
+			],
+			menutype: "choice",
+			default: "Prompt",
+			disabled: () => {
+				return false;
+			},
+		},
 		"extreme-gag-politeSub": {
 			name: "Gag - Polite Sub",
 			desc: "Enforces the use of Honorifics to speak",

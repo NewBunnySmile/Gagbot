@@ -12,6 +12,8 @@ const { arousedtexts } = require("../vibes/aroused/aroused_texts.js");
 const { config } = require("./configfunctions.js");
 const { getOption, getBotOption } = require(`./configfunctions.js`);
 const { getUserVar, setUserVar } = require("./usercontext.js");
+const { getToys } = require("./toyfunctions.js");
+const { logConsole } = require("./logfunctions.js");
 
 // NOTE: canUnequip is currently checked in functions that remove/assign chastity and those functions return if it succeeded, but the text responses are not yet updated
 // probably makes more sense to make custom text responses for the belts/bras that use this that explain why it failed
@@ -1347,11 +1349,18 @@ function updateArousalValues() {
 			// if the timestamp is in the future the user is cooling off from an orgasm or similar and should be skipped
 			if (arousal.timestamp > now) continue;
 			const traits = getCombinedTraits(user);
-			const vibes = getVibe(user);
+			const vibes = getToys(user);
 			// if no vibe effect, growth coefficient will be 0
 			// otherwise add the effects of the vibes and multiply it with the growth coefficient from belt and bra, and scale it so it ends up in a good range
-			const growthCoefficient = !vibes && !traits.minVibe ? 0 : traits.growthCoefficient * bounded(traits.minVibe, vibes?.reduce((a, b) => a + b.intensity, 0) ?? 0, traits.maxVibe) * VIBE_SCALING;
-			const next = calcNextArousal(traits, time, arousal.arousal, arousal.prev, growthCoefficient, traits.decayCoefficient * UNBELTED_DECAY);
+            let vibegains = vibes.reduce((prev, currVibe) => { 
+                let vibedata = { intensity: currVibe.intensity, userID: user }
+                return prev + process.toytypes[currVibe.type].calcVibeEffect(vibedata) 
+            }, 0)
+            let growthmult = vibes ? (traits.growthCoefficient ?? 1) : 0
+            let minvibegain = traits.minVibe ? (traits.minVibe * VIBE_SCALING) : -9999
+            let maxvibegain = traits.maxVibe ? (traits.maxVibe * VIBE_SCALING) : 9999
+			const vibearousalchange = growthmult * bounded(minvibegain, vibegains, maxvibegain);
+			const next = calcNextArousal(traits, time, arousal.arousal, arousal.prev, vibearousalchange, traits.decayCoefficient * UNBELTED_DECAY);
 			// set the values to the new ones
 			arousal.timestamp = now;
 			arousal.prev = arousal.arousal;
@@ -1432,10 +1441,11 @@ function calcNextArousal(traits, time, arousal, prev, growthCoefficient, decayCo
 
 	// first increase it due to vibe effect
 	const growth = tickScale * bounded(traits.minGrowth, traits.timescale * (1 + AROUSAL_PERIOD_AMPLITUDE * Math.cos(traits.timescale * time * AROUSAL_PERIOD_A) * Math.cos(traits.timescale * time * AROUSAL_PERIOD_B)) * growthCoefficient * ((RANDOM_BIAS + Math.random()) / (RANDOM_BIAS + 1)), traits.maxGrowth);
-	const noDecay = arousal + growth;
+	const noDecay = (arousal ?? 0) + growth;
 	// then reduce it based on decay
-	const decay = tickScale * bounded(traits.minDecay, traits.timescale * decayCoefficient * Math.max(arousal + prev / 2, 0.1), traits.maxDecay);
-	return bounded(traits.minArousal, noDecay - decay, traits.maxArousal);
+	const decay = tickScale * bounded(traits.minDecay, traits.timescale * decayCoefficient * Math.max((arousal ?? 0) + prev / 2, 0.1), traits.maxDecay);
+    logConsole(`calcNextArousal: ${bounded(traits.minArousal, noDecay - decay, traits.maxArousal)}`, 1);
+    return bounded(traits.minArousal, noDecay - decay, traits.maxArousal);
 }
 
 // user attempts to orgasm, returns if it succeeds
@@ -1482,9 +1492,12 @@ function setArousalCooldown(user, cooldownModifier = 1, arousalLeft = 0) {
 
 // modify when more things affect it
 function calcStaticVibeIntensity(user) {
-	const vibes = getVibe(user);
+	const vibes = getToys(user);
 	if (!vibes) return 0;
-	return vibes.reduce((a, b) => a + b.intensity, 0) * 0.7;
+	return vibes.reduce((prev, currVibe) => {
+        let vibedata = { intensity: currVibe.intensity }
+        return prev + process.toytypes[currVibe.type].calcVibeEffect(vibedata) 
+    })
 }
 
 // modify when more things affect it

@@ -47,13 +47,14 @@ const headweartypes = [
 	{ name: "Doll Visor", value: "doll_visor", blockemote: true }, // Doll Visor removes emotes only.
 	{ name: "Doll Visor (Opaque)", value: "doll_visor_blind", blockinspect: true, blockemote: true }, // Blindfolding Doll Visor
 	{ name: "Doll Visor (Transparent)", value: "doll_visor_trans" }, // Cosmetic Item
+    { name: "Dollmaker's Visor", value: "dollmaker_visor", blockemote: true }, // Doll Visor removes emotes only.
 	{ name: "VR Headset", value: "vr_visor", blockinspect: true },
 
 	// Misc
 	{ name: "Painted Goggles", value: "painted_goggles", blockinspect: true },
 ];
 
-const DOLLVISORS = ["doll_visor", "doll_visor_blind"];
+const DOLLVISORS = ["doll_visor", "doll_visor_blind", "dollmaker_visor"];
 
 /**************
  * Discord API Requires an array of objects in form:

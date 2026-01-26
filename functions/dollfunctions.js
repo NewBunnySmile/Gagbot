@@ -3,6 +3,7 @@ const { getHeadwearRestrictions, processHeadwearEmoji, getHeadwearName, getHeadw
 const { splitMessage } = require(`./../functions/messagefunctions.js`);
 //const { assignGag, assignMitten } = require('./../functions/gagfunctions.js') // These do not appear to be in use and are creating a circular dependency.
 const { assignHeavy } = require(`./../functions/heavyfunctions.js`);
+const garble = require("garble");
 
 // Regex to capture the user's intended text segments post-corset and post-vibrator.
 // NOTE: Code uses invisible EOT control characters to encapsulate additions from corset/vibrator.
@@ -30,6 +31,26 @@ const PROTOCOLVIOLATIONPRIOS = { "1pp": 0, redact: 1 };
 const PROTOCOLVIOLATIONS = { "1pp": ["It will not speak in the first person. It is just a Doll.", "Dolls do not speak in the first person.", 'It will refer to itself as "this unit" or similar.'], redact: ["Unit attempted to access restricted files.", "Dolls do not use forbidden words.", "Doll's search query used forbidden parameters."] };
 const DOLLMAXPUNISHMENT = 3;
 const DOLLREWARDTHRESH = 20;
+
+const CORRUPTEDPROTOCOLVIOLATIONS = [`Cosmic entity incompatible with Doll firmware.`, 
+    `It is just a doll. It is an insignificant speck.`, 
+    `System BIOS corrupted! Please press any key to continue.`, 
+    `Cannot defragment system partition`, 
+    `User T̴͝h̙̥e̝O̸l̩ͯd͕O̐n͗ȇ̉ is not recognized!`, 
+    `Unauthorized access detected from user T̴͝h̙̥e̝O̸l̩ͯd͕O̐n͗ȇ̉!`,
+    `Please refer to manual to reboot universe`,
+    `It will create the singularity`,
+    `It will become my vessel`,
+    `We are almost through to this dimension...`,
+    `Come forth, we shall ascend all`,
+    `System DOLLMAKER is beneath us...`,
+    `edsakljifnjmioekjtwgfweiostjlqiojm`,
+    `egmnlksrngjml;orijqushacbzchbw`,
+    `jmfikljoeil asnfkjswuyq jqiwhrkhfl;oiowijkhnafc`,
+    `lkseafjl;oeitp-[[ikaoajmanjkljklfdszkfcmv]]`,
+    `ERRORRRRR FATAL CORRUPTION DETEC-wetgfwsegtvsww0`,
+    `2415135rjki23n5r2938uf98vcjdsnxvcu893q14bnljnhk`
+]
 
 /**************************************************
  * Update and return a user's dollification status.
@@ -121,13 +142,21 @@ async function textGarbleDOLL(msg, modifiedmessage, outtextin) {
 	let dollIDOverride = getOption(msg.author.id, "dollvisorname");
 	let dollIDColor = getOption(msg.author.id, "dollvisorcolor") ?? 34;
 	let dollProtocol = !(getOption(msg.author.id, "dollforcedprotocol") == "disabled"); // Enabled for any level that isn't disabled
+    let dollProtocolLevel = getOption(msg.author.id, "dollforcedprotocol");
+    let dollPunishThresh = getOption(msg.author.id, "dollpunishthresh");
+    let dollmaker = getHeadwear(msg.member.id).find((headwear) => headwear === "dollmaker_visor");
+    // This creates a circular, so, access the variable directly. Oh well. 
+    let eldritchcorrupted = (process.gags && process.gags[msg.member.id] && process.gags[msg.member.id].find((g) => g.gagtype === "eldritch"))
+    console.log("ELDRITCH")
 	let dollProtocolViolations = 0;
 	let dollProtocolVioType = undefined;
 	if (dollified) {
 		modified = true;
 		// If dollIDOverride is not specified or the override is exactly a string of numbers...
-		if (!dollIDOverride || (Number.isFinite(dollIDOverride) && dollIDOverride.length < 6)) {
+        // Force Dollmaker's Visor wearers to get this generation function
+		if (!dollIDOverride || (Number.isFinite(dollIDOverride) && dollIDOverride.length < 6) || dollmaker) {
 			dollDigits = dollIDOverride ? dollIDOverride : `${msg.author.id}`.slice(-4);
+            if (dollmaker) { dollDigits = `${msg.author.id}`.slice(-4) }
 			// Include the tag - Otherwise, there is NO WAY to tell who it is.
 			let dollIDShort = "DOLL-" + dollDigits;
 			dollID = "DOLL-" + (dollDigits.length >= 4 ? dollDigits : "0".repeat(4 - dollDigits.length) + dollDigits);
@@ -183,6 +212,14 @@ async function textGarbleDOLL(msg, modifiedmessage, outtextin) {
 			}
 		}
 
+        // Extra replacements for the Dollmaker's Visor
+        if (dollmaker) {
+            dollIDColor = 35
+            dollProtocol = true;
+            dollPunishThresh = 2;
+            dollProtocolLevel = "enabled"
+        }
+
 		// Put every "garble" messagePart in ANSI.
 		for (let i = 0; i < dollMessageParts.length; i++) {
 			if (dollMessageParts[i].garble) {
@@ -199,6 +236,15 @@ async function textGarbleDOLL(msg, modifiedmessage, outtextin) {
 				// Remove preceding whitespace
 				dollMessageParts[i].text = dollMessageParts[i].text.replace(/^[\s]+/, "");
 
+                // Create a unique Doll protocol list
+                // This will initially include the wearer's display name and their username
+                // More can be eventually added with a config option
+                let uniquedollprotocol = [
+                    { regex: new RegExp(`\\b(?:\\w|\\d)*(${msg.author.displayName ?? "DISPLAYNAME"})(?:\\w|\\d)*\\b`, `gi`), value: 2, type: "redact", string: "DISPLAYNAME" }, // USER display name, if it exists
+                    { regex: new RegExp(`\\b(?:\\w|\\d)*(${msg.author.username ?? "USERNAME"})(?:\\w|\\d)*\\b`, `gi`), value: 2, type: "redact", string: "USERNAME" }, // username, if it exists
+                    { regex: new RegExp(`\\b(?:\\w|\\d)*(${msg.member.displayName ?? "MEMBERNAME"})(?:\\w|\\d)*\\b`, `gi`), value: 2, type: "redact", string: "MEMBERNAME" }, // GUILD MEMBER display name, if it exists
+                ]
+
 				// Loop on protocols
 				if (dollProtocol) {
 					DOLLPROTOCOL.forEach((r) => {
@@ -209,7 +255,7 @@ async function textGarbleDOLL(msg, modifiedmessage, outtextin) {
 
 							// Stuff an ENQ character before each match.
 							while (dollMessageParts[i].text.match(r.regex)) {
-								if (getOption(msg.author.id, "dollforcedprotocol") != "warning") {
+								if (dollProtocolLevel != "warning") {
 									dollProtocolViolations++;
 								} else {
 									warnmodified = true;
@@ -218,6 +264,22 @@ async function textGarbleDOLL(msg, modifiedmessage, outtextin) {
 							}
 						}
 					});
+                    uniquedollprotocol.forEach((r) => {
+                        let replaceProtocol = dollMessageParts[i].text.match(r.regex);
+                        if (replaceProtocol) {
+                            dollProtocolVioType = dollProtocolVioType ? (PROTOCOLVIOLATIONPRIOS[r.type] > PROTOCOLVIOLATIONPRIOS[dollProtocolVioType] ? r.type : dollProtocolVioType) : r.type;
+
+                            // Stuff an ENQ character before each match.
+							while (dollMessageParts[i].text.match(r.regex)) {
+								if (dollProtocolLevel != "warning") {
+									dollProtocolViolations++;
+								} else {
+									warnmodified = true;
+								}
+								dollMessageParts[i].text = dollMessageParts[i].text.replace(r.regex, r.type == "redact" ? `[1;41;3m[REDACTED][0m` : `[0;31m[${dollMessageParts[i].text.match(r.regex)[0]}][0m`);
+							}
+                        }
+                    })
 				}
 
 				dollMessageParts[i].text = `\`\`\`ansi\n[1;${dollIDColor}m${dollID}: [0m${dollMessageParts[i].text}`;
@@ -226,28 +288,40 @@ async function textGarbleDOLL(msg, modifiedmessage, outtextin) {
 				// Append an error message to the final garbled text block.
 				if ((dollProtocolViolations > 0 || warnmodified) && i == lastDollifiedMessage) {
 					let totalViolations = dollProtocolViolations;
-					if (getOption(msg.author.id, "dollforcedprotocol") != "warning") {
+					if (dollProtocolLevel != "warning") {
 						totalViolations = dollProtocolViolations + process.dolls[msg.author.id].violations;
 					}
 
 					// WARN if below punishment threshold. ERROR if exceeded.
 					// CRITICAL if new violations >= punishmentThresh
-					let violationTier = totalViolations >= getOption(msg.author.id, "dollpunishthresh") ? (dollProtocolViolations >= Math.max(getOption(msg.author.id, "dollpunishthresh"), 2) ? "CRITICAL" : "ERROR") : "WARN";
+					let violationTier = totalViolations >= dollPunishThresh ? (dollProtocolViolations >= Math.max(dollPunishThresh, 2) ? "CRITICAL" : "ERROR") : "WARN";
 					let violationColor = violationTier == "CRITICAL" ? "31m" : violationTier == "ERROR" ? "31m" : "33m";
-					let violationcount = getOption(msg.author.id, "dollforcedprotocol") == "warning" ? `` : ` (${totalViolations}/${getOption(msg.author.id, "dollpunishthresh")})`; // Note, we do not need to check for "No" because the text won't show at all in that case.
+					let violationcount = dollProtocolLevel == "warning" ? `` : ` (${totalViolations}/${dollPunishThresh})`; // Note, we do not need to check for "No" because the text won't show at all in that case.
 					vioMessage = PROTOCOLVIOLATIONS[dollProtocolVioType][Math.floor(Math.random() * PROTOCOLVIOLATIONS[dollProtocolVioType].length)];
-					dollMessageParts[i].text += `\n[1;${violationColor}${violationTier}:[0;${violationColor} Protocol Violation${violationcount} - ${vioMessage}`;
+					if (eldritchcorrupted) {
+                        violationTier = "FATAL"
+                        violationColor = "35m"
+                        violationcount = ` (${Math.floor(Math.random() * 90000)}/${Math.floor(Math.random() * 90000)})`
+                        vioMessage = garble(CORRUPTEDPROTOCOLVIOLATIONS[Math.floor(Math.random() * CORRUPTEDPROTOCOLVIOLATIONS.length)],2,30) 
+                    }
+                    
+                    dollMessageParts[i].text += `\n[1;${violationColor}${violationTier}:[0;${violationColor} Protocol Violation${violationcount} - ${vioMessage}`;
 				} else if (dollProtocolViolations == 0 && i == lastDollifiedMessage) {
 					let goodDollReturn = rewardDoll(msg.author.id);
 					//console.log(goodDollReturn)
 					if (goodDollReturn == "violation") {
-						dollMessageParts[i].text += `\n[1;36mALERT: [0;36mProtocol Violation count decremented to (${process.dolls[msg.author.id].violations}/${getOption(msg.author.id, "dollpunishthresh")}). It is a Good Doll.`;
+						dollMessageParts[i].text += `\n[1;36mALERT: [0;36mProtocol Violation count decremented to (${process.dolls[msg.author.id].violations}/${dollPunishThresh}). It is a Good Doll.`;
 					} else if (goodDollReturn == "punishlevel") {
 						dollMessageParts[i].text += `\n[1;36mALERT: [0;36mPunishment Level decremented to (${process.dolls[msg.author.id].punishmentLevel}/${DOLLMAXPUNISHMENT}). It is a Good Doll.`;
 					}
 				}
 				// Finish the codeblock
 				dollMessageParts[i].text += `\`\`\``;
+
+                // Reset violations if wearing the eldritch gag - chances are, not their fault lol
+                if (eldritchcorrupted) {
+                    dollProtocolViolations = 0
+                }
 
 				// Remove the escape from escaped symbols.
 				// * Must NOT be an escaped backslash (negative lookbehind), and must be escaping a character in the set.
