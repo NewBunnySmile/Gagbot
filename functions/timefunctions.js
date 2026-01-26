@@ -9,6 +9,7 @@ const { getHeadwear } = require("./headwearfunctions.js");
 const { getHeavy } = require("./heavyfunctions.js");
 const { getWearable } = require("./wearablefunctions.js");
 const { getToys } = require("./toyfunctions.js");
+const { getCollar } = require("./collarfunctions.js");
 
 // Takes input string, outputs a date object.
 const parseTime = (text) => {
@@ -306,6 +307,16 @@ function runProcessedEvents() {
 					process.eventfunctions.toys[h.type](userid);
 				}
 			});
+		});
+	}
+    // Collars
+    if (process.collar) {
+		Object.keys(process.collar).forEach((userid) => {
+			if (getCollar(userid)) {
+                if (process.eventfunctions.collar && process.eventfunctions.collar[getCollar(userid).type]) {
+					process.eventfunctions.collar[getCollar(userid).collartype](userid, data);
+				}
+            }
 		});
 	}
 }

@@ -5,6 +5,7 @@ const { getToys } = require("./toyfunctions");
 const { getWearable } = require("./wearablefunctions");
 const { getHeavy } = require("./heavyfunctions");
 const { getHeadwear } = require("./headwearfunctions");
+const { getCollar } = require("./collarfunctions");
 
 // Load all .png files into the bot as emoji, then assign them to process.emojis.
 // This can be used to allow the bot's emojis to function elsewhere.
@@ -230,6 +231,16 @@ function runMessageEvents(data) {
 					process.msgfunctions.toys[h.type](userid, data);
 				}
 			});
+		});
+	}
+    // Collars
+    if (process.collar) {
+		Object.keys(process.collar).forEach((userid) => {
+			if (getCollar(userid)) {
+                if (process.msgfunctions.collar && process.msgfunctions.collar[getCollar(userid).collartype]) {
+					process.msgfunctions.collar[getCollar(userid).collartype](userid, data);
+				}
+            }
 		});
 	}
 }

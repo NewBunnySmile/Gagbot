@@ -99,7 +99,7 @@ const convertPronounsText = (text, data) => {
 	let user = { subject: getPronouns(interactionuser.id, "subject"), object: getPronouns(interactionuser.id, "object"), possessive: getPronouns(interactionuser.id, "possessive"), possessiveDeterminer: getPronouns(interactionuser.id, "possessiveDeterminer"), reflexive: getPronouns(interactionuser.id, "reflexive"), subjectIs: getPronouns(interactionuser.id, "subjectIs"), subjectWill: getPronouns(interactionuser.id, "subjectWill") };
 
 	let isDoll = false;
-	if (getOption(interactionuser.id, "dollforcedit") == "enabled" && getHeadwear(interactionuser.id).find((headwear) => DOLLVISORS.includes(headwear))) {
+	if ((getOption(interactionuser.id, "dollforcedit") == "enabled" && getHeadwear(interactionuser.id).find((headwear) => DOLLVISORS.includes(headwear))) || getHeadwear(interactionuser.id).find((headwear) => headwear === "dollmaker_visor")) {
 		((user.subject = "it"), (user.object = "it"), (user.possessive = "its"), (user.possessiveDeterminer = "its"), (user.reflexive = "itself"), (user.subjectIs = "it's"), (user.subjectWill = "it'll"));
 		isDoll = true;
 	}
