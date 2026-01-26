@@ -698,7 +698,7 @@ const texts_heavy = {
 			only: (t) => {
 				return t.c2.includes("One Bar Prison");
 			},
-			text: `USER_TAG steps onto the VAR_C2, spreading USER_THEIR legs to stand in the footrests. The pole rises between USER_THEIR's legs, trapping USER_THEM in place!`,
+			text: `USER_TAG steps onto the VAR_C2, spreading USER_THEIR legs to stand in the footrests. The pole rises between USER_THEIR legs, trapping USER_THEM in place!`,
 		},
 		{
 			only: (t) => {
@@ -893,31 +893,36 @@ const texts_struggle = {
 		// Blacklisted Generics - Filter Out Messages that will not read smoothly with some types
 		{
 			required: (t) => {
-				return !t.c1.includes("Doll Processing") && !t.c1.includes("Mimic") && !t.c1.includes("Dancer") && !t.c1.includes("Horse");
+				let blacklistTypes = ["Doll Processing", "Mimic", "Dancer", "Horse"]
+				return !blacklistTypes.some(blacklistTypes => t.c1.includes(blacklistTypes));
 			},
 			text: `USER_TAG squirms in USER_THEIR VAR_C1, trying to squeeze out of it but USER_THEY really didn't think about how challenging that'd be.`,
 		},
 		{
 			required: (t) => {
-				return !t.c1.includes("One Bar Prison") && !t.c1.includes("Pet Cage") && !t.c1.includes("Dancer");
+				let blacklistTypes = ["One Bar Prison", "Pet Cage", "Dancer"]				
+				return !blacklistTypes.some(blacklistTypes => t.c1.includes(blacklistTypes));
 			},
 			text: `Despite USER_THEIR best efforts, the VAR_C1 binding USER_TAG's arms (and maybe legs) refuses to budge!`,
 		},
 		{
 			required: (t) => {
-				return !t.c1.includes("One Bar Prison") && !t.c1.includes("Weighted Blanket") && !t.c1.includes("Toasty Kotatsu");
+				let blacklistTypes = ["One Bar Prison", "Weighted Blanket", "Toasty Kotatsu"]
+				return !blacklistTypes.some(blacklistTypes => t.c1.includes(blacklistTypes));
 			},
 			text: `The VAR_C1 creaks loudly as USER_TAG *thrashes* in USER_THEIR bondage, trying to escape!`,
 		},
 		{
 			required: (t) => {
-				return !t.c1.includes("Doll Processing") && !t.c1.includes("Mimic");
+				let blacklistTypes = ["Doll Processing", "Mimic"]
+				return !blacklistTypes.some(blacklistTypes => t.c1.includes(blacklistTypes));
 			},
 			text: `USER_TAG fights against USER_THEIR VAR_C1, trying to loosen it even a little bit to maybe escape...`,
 		},
 		{
 			required: (t) => {
-				return !t.c1.includes("Doll Processing") && !t.c1.includes("Mimic");
+				let blacklistTypes = ["Doll Processing", "Mimic"]
+				return !blacklistTypes.some(blacklistTypes => t.c1.includes(blacklistTypes));
 			},
 			text: `USER_TAG fights against USER_THEIR VAR_C1, but it doesn't budge even a micrometer...`,
 		},
