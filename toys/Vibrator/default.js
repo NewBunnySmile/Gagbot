@@ -1,6 +1,6 @@
 const { getOption } = require("../../functions/configfunctions")
 const { rollKeyFumble } = require("../../functions/keyfindingfunctions")
-const { canAccessChastity, addArousal, discardChastityKey } = require("../../functions/vibefunctions")
+const { canAccessChastity, addArousal, discardChastityKey, getChastity } = require("../../functions/vibefunctions")
 
 // These values are used whenever they're unspecified on the vibe in this folder.
 // Arousal gain per intensity for this vibe type
@@ -20,6 +20,9 @@ exports.canUnequip = (data) => { return (!canAccessChastity(data.userID, data.ke
 
 // Condition to force unequip on refresh
 exports.forceUnequip = (data) => { return false }
+
+// Condition to check if wearer is wearing a potential blocker
+exports.blocker = (data) => { return getChastity(data.userID) }
 
 // Condition to allow modification
 exports.canModify = (data) => { return (!canAccessChastity(data.userID, data.keyholderID).hasbelt || canAccessChastity(data.userID, data.keyholderID).access) };
