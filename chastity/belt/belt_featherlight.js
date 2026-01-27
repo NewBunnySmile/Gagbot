@@ -7,5 +7,8 @@ exports.minVibe = (data) => { return 2 }
 
 exports.minArousal = (data) => { return 1 }
 
+// Calculate Arousal change
+exports.vibelevel = (data) => { return 1 };
+
 // Name
 exports.name = "Featherlight Belt"

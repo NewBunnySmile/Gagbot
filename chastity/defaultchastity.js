@@ -4,10 +4,10 @@
 // default.js in each folder and then the specific chastity after that. 
 function Chastity() {
     // Growth Coefficient. Higher = more growth, this is a multiplier(?) on arousal gains
-    this.growthCoefficient = (data) => { return 0 }
+    this.growthCoefficient = (data) => { return 1 }
 
     // Decay Coefficient. This is a modifier for which decay is REDUCED by when in chastity
-    this.decayCoefficient = (data) => { return 0 }
+    this.decayCoefficient = (data) => { return 1 }
 
     // Denial Coefficient. This is the modifier for which arousal much reach to successfully let go
     this.denialCoefficient = (data) => { return 1 }
@@ -22,6 +22,9 @@ function Chastity() {
 
     // Vibrator Scaling. This is multipled with minvibe and maxvibe to get the effective arousal gain necessary
     this.vibeScaling = (data) => { return 0 }
+
+    // Vibrator setting for THIS chastity device.
+    this.vibelevel = (data) => { return 0 }
 
     // Timescale. All gains and decays are multiplied by this timescale. Can be used to receive props for arousal OR decay.
     this.timescale = (data) => { return 1 }
@@ -76,6 +79,9 @@ function Chastity() {
 
     // Event: After Arousal Change. Fired when the wearer's arousal changes
     this.afterArousalChange = (data) => { return false }
+
+    // Calculate Arousal change
+    this.calcVibeEffect = function (data) { return (this.vibelevel * this.vibeScaling) }
 
     // Category
     this.category = "default"

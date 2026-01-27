@@ -8,6 +8,9 @@ exports.decayCoefficient = (data) => { return 0.2 }
 // Denial Coefficient. This is the modifier for which arousal much reach to successfully let go
 exports.denialCoefficient = (data) => { return 5 }
 
+// Default vibe scaling is 0.6.
+exports.vibeScaling = (data) => { return 0.6 }
+
 // Category
 exports.category = "Chastity Belt"
 
