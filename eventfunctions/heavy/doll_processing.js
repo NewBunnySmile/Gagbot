@@ -10,6 +10,8 @@ const { getChastityBraName } = require("../../functions/vibefunctions.js");
 const { getChastityName, assignChastity } = require("../../functions/vibefunctions.js");
 const { getChastity } = require("../../functions/vibefunctions.js");
 const { getWearable, getLockedWearable, deleteWearable, getWearableName, assignWearable, wearablecolors } = require("../../functions/wearablefunctions.js");
+const { getOption } = require(`../../functions/configfunctions.js`);
+const { User } = require("discord.js");
 
 // Doll Processing Facility will slowly strip the wearer of all of their clothes!
 // Then after they are naked, it will announce once that it is applying restraints
@@ -18,8 +20,11 @@ const { getWearable, getLockedWearable, deleteWearable, getWearableName, assignW
 let functiontick = async (userID) => {
     if (process.userevents == undefined) { process.userevents = {} }
     if (process.userevents[userID] == undefined) { process.userevents[userID] = {} }
-    if (process.userevents[userID].dollprocessing == undefined) { process.userevents[userID].dollprocessing = { stage: 0 } }
-    let currclothes = getWearable(userID).filter((f) => (!getLockedWearable(userID).includes(f)) ); // These are the worn clothes
+    if (process.userevents[userID].dollprocessing == undefined) { process.userevents[userID].dollprocessing = { stage: 0 } }  
+    if (process.userevents[userID].dollprocessing.doll_id == undefined) { process.userevents[userID].dollprocessing.doll_id = getOption(userID, "dollvisorname") }      
+    if (process.userevents[userID].dollprocessing.existingbarcodelogged == undefined) { process.userevents[userID].dollprocessing.existingbarcodelogged = !getWearable(userID).includes("cyberdoll_barcode"); }
+
+    let currclothes = getWearable(userID).filter((f) => (!getLockedWearable(userID).includes(f))); // These are the worn clothes
     // Figure out the color of the wearer's current clothing. If none, choose black because black is sexy.
     wearablecolors.forEach((color) => {
         if ((process.userevents[userID].dollprocessing.color == undefined) && getWearable(userID).some((clothing) => (clothing.search(color.toLowerCase()) > -1))) {
@@ -39,7 +44,9 @@ let functiontick = async (userID) => {
     // Only update a max of once every 60 seconds. 
     if ((process.userevents[userID].dollprocessing.nextupdate ?? 0) < Date.now()) {
         process.userevents[userID].dollprocessing.nextupdate = Date.now() + 60000;
+        //process.userevents[userID].dollprocessing.nextupdate = Date.now() + 3000; // TEST SPEED
     }
+    
     else { return };
     // Build data tree:
     let data = {
@@ -55,7 +62,7 @@ let functiontick = async (userID) => {
     data.doll_processing = true;
     if (currclothes.length > 0) {
         data.textdata.c1 = getWearableName(undefined, currclothes[0]), // wearable name
-        data.removeclothing = true;
+            data.removeclothing = true;
         deleteWearable(userID, currclothes[0]);
         // Taking off the clothes at the beginning!
         if (process.userevents[userID].dollprocessing.stage == 0) {
@@ -77,23 +84,33 @@ let functiontick = async (userID) => {
         messageSendChannel(getText(data), process.recentmessages[userID])
     }
     else {
-        let newclothes = getWearable(userID) // Clothing, check for drone clothes
+        let newclothes = getWearable(userID) // All Clothing, check for drone clothes
         let equipped = false;
         droneclothes.forEach((d) => {
-            if (!newclothes.includes(d) && !equipped) {
+            if (!process.userevents[userID].dollprocessing.existingbarcodelogged) {
+                // Existing Barcode Detection And Messaging
                 data.addclothing = true;
-                if (d.includes("catsuit")) { 
-                    data.catsuit = true 
-                }
+                data.existing_barcode = true;
+                data.textdata.c1 = getWearableName(undefined, d); // wearable name
+                data.textdata.c2 = process.userevents[userID].dollprocessing.doll_id;
+                messageSendChannel(getText(data), process.recentmessages[userID]);
+                equipped = true;
+                process.userevents[userID].dollprocessing.existingbarcodelogged = true;
+                return;
+            } else if (!newclothes.includes(d) && !equipped) {
+                data.addclothing = true;
+                if (d.includes("catsuit")) {
+                    data.catsuit = true
+                } 
                 else {
                     data[d] = true;
-                } 
+                }
                 data.textdata.c1 = getWearableName(undefined, d), // wearable name
-                assignWearable(userID, d);
+                    assignWearable(userID, d);
                 messageSendChannel(getText(data), process.recentmessages[userID])
                 equipped = true;
                 return;
-            } 
+            }
         })
         if (equipped) { return }
         // Done applying clothes, advance to next stage. 
@@ -110,21 +127,21 @@ let functiontick = async (userID) => {
         }
         // We are applying restraints if at a high enough stage!
         if (process.userevents[userID].dollprocessing.stage == 2) {
-            data.applyingrestraints = true; 
+            data.applyingrestraints = true;
             let appliedrestraint = false;
             // Apply mittens if the doll is not wearing them. 
             if (!getMitten(userID) || (getMitten(userID) && (getMitten(userID).mittenname != "mittens_cyberdoll"))) {
                 data.mitten = true;
                 if (getMitten(userID)) {
                     data.textdata.c1 = getMittenName(undefined, getMitten(userID).mittenname) ?? "mittens", // mitten name
-                    assignMitten(userID, "mittens_cyberdoll", getMitten(userID).origbinder)
+                        assignMitten(userID, "mittens_cyberdoll", getMitten(userID).origbinder)
                     data.replace = true;
                     appliedrestraint = true;
                 }
                 else {
                     assignMitten(userID, "mittens_cyberdoll", targetobject.id)
                     data.textdata.c1 = getMittenName(undefined, "mittens_cyberdoll") ?? "mittens", // mitten name
-                    data.add = true;
+                        data.add = true;
                     appliedrestraint = true;
                 }
                 messageSendChannel(getText(data), process.recentmessages[userID])
@@ -134,14 +151,14 @@ let functiontick = async (userID) => {
                 data.chastitybelt = true;
                 if (getChastity(userID)) {
                     data.textdata.c1 = getChastityName(undefined, getChastity(userID).chastitytype) ?? "chastity belt", // mitten name
-                    process.chastity[userID].chastitytype = "belt_cyberdoll"
+                        process.chastity[userID].chastitytype = "belt_cyberdoll"
                     data.replace = true;
                     appliedrestraint = true;
                 }
                 else {
                     assignChastity(userID, targetobject.id, "belt_cyberdoll")
                     data.textdata.c1 = getChastityName(undefined, "belt_cyberdoll") ?? "chastity belt", // mitten name
-                    data.add = true;
+                        data.add = true;
                     appliedrestraint = true;
                 }
                 messageSendChannel(getText(data), process.recentmessages[userID])
@@ -151,14 +168,14 @@ let functiontick = async (userID) => {
                 data.chastitybra = true;
                 if (getChastityBra(userID)) {
                     data.textdata.c1 = getChastityBraName(undefined, getChastityBra(userID).chastitytype) ?? "chastity bra", // mitten name
-                    process.chastitybra[userID].chastitytype = "bra_cyberdoll"
+                        process.chastitybra[userID].chastitytype = "bra_cyberdoll"
                     data.replace = true;
                     appliedrestraint = true;
                 }
                 else {
                     assignChastityBra(userID, targetobject.id, "bra_cyberdoll")
                     data.textdata.c1 = getChastityBraName(undefined, "bra_cyberdoll") ?? "chastity bra", // mitten name
-                    data.add = true;
+                        data.add = true;
                     appliedrestraint = true;
                 }
                 messageSendChannel(getText(data), process.recentmessages[userID])
@@ -168,14 +185,14 @@ let functiontick = async (userID) => {
                 data.collar = true;
                 if (getCollar(userID)) {
                     data.textdata.c1 = getCollarName(undefined, getCollar(userID).collartype) ?? "collar", // mitten name
-                    process.collar[userID].collartype = "collar_cyberdoll"
+                        process.collar[userID].collartype = "collar_cyberdoll"
                     data.replace = true;
                     appliedrestraint = true;
                 }
                 else {
-                    assignCollar(userID, targetobject.id, { }, false, "collar_cyberdoll")
+                    assignCollar(userID, targetobject.id, {}, false, "collar_cyberdoll")
                     data.textdata.c1 = getCollarName(undefined, "collar_cyberdoll") ?? "collar", // mitten name
-                    data.add = true;
+                        data.add = true;
                     appliedrestraint = true;
                 }
                 messageSendChannel(getText(data), process.recentmessages[userID])
@@ -184,7 +201,7 @@ let functiontick = async (userID) => {
             else if (!getHeadwear(userID).some((d) => DOLLVISORS.includes(d))) {
                 data.headwear = true;
                 data.textdata.c1 = getHeadwearName(undefined, "doll_visor"), // mitten name
-                assignHeadwear(userID, "doll_visor", targetobject.id)
+                    assignHeadwear(userID, "doll_visor", targetobject.id)
                 data.add = true;
                 appliedrestraint = true;
                 messageSendChannel(getText(data), process.recentmessages[userID])
@@ -193,6 +210,7 @@ let functiontick = async (userID) => {
             if (!appliedrestraint) {
                 process.userevents[userID].dollprocessing.stage++
                 data.done = true;
+                data.textdata.c2 = process.userevents[userID].dollprocessing.doll_id;
                 messageSendChannel(getText(data), process.recentmessages[userID])
                 return;
             }
