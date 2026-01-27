@@ -35,12 +35,12 @@ const NO_CHASTITY = {
 	maxDecay: null,
 	orgasmCooldown: 1,
 	orgasmArousalLeft: 0,
-	onOrgasm(user, prevArousal) {},
-	onFailedOrgasm(user, prevArousal) {},
-	onEquip(user) {},
-	onUnequip(user) {},
-	onFumble(wearer, keyholder, fumbleResult) {},
-	afterArousalChange(user, prevArousal, newArousal) {},
+	onOrgasm(user, prevArousal) { },
+	onFailedOrgasm(user, prevArousal) { },
+	onEquip(user) { },
+	onUnequip(user) { },
+	onFumble(wearer, keyholder, fumbleResult) { },
+	afterArousalChange(user, prevArousal, newArousal) { },
 	canUnequip(user) {
 		return true;
 	},
@@ -61,12 +61,12 @@ const DEFAULT_BELT = {
 	maxDecay: null,
 	orgasmCooldown: 1,
 	orgasmArousalLeft: 0,
-	onOrgasm(user, prevArousal) {},
-	onFailedOrgasm(user, prevArousal) {},
-	onEquip(user) {},
-	onUnequip(user) {},
-	onFumble(wearer, keyholder, fumbleResult) {},
-	afterArousalChange(user, prevArousal, newArousal) {},
+	onOrgasm(user, prevArousal) { },
+	onFailedOrgasm(user, prevArousal) { },
+	onEquip(user) { },
+	onUnequip(user) { },
+	onFumble(wearer, keyholder, fumbleResult) { },
+	afterArousalChange(user, prevArousal, newArousal) { },
 	canUnequip(user) {
 		return true;
 	},
@@ -87,12 +87,12 @@ const DEFAULT_BRA = {
 	maxDecay: null,
 	orgasmCooldown: 1,
 	orgasmArousalLeft: 0,
-	onOrgasm(user, prevArousal) {},
-	onFailedOrgasm(user, prevArousal) {},
-	onEquip(user) {},
-	onUnequip(user) {},
-	onFumble(wearer, keyholder, fumbleResult) {},
-	afterArousalChange(user, prevArousal, newArousal) {},
+	onOrgasm(user, prevArousal) { },
+	onFailedOrgasm(user, prevArousal) { },
+	onEquip(user) { },
+	onUnequip(user) { },
+	onFumble(wearer, keyholder, fumbleResult) { },
+	afterArousalChange(user, prevArousal, newArousal) { },
 	canUnequip(user) {
 		return true;
 	},
@@ -138,6 +138,35 @@ const chastitytypes = [
 		orgasmCooldown: 0.05,
 		orgasmArousalLeft: 0.05
 	},
+	{
+		name: "Livingwood Belt",
+		value: "belt_livingwood",
+		growthCoefficient: 1,
+		decayCoefficient: 0.1,
+		denialCoefficient: 5,
+		orgasmCooldown: 1,
+		minVibe: 0,
+		//Increment Vibe every 15 minutes
+		minVibeFn: (user) => minVibe = Math.max(Math.min(Math.floor((Date.now() - (getUserVar(user, "livingwoodbelt") ?? Date.now())) / 900000), 20), getUserVar(user, "livingwoodvibe")),
+		onOrgasm(user, prevArousal) {
+			setUserVar(user, "livingwoodvibe", Math.max((minVibe -= 10), 0));
+			setUserVar(user, "livingwoodbelt", Date.now());
+		},
+		onFailedOrgasm(user, prevArousal) {
+			setUserVar(user, "livingwoodvibe", Math.min((minVibe += 1), 20));
+		},
+		onEquip(user) {
+			setUserVar(user, "livingwoodvibe", 0);
+			setUserVar(user, "livingwoodbelt", Date.now());
+		},
+		onUnequip(user) {
+			setUserVar(user, "livingwoodvibe", {});
+			setUserVar(user, "livingwoodbelt", {});
+		},
+		afterArousalChange(user, prevArousal, newArousal) {
+			// console.log(minVibe, Math.min(Math.floor((Date.now() - (getUserVar(user, "livingwoodbelt") ?? Date.now())) / 900000), 20), Math.max(Math.min(Math.floor((Date.now() - (getUserVar(user, "livingwoodbelt") ?? Date.now())) / 900000), 20), getUserVar(user, "livingwoodvibe")));
+		},
+	},
 ];
 
 const chastitybratypes = [
@@ -153,6 +182,14 @@ const chastitybratypes = [
 	{ name: "Maid Chastity Bra", value: "bra_maid", growthCoefficient: 1, decayCoefficient: 0.6, denialCoefficient: 3 },
 	{ name: "Queensbra", value: "bra_queen", growthCoefficient: 1, decayCoefficient: 0.6, denialCoefficient: 4 },
 	{ name: "Starmetal Bra", value: "bra_starmetal", growthCoefficient: 1, decayCoefficient: 0.6, denialCoefficient: 3 },
+	{
+		name: "Livingwood Bra",
+		value: "bra_livingwood",
+		growthCoefficient: 1,
+		decayCoefficient: 0.3,
+		denialCoefficient: 3,
+		minVibe: 0,
+	},
 ];
 
 const chastitytypesoptions = chastitytypes.map((chastity) => ({ name: chastity.name, value: chastity.value }));
@@ -188,7 +225,7 @@ const ORGASM_COOLDOWN = 60 * 1000;
 // the frustration increase caused by failed orgasms
 const ORGASM_FRUSTRATION = 5;
 const AROUSAL_STEP_SIZE = Number(process.env.AROUSALSTEPSIZE ?? "6000") ?? 6000;
-const AROUSAL_STEP_SIZE_SCALING = AROUSAL_STEP_SIZE / 60000;
+const AROUSAL_STEP_SIZE_SCALING = AROUSAL_STEP_SIZE / 60000; // This just aint even used. 
 // how large an impact the arousal variance has
 const AROUSAL_PERIOD_AMPLITUDE = 0.3;
 // the inverses of the period lengths used for arousal variance. The lengths should be coprime
@@ -276,7 +313,7 @@ const removeChastityBra = (user, force = false) => {
 };
 
 function swapChastity(user, namedchastity) {
-	if(process.chastity == undefined) {
+	if (process.chastity == undefined) {
 		process.chastity = {};
 	}
 	let traits = getChastityTraits(user);
@@ -293,7 +330,7 @@ function swapChastity(user, namedchastity) {
 }
 
 function swapChastityBra(user, namedchastity) {
-	if(process.chastitybra == undefined) {
+	if (process.chastitybra == undefined) {
 		process.chastitybra = {};
 	}
 	let traits = getChastityBraTraits(user);

@@ -22,7 +22,7 @@ const maid_outfit = [
     { category: "wearable", itemtowear: "maid_dress", color: "Black" },
     { category: "wearable", itemtowear: "maid_apron", color: null },
     { category: "gag", itemtowear: "politeSub", color: null },
-    { category: "collar", itemtowear: "collar_maid", color: null },
+    { category: "collar", itemtowear: "collar_maidtraining", color: null },
     { category: "headwear", itemtowear: "mask_kigu_cutemaid", color: null },
     { category: "wearable", itemtowear: "maid_headdress", color: null },
     { category: "heavy", itemtowear: "straitjacket_maid", color: null },
@@ -44,6 +44,7 @@ const ponygirl_outfit = [
 
 const bunnygirl_outfit = [
     { category: "wearable", itemtowear: "outfit_playbunny_headwear", color: "Blue" },
+    { category: "chastitybelt", itemtowear: "belt_ardour", color: null },
     { category: "wearable", itemtowear: "bunnytights", color: "White" },
     { category: "wearable", itemtowear: "suit_outfit", color: "Playbunny" },
     { category: "wearable", itemtowear: "highheels", color: "Blue" },
@@ -137,6 +138,7 @@ const rogue_outfit = [
 const dancer_outfit = [
     { category: "headwear", itemtowear: "blindfold_cloth", color: null },
     { category: "collar", itemtowear: "collar_moon", color: null },
+    { category: "chastitybelt", itemtowear: "belt_ardour", color: null },
     { category: "wearable", itemtowear: "armbands", color: "Gold" },
     { category: "wearable", itemtowear: "bracelets", color: "Gold" },
     { category: "wearable", itemtowear: "anklets", color: "Gold" },
@@ -276,6 +278,23 @@ const cheerleader_outfit = [
     { category: "headwear", itemtowear: "mask_kigu_teto", color: null },
 ];
 
+const dryad_outfit = [
+    { category: "wearable", itemtowear: "anklets", color: "Floral" },
+    { category: "wearable", itemtowear: "bracelets", color: "Floral" },
+    { category: "wearable", itemtowear: "gloves_fingerlesselbow", color: "Green" },
+    { category: "mittens", itemtowear: "mittens_leather", color: null },
+    { category: "wearable", itemtowear: "armbands", color: "Livingwood" },
+    { category: "chastitybra", itemtowear: "bra_livingwood", color: null },
+    { category: "chastitybelt", itemtowear: "belt_livingwood", color: null },
+    { category: "collar", itemtowear: "collar_livingwood", color: null },
+    { category: "gag", itemtowear: "ball", color: null },
+    { category: "headwear", itemtowear: "blindfold_floral", color: null },
+    { category: "wearable", itemtowear: "bikini", color: "Leaf" },
+    { category: "wearable", itemtowear: "pareo", color: "Leafy" },
+    { category: "wearable", itemtowear: "sandals_strappy", color: "Leafy" },
+    { category: "heavy", itemtowear: "entangling_vines", color: null },
+];
+
 
 const mimicCostumes = {
     maid_outfit: maid_outfit,
@@ -295,6 +314,7 @@ const mimicCostumes = {
     mermaid_outfit: mermaid_outfit,
     mer_maid_outfit: mer_maid_outfit,
     cheerleader_outfit: cheerleader_outfit,
+    dryad_outfit: dryad_outfit,
 };
 
 //*/ Shuffler Application
@@ -439,7 +459,7 @@ let functiontick = async (userID) => {
     }
 
     // Apply Outfit Items once stripped until last index of array is reached or a heavy item is found
-    if (process.userevents[userID].costumermimic.stage >= 4 && process.userevents[userID].costumermimic.costumeidx < mimicCostumes[process.userevents[userID].costumermimic.outfit].length  && nextitem.category != "heavy") {
+    if (process.userevents[userID].costumermimic.stage >= 4 && process.userevents[userID].costumermimic.costumeidx < mimicCostumes[process.userevents[userID].costumermimic.outfit].length && nextitem.category != "heavy") {
 
         data.applyingOutfit = true;
         switch (nextitem.category) {
