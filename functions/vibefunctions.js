@@ -513,26 +513,26 @@ function getCombinedTraits(user) {
     let props = Object.keys(beltbase)
     props.forEach((f) => {
         if ((typeof f === "function") && (f.startsWith("on"))) {
-            returnobject[f] = (data) => {
+            returnobject[f] = function (data) {
                 beltbase[f](data);
                 brabase[f](data);
             }
         }
         // canEquip and canUnlock, maybe eventually add other stuff like canOrgasm :D
         if ((typeof f === "function") && (f.startsWith("can"))) {
-            returnobject[f] = (data) => {
+            returnobject[f] = function (data) {
                 return beltbase[f](data) && brabase[f](data)
             }
         }
     })
     // Extra props that aren't listed
     // Note, fumbles are NOT listed here, but we can add them later if needed. 
-    returnobject.afterArousalChange = (data) => {
+    returnobject.afterArousalChange = function (data) {
         beltbase.afterArousalChange(data);
         brabase.afterArousalChange(data);
     }
     // Arousal gain as if wearer is wearing vibes - used for featherlight
-    returnobject.calcVibeEffect = (data) => {
+    returnobject.calcVibeEffect = function (data) {
         let sum = 0;
         sum = sum + beltbase.calcVibeEffect(data)
         sum = sum + brabase.calcVibeEffect(data)
@@ -1342,7 +1342,7 @@ function updateArousalValues() {
 			arousal.prev = arousal.arousal;
 			// mathematically it would never reach 0 so reset it to 0 if low enough here
 			arousal.arousal = next < RESET_LIMIT ? 0 : next;
-			traits.afterArousalChange(user, arousal.prev, arousal.arousal);
+			traits.afterArousalChange({ userID: user, prevArousal: arousal.prev, currArousal: arousal.arousal });
 		}
 		if (process.readytosave == undefined) {
 			process.readytosave = {};
@@ -1453,7 +1453,7 @@ function tryOrgasm(user) {
 	const penalties = frustrationPenalties.get(user) ?? [];
 	penalties.push({ timestamp: now, value: 10, decay: 1 });
 	frustrationPenalties.set(user, penalties);
-	traits.onFailedOrgasm(user, arousal);
+	traits.onFailedOrgasm({ userID: user, arousal: arousal });
 
 	return false;
 }
