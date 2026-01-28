@@ -15,30 +15,35 @@ module.exports = {
 		.addBooleanOption((opt) => opt.setName("freeuse").setDescription("Allow public access (Free Use?"))
 		.addStringOption((opt) => opt.setName("type").setDescription("What kind of collar to wear...").setAutocomplete(true)),
 	async autoComplete(interaction) {
-		const focusedValue = interaction.options.getFocused();
-        let autocompletes = process.autocompletes.collar;
-        let matches = didYouMean(focusedValue, autocompletes, {
-            matchPath: ['name'], 
-            returnType: ReturnTypeEnums.ALL_SORTED_MATCHES, // Returns any match meeting 20% of the input
-            threshold: 0.2, // Default is 0.4 - this is how much of the word must exist. 
-        })
-        console.log(matches.slice(0,25))
-        if (matches.length == 0) {
-            matches = autocompletes;
-        }
-        let tags = getUserTags(interaction.user.id);
-        let newsorted = [];
-        matches.forEach((f) => {
-            let tagged = false;
-            let i = getBaseCollar(f.value)
-            tags.forEach((t) => {
-                if (i.tags && i.tags.includes(t)) { tagged = true }
+		try {
+            const focusedValue = interaction.options.getFocused();
+            let autocompletes = process.autocompletes.collar;
+            let matches = didYouMean(focusedValue, autocompletes, {
+                matchPath: ['name'], 
+                returnType: ReturnTypeEnums.ALL_SORTED_MATCHES, // Returns any match meeting 20% of the input
+                threshold: 0.2, // Default is 0.4 - this is how much of the word must exist. 
             })
-            if (!tagged) {
-                newsorted.push(f);
+            console.log(matches.slice(0,25))
+            if (matches.length == 0) {
+                matches = autocompletes;
             }
-        })
-        interaction.respond(newsorted.slice(0,25))
+            let tags = getUserTags(interaction.user.id);
+            let newsorted = [];
+            matches.forEach((f) => {
+                let tagged = false;
+                let i = getBaseCollar(f.value)
+                tags.forEach((t) => {
+                    if (i.tags && i.tags.includes(t)) { tagged = true }
+                })
+                if (!tagged) {
+                    newsorted.push(f);
+                }
+            })
+            interaction.respond(newsorted.slice(0,25))
+        }
+        catch (err) {
+            console.log(err);
+        }
 	},
 	async execute(interaction) {
 		try {

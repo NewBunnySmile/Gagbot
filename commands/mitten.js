@@ -14,31 +14,36 @@ module.exports = {
 		.setDescription("Put mittens on yourself, preventing /ungag on yourself and /gag on others")
 		.addStringOption((opt) => opt.setName("type").setDescription("What flavor of helpless mittens to wear...").setAutocomplete(true)),
 	async autoComplete(interaction) {
-		const focusedValue = interaction.options.getFocused();
-        let autocompletes = process.autocompletes.mitten;
-        let matches = didYouMean(focusedValue, autocompletes, {
-            matchPath: ['name'], 
-            returnType: ReturnTypeEnums.ALL_SORTED_MATCHES, // Returns any match meeting 20% of the input
-            threshold: 0.2, // Default is 0.4 - this is how much of the word must exist. 
-        })
-        console.log(matches.slice(0,25))
-        if (matches.length == 0) {
-            matches = autocompletes;
-        }
-        let tags = getUserTags(interaction.user.id);
-        let newsorted = [];
-        matches.forEach((f) => {
-            let tagged = false;
-            let i = getBaseMitten(f)
-            tags.forEach((t) => {
-                if (i.tags && (Array.isArray(i.tags)) && i.tags.includes(t)) { tagged = true }
-                else if (i.tags && (i.tags[t])) { tagged = true }
+		try {
+            const focusedValue = interaction.options.getFocused();
+            let autocompletes = process.autocompletes.mitten;
+            let matches = didYouMean(focusedValue, autocompletes, {
+                matchPath: ['name'], 
+                returnType: ReturnTypeEnums.ALL_SORTED_MATCHES, // Returns any match meeting 20% of the input
+                threshold: 0.2, // Default is 0.4 - this is how much of the word must exist. 
             })
-            if (!tagged) {
-                newsorted.push(f);
+            console.log(matches.slice(0,25))
+            if (matches.length == 0) {
+                matches = autocompletes;
             }
-        })
-        interaction.respond(newsorted.slice(0,25))
+            let tags = getUserTags(interaction.user.id);
+            let newsorted = [];
+            matches.forEach((f) => {
+                let tagged = false;
+                let i = getBaseMitten(f)
+                tags.forEach((t) => {
+                    if (i.tags && (Array.isArray(i.tags)) && i.tags.includes(t)) { tagged = true }
+                    else if (i.tags && (i.tags[t])) { tagged = true }
+                })
+                if (!tagged) {
+                    newsorted.push(f);
+                }
+            })
+            interaction.respond(newsorted.slice(0,25))
+        }
+        catch (err) {
+            console.log(err);
+        }
 	},
 	async execute(interaction) {
 		try {

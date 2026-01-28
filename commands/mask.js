@@ -16,33 +16,38 @@ module.exports = {
 		.addUserOption((opt) => opt.setName("user").setDescription("Who to apply headwear to?"))
 		.addStringOption((opt) => opt.setName("type").setDescription("What headwear to wear...").setAutocomplete(true)),
 	async autoComplete(interaction) {
-        const focusedValue = interaction.options.getFocused();
-        let chosenuserid = interaction.options.get("user")?.value ?? interaction.user.id; // Note we can only retrieve the user ID here!
-        let itemsworn = getHeadwear(chosenuserid);
-        let autocompletes = process.headtypes.filter((f) => !itemsworn.includes(f.value));
-        let matches = didYouMean(focusedValue, autocompletes, {
-            matchPath: ['name'], 
-            returnType: ReturnTypeEnums.ALL_SORTED_MATCHES, // Returns any match meeting 20% of the input
-            threshold: 0.2, // Default is 0.4 - this is how much of the word must exist. 
-        })
-        console.log(matches.slice(0,25))
-        if (matches.length == 0) {
-            matches = autocompletes;
-        }
-        let tags = getUserTags(chosenuserid);
-        let newsorted = [];
-        matches.forEach((f) => {
-            let tagged = false;
-            let i = getBaseHeadwear(f.value)
-            tags.forEach((t) => {
-                if (i.tags && (Array.isArray(i.tags)) && i.tags.includes(t)) { tagged = true }
-                else if (i.tags && (i.tags[t])) { tagged = true }
+        try {
+            const focusedValue = interaction.options.getFocused();
+            let chosenuserid = interaction.options.get("user")?.value ?? interaction.user.id; // Note we can only retrieve the user ID here!
+            let itemsworn = getHeadwear(chosenuserid);
+            let autocompletes = process.headtypes.filter((f) => !itemsworn.includes(f.value));
+            let matches = didYouMean(focusedValue, autocompletes, {
+                matchPath: ['name'], 
+                returnType: ReturnTypeEnums.ALL_SORTED_MATCHES, // Returns any match meeting 20% of the input
+                threshold: 0.2, // Default is 0.4 - this is how much of the word must exist. 
             })
-            if (!tagged) {
-                newsorted.push(f);
+            console.log(matches.slice(0,25))
+            if (matches.length == 0) {
+                matches = autocompletes;
             }
-        })
-        interaction.respond(newsorted.slice(0,25))
+            let tags = getUserTags(chosenuserid);
+            let newsorted = [];
+            matches.forEach((f) => {
+                let tagged = false;
+                let i = getBaseHeadwear(f.value)
+                tags.forEach((t) => {
+                    if (i.tags && (Array.isArray(i.tags)) && i.tags.includes(t)) { tagged = true }
+                    else if (i.tags && (i.tags[t])) { tagged = true }
+                })
+                if (!tagged) {
+                    newsorted.push(f);
+                }
+            })
+            interaction.respond(newsorted.slice(0,25))
+        }
+        catch (err) {
+            console.log(err);
+        }
 	},
 	async execute(interaction) {
 		try {

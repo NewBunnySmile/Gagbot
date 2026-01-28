@@ -15,35 +15,40 @@ module.exports = {
 		.addUserOption((opt) => opt.setName("user").setDescription("Who to apply fashion to?"))
 		.addStringOption((opt) => opt.setName("type").setDescription("What fashion to wear...").setAutocomplete(true)),
 	async autoComplete(interaction) {
-        let chosenuserid = interaction.options.get("user")?.value ?? interaction.user.id; // Note we can only retrieve the user ID here!
-        let itemsworn = getWearable(chosenuserid);
+        try {
+            let chosenuserid = interaction.options.get("user")?.value ?? interaction.user.id; // Note we can only retrieve the user ID here!
+            let itemsworn = getWearable(chosenuserid);
 
-        // Remove anything we're already wearing from the list
-        const focusedValue = interaction.options.getFocused();
-        let autocompletes = process.autocompletes.wearables.filter((f) => !itemsworn.includes(f.value));
-        console.log(autocompletes)
-        let matches = didYouMean(focusedValue, autocompletes, {
-            matchPath: ['name'], 
-            returnType: ReturnTypeEnums.ALL_SORTED_MATCHES, // Returns any match meeting 20% of the input
-            threshold: 0.2, // Default is 0.4 - this is how much of the word must exist. 
-        })
-        if (matches.length == 0) {
-            matches = autocompletes.slice(0,25);
-        }
-        let tags = getUserTags(chosenuserid);
-        let newsorted = [];
-        matches.forEach((f) => {
-            let tagged = false;
-            let i = process.wearabletypes.find((w) => w.value == f.value)
-            tags.forEach((t) => {
-                if (i.tags && (Array.isArray(i.tags)) && i.tags.includes(t)) { tagged = true }
-                else if (i.tags && (i.tags[t])) { tagged = true }
+            // Remove anything we're already wearing from the list
+            const focusedValue = interaction.options.getFocused();
+            let autocompletes = process.autocompletes.wearables.filter((f) => !itemsworn.includes(f.value));
+            console.log(autocompletes)
+            let matches = didYouMean(focusedValue, autocompletes, {
+                matchPath: ['name'], 
+                returnType: ReturnTypeEnums.ALL_SORTED_MATCHES, // Returns any match meeting 20% of the input
+                threshold: 0.2, // Default is 0.4 - this is how much of the word must exist. 
             })
-            if (!tagged) {
-                newsorted.push(f);
+            if (matches.length == 0) {
+                matches = autocompletes.slice(0,25);
             }
-        })
-        interaction.respond(newsorted.slice(0,25))
+            let tags = getUserTags(chosenuserid);
+            let newsorted = [];
+            matches.forEach((f) => {
+                let tagged = false;
+                let i = process.wearabletypes.find((w) => w.value == f.value)
+                tags.forEach((t) => {
+                    if (i.tags && (Array.isArray(i.tags)) && i.tags.includes(t)) { tagged = true }
+                    else if (i.tags && (i.tags[t])) { tagged = true }
+                })
+                if (!tagged) {
+                    newsorted.push(f);
+                }
+            })
+            interaction.respond(newsorted.slice(0,25))
+        }
+        catch (err) {
+            console.log(err);
+        }
 	},
 	async execute(interaction) {
 		try {
