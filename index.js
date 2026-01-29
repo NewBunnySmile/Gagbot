@@ -12,7 +12,7 @@ const { loadHeavyTypes } = require('./functions/heavyfunctions.js');
 const { loadHeadwearTypes } = require('./functions/headwearfunctions.js')
 const { assignCorset } = require('./functions/corsetfunctions.js');
 const { assignMemeImages } = require('./functions/interactivefunctions.js');
-const { backupsAreAnnoying, saveFiles, processUnlockTimes, processTimedEvents, importFileNames } = require('./functions/timefunctions.js');
+const { backupsAreAnnoying, saveFiles, processUnlockTimes, processTimedEvents, importFileNames, scavengeUsers } = require('./functions/timefunctions.js');
 const { loadEmoji } = require("./functions/messagefunctions.js");
 const { loadWearables } = require("./functions/wearablefunctions.js");
 const { knownServer, setGlobalCommands, loadWebhooks, getBotOption } = require('./functions/configfunctions.js');
@@ -268,6 +268,11 @@ client.on("clientReady", async () => {
         // Load webhooks
         await loadWebhooks(client);
         //console.log(`Webhook Channels: [${Array.from(process.webhook.keys()).join(", ")}]`)
+
+        scavengeUsers(client);
+        setInterval(() => {
+            scavengeUsers(client);
+        }, 3600000);
     }
     catch (err) {
         console.log(err)
