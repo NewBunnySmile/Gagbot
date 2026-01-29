@@ -21,7 +21,6 @@ module.exports = {
 			let itemslocked = getLockedWearable(chosenuserid);
 
 			// Remove anything we're already wearing from the list
-            console.log(process.autocompletes.wearables)
 			let sorted = process.autocompletes.wearables.filter((f) => itemsworn.includes(f.value));
 			sorted = sorted.filter((f) => !itemslocked.includes(f.value));
 			await interaction.respond(sorted.slice(0, 10));
