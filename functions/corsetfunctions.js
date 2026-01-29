@@ -76,7 +76,7 @@ function corsetLimitWords(text, parent, user, msgModified) {
 				return;
 			}
 			if (escaped) return;
-			if (char.match(/[a-zA-Z]/)) idxMap.push(idx);
+			if (char.match(/[a-zA-Z\d]/)) idxMap.push(idx);
 			else if (idxMap.length > 0 && char.match(/\s/)) idxMap.push(idx);
 		});
 
