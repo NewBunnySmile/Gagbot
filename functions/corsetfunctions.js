@@ -92,7 +92,31 @@ const corsets = [
 	},
 ];
 
-const lookup = new Map(corsets.map((corset) => [corset.type, corset]));
+function setUpCorsets() {
+    let corsetsfunctionsroot = path.join(__dirname, "..", "corset");
+    let newcorsetref = require(`${corsetsfunctionsroot}/defaultcorset.js`);
+    let corsettypes = fs.readdirSync(corsetsfunctionsroot)
+    corsettypes.forEach((foldertype) => {
+        if (foldertype != "defaultcorset.js") {
+            let newcorset = new newcorsetref.Corset(); // Instantiate a copy of the corset object.
+            let specificcorset = require(`${corsetsfunctionsroot}/${foldertype}`);
+            let specificcorsetoverrides = Object.keys(specificcorset);
+            specificcorsetoverrides.forEach((specificover) => {
+                newcorset[specificover] = specificcorset[specificover]
+            })
+            if (process.corsettypes == undefined) { process.corsettypes = {} };
+            // Push to corsettypes for reference by corset functions
+            process.corsettypes[foldertype.replace(".js", "")] = newcorset;
+            if (process.autocompletes == undefined) { process.autocompletes = {} }
+            if (process.autocompletes.corset == undefined) { process.autocompletes.corset = [] }
+            process.autocompletes.corset.push({ name: newcorset.name, value: foldertype.replace(".js", "") })
+        }
+    })
+}
+
+function getBaseCorset(corsettype) {
+    return process.corsettypes[corsettype];
+}
 
 // NOTE: Encapsulate gaspSounds in EOT characters so the Doll Visor doesn't split on them.
 const gaspSounds = ["*hff*", "*hnnf*", "*ahff*", "*hhh*", "*nnh*", "*hnn*", "*hng*", "*uah*", "*uhf*"];
@@ -101,18 +125,27 @@ const silenceMessages = ["-# *Panting heavily*", "-# *Completely out of breath*"
 
 const assignCorset = (user, type, tightness, origbinder) => {
 	if (process.corset == undefined) process.corset = {};
-	const old = process.corset[user];
-	const currentBreath = old ? getBreath(user) : null;
+	const old = Object.assign({}, process.corset[user]);
+	const currentBreath = process.corset[user] ? getBreath(user) : null;
 	let originalbinder = old?.origbinder;
-	type ??= old?.type ?? DEFAULT_CORSET.type;
-	const newMaxBreath = lookup.get(type)?.maxBreath ?? DEFAULT_CORSET.maxBreath;
-	process.corset[user] = {
+    if (old && old.type != type) { 
+        // Call the unequip function on the old corset
+        getBaseCorset(old?.type)?.onUnequip({ userID: user, oldcorset: old })
+    }
+    const newMaxBreath = getBaseCorset(type)?.getMaxBreath({ tightness: 0 }) ?? getBaseCorset("corset_leather").getMaxBreath({ tightness: 0 });
+    process.corset[user] = {
 		tightness: tightness ?? old?.tightness ?? 5,
-		breath: currentBreath ? Math.min(currentBreath, newMaxBreath[tightness]) : newMaxBreath[tightness],
+		breath: currentBreath ? Math.min(currentBreath, newMaxBreath) : newMaxBreath,
 		timestamp: Date.now(),
 		origbinder: originalbinder ?? origbinder, // Preserve original binder until it is removed.
 		type: type,
 	};
+    if (old.type == type) {
+        getBaseCorset(old?.type)?.onAdjustTightness({ userID: user, oldTightness: old.tightness, newTightness: tightness })
+    }
+    if (old.type != type) {
+        getBaseCorset(type)?.onEquip({ userID: user })
+    }
 	if (process.readytosave == undefined) {
 		process.readytosave = {};
 	}
@@ -122,9 +155,6 @@ const assignCorset = (user, type, tightness, origbinder) => {
 const getCorset = (user) => {
 	if (process.corset == undefined) process.corset = {};
 	const corset = process.corset[user];
-	if (!corset) return corset;
-	const traits = lookup.get(corset?.type ?? DEFAULT_CORSET.type) ?? DEFAULT_CORSET;
-	for (const trait of TRAITS) corset[trait] = traits[trait];
 	return corset;
 };
 
@@ -155,6 +185,7 @@ function corsetLimitWords(text, parent, user, msgModified) {
 	// Bad bottom for shouting! Corsets should make you SILENT. Double all breath used.
 	let globalMultiplier = scriptLevel > 0 ? 2 : 1;
 	const corset = calcBreath(user);
+    const basecorset = getBaseCorset(corset.type)
 
 	// Tightlaced bottoms must only whisper
 	if (corset.tightness >= 7 && scriptLevel >= 0) globalMultiplier *= 2;
@@ -214,7 +245,7 @@ function corsetLimitWords(text, parent, user, msgModified) {
 				else if (corset.tightness >= 3 && capitals > 4) syllable = syllable.toLowerCase();
 
 				let ended = false;
-				if (corset.breath < corset.silenceLimit[corset.tightness] && i >= corset.minWords[corset.tightness]) {
+				if (corset.breath < basecorset.getSilenceLimit({ tightness: corset.tightness }) && i >= basecorset.getMinWords({ tightness: corset.tightness })) {
 					if (!silence) {
 						ended = true;
 						silenceIdx = currIdx;
@@ -224,7 +255,7 @@ function corsetLimitWords(text, parent, user, msgModified) {
 
 				// add gasping sounds once at half of max breath
 				let gasp = "";
-				if (!silence && corset.breath < corset.gaspLimit[corset.tightness] && Math.random() < corset.gaspCoefficient * Math.min(corset.tightness / 10, 1 - (corset.breath - corset.silenceLimit[corset.tightness]) / (corset.gaspLimit[corset.tightness] - corset.silenceLimit[corset.tightness]))) {
+				if (!silence && corset.breath < basecorset.getGaspLimit({ tightness: corset.tightness }) && Math.random() < basecorset.gaspCoefficient * Math.min(corset.tightness / 10, 1 - (corset.breath - basecorset.getSilenceLimit({ tightness: corset.tightness }) / (basecorset.getGaspLimit({ tightness: corset.tightness }) - basecorset.getSilenceLimit({ tightness: corset.tightness }))))) {
 					if (j == 0) gasp = gaspSounds[Math.floor(Math.random() * gaspSounds.length)] + " ";
 					else gasp = "-" + gaspSounds[Math.floor(Math.random() * gaspSounds.length)] + "-";
 				}
@@ -240,7 +271,7 @@ function corsetLimitWords(text, parent, user, msgModified) {
 		}
 	}
 
-	corset.afterUsingBreath(user, corset);
+	basecorset.afterUsingBreath({ userID: user, corset: corset });
 
 	let outtext = (silence ? chars.slice(0, silenceIdx + 1) : chars).join("");
 
@@ -263,8 +294,9 @@ function corsetLimitWords(text, parent, user, msgModified) {
 // calculates current breath and returns corset. Does not save to file.
 function calcBreath(user) {
 	const corset = getCorset(user);
+    const basecorset = getBaseCorset(corset.type)
 	if (!corset) return null;
-	if (corset.breath < corset.minBreath[corset.tightness]) corset.breath = corset.minBreath[corset.tightness];
+	if (corset.breath < basecorset.getMinBreath({ tightness: corset.tightness })) corset.breath = basecorset.getMinBreath({ tightness: corset.tightness });
 	const now = Date.now();
 	let recoveryCoefficient = 1;
 	if (process.gags == undefined) process.gags = {};
@@ -279,8 +311,8 @@ function calcBreath(user) {
 			}
 		});
 	}
-	const newBreath = corset.breath + corset.breathRecovery[corset.tightness] * ((now - corset.timestamp) / 1000) * recoveryCoefficient;
-	if (newBreath > corset.maxBreath[corset.tightness]) corset.breath = corset.maxBreath[corset.tightness];
+	const newBreath = corset.breath + basecorset.getBreathRecovery({ tightness: corset.tightness }) * ((now - corset.timestamp) / 1000) * recoveryCoefficient;
+	if (newBreath > basecorset.getMaxBreath({ tightness: corset.tightness })) corset.breath = basecorset.getMaxBreath({ tightness: corset.tightness });
 	else corset.breath = newBreath;
 	corset.timestamp = now;
 	return corset;
@@ -298,8 +330,9 @@ function getBreath(user) {
 // consumes specified breath and returns true if user had enough
 function tryExpendBreath(user, exertion) {
 	const corset = calcBreath(user);
+    const basecorset = getBaseCorset(corset.type ?? "corset_leather")
 	corset.breath -= exertion;
-	corset.afterUsingBreath(user, corset);
+	basecorset.afterUsingBreath({ userID: user, corset: corset });
 	if (process.readytosave == undefined) {
 		process.readytosave = {};
 	}
@@ -311,11 +344,9 @@ function silenceMessage() {
 	return silenceMessages[Math.floor(Math.random() * silenceMessages.length)];
 }
 
-exports.corsetChoices = corsets.map(({ type, name }) => ({ name: name, value: type }));
-exports.corsets = lookup;
-
 exports.assignCorset = assignCorset;
 exports.getCorset = getCorset;
+exports.getBaseCorset = getBaseCorset;
 exports.getCorsetBinder = getCorsetBinder;
 exports.removeCorset = removeCorset;
 exports.corsetLimitWords = corsetLimitWords;
@@ -323,3 +354,5 @@ exports.silenceMessage = silenceMessage;
 
 exports.getBreath = getBreath;
 exports.tryExpendBreath = tryExpendBreath;
+
+exports.setUpCorsets = setUpCorsets;

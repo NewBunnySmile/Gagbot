@@ -6,7 +6,7 @@ const { TextDisplayBuilder, MessageFlags, ButtonStyle, ActionRow, SectionBuilder
 const { getWearable, getLockedWearable, getWearableName, getBaseWearable } = require("./wearablefunctions");
 const { getGags, getMitten, getGag, convertGagText, getMittenName } = require("./gagfunctions");
 const { getCollar, canAccessCollar, getCollarName, getCollarTimelock, getCollarPerm, getCollarKeys, getClonedCollarKeysOwned } = require("./collarfunctions");
-const { getCorset } = require("./corsetfunctions");
+const { getCorset, getBaseCorset } = require("./corsetfunctions");
 const { getChastity, getVibe, getChastityTimelock, getArousal, getChastityKeys } = require("./vibefunctions");
 const { getChastityBra } = require("./vibefunctions");
 const { getHeadwear, getHeadwearName, getHeadwearRestrictions, getLockedHeadgear } = require("./headwearfunctions");
@@ -550,7 +550,7 @@ async function generateOutfitModal(userID, menu, page, options) {
 		if (!getCorset(userID)) {
 			texts = `${texts}Not worn`;
 		} else {
-			texts = `${texts}${getCorset(inspectuserID).name} laced to Length ${getCorset(userID).tightness}`;
+			texts = `${texts}${getBaseCorset(getCorset(inspectuserID).type).name} laced to Length ${getCorset(userID).tightness}`;
 		}
 		pagecomponents.push(
 			new SectionBuilder()
@@ -731,7 +731,7 @@ async function inspectModal(userID, inspectuserIDin, menu, page) {
         }
         // Corset
         if (getCorset(inspectuserID)) {
-            wearingtext = `${wearingtext}\n${process.emojis.corset} Corset: **${getCorset(inspectuserID).name} laced with strings at length ${getCorset(inspectuserID).tightness}**`
+            wearingtext = `${wearingtext}\n${process.emojis.corset} Corset: **${getBaseCorset(getCorset(inspectuserID).type).name} laced with strings at length ${getCorset(inspectuserID).tightness}**`
         }
         // Vibe
         if (getToys(inspectuserID).length > 0) {
@@ -893,7 +893,7 @@ async function inspectModal(userID, inspectuserIDin, menu, page) {
         }
         // Corset
         if (getCorset(inspectuserID)) {
-            wearingtext = `${wearingtext}\n${process.emojis.corset} Corset: **${getCorset(inspectuserID).name} laced with strings at length ${getCorset(inspectuserID).tightness}**`
+            wearingtext = `${wearingtext}\n${process.emojis.corset} Corset: **${getBaseCorset(getCorset(inspectuserID).type).name} laced with strings at length ${getCorset(inspectuserID).tightness}**`
         }
         // Vibe
         if (getToys(inspectuserID).length > 0) {

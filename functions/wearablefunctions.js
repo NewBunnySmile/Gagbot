@@ -320,7 +320,7 @@ const tagstoadd = [
  * Discord API Requires an array of objects in form:
  * { name: "Latex Armbinder", value: "armbinder_latex" }
  ********************/
-const loadWearables = () => {
+const loadWearables = async () => {
 	// Copy the array so we dont mutate the original lmao
 	let wearablestoadd = wearabletypes.slice(0);
 	// Iterate over each wearable type, filtering only the ones that are colorable.

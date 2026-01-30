@@ -10,7 +10,7 @@ const { handleKeyFinding } = require('./functions/keyfindingfunctions.js');
 const { restartChastityTimers } = require('./functions/timelockfunctions.js');
 const { loadHeavyTypes } = require('./functions/heavyfunctions.js');
 const { loadHeadwearTypes } = require('./functions/headwearfunctions.js')
-const { assignCorset } = require('./functions/corsetfunctions.js');
+const { assignCorset, setUpCorsets } = require('./functions/corsetfunctions.js');
 const { assignMemeImages } = require('./functions/interactivefunctions.js');
 const { backupsAreAnnoying, saveFiles, processUnlockTimes, processTimedEvents, importFileNames } = require('./functions/timefunctions.js');
 const { loadEmoji } = require("./functions/messagefunctions.js");
@@ -121,15 +121,6 @@ catch (err) {
     console.log(err);
 }
 
-try {
-    // add breath values for old corsets, this only needs to run once
-    for (const user in process.corset) {
-        if (!process.corset[user].breath) assignCorset(user, process.corset[user]?.tightness);
-    }
-} catch (err) { 
-    console.log(err);
-}
-
 // Later loaders for autocompletes
 gagtypesset();
 loadHeavyTypes(); 
@@ -141,6 +132,7 @@ assignMemeImages();
 
 setUpToys();
 setUpChastity();
+setUpCorsets();
 
 // Grab all the command files from the commands directory
 const commands = new Map();

@@ -1,13 +1,15 @@
 const { SlashCommandBuilder, MessageFlags } = require("discord.js");
-const { getChastity, getVibe, assignVibe, discardChastityKey, canAccessChastity } = require("./../functions/vibefunctions.js");
+const { getChastity, discardChastityKey, canAccessChastity } = require("./../functions/vibefunctions.js");
 const { getHeavy } = require("./../functions/heavyfunctions.js");
 const { getPronouns } = require("./../functions/pronounfunctions.js");
 const { getConsent, handleConsent } = require("./../functions/interactivefunctions.js");
-const { getCorset, assignCorset, corsetChoices, corsets } = require("./../functions/corsetfunctions.js");
+const { getCorset, assignCorset, getBaseCorset } = require("./../functions/corsetfunctions.js");
 const { rollKeyFumble } = require("../functions/keyfindingfunctions.js");
 const { getText, getTextGeneric } = require("./../functions/textfunctions.js");
 const { checkBondageRemoval, handleBondageRemoval } = require("../functions/interactivefunctions.js");
 const { config } = require("../functions/configfunctions.js");
+const { default: didYouMean, ReturnTypeEnums } = require("didyoumean2");
+const { getUserTags } = require("../functions/configfunctions.js");
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -15,13 +17,40 @@ module.exports = {
 		.setDescription("Put a corset on someone, shortening their messages")
 		.addUserOption((opt) => opt.setName("user").setDescription("Who to corset?"))
 		.addNumberOption((opt) => opt.setName("intensity").setDescription("How tightly to lace their corset!").setMinValue(1).setMaxValue(10))
-		.addStringOption((opt) =>
-			opt
-				.setName("type")
-				.setDescription("Which type of corset")
-				.addChoices(...corsetChoices),
-		),
-	async execute(interaction) {
+		.addStringOption((opt) => opt.setName("type").setDescription("Which type of corset").setAutocomplete(true)),
+    async autoComplete(interaction) {
+		try {
+            const focusedValue = interaction.options.getFocused();
+            let autocompletes = process.autocompletes.corset;
+            let matches = didYouMean(focusedValue, autocompletes, {
+                matchPath: ['name'], 
+                returnType: ReturnTypeEnums.ALL_SORTED_MATCHES, // Returns any match meeting 20% of the input
+                threshold: 0.2, // Default is 0.4 - this is how much of the word must exist. 
+            })
+            
+            if (matches.length == 0) {
+                matches = autocompletes;
+            }
+            let tags = getUserTags(interaction.user.id);
+            let newsorted = [];
+            matches.forEach((f) => {
+                let tagged = false;
+                let i = getBaseCorset(f.value)
+                tags.forEach((t) => {
+                    if (i.tags && (Array.isArray(i.tags)) && i.tags.includes(t)) { tagged = true }
+                    else if (i.tags && (i.tags[t])) { tagged = true }
+                })
+                if (!tagged) {
+                    newsorted.push(f);
+                }
+            })
+            interaction.respond(newsorted.slice(0,25))
+        }
+        catch (err) {
+            console.log(err);
+        }
+	},
+    async execute(interaction) {
 		try {
 			let corsetuser = interaction.options.getUser("user") ? interaction.options.getUser("user") : interaction.user;
 			// CHECK IF THEY CONSENTED! IF NOT, MAKE THEM CONSENT
@@ -46,7 +75,7 @@ module.exports = {
 					c1: getHeavy(interaction.user.id)?.type, // heavy bondage type
 					c2: tightness, // corset tightness
 					c3: current?.name ?? "Leather Corset", // current corset
-					c4: corsets.get(type)?.name ?? "Leather Corset", // new corset
+					c4: getBaseCorset(type)?.name ?? "Leather Corset", // new corset
 				},
 			};
 			// REFLECT
