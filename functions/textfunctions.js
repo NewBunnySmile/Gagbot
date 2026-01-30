@@ -1268,6 +1268,9 @@ const texts_toy = {
                 "Vibrator": [
                     `USER_TAG bucks USER_THEIR hips over towards a VAR_C2, but can't slip it in because USER_THEY USER_HAVE no hands to work with!`
                 ],
+                "Wand": [
+                    `USER_TAG squirms with USER_THEIR VAR_C1, but can't reach the buttons on a VAR_C2 to pleasure USER_THEMSELF.`
+                ],
                 default: [
                     `USER_TAG attempts to use reality defying magic to add a VAR_C2 to USER_THEMSELF, but can't because of USER_THEIR VAR_C1! (This is a bug, report)`
                 ]
@@ -1278,6 +1281,9 @@ const texts_toy = {
                 ],
                 "Vibrator": [
                     `USER_TAG bucks USER_THEIR hips over towards a VAR_C2 despite USER_THEIR VAR_C1, but USER_THEIR chastity belt prevents USER_THEM from putting the toy inside anyway.`
+                ],
+                "Wand": [
+                    `USER_TAG squirms with USER_THEIR VAR_C1, but can't get a grip on a VAR_C2 to pleasure USER_THEMSELF. (this is a bug, please report)`
                 ],
                 default: [
                     `USER_TAG attempts to use reality defying magic to add a VAR_C2 to USER_THEMSELF, but even if USER_THEY USER_WERE not in a VAR_C1, USER_THEY wouldn't be able to add it! (This is a bug, report)`
@@ -1292,6 +1298,9 @@ const texts_toy = {
                 "Vibrator": [
                     `USER_TAG bucks USER_THEIR hips over towards a VAR_C2, but can't slip it into TARGET_TAG because USER_THEY USER_HAVE no hands to work with!`
                 ],
+                "Wand": [
+                    `USER_TAG squirms with USER_THEIR VAR_C1, but can't get a grip on a VAR_C2 to pleasure TARGET_TAG!`
+                ],
                 default: [
                     `USER_TAG attempts to use reality defying magic to add a VAR_C2 to TARGET_TAG, but can't because of USER_THEIR VAR_C1! (This is a bug, report)`
                 ]
@@ -1302,6 +1311,9 @@ const texts_toy = {
                 ],
                 "Vibrator": [
                     `USER_TAG bucks USER_THEIR hips over towards a VAR_C2 despite USER_THEIR VAR_C1, but TARGET_TAG's chastity belt prevents USER_THEM from putting the toy inside anyway.`
+                ],
+                "Wand": [
+                    `USER_TAG squirms with USER_THEIR VAR_C1, but can't get a grip on a VAR_C2 to pleasure TARGET_TAG! (this is a bug, please report!)`
                 ],
                 default: [
                     `USER_TAG attempts to use reality defying magic to add a VAR_C2 to TARGET_TAG, but even if USER_THEY USER_WERE not in a VAR_C1, USER_THEY wouldn't be able to add it! (This is a bug, report)`
@@ -1350,6 +1362,11 @@ const texts_toy = {
                                 `USER_TAG puts the key in USER_THEIR belt, unlocking it and adjusting the VAR_C2 to VAR_C3 power! USER_THEY_CAP then closeUSER_S and lockUSER_S USER_THEMSELF back up.`
                             ]
                         },
+                        "Wand": {
+                            nofumble: [
+                                `USER_TAG grabs the VAR_C2 and clicks a button. It vibrates brilliantly at VAR_C3 as USER_THEY continue to rock USER_THEIR hips while holding it to USER_THEIR crotch!`
+                            ]
+                        },
                         default: {
                             fumble: {
                                 keyloss: {
@@ -1376,6 +1393,9 @@ const texts_toy = {
                         "Vibrator": [
                             `USER_TAG tries as USER_THEY might, but is unable to unlock USER_THEIR chastity belt to adjust USER_THEIR VAR_C2.`
                         ],
+                        "Wand": [
+                            `USER_TAG grabs the VAR_C2 but can't change it for some reason... Huh. (This is a bug, report)!`
+                        ],
                         default: [
                             `USER_TAG tries to adjust USER_THEIR VAR_C2, but some kind of reality-defying magic prevents USER_THEM! (This is a bug, report)`
                         ],
@@ -1387,6 +1407,9 @@ const texts_toy = {
                     ],
                     "Vibrator": [
                         `USER_TAG taps a button on the VAR_C2 USER_THEY USER_ISARE wearing! It vibrates at a strength of VAR_C3!`
+                    ],
+                    "Wand": [
+                        `USER_TAG grabs the VAR_C2 and clicks a button. It vibrates brilliantly at VAR_C3 as USER_THEY continue to rock USER_THEIR hips while holding it to USER_THEIR crotch!`
                     ],
                     default: [
                         `USER_TAG causes fuzzy shifting in the universe adjusting USER_THEIR VAR_C2 to VAR_C3! (This is a bug, report!)`
@@ -1432,6 +1455,11 @@ const texts_toy = {
                                 `USER_TAG puts the key in USER_THEIR belt, unlocking it and adding a VAR_C2, turned up to VAR_C3! USER_THEY_CAP then closeUSER_S and lockUSER_S USER_THEMSELF back up.`
                             ]
                         },
+                        "Wand": {
+                            nofumble: [
+                                `USER_TAG grabs a VAR_C2 and clicks a button. It vibrates brilliantly at VAR_C3 as USER_THEY feverishly shove it into USER_THEIR crotch!`
+                            ]
+                        },
                         default: {
                             fumble: {
                                 keyloss: {
@@ -1458,6 +1486,9 @@ const texts_toy = {
                         "Vibrator": [
                             `USER_TAG tries as USER_THEY might, but is unable to unlock USER_THEIR chastity belt to add a VAR_C2.`
                         ],
+                        "Wand": [
+                            `USER_TAG grabs a VAR_C2 but can't apply it for some reason... Huh. (This is a bug, report)!`
+                        ],
                         default: [
                             `USER_TAG tries to add a VAR_C2, but some kind of reality-defying magic prevents USER_THEM! (This is a bug, report)`
                         ],
@@ -1469,6 +1500,9 @@ const texts_toy = {
                     ],
                     "Vibrator": [
                         `USER_TAG grabs a VAR_C2 and inserts it into USER_THEMSELF at VAR_C3!`
+                    ],
+                    "Wand": [
+                        `USER_TAG grabs a VAR_C2 and clicks a button. It vibrates brilliantly at VAR_C3 as USER_THEY feverishly shove it into USER_THEIR crotch!`
                     ],
                     default: [
                         `USER_TAG potentially summons a black hole putting on a VAR_C2 at VAR_C3 power! (This is a bug, report!)`
@@ -1516,6 +1550,11 @@ const texts_toy = {
                                 `USER_TAG puts the key in TARGET_TAG's belt, unlocking it and adjusting the VAR_C2 to VAR_C3 power! USER_THEY_CAP then closeUSER_S and lockUSER_S TARGET_THEM back up.`
                             ]
                         },
+                        "Wand": {
+                            nofumble: [
+                                `USER_TAG grabs the VAR_C2 and clicks a button. It vibrates brilliantly at VAR_C3 as USER_THEY continue holding it against TARGET_TAG's crotch!`
+                            ]
+                        },
                         default: {
                             fumble: {
                                 keyloss: {
@@ -1542,6 +1581,9 @@ const texts_toy = {
                         "Vibrator": [
                             `USER_TAG tries as USER_THEY might, but is unable to unlock TARGET_TAG's chastity belt to adjust USER_THEIR VAR_C2.`
                         ],
+                        "Wand": [
+                            `USER_TAG grabs the VAR_C2 on TARGET_TAG but can't change it for some reason... Huh. (This is a bug, report)!`
+                        ],
                         default: [
                             `USER_TAG tries to adjust TARGET_TAG's VAR_C2, but some kind of reality-defying magic prevents USER_THEM! (This is a bug, report)`
                         ],
@@ -1553,6 +1595,9 @@ const texts_toy = {
                     ],
                     "Vibrator": [
                         `USER_TAG taps a button on the VAR_C2 TARGET_TAG is wearing! It vibrates at a strength of VAR_C3!`
+                    ],
+                    "Wand": [
+                        `USER_TAG grabs the VAR_C2 and clicks a button. It vibrates brilliantly at VAR_C3 as TARGET_TAG continues to rock TARGET_THEIR hips while holding it to TARGET_THEIR crotch!`
                     ],
                     default: [
                         `USER_TAG causes fuzzy shifting in the universe adjusting TARGET_TAG's VAR_C2 to VAR_C3! (This is a bug, report!)`
@@ -1598,6 +1643,11 @@ const texts_toy = {
                                 `USER_TAG puts the key in TARGET_TAG's belt, unlocking it and adding a VAR_C2, turned up to VAR_C3! USER_THEY_CAP then closeUSER_S and lockUSER_S TARGET_THEM back up.`
                             ]
                         },
+                        "Wand": {
+                            nofumble: [
+                                `USER_TAG grabs a VAR_C2 and clicks a button. It vibrates brilliantly at VAR_C3 as USER_THEY feverishly shove it into TARGET_TAG's crotch!`
+                            ]
+                        },
                         default: {
                             fumble: {
                                 keyloss: {
@@ -1624,6 +1674,9 @@ const texts_toy = {
                         "Vibrator": [
                             `USER_TAG tries as USER_THEY might, but is unable to unlock TARGET_TAG's chastity belt to add a VAR_C2.`
                         ],
+                        "Wand": [
+                            `USER_TAG grabs a VAR_C2 but can't apply it to TARGET_TAG for some reason... Huh. (This is a bug, report)!`
+                        ],
                         default: [
                             `USER_TAG tries to add a VAR_C2 to TARGET_TAG, but some kind of reality-defying magic prevents USER_THEM! (This is a bug, report)`
                         ],
@@ -1635,6 +1688,9 @@ const texts_toy = {
                     ],
                     "Vibrator": [
                         `USER_TAG grabs a VAR_C2 and inserts it into TARGET_TAG! It vibrates at VAR_C3!`
+                    ],
+                    "Wand": [
+                        `USER_TAG grabs a VAR_C2 and clicks a button. It vibrates brilliantly at VAR_C3 as USER_THEY lustfully shove it into TARGET_TAG's crotch!`
                     ],
                     default: [
                         `USER_TAG potentially summons a black hole putting a VAR_C2 on TARGET_TAG at VAR_C3! (This is a bug, report!)`
@@ -2018,6 +2074,9 @@ const texts_untoy = {
                 "Vibrator": [
                     `USER_TAG bucks USER_THEIR hips to take off USER_THEIR VAR_C2, but can't because USER_THEY USER_HAVE no hands to work with!`
                 ],
+                "Wand": [
+                    `USER_TAG twists USER_THEIR thighs slightly, but can't click the button on USER_THEIR VAR_C2 to turn it off!`
+                ],
                 default: [
                     `USER_TAG attempts to use reality defying magic to take off USER_THEIR VAR_C2, but can't because of USER_THEIR VAR_C1! (This is a bug, report)`
                 ]
@@ -2028,6 +2087,9 @@ const texts_untoy = {
                 ],
                 "Vibrator": [
                     `USER_TAG bucks USER_THEIR hips to remove USER_THEIR VAR_C2 despite USER_THEIR VAR_C1, but USER_THEIR chastity belt prevents USER_THEM from getting to it.`
+                ],
+                "Wand": [
+                    `USER_TAG twists USER_THEIR thighs slightly, but can't click the button on USER_THEIR VAR_C2 to turn it off! (this is a bug, please report)`
                 ],
                 default: [
                     `USER_TAG attempts to use reality defying magic to remove USER_THEIR VAR_C2 from USER_THEMSELF, but even if USER_THEY USER_WERE not in a VAR_C1, USER_THEY wouldn't be able to remove it! (This is a bug, report)`
@@ -2042,6 +2104,9 @@ const texts_untoy = {
                 "Vibrator": [
                     `USER_TAG bucks USER_THEIR hips over towards TARGET_TAG to remove USER_THEIR VAR_C2, but USER_THEY USER_HAVE no hands to work with!`
                 ],
+                "Wand": [
+                    `USER_TAG wiggles towards TARGET_TAG, but can't click the button on TARGET_THEIR VAR_C2 to turn it off!`
+                ],
                 default: [
                     `USER_TAG attempts to use reality defying magic to remove the VAR_C2 on TARGET_TAG, but can't because of USER_THEIR VAR_C1! (This is a bug, report)`
                 ]
@@ -2052,6 +2117,9 @@ const texts_untoy = {
                 ],
                 "Vibrator": [
                     `USER_TAG bucks USER_THEIR hips over towards TARGET_TAG to remove TARGET_THEIR VAR_C2 despite USER_THEIR VAR_C1. TARGET_THEIR_CAP chastity belt prevents USER_THEM from removing the toy anyway, though.`
+                ],
+                "Wand": [
+                    `USER_TAG wiggles towards TARGET_TAG, but can't click the button on TARGET_THEIR VAR_C2 to turn it off! (this is a bug, please report)`
                 ],
                 default: [
                     `USER_TAG attempts to use reality defying magic to remove a VAR_C2 from TARGET_TAG, but even if USER_THEY USER_WERE not in a VAR_C1, USER_THEY wouldn't be able to remove it! (This is a bug, report)`
@@ -2100,6 +2168,11 @@ const texts_untoy = {
                                 `USER_TAG puts the key in USER_THEIR belt, unlocking it removing USER_THEIR VAR_C2! USER_THEY_CAP then closeUSER_S and lockUSER_S USER_THEMSELF back up.`
                             ]
                         },
+                        "Wand": {
+                            nofumble: [
+                                `USER_TAG presses the button on USER_THEIR VAR_C2, turning off the pleasurable vibrations for now...`
+                            ]
+                        },
                         default: {
                             fumble: {
                                 keyloss: {
@@ -2126,6 +2199,9 @@ const texts_untoy = {
                         "Vibrator": [
                             `USER_TAG tries as USER_THEY might, but is unable to unlock USER_THEIR chastity belt to remove USER_THEIR VAR_C2.`
                         ],
+                        "Wand": [
+                            `USER_TAG tries to press the button on USER_THEIR VAR_C2, but... can't? (this is a bug, please report)`
+                        ],
                         default: [
                             `USER_TAG tries to remove USER_THEIR VAR_C2, but some kind of reality-defying magic prevents USER_THEM! (This is a bug, report)`
                         ],
@@ -2137,6 +2213,9 @@ const texts_untoy = {
                     ],
                     "Vibrator": [
                         `USER_TAG gently removes the VAR_C2 from inside USER_THEM and puts it away. `
+                    ],
+                    "Wand": [
+                        `USER_TAG presses the button on USER_THEIR VAR_C2, turning off the pleasurable vibrations for now...`
                     ],
                     default: [
                         `USER_TAG materializes a tear in reality to remove the VAR_C2 from USER_THEM! (This is a bug, report)`
@@ -2187,6 +2266,11 @@ const texts_untoy = {
                                 `USER_TAG puts the key in TARGET_TAG's belt, unlocking it and removing the VAR_C2! USER_THEY_CAP then closeUSER_S and lockUSER_S TARGET_THEM back up.`
                             ]
                         },
+                        "Wand": {
+                            nofumble: [
+                                `USER_TAG presses the button on TARGET_TAG's VAR_C2, turning off the pleasurable vibrations for now...`
+                            ]
+                        },
                         default: {
                             fumble: {
                                 keyloss: {
@@ -2213,6 +2297,9 @@ const texts_untoy = {
                         "Vibrator": [
                             `USER_TAG tries as USER_THEY might, but is unable to unlock TARGET_TAG's chastity belt to remove USER_THEIR VAR_C2.`
                         ],
+                        "Wand": [
+                            `USER_TAG tries to press the button on TARGET_TAG's VAR_C2, but... can't? (this is a bug, please report)`
+                        ],
                         default: [
                             `USER_TAG tries to remove TARGET_TAG's VAR_C2, but some kind of reality-defying magic prevents USER_THEM! (This is a bug, report)`
                         ],
@@ -2224,6 +2311,9 @@ const texts_untoy = {
                     ],
                     "Vibrator": [
                         `USER_TAG gently removes the VAR_C2 from inside TARGET_TAG and puts it away. `
+                    ],
+                    "Wand": [
+                        `USER_TAG presses the button on USER_THEIR VAR_C2, turning off the pleasurable vibrations for now...`
                     ],
                     default: [
                         `USER_TAG materializes a tear in reality to remove the VAR_C2 from TARGET_TAG! (This is a bug, report)`
