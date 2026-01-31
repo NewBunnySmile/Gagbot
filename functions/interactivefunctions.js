@@ -835,7 +835,7 @@ function generateListTexts() {
     const restraints = {
         Heavy: heavytypes.sort((a, b) => a.name.localeCompare(b.name)).map((heavy) => ({ name: heavy.name, value: `Denial coefficient: ${heavy.denialCoefficient}` })),
         Mitten: mittentypes.sort((a, b) => a.name.localeCompare(b.name)).map((heavy) => ({ name: heavy.name, value: "" })),
-        Gag: Object.entries(process.gagtypes).map((f) => f[1]).sort((a, b) => a.choicename.localeCompare(b.choicename)).map((heavy) => ({ name: heavy.choicename, value: "" })),
+        Gag: Object.entries(process.gagtypes).filter((f) => !f[1].hidden).map((f) => f[1]).sort((a, b) => a.choicename.localeCompare(b.choicename)).map((heavy) => ({ name: heavy.choicename, value: "" })),
         "Chastity Belt": Object.entries(process.chastitytypes).filter((f) => f[1].category == "Chastity Belt").map((f) => f[1]).sort((a, b) => a.name.localeCompare(b.name)).map((heavy) => ({ name: heavy.name, value: `` })),
         "Chastity Bra": Object.entries(process.chastitytypes).filter((f) => f[1].category == "Chastity Bra").map((f) => f[1]).sort((a, b) => a.name.localeCompare(b.name)).map((heavy) => ({ name: heavy.name, value: `` })),
         Corset: Object.entries(process.corsettypes).map((f) => f[1]).sort((a, b) => a.name.localeCompare(b.name)).map((heavy) => ({ name: heavy.name, value: `` })),

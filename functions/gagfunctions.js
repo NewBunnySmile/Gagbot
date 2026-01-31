@@ -36,7 +36,7 @@ const setUpGags = () => {
 	for (const file of commandFiles) {
 		const gag = require(`./../gags/${file}`);
         gagtypes[file.replace(".js", "")] = gag;
-		gagautocompletes.push({ name: gag.choicename, value: file.replace(".js", "") });
+        if (!gag.hidden) { gagautocompletes.push({ name: gag.choicename, value: file.replace(".js", "") }) };
 	}
 
 	process.gagtypes = gagtypes;
