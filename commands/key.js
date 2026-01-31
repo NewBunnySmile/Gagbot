@@ -57,10 +57,10 @@ module.exports = {
 		)
         .addSubcommand((subcommand) =>
             subcommand
-                .setName("discardKey")
+                .setName("discardkey")
                 .setDescription("Discard a key you're holding...")
                 .addUserOption((opt) => opt.setName("wearer").setDescription("Whose restraint to discard the key?"))
-                .addStringOption((opt) => opt.setName("restraint").setDescription("Which restraint of theirs to discard?").setAutocomplete(true))
+                .addStringOption((opt) => opt.setName("restraint").setDescription("Which restraint of theirs to discard?").setAutocomplete(true)),
         ),
 	async autoComplete(interaction) {
 		const focusedValue = interaction.options.getFocused();
