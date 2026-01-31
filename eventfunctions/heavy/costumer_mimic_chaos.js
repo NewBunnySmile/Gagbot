@@ -261,7 +261,6 @@ let functiontick = async (userID) => {
         if (heavyend) { outfitpieces.push(heavyend) }
         process.userevents[userID].costumermimic.outfit = outfitpieces;
     }
-    console.log(process.userevents[userID].costumermimic.outfit)
     let currclothes = getWearable(userID).filter((f) => (!getLockedWearable(userID).includes(f))); // Current clothes that can be removed
     let shuffledclothes = shuffleWearables(currclothes); // I admittedly dont think a big shuffler's necessary but its fine
     // Capture length of initial Removable Wearables array
