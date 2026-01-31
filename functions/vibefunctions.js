@@ -580,11 +580,11 @@ const canAccessChastity = (chastityuser, keyholder, unlock, cloning) => {
 	// If unlock is set, only allow access to unlock if the keyholder is the correct one.
 	if (unlock) {
 		// Allow unlocks by a non-self keyholder at all times, assuming its not sealed.
-		if (getChastity(chastityuser)?.access != 2 && getChastity(chastityuser)?.keyholder == keyholder && keyholder != chastityuser) {
+		if (getChastity(chastityuser)?.access != 2 && getChastity(chastityuser)?.keyholder == keyholder && keyholder != chastityuser && !getChastityBra(chastityuser)?.fumbled) {
 			accessval.access = true;
 		}
-		// Allow unlocks by any keyholder if no timelock.
-		if (getChastity(chastityuser)?.access == undefined && getChastity(chastityuser)?.keyholder == keyholder) {
+		// Allow unlocks by any keyholder if no timelock if the key isn't fumbled!
+		if (getChastity(chastityuser)?.access == undefined && getChastity(chastityuser)?.keyholder == keyholder && !getChastity(chastityuser)?.fumbled) {
 			accessval.access = true;
 		}
 		// Allow unlocks by secondary keyholder if no timelock
@@ -603,12 +603,12 @@ const canAccessChastity = (chastityuser, keyholder, unlock, cloning) => {
 			accessval.access = true;
 			accessval.public = true;
 		}
-		// Keyholder access if access is unset (no timelocks)
-		if (getChastity(chastityuser)?.access == undefined && getChastity(chastityuser)?.keyholder == keyholder) {
+		// Keyholder access if access is unset (no timelocks) and the key isnt fumbled
+		if (getChastity(chastityuser)?.access == undefined && getChastity(chastityuser)?.keyholder == keyholder && !getChastity(chastityuser)?.fumbled) {
 			accessval.access = true;
 		}
-		// Keyholder access if timelock is 1 (keyholder only) but only if not self.
-		if (getChastity(chastityuser)?.access == 1 && getChastity(chastityuser)?.keyholder == keyholder && chastityuser != keyholder) {
+		// Keyholder access if timelock is 1 (keyholder only) but only if not self and if key isnt fumbled.
+		if (getChastity(chastityuser)?.access == 1 && getChastity(chastityuser)?.keyholder == keyholder && chastityuser != keyholder  && !getChastity(chastityuser)?.fumbled) {
 			accessval.access = true;
 		}
 
@@ -619,8 +619,8 @@ const canAccessChastity = (chastityuser, keyholder, unlock, cloning) => {
 		accessval.access = true;
 		accessval.public = true;
 	}
-	// Keyholder access if access is unset (no timelocks)
-	if (getChastity(chastityuser)?.access == undefined && getChastity(chastityuser)?.keyholder == keyholder) {
+	// Keyholder access if access is unset (no timelocks) and not fumbled
+	if (getChastity(chastityuser)?.access == undefined && getChastity(chastityuser)?.keyholder == keyholder && !getChastity(chastityuser)?.fumbled) {
 		accessval.access = true;
 	}
 	// Secondary Keyholder access (cloned key), but only if cloning is NOT true and no timelocks
@@ -628,8 +628,8 @@ const canAccessChastity = (chastityuser, keyholder, unlock, cloning) => {
 	if (clonedkeys.includes(keyholder) && getChastity(chastityuser)?.access == undefined) {
 		accessval.access = true;
 	}
-	// Keyholder access if timelock is 1 (keyholder only) but only if not self.
-	if (getChastity(chastityuser)?.access == 1 && getChastity(chastityuser)?.keyholder == keyholder && chastityuser != keyholder) {
+	// Keyholder access if timelock is 1 (keyholder only) but only if not self and not fumbled
+	if (getChastity(chastityuser)?.access == 1 && getChastity(chastityuser)?.keyholder == keyholder && chastityuser != keyholder  && !getChastity(chastityuser)?.fumbled) {
 		accessval.access = true;
 	}
 	// Secondary Keyholder access (cloned key) if access is 1, but only if not self.
@@ -663,11 +663,11 @@ const canAccessChastityBra = (chastityuser, keyholder, unlock, cloning) => {
 	// If unlock is set, only allow access to unlock if the keyholder is the correct one.
 	if (unlock) {
 		// Allow unlocks by a non-self keyholder at all times, assuming its not sealed.
-		if (getChastityBra(chastityuser)?.access != 2 && getChastityBra(chastityuser)?.keyholder == keyholder && keyholder != chastityuser) {
+		if (getChastityBra(chastityuser)?.access != 2 && getChastityBra(chastityuser)?.keyholder == keyholder && keyholder != chastityuser && !getChastityBra(chastityuser)?.fumbled) {
 			accessval.access = true;
 		}
-		// Allow unlocks by any keyholder if no timelock.
-		if (getChastityBra(chastityuser)?.access == undefined && getChastityBra(chastityuser)?.keyholder == keyholder) {
+		// Allow unlocks by any keyholder if no timelock and not fumbled.
+		if (getChastityBra(chastityuser)?.access == undefined && getChastityBra(chastityuser)?.keyholder == keyholder && !getChastityBra(chastityuser)?.fumbled) {
 			accessval.access = true;
 		}
 		// Allow unlocks by secondary keyholder if no timelock
@@ -687,11 +687,11 @@ const canAccessChastityBra = (chastityuser, keyholder, unlock, cloning) => {
 			accessval.public = true;
 		}
 		// Keyholder access if access is unset (no timelocks)
-		if (getChastityBra(chastityuser)?.access == undefined && getChastityBra(chastityuser)?.keyholder == keyholder) {
+		if (getChastityBra(chastityuser)?.access == undefined && getChastityBra(chastityuser)?.keyholder == keyholder && !getChastityBra(chastityuser)?.fumbled) {
 			accessval.access = true;
 		}
 		// Keyholder access if timelock is 1 (keyholder only) but only if not self.
-		if (getChastityBra(chastityuser)?.access == 1 && getChastityBra(chastityuser)?.keyholder == keyholder && chastityuser != keyholder) {
+		if (getChastityBra(chastityuser)?.access == 1 && getChastityBra(chastityuser)?.keyholder == keyholder && chastityuser != keyholder && !getChastityBra(chastityuser)?.fumbled) {
 			accessval.access = true;
 		}
 
@@ -703,7 +703,7 @@ const canAccessChastityBra = (chastityuser, keyholder, unlock, cloning) => {
 		accessval.public = true;
 	}
 	// Keyholder access if access is unset (no timelocks)
-	if (getChastityBra(chastityuser)?.access == undefined && getChastityBra(chastityuser)?.keyholder == keyholder) {
+	if (getChastityBra(chastityuser)?.access == undefined && getChastityBra(chastityuser)?.keyholder == keyholder && !getChastityBra(chastityuser)?.fumbled) {
 		accessval.access = true;
 	}
 	// Secondary Keyholder access (cloned key), but only if cloning is NOT true and no timelocks
@@ -712,7 +712,7 @@ const canAccessChastityBra = (chastityuser, keyholder, unlock, cloning) => {
 		accessval.access = true;
 	}
 	// Keyholder access if timelock is 1 (keyholder only) but only if not self.
-	if (getChastityBra(chastityuser)?.access == 1 && getChastityBra(chastityuser)?.keyholder == keyholder && chastityuser != keyholder) {
+	if (getChastityBra(chastityuser)?.access == 1 && getChastityBra(chastityuser)?.keyholder == keyholder && chastityuser != keyholder && !getChastityBra(chastityuser)?.fumbled) {
 		accessval.access = true;
 	}
 	// Secondary Keyholder access (cloned key) if access is 1, but only if not self.
@@ -1062,6 +1062,38 @@ const transferChastityKey = (lockedUser, newKeyholder) => {
 
 	return false;
 };
+
+// Discards a key held by keyholderid for userid. Varying effect based on device.
+function discardKey(userid, keyholderid, device) {
+    // If it isnt one of the three devices we know about, go away
+    if ((device != "collar") && (device != "chastity belt") && (device != "chastity bra")) { 
+        console.log(`Unknown device ${device}. Use "collar", "chastity belt" or "chastity bra`)
+        return false 
+    }
+    let processvar = "collar";
+    if (device == "chastity belt") { processvar = "chastity" }
+    if (device == "chastity bra") { processvar = "chastitybra" }
+    // If this is undefined, we have some big problems lol
+    let typelocked = "none";
+    if (process[processvar] == undefined) { process[processvar] = {} }
+    if (process[processvar][userid]) {
+        if (process[processvar][userid].keyholder == keyholderid) {
+            // Lost primary keys
+            process[processvar][userid].fumbled = Date.now(); // We might be able to track time with this?
+            typelocked = "keyholder";
+        }
+        else if (process[processvar][userid].clonedKeyholders.includes(keyholderid)) {
+            // Lost a clone. Clones should be destroyed.
+            process[processvar][userid].clonedKeyholders.splice(process[processvar][userid].clonedKeyholders.indexOf(keyholderid), 1)
+            typelocked = "clone";
+        }
+    }
+    if (process.readytosave == undefined) {
+		process.readytosave = {};
+	}
+    process.readytosave[processvar] = true;
+    return typelocked;
+}
 
 const discardChastityKey = (user, locker) => {
 	if (process.chastity == undefined) {
@@ -1661,3 +1693,5 @@ exports.getChastityBraTimelock = getChastityBraTimelock;
 
 exports.swapChastity = swapChastity;
 exports.swapChastityBra = swapChastityBra
+
+exports.discardKey = discardKey;

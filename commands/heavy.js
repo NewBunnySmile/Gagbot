@@ -20,7 +20,7 @@ module.exports = {
 	async autoComplete(interaction) {
         try {
             const focusedValue = interaction.options.getFocused();
-            let autocompletes = process.heavytypes;
+            let autocompletes = process.heavytypes.filter((f) => !getBaseHeavy(f.value).noself);
             let matches = didYouMean(focusedValue, autocompletes, {
                 matchPath: ['name'], 
                 returnType: ReturnTypeEnums.ALL_SORTED_MATCHES, // Returns any match meeting 20% of the input

@@ -1048,6 +1048,54 @@ const configoptions = {
 				return false;
 			},
 		},
+        "extreme-heavy-costumer_mimic_chaos": {
+			name: "Heavy - Costumer Mimic (Chaos)",
+			desc: "Changes you into a randomized outfit. Will respect Content settings.",
+			prompttext: `Costumer Mimics can change you into a a random outfit, which may include other extreme restraints such as the Polite Sub gag. The resulting outfit does not adjust to anything worn and cannot be influenced once tossed in.`,
+			choices: [
+				{
+					name: "Disabled",
+					helptext: "*Costumer Mimics are disabled*",
+					select_function: (interaction, serverID) => {
+						return false;
+					},
+					value: "Disabled",
+					style: ButtonStyle.Danger,
+				},
+				{
+					name: "Prompt",
+					helptext: "You will be prompted when this is put on you",
+					select_function: (interaction, serverID) => {
+						return false;
+					},
+					value: "Prompt",
+					style: ButtonStyle.Secondary,
+				},
+				{
+					name: "Prompt (Others)",
+					helptext: "You will be prompted when others put this on you",
+					select_function: (interaction, serverID) => {
+						return false;
+					},
+					value: "PromptOthers",
+					style: ButtonStyle.Secondary,
+				},
+				{
+					name: "Enabled",
+					helptext: "⚠️ You will automatically accept this restraint",
+					select_function: (interaction, serverID) => {
+						return false;
+					},
+					value: "Enabled",
+					style: ButtonStyle.Secondary,
+				},
+			],
+			menutype: "choice",
+			default: "Prompt",
+			disabled: () => {
+				return false;
+			},
+		},
         "extreme-mask-dollmaker_visor": {
 			name: "Mask - Dollmaker's Visor",
 			desc: "Forces DOLL-#### syntax, it/its pronouns and Doll Protocol.",
@@ -1655,6 +1703,35 @@ const configoptions = {
 				return false;
 			},
 		},
+        "bot-allowkeyfinding": {
+			name: "Allow Keyfinding",
+			desc: "Should the bot allow users to find keys when sending messages?",
+			choices: [
+				{
+					name: "Disabled",
+					helptext: "*Users will not be able to find keys*",
+					select_function: (userID) => {
+						return false;
+					}, // We will need to have this update commands
+					value: "Disabled",
+					style: ButtonStyle.Danger,
+				},
+				{
+					name: "Enabled",
+					helptext: "✔️ Users can find keys",
+					select_function: (userID) => {
+						return false;
+					}, // We will need to have this update commands
+					value: "Enabled",
+					style: ButtonStyle.Success,
+				},
+			],
+			menutype: "choice_bot",
+			default: "Enabled",
+			disabled: () => {
+				return false;
+			},
+		},
 	},
 };
 
@@ -1810,6 +1887,17 @@ function generateConfigModal(interaction, menuset = "General", page, statustext)
 					);
 				pagecomponents.push(buttonsection);
 			} else if (configoptions[menuset][k].menutype == "choice_revokeconsent") {
+				let buttonsection = new SectionBuilder()
+					.addTextDisplayComponents((textdisplay) => textdisplay.setContent(`## ${configoptions[menuset][k].name}\n${configoptions[menuset][k].desc}`))
+					.setButtonAccessory((button) =>
+						button
+							.setCustomId(`config_pageoptrevoke_${menuset}`)
+							.setLabel(`Revoke Consent`)
+							.setStyle(ButtonStyle.Danger)
+							.setDisabled(process.consented[interaction.user.id] == undefined),
+					);
+				pagecomponents.push(buttonsection);
+			} else if (configoptions[menuset][k].menutype == "choice_") {
 				let buttonsection = new SectionBuilder()
 					.addTextDisplayComponents((textdisplay) => textdisplay.setContent(`## ${configoptions[menuset][k].name}\n${configoptions[menuset][k].desc}`))
 					.setButtonAccessory((button) =>

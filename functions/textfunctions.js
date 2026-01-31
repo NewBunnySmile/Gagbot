@@ -3285,23 +3285,59 @@ const textarrays = {
 // Get generic text and spit out a pronoun respecting version YAY
 const getTextGeneric = (type, data_in) => {
 	let generics = {
-		unbind: "TARGET_TAG has elected to prompt for TARGET_THEIR VAR_C1 to be removed. Please wait as TARGET_THEY confirmTARGET_S (5 minute timeout).",
-		unbind_decline: "TARGET_TAG has declined your help with USER_THEIR VAR_C1.",
-		unbind_accept: "TARGET_TAG has accepted your offer to help with TARGET_THEIR VAR_C1!",
-		unbind_timeout: "The request to help TARGET_TAG timed out!",
-		changebind: "TARGET_TAG has elected to prompt for TARGET_THEIR VAR_C1 to be changed. Please wait as TARGET_THEY confirmTARGET_S (5 minute timeout).",
-		changebind_decline: "TARGET_TAG has declined allowing you to change TARGET_THEIR bindings.",
-		changebind_accept: "TARGET_TAG has allowed you to change TARGET_THEIR bindings.",
-		clone_accept: "TARGET_TAG has allowed you to make a clone of TARGET_THEIR VAR_C1 key, giving it to VAR_C2!",
-		clone_accept_self: "Cloning your key...",
-		clone_decline: "TARGET_TAG has forbidden you from making a clone of TARGET_THEIR VAR_C1 key for VAR_C2!",
-		give_accept: "TARGET_TAG has allowed you to give TARGET_THEIR VAR_C1 key to VAR_C2!",
-		give_accept_self: "Giving your key...",
-		give_decline: "TARGET_TAG has forbidden you from giving TARGET_THEIR VAR_C1 key to VAR_C2!",
-		revoke_accept: "You have destroyed the key VAR_C2 had to TARGET_TAG's VAR_C1.",
+		unbind: ["TARGET_TAG has elected to prompt for TARGET_THEIR VAR_C1 to be removed. Please wait as TARGET_THEY confirmTARGET_S (5 minute timeout)."],
+		unbind_decline: ["TARGET_TAG has declined your help with USER_THEIR VAR_C1."],
+		unbind_accept: ["TARGET_TAG has accepted your offer to help with TARGET_THEIR VAR_C1!"],
+		unbind_timeout: ["The request to help TARGET_TAG timed out!"],
+		changebind: ["TARGET_TAG has elected to prompt for TARGET_THEIR VAR_C1 to be changed. Please wait as TARGET_THEY confirmTARGET_S (5 minute timeout)."],
+		changebind_decline: ["TARGET_TAG has declined allowing you to change TARGET_THEIR bindings."],
+		changebind_accept: ["TARGET_TAG has allowed you to change TARGET_THEIR bindings."],
+		clone_accept: ["TARGET_TAG has allowed you to make a clone of TARGET_THEIR VAR_C1 key, giving it to VAR_C2!"],
+		clone_accept_self: ["Cloning your key..."],
+		clone_decline: ["TARGET_TAG has forbidden you from making a clone of TARGET_THEIR VAR_C1 key for VAR_C2!"],
+		give_accept: ["TARGET_TAG has allowed you to give TARGET_THEIR VAR_C1 key to VAR_C2!"],
+		give_accept_self: ["Giving your key..."],
+		give_decline: ["TARGET_TAG has forbidden you from giving TARGET_THEIR VAR_C1 key to VAR_C2!"],
+		revoke_accept: ["You have destroyed the key VAR_C2 had to TARGET_TAG's VAR_C1."],
+        find_key_self: [
+            `USER_TAG finds USER_THEIR key to USER_THEIR VAR_C1! Lucky find!`,
+            `USER_TAG spots a shiny glint and picks it up. It turns out to be the key to USER_THEIR VAR_C1!`,
+            `USER_TAG steps on something weird and picks it up. Fortunately, it's USER_THEIR VAR_C1 key!`
+        ],
+        find_key_other: [
+            `USER_TAG finds the key to TARGET_TAG's VAR_C1! What will TARGET_THEY have to do to get it back?`,
+            `As USER_TAG is chatting, USER_THEY spotUSER_S a shiny key that seems to match TARGET_TAG's VAR_C1!`
+        ],
+        find_key_self_mitten: [
+            `USER_TAG finds USER_THEIR key to USER_THEIR VAR_C1! USER_THEY_CAP attemptUSER_S to pick it up... and just BARELY grasps it.`,
+            `USER_TAG sees a glint that looks a lot like USER_THEIR VAR_C1 key! Despite having no fingers, USER_THEY still somehow manageUSER_S to pick it up.`,
+            `USER_TAG spots USER_THEIR VAR_C1 key! USER_THEY_CAP sighs in relief as USER_THEY just barely pick it up.`
+        ],
+        find_key_other_mitten: [
+            `USER_TAG finds the key to TARGET_TAG's VAR_C1! TARGET_THEY_CAP would be in trouble if USER_TAG had fingers... But! Despite no fingers, USER_THEY still manageUSER_S to pick it up!`,
+            `TARGET_TAG's key has been missing for a bit, but fortunately, USER_TAG spots it! USER_TAG_CAP bats it around a little bit, but in the end, manages to pick it up using both mittens!`
+        ],
+        find_keyfail_self_mitten: [
+            `USER_TAG finds USER_THEIR key to USER_THEIR VAR_C1! USER_THEY_CAP attemptUSER_S to pick it up... and fails.`,
+            `USER_TAG sees a glint that looks a lot like USER_THEIR VAR_C1 key! Unhelpfully, USER_THEY bat it because USER_THEY USER_HAVE no fingers.`,
+            `USER_TAG spots USER_THEIR VAR_C1 key! USER_THEY_CAP sighs in frustration as USER_THEY can't pick it up.`
+        ],
+        find_keyfail_other_mitten: [
+            `USER_TAG finds the key to TARGET_TAG's VAR_C1! TARGET_THEY_CAP would be in trouble if USER_TAG had fingers...`,
+            `TARGET_TAG's key has been missing for a bit, but fortunately, USER_TAG spots it! Not that USER_THEY can pick it up, of course, but it's the thought that counts.`
+        ],
+        find_keyfail_self_heavy: [
+            `USER_TAG finds USER_THEIR key to USER_THEIR VAR_C1! USER_THEY_CAP attemptUSER_S to pick it up, but obviously fails because USER_THEIR arms are tightly bound.`,
+            `USER_TAG sees a glint that looks a lot like USER_THEIR VAR_C1 key! Unhelpfully, USER_THEY bat it because USER_THEY USER_HAVE no arms.`,
+            `USER_TAG spots USER_THEIR VAR_C1 key! USER_THEY_CAP sighs in frustration as USER_THEY can't pick it up.`
+        ],
+        find_keyfail_other_heavy: [
+            `USER_TAG finds the key to TARGET_TAG's VAR_C1! TARGET_THEY_CAP would be in trouble if USER_TAG had arms to pick it up...`,
+            `TARGET_TAG's key has been missing for a bit, but fortunately, USER_TAG spots it! Not that USER_THEY can pick it up, of course, but it's the thought that counts.`
+        ],
 	};
 
-	let chosentext = generics[type];
+	let chosentext = generics[type][Math.floor(generics[type].length * Math.random())];
 	return convertPronounsText(chosentext, data_in);
 };
 

@@ -109,6 +109,7 @@ const heavytypes = [
 	{ name: "Sticky Glue", value: "stickyglue_bondage", tags: ["slime"], denialCoefficient: 5 },
 	{ name: "Costumer Mimic", value: "costumer_mimic", denialCoefficient: 5 },
 	{ name: "Costumer Mimic (Latex)", value: "costumer_mimic_latex", tags: ["latex"], denialCoefficient: 5 },
+    { name: "Costumer Mimic (Chaos)", value: "costumer_mimic_chaos", denialCoefficient: 5 },
 
 	// Heavy Restraints with unique name functions
 	{

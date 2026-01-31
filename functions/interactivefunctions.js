@@ -842,7 +842,7 @@ function generateListTexts() {
         Mask: headweartypes.sort((a, b) => a.name.localeCompare(b.name)).map((heavy) => ({ name: heavy.name, value: heavy.blockinspect || heavy.blockemote ? `Restricts: ${heavy.blockinspect ? `Inspect, ` : ``}${heavy.blockemote ? `Emote, ` : ``}`.slice(0, -2) : `` })),
         Collar: collartypes.sort((a, b) => a.name.localeCompare(b.name)).map((heavy) => ({ name: heavy.name, value: "" })),
         Toys: Object.entries(process.toytypes).map((f) => f[1]).sort((a, b) => a.toyname.localeCompare(b.toyname)).map((heavy) => ({ name: heavy.toyname, value: heavy.category })),
-        Wearable: wearabletypes.sort((a, b) => a.name.localeCompare(b.name)).map((heavy) => ({ name: heavy.name, value: heavy.colorable ? `Colorable` : `` })),
+        Wearable: wearabletypes.filter((f) => (f.name.length > 0)).sort((a, b) => a.name.localeCompare(b.name)).map((heavy) => ({ name: heavy.name, value: heavy.colorable ? `Colorable` : `` })),
     };
     process.listtexts = restraints;
 }

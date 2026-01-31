@@ -1,4 +1,4 @@
-const { findCollarKey } = require("./collarfunctions");
+const { findCollarKey, getBaseCollar } = require("./collarfunctions");
 const { findChastityKey, getChastity, getArousal, calcFrustration } = require("./vibefunctions");
 const { their } = require("./pronounfunctions");
 const { getMitten } = require("./gagfunctions");
@@ -11,6 +11,9 @@ const { messageSendChannel } = require("./messagefunctions.js");
 const { PermissionsBitField } = require("discord.js");
 const { frustrationPenalties } = require("./vibefunctions.js");
 const { getCombinedTraits } = require("./vibefunctions.js");
+const { logConsole } = require("./logfunctions.js");
+const { getBaseChastity } = require("./chastityfunctions.js");
+const { getTextGeneric } = require("./textfunctions.js");
 
 const MAX_FUMBLE_CHANCE = 0.95;
 const FUMBLE_AROUSAL_POTENCY = 11.7;
@@ -88,30 +91,68 @@ function getFumbleChance(keyholder, locked) {
 }
 
 async function handleKeyFinding(message) {
-	if (process.discardedKeys == undefined) process.discardedKeys = [];
-	if (process.discardedKeys.length == 0) return;
-	if (Math.random() > (Math.min(message.content.length / 20, 20) * process.discardedKeys.length) / 100) return;
-	const idx = Math.floor(Math.random() * process.discardedKeys.length);
-	const restraint = process.discardedKeys[idx];
-	if (!restraint) return;
-
-	if (Math.random() < calcFindSuccessChance(message.author.id)) {
-		// We found the key! Now lets see if the person could find it anyway
-		let wearerobjectinguild;
-		try {
-			wearerobjectinguild = await message.guild.members.fetch(restraint.wearer);
-			// This person should be in the guild.
-			const findFunction = getFindFunction(restraint.restraint);
-			if (findFunction(idx, message.author.id) && wearerobjectinguild && message.channel.permissionsFor(wearerobjectinguild).has(PermissionsBitField.Flags.ViewChannel)) {
-				sendFindMessage(message, restraint.wearer, restraint.restraint);
-			}
-		} catch (err) {
-			// member doesn't exist in this channel, don't even bother anymore
-			console.log("Failed to obtain user object for " + restraint.wearer);
-		}
-	} else {
-		sendFindFumbleMessage(message, restraint.wearer, restraint.restraint);
-	}
+    let processvars = ["collar", "chastity", "chastitybra"];
+    processvars.forEach((pv) => {
+        if (processvars[pv] == undefined) { processvars[pv] = {}}
+        Object.entries(processvars[pv]).forEach(async (en) => {
+            try {
+                if (en[1].fumbled) {
+                    if (Math.random() < (Math.max(Math.min(message.content.length * 0.0005, 0.2), 0.01))) {
+                        // Key was found! Lets make sure the sender AND the user can view the channel.
+                        // Implicitly, the sender should be able to lol
+                        let weareruser = await message.guild.members.fetch(en[0]);
+                        if (message.channel.permissionsFor(weareruser).has(PermissionsBitField.Flags.ViewChannel)) {
+                            // Wearer IS able to view this channel! Both people should be able to see this channel then.
+                            // Determine which string sets to use, starting with other or self.
+                            let finderpart = "other";
+                            if (weareruser.id == message.member.id) {
+                                finderpart = "self";
+                            }
+                            // Now an append if they're in mittens or heavy bondage
+                            let extrafindkeypart = "";
+                            let chance = 1.0
+                            if (getMitten(message.member.id)) {
+                                chance = 0.5;
+                                extrafindkeypart = "_mitten"
+                            }
+                            if (getHeavy(message.member.id)) {
+                                chance = 0.0;
+                                extrafindkeypart = "_heavy"
+                            }
+                            let data = {
+                                interactionuser: message.member,
+                                targetuser: weareruser
+                            }
+                            if ((pv == "chastity") || (pv == "chastitybra")) {
+                                data.c1 = getBaseChastity(en[1].chastitytype).name
+                            }
+                            else if (pv == "collar") {
+                                data.c1 = getBaseCollar(en[1].collartype).name
+                            }
+                            if (Math.random() < chance) {
+                                // Successfully found the key!
+                                messageSendChannel(getTextGeneric(`find_key_${finderpart}${extrafindkeypart}`, data), message.channel.id)
+                                // Destroy cloned keyholders if the keyholder is new!
+                                if (message.member.id != processvars[pv][en[0]].keyholder) {
+                                    processvars[pv][en[0]].clonedKeyholders = [];
+                                }
+                                // Assign the new keyholder and then delete the fumbled date. 
+                                processvars[pv][en[0]].keyholder = message.member.id;
+                                delete processvars[pv][en[0]].fumbled;
+                            }
+                            else {
+                                // Fumbled finding the key lol
+                                messageSendChannel(getTextGeneric(`find_keyfail_${finderpart}${extrafindkeypart}`, data), message.channel.id)
+                            }
+                        }
+                    }
+                }
+            }
+            catch (err) {
+                logConsole(`handleKeyFinding: ${err}`, 4);
+            }
+        })
+    })
 }
 
 function getFindFunction(restraint) {
