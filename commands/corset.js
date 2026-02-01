@@ -90,15 +90,20 @@ module.exports = {
 				interaction.reply({ content: `Gagbot recognizes what you're attempting to do. Cheeky.`, flags: MessageFlags.Ephemeral });
 				return;
 			}
+            let blocked = false;
             if (type) {
                 let tags = getUserTags(corsetuser.id);
                 let i = getBaseCorset(type)
                 tags.forEach((t) => {
                     if (i && i.tags && i.tags.includes(t) && (wearableuser != interaction.user)) {
                         interaction.reply({ content: `${wearableuser}'s content settings forbid this item - ${i.name}!`, flags: MessageFlags.Ephemeral })
+                        blocked = true;
                         return;
                     }
                 })
+            }
+            if (blocked) {
+                return;
             }
 			if (getHeavy(interaction.user.id)) {
 				// In heavy bondage, fail

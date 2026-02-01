@@ -82,15 +82,20 @@ module.exports = {
 				return;
 			}
 
+            let blocked = false;
             if (headwearchoice) {
                 let tags = getUserTags(headwearuser.id);
                 let i = getBaseHeadwear(headwearchoice)
                 tags.forEach((t) => {
                     if (i && i.tags && i.tags[t] && (headwearuser != interaction.user)) {
                         interaction.reply({ content: `${headwearuser}'s content settings forbid this item - ${i.name}!`, flags: MessageFlags.Ephemeral })
+                        blocked = true;
                         return;
                     }
                 })
+            }
+            if (blocked) {
+                return;
             }
 
 			if (getHeavy(interaction.user.id)) {

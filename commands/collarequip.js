@@ -156,6 +156,7 @@ module.exports = {
 			let braorbelt = interaction.options.getString("braorbelt") ?? "chastitybelt";
 
             // Check if the wearer is okay with it. If they aren't, error.
+            let blocked = false;
             if (actiontotake == "heavy") {
                 if (bondagetype) {
                     let tags = getUserTags(collareduser.id);
@@ -163,6 +164,7 @@ module.exports = {
                     tags.forEach((t) => {
                         if (i && i.tags && i.tags.includes(t) && (collareduser != interaction.user)) {
                             interaction.reply({ content: `${collareduser}'s content settings forbid this item - ${i.name}!`, flags: MessageFlags.Ephemeral })
+                            blocked = true;
                             return;
                         }
                     })
@@ -175,6 +177,7 @@ module.exports = {
                     tags.forEach((t) => {
                         if (i && i.tags && i.tags.includes(t) && (collareduser != interaction.user)) {
                             interaction.reply({ content: `${collareduser}'s content settings forbid this item - ${i.name}!`, flags: MessageFlags.Ephemeral })
+                            blocked = true;
                             return;
                         }
                     })
@@ -187,10 +190,14 @@ module.exports = {
                     tags.forEach((t) => {
                         if (i && i.tags && i.tags.includes(t) && (collareduser != interaction.user)) {
                             interaction.reply({ content: `${collareduser}'s content settings forbid this item - ${i.name}!`, flags: MessageFlags.Ephemeral })
+                            blocked = true;
                             return;
                         }
                     })
                 }
+            }
+            if (blocked) {
+                return;
             }
 
 			let bondagetypenotchosen = false;
