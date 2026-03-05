@@ -24,6 +24,12 @@ module.exports = {
 				await interaction.reply({ content: err.toString(), flags: MessageFlags.Ephemeral });
 			}
 			if (res) {
+                if (typeof res === "object") {
+                    res = `(Object) ${JSON.stringify(res).slice(0,1900)}`
+                }
+                else if (typeof res === "function") {
+                    res = `function`
+                }
 				await interaction.reply({ content: `Eval result: ${res}`, flags: MessageFlags.Ephemeral });
 			} else {
 				await interaction.reply({ content: `Command run. No return value.`, flags: MessageFlags.Ephemeral });

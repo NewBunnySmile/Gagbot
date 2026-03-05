@@ -1794,6 +1794,7 @@ const texts_struggle = {
 			},
 			text: `USER_TAG produces a deck of cards and pulls one out with a dramatic flourish, holding it up while shouting, "It's time to d-d-d-d-d-duel!`,
 		},
+        `USER_TAG starts planning tactics in USER_THEIR head on how to take down the elusive VAR_C menace. The 2nd one has shown up in the most unexpected places!`
 	],
 };
 
