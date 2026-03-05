@@ -3,7 +3,7 @@ const { mittentypes, getMittenName, getGag, assignMitten, getMitten, getBaseMitt
 const { calculateTimeout } = require("./../functions/timefunctions.js");
 const { getHeavy } = require("./../functions/heavyfunctions.js");
 const { getPronouns } = require("./../functions/pronounfunctions.js");
-const { getConsent, handleConsent } = require("./../functions/interactivefunctions.js");
+const { getConsent, handleConsent, handleMajorRestraint, handleExtremeRestraint } = require("./../functions/interactivefunctions.js");
 const { getText } = require("./../functions/textfunctions.js");
 const { default: didYouMean, ReturnTypeEnums } = require("didyoumean2");
 const { getUserTags } = require("../functions/configfunctions.js");
