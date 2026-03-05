@@ -1278,7 +1278,7 @@ const texts_mitten = {
 	nomitten: {
         self: {
             gag: [
-                `USER_TAG puts on a set of VAR_C2. USER_THEYLL_CAP be unable to remove USER_THEIR gag!`
+                `USER_TAG puts on a set of VAR_C2. USER_THEYLL_CAP be unable to remove USER_THEIR gag!`,
                 `USER_TAG wriggles USER_THEIR fingers into some VAR_C2. USER_THEIR_CAP gag will be impossible to remove!`,
                 `As if USER_THEY wantUSER_S to stay gagged, USER_TAG renders USER_THEIR hands useless with a pair of VAR_C2!`,
                 `USER_TAG puts on a pair of VAR_C2 with a pair of padlocks. USER_THEYLL_CAP be unable to remove USER_THEIR gag!`,
