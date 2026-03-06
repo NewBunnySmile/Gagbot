@@ -55,7 +55,7 @@ function assignOutfit(userID, slot, options) {
 		}
 		optionbit++;
 		if (options.charAt(optionbit) == 1) {
-			storedobject.headwear = getHeadwear(userID).length > 0 ? getHeadwear(userID) : undefined;
+			storedobject.headwear = process.headwear[userID]; // Oops.
 		}
 		optionbit++;
 		if (options.charAt(optionbit) == 1) {
