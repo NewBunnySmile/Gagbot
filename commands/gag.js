@@ -2,7 +2,7 @@ const { SlashCommandBuilder, MessageFlags, TextDisplayBuilder } = require("disco
 const fs = require("fs");
 const path = require("path");
 const { getGag, assignGag, getMitten, getGagLast } = require("./../functions/gagfunctions.js");
-const { getHeavy } = require("./../functions/heavyfunctions.js");
+const { getHeavy, getHeavyBound } = require("./../functions/heavyfunctions.js");
 const { getPronouns } = require("./../functions/pronounfunctions.js");
 const { getConsent, handleConsent, handleExtremeRestraint } = require("./../functions/interactivefunctions.js");
 const { getText, getTextGeneric } = require("./../functions/textfunctions.js");
@@ -118,7 +118,7 @@ module.exports = {
 				return;
 			}
 
-			// REFLECT
+			// REFLECT // We may need to move this to within the nomitten section. 
 			if (gaggeduser.id == process.client.user.id) {
 				data.gagreflect = true;
 				data.textdata.interactionuser = process.client.user;
@@ -127,7 +127,7 @@ module.exports = {
 				gaggeduser = interaction.user;
 			}
 
-			if (getHeavy(interactionuser.id)) {
+			if (!getHeavyBound(interaction.user.id, gaggeduser.id)) {
 				// in heavy bondage, cant equip
 				data.heavy = true;
 				if (interactionuser == gaggeduser) {
