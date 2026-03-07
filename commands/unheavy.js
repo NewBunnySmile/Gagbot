@@ -53,7 +53,7 @@ module.exports = {
 					interactionuser: interaction.user,
 					targetuser: heavyuser,
 					c1: getHeavy(interaction.user.id)?.type, // heavy bondage type
-					c2: getBaseHeavy(heavytype).name
+					c2: getHeavy(heavyuser.id, heavytype).displayname ??  getBaseHeavy(heavytype).name
 				},
 			};
 
@@ -93,7 +93,7 @@ module.exports = {
 						let datatogeneric = Object.assign({}, data.textdata);
 						datatogeneric.c1 = "heavy bondage";
 						interaction.reply({ content: getTextGeneric("unbind", datatogeneric), flags: MessageFlags.Ephemeral });
-						let canRemove = await handleBondageRemoval(interaction.user, heavyuser, "heavy bondage").then(
+						let canRemove = await handleBondageRemoval(interaction.user, heavyuser, getHeavy(heavyuser.id, heavytype)?.displayname ?? "heavy bondage").then(
 							async (res) => {
 								await interaction.editReply(getTextGeneric("unbind_accept", datatogeneric));
 								await interaction.followUp(getText(data));
