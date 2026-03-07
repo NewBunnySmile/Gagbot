@@ -162,7 +162,7 @@ const texts_chastity = {
 					key_self: [
 						`USER_TAG puts a VAR_C2 on and clicks a tiny lock on it before stashing the key for safekeeping!`,
 						`USER_TAG slips a VAR_C2 on and turns the key, locking USER_THEIR breasts away... but USER_THEY still USER_HAVE the key.`,
-						`USER_TAG whispers a sweet goodbye as USER_THEY wrap a VAR_C2 around USER_THEIR chest, sealing USER_THEIR chastity away under lock and key.`,
+						`USER_TAG whispers a sweet goodbye as USER_THEY wrapUSER_S a VAR_C2 around USER_THEIR chest, sealing USER_THEIR chastity away under lock and key.`,
 						{
 							required: (t) => {
 								return getArousal(t.interactionuser.id) > 10;
@@ -198,7 +198,7 @@ const texts_chastity = {
 					key_self: [
 						`USER_TAG puts a VAR_C2 on and clicks a tiny lock on it before stashing the key for safekeeping!`,
 						`USER_TAG slips a VAR_C2 on and turns the key, locking USER_THEIR breasts away... but USER_THEY still USER_HAVE the key.`,
-						`USER_TAG whispers a sweet goodbye as USER_THEY wrap a VAR_C2 around USER_THEIR chest, sealing USER_THEIR chastity away under lock and key.`,
+						`USER_TAG whispers a sweet goodbye as USER_THEY wrapUSER_S a VAR_C2 around USER_THEIR chest, sealing USER_THEIR chastity away under lock and key.`,
 						{
 							required: (t) => {
 								return getArousal(t.interactionuser.id) > 10;
@@ -1696,8 +1696,8 @@ const texts_struggle = {
 		`USER_TAG is considering announcing to everyone that USER_THEY lost The Game!`,
 		`USER_TAG wants a new pair of handcuffs. Where? On who? Who knows!`,
 		`USER_TAG wants a new pair of handcuffs. Probably on USER_THEMSELF. Someone should bind USER_THEM!`,
-		`USER_TAG rubs USER_THEIR wrists. They wonder what it would feel like to be wearing cuffs.`,
-		`USER_TAG blushes slightly as they glance around at all the restraints. Maybe someone will use them on USER_THEM!`,
+		`USER_TAG rubs USER_THEIR wrists. USER_THEY_CAP wonder what it would feel like to be wearing cuffs.`,
+		`USER_TAG blushes slightly as USER_THEY glance around at all the restraints. Maybe someone will use them on USER_THEM!`,
 		`USER_TAG nods as USER_THEY USER_ISARE reminded by USER_THEIR subconscious brain to drink some water!`,
 		`USER_TAG tries to imagine how best to adjust USER_THEIR speech when gagged. Perhaps with practice, USER_THEY can figure it out!`,
 		`All the keys clanging and bondage restraints strewn about makes USER_TAG swim in happy thoughts!`,
@@ -1794,7 +1794,14 @@ const texts_struggle = {
 			},
 			text: `USER_TAG produces a deck of cards and pulls one out with a dramatic flourish, holding it up while shouting, "It's time to d-d-d-d-d-duel!`,
 		},
-        `USER_TAG starts planning tactics in USER_THEIR head on how to take down the elusive VAR_C menace. The 2nd one has shown up in the most unexpected places!`
+        `USER_TAG starts planning tactics in USER_THEIR head on how to take down the elusive VAR_C menace. The 2nd one has shown up in the most unexpected places!`,
+        `USER_TAG quietly ponders the science behind headpatting all of the cute people in the dungeon.`,
+        `USER_TAG prods a controller USER_THEY had in USER_THEIR pocket. Which kind of controller? Clearly the best one. Simply ask, where is the X button?`,
+        `USER_TAG pulls out a leash and giggles as USER_THEY fidget with the clicky bit. Who will the leash get secured to?`,
+        `USER_TAG flops on a nearby chair. The chair is comfy. The chair offers so much softness... There is only... the chair...`,
+        `USER_TAG's eyes narrow as USER_THEY spot **The Book**. USER_THEIR_CAP thoughts race as USER_THEY strategize the best method with which to dispatch the creature.`,
+        `USER_TAG says a silent prayer to the Goddess of RAM, hoping for the prices to return to normal.`,
+        `USER_TAG hums a song to USER_THEMSELF. What is the song? Well, this time, everyone should know it!`,
 	],
 };
 
