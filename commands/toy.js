@@ -3,7 +3,7 @@ const { default: didYouMean, ReturnTypeEnums } = require("didyoumean2");
 const { getBaseToy, getSpecificToy, userBlockArousingToy, assignToy } = require("../functions/toyfunctions");
 const { getText } = require("../functions/textfunctions");
 const { getConsent } = require("../functions/interactivefunctions");
-const { getHeavy } = require("../functions/heavyfunctions");
+const { getHeavy, getHeavyBound } = require("../functions/heavyfunctions");
 
 
 module.exports = {
@@ -82,7 +82,7 @@ module.exports = {
                 return;
             }
 
-            if (getHeavy(interaction.user.id)) {
+            if (!getHeavyBound(interaction.user.id, toyuser.id)) {
 				// We are in heavy bondage
 				data.heavy = true;
 				if (toyuser == interaction.user) {

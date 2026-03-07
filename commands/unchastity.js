@@ -1,7 +1,7 @@
 const { SlashCommandBuilder, MessageFlags } = require("discord.js");
 const { getChastity, removeChastity, canAccessChastity } = require("./../functions/vibefunctions.js");
 const { calculateTimeout } = require("./../functions/timefunctions.js");
-const { getHeavy } = require("./../functions/heavyfunctions.js");
+const { getHeavy, getHeavyBound } = require("./../functions/heavyfunctions.js");
 const { getPronouns } = require("./../functions/pronounfunctions.js");
 const { getConsent, handleConsent } = require("./../functions/interactivefunctions.js");
 const { rollKeyFumble } = require("../functions/keyfindingfunctions.js");
@@ -41,7 +41,7 @@ module.exports = {
 			data[braorbelt] = true;
 			if (braorbelt == "chastitybelt") {
 				// Trying to take off a chastity belt
-				if (getHeavy(interaction.user.id)) {
+				if (!getHeavyBound(interaction.user.id, chastitywearer.id)) {
 					// In heavy bondage, cannot take off the belt anyway
 					data.heavy = true;
 					if (chastitywearer == interaction.user) {
@@ -155,7 +155,7 @@ module.exports = {
 				}
 			} else {
 				// Trying to take off a chastity bra
-				if (getHeavy(interaction.user.id)) {
+				if (!getHeavyBound(interaction.user.id, chastitywearer.id)) {
 					// In heavy bondage, cannot take off the belt anyway
 					data.heavy = true;
 					if (chastitywearer == interaction.user) {

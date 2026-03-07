@@ -1,6 +1,6 @@
 const { SlashCommandBuilder, MessageFlags, TextDisplayBuilder } = require("discord.js");
 const { getMitten } = require("./../functions/gagfunctions.js");
-const { getHeavy } = require("./../functions/heavyfunctions.js");
+const { getHeavy, getHeavyBound } = require("./../functions/heavyfunctions.js");
 const { getPronouns } = require("./../functions/pronounfunctions.js");
 const { getConsent, handleConsent, handleMajorRestraint, handleExtremeRestraint } = require("./../functions/interactivefunctions.js");
 const { getHeadwear, assignHeadwear, getHeadwearName, getBaseHeadwear } = require("../functions/headwearfunctions.js");
@@ -99,7 +99,7 @@ module.exports = {
                 return;
             }
 
-			if (getHeavy(interaction.user.id)) {
+			if (!getHeavyBound(interaction.user.id, targetuser.id)) {
 				// target is in heavy bondage
 				data.heavy = true;
 				if (headwearuser.id == interaction.user.id) {

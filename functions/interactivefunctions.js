@@ -22,7 +22,7 @@ const { getBaseChastity } = require("./chastityfunctions.js");
 // Generates a consent button which the user will have to agree to.
 const consentMessage = (interaction, user) => {
 	let outtext = `# Consent to being Bound
-<@${process.env.CLIENTID}> is a bot which facilitates restraints in this channel, which have certain effects on you as you wear them, primarily centered around some form of speech impairment. Effects will only apply within this channel. 
+<@${process.client.user.id}> is a bot which facilitates restraints in this channel, which have certain effects on you as you wear them, primarily centered around some form of speech impairment. Effects will only apply within this channel. 
 Restraints and toys used include the following:
 - Gags, Corsets and Toys: Impair and modify speech in various ways
 - Mittens and Chastity: Restrict modifying these settings
@@ -632,11 +632,6 @@ const assignMemeImages = () => {
 function checkBondageRemoval(userID, targetID, type) {
 	let useroption = getOption(targetID, "removebondage");
 
-	console.log(`PERMS`);
-	console.log(useroption == "all_binder_and_keyholder");
-	console.log(canAccessCollar(userID, targetID, true));
-	console.log(useroption == "all_binder_and_keyholder" && (canAccessChastity(targetID, userID, true).access || canAccessCollar(targetID, userID, true).access));
-
 	// Return true immediately if it's accepted without question
 	if (useroption == "accept") {
 		return true;
@@ -657,7 +652,7 @@ function checkBondageRemoval(userID, targetID, type) {
 	if (useroption == "all_binder" || useroption == "all_binder_and_keyholder") {
 		let restraintobject;
 		if (type == "heavy") {
-			restraintobject = getHeavyBinder(targetID);
+			restraintobject = getHeavyBinder(targetID, type);
 		}
 		if (type == "gag") {
 			restraintobject = getGagBinder(targetID);

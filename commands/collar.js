@@ -1,5 +1,5 @@
 const { SlashCommandBuilder, MessageFlags, TextDisplayBuilder } = require("discord.js");
-const { getHeavy } = require("./../functions/heavyfunctions.js");
+const { getHeavy, getHeavyBound } = require("./../functions/heavyfunctions.js");
 const { getCollar, assignCollar, collartypes, getCollarName, getBaseCollar, canAccessCollar } = require("./../functions/collarfunctions.js");
 const { getPronouns } = require("./../functions/pronounfunctions.js");
 const { getConsent, handleConsent, collarPermModal } = require("./../functions/interactivefunctions.js");
@@ -80,7 +80,7 @@ module.exports = {
 				},
 			};
 
-			if (getHeavy(interaction.user.id)) {
+			if (!getHeavyBound(interaction.user.id, interaction.user.id)) {
 				data.heavy = true;
 				if (getCollar(interaction.user.id)) {
 					data.collar = true;
@@ -138,7 +138,7 @@ module.exports = {
 				},
 			};
 
-			if (getHeavy(interaction.user.id)) {
+			if (!getHeavyBound(interaction.user.id, interaction.user.id)) {
 				data.heavy = true;
 				if (getCollar(interaction.user.id)) {
 					data.collar = true;

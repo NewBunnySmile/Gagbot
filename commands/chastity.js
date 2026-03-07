@@ -1,7 +1,7 @@
 const { SlashCommandBuilder, MessageFlags, TextDisplayBuilder } = require("discord.js");
 const { getChastity, assignChastity, getChastityName } = require("./../functions/vibefunctions.js");
 const { calculateTimeout } = require("./../functions/timefunctions.js");
-const { getHeavy } = require("./../functions/heavyfunctions.js");
+const { getHeavy, getHeavyBound } = require("./../functions/heavyfunctions.js");
 const { getPronouns } = require("./../functions/pronounfunctions.js");
 const { getConsent, handleConsent } = require("./../functions/interactivefunctions.js");
 const { getText } = require("./../functions/textfunctions.js");
@@ -90,7 +90,7 @@ module.exports = {
 			if (braorbelt == "chastitybelt") {
 				// They are trying to put on a chastity belt.
 				// Check if the wearer is in an armbinder - if they are, block them.
-				if (getHeavy(interaction.user.id)) {
+				if (!getHeavyBound(interaction.user.id, chastityuser.id)) {
 					data.heavy = true;
 					if (getChastity(interaction.user.id)) {
 						// User is in some form of heavy bondage and already has a chastity belt
@@ -155,7 +155,7 @@ module.exports = {
 			} else {
 				// They are trying to put on a chastity bra.
 				// Check if the wearer is in an armbinder - if they are, block them.
-				if (getHeavy(interaction.user.id)) {
+				if (!getHeavyBound(interaction.user.id, chastityuser.id)) {
 					data.heavy = true;
 					if (getChastityBra(interaction.user.id)) {
 						// User is in some form of heavy bondage and already has a chastity belt

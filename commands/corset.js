@@ -1,6 +1,6 @@
 const { SlashCommandBuilder, MessageFlags, TextDisplayBuilder } = require("discord.js");
 const { getChastity, getVibe, assignVibe, canAccessChastity } = require("./../functions/vibefunctions.js");
-const { getHeavy } = require("./../functions/heavyfunctions.js");
+const { getHeavy, getHeavyBound } = require("./../functions/heavyfunctions.js");
 const { getPronouns } = require("./../functions/pronounfunctions.js");
 const { getConsent, handleConsent } = require("./../functions/interactivefunctions.js");
 const { getCorset, assignCorset, getBaseCorset } = require("./../functions/corsetfunctions.js");
@@ -110,7 +110,7 @@ module.exports = {
 			if (blocked) {
 				return;
 			}
-			if (getHeavy(interaction.user.id)) {
+			if (!getHeavyBound(interaction.user.id, corsetuser.id)) {
 				// In heavy bondage, fail
 				data.heavy = true;
 				if (corsetuser == interaction.user) {

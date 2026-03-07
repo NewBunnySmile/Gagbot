@@ -1,6 +1,6 @@
 const { SlashCommandBuilder, MessageFlags } = require("discord.js");
 const { getGag, deleteGag, getMitten, getGags } = require("./../functions/gagfunctions.js");
-const { getHeavy } = require("./../functions/heavyfunctions.js");
+const { getHeavy, getHeavyBound } = require("./../functions/heavyfunctions.js");
 const { getPronouns } = require("./../functions/pronounfunctions.js");
 const { getConsent, handleConsent } = require("./../functions/interactivefunctions.js");
 const { getText, getTextGeneric } = require("./../functions/textfunctions.js");
@@ -65,7 +65,7 @@ module.exports = {
 			};
 
 			// Fuck it, I'm just gonna redo the code path because I've been redoing all the removals anyway.
-			if (getHeavy(interaction.user.id)) {
+			if (!getHeavyBound(interaction.user.id, gaggeduser.id)) {
 				// We are in heavy bondage
 				data.heavy = true;
 				if (gaggeduser == interaction.user) {
