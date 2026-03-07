@@ -15,8 +15,8 @@ const { getUserTags } = require("../functions/configfunctions.js");
 module.exports = {
 	data: new SlashCommandBuilder()
 		.setName("collarequip")
-		.setDescription(`Put chastity, mittens or heavy bondage on someone with a collar`)
-		.addSubcommand((subcommand) =>
+		.setDescription(`Put chastity someone with a collar`)
+		/*.addSubcommand((subcommand) =>
 			subcommand
 				.setName("mittens")
 				.setDescription("Apply Mittens...")
@@ -29,7 +29,7 @@ module.exports = {
 				.setDescription("Apply Heavy Bondage...")
 				.addUserOption((opt) => opt.setName("user").setDescription("To who?").setRequired(true))
 				.addStringOption((opt) => opt.setName("type").setDescription("Which Restraint?").setAutocomplete(true)),
-		)
+		)*/
 		.addSubcommand((subcommand) =>
 			subcommand
 				.setName("chastity")
