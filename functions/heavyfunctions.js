@@ -237,7 +237,7 @@ const assignHeavy = (user, type, origbinder, customname) => {
 };
 
 /*************
- * Get Heavy Bondage worn by user ID. Check for falsy values to determine if they're free. Returns the most RELEVANT heavy bondage in the list (arms -> legs -> container). See getHeavyList to retrieve all of them.
+ * Get Heavy Bondage worn by user ID. Check for falsy values to determine if they're free. Returns the most RELEVANT heavy bondage in the list (arms -> legs -> container). See getHeavyList to retrieve all of them. Specify a type to get a specific bondage the user is wearing. 
  * - **(user id) user** to retrieve bondage for
  * - **(string) type** to retrieve a specific bondage, if worn. 
  *************/

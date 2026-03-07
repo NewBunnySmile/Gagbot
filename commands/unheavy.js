@@ -41,6 +41,7 @@ module.exports = {
 	async execute(interaction) {
 		try {
 			let heavyuser = interaction.options.getUser("user") ? interaction.options.getUser("user") : interaction.user;
+            let heavytype = interaction.options.getString("type");
 			// CHECK IF THEY CONSENTED! IF NOT, MAKE THEM CONSENT
 			if (!getConsent(interaction.user.id)?.mainconsent) {
 				await handleConsent(interaction, interaction.user.id);
@@ -52,11 +53,11 @@ module.exports = {
 					interactionuser: interaction.user,
 					targetuser: heavyuser,
 					c1: getHeavy(interaction.user.id)?.type, // heavy bondage type
-					c2: getHeavy(heavyuser.id)?.type, // Target's heavy bondage
+					c2: getBaseHeavy(heavytype).name
 				},
 			};
 
-			if (!getHeavy(heavyuser.id)) {
+			if (!getHeavy(heavyuser.id, heavytype)) {
 				// They aren't bound lol.
 				data.noheavy = true;
 				data.noheavyequipped = true;
@@ -80,7 +81,7 @@ module.exports = {
 			} else {
 				// Not in heavy bondage
 				data.noheavy = true;
-				if (getHeavyList(heavyuser.id).find((h) => h.type == )) {
+				if (getHeavy(heavyuser.id, heavytype)) {
 					data.heavyequipped = true;
 					// Now lets make sure the wearer wants that.
 					if (checkBondageRemoval(interaction.user.id, heavyuser.id, "heavy") == true) {

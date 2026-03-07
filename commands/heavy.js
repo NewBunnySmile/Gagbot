@@ -1,6 +1,6 @@
 const { SlashCommandBuilder, MessageFlags, TextDisplayBuilder } = require("discord.js");
 const { calculateTimeout } = require("./../functions/timefunctions.js");
-const { getHeavy, assignHeavy, commandsheavy, convertheavy, heavytypes, getBaseHeavy } = require("./../functions/heavyfunctions.js");
+const { getHeavy, assignHeavy, commandsheavy, convertheavy, heavytypes, getBaseHeavy, getHeavyRestrictions, getHeavyBound } = require("./../functions/heavyfunctions.js");
 const { getPronouns } = require("./../functions/pronounfunctions.js");
 const { getConsent, handleConsent, handleExtremeRestraint, handleMajorRestraint } = require("./../functions/interactivefunctions.js");
 const { getText } = require("./../functions/textfunctions.js");
@@ -101,7 +101,7 @@ module.exports = {
 				return;
 			}
 
-			if (getHeavy(interaction.user.id)) {
+			if (!getHeavyBound(interaction.user.id, targetuser.id)) {
 				data.heavy = true;
 				interaction.reply(getText(data));
 			} else {
