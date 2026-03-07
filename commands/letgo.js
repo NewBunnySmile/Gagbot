@@ -2,7 +2,7 @@ const { SlashCommandBuilder, MessageFlags } = require("discord.js");
 const { their } = require("./../functions/pronounfunctions.js");
 const { getConsent, handleConsent } = require("./../functions/interactivefunctions.js");
 const { tryOrgasm, getChastity, setArousalCooldown } = require("../functions/vibefunctions.js");
-const { getHeavy } = require("../functions/heavyfunctions.js");
+const { getHeavy, getHeavyBound } = require("../functions/heavyfunctions.js");
 const { getText } = require("./../functions/textfunctions.js");
 
 module.exports = {

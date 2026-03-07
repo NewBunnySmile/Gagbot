@@ -3,7 +3,7 @@ const { timelockChastityModal, timelockChastityBraModal, timelockCollarModal, ti
 const { getChastity, getChastityBra, canAccessChastity, canAccessChastityBra } = require("../functions/vibefunctions.js");
 const { getCollar, canAccessCollar } = require("../functions/collarfunctions.js");
 const { their } = require("../functions/pronounfunctions.js");
-const { getHeavy } = require("../functions/heavyfunctions.js");
+const { getHeavy, getHeavyBound } = require("../functions/heavyfunctions.js");
 const { timelockChastity, timelockChastityBra, timelockCollar } = require("./../functions/timelockfunctions.js");
 const { parseTime } = require("./../functions/timefunctions.js");
 const { getText } = require("../functions/textfunctions.js");

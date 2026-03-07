@@ -245,29 +245,41 @@ const getHeavy = (user, type) => {
 	if (process.heavy == undefined) {
 		process.heavy = {};
 	}
+    let returnarms;
+    let returnlegs;
+    let returncontainer;
     let returnedval;
-    if (process.heavy[user]) {
+    if (process.heavy[user] && (process.heavy[user].length > 0)) {
         if (!type) {
             let mapped = process.heavy[user].map((h) => getBaseHeavy(h.type))
         
             // return arms first
             mapped.forEach((h) => {
                 if (h.heavytags.includes("arms")) {
-                    returnedval = process.heavy[user].find((heavy) => heavy.type === h.value)
+                    returnarms = process.heavy[user].find((heavy) => heavy.type === h.value)
                 }
             })
             // return legs next
             mapped.forEach((h) => {
                 if (h.heavytags.includes("legs")) {
-                    returnedval = process.heavy[user].find((heavy) => heavy.type === h.value)
+                    returnlegs = process.heavy[user].find((heavy) => heavy.type === h.value)
                 }
             })
             // return container last
             mapped.forEach((h) => {
                 if (h.heavytags.includes("container")) {
-                    returnedval = process.heavy[user].find((heavy) => heavy.type === h.value)
+                    returncontainer = process.heavy[user].find((heavy) => heavy.type === h.value)
                 }
             })
+            if (returnarms) {
+                returnedval = returnarms;
+            }
+            else if (returnlegs) {
+                returnedval = returnlegs;
+            }
+            else if (returncontainer) {
+                returnedval = returncontainer;
+            }
         }
         else {
             returnedval = process.heavy[user].find((h) => h.type === type);
@@ -333,15 +345,18 @@ const removeHeavy = (user, type) => {
                 if (process.heavy[user][find] && process.onremovefunctions && process.onremovefunctions.heavy && process.onremovefunctions.heavy[process.heavy[user][find].type]) {
                     process.onremovefunctions.heavy[process.heavy[user][find].type](user);
                 }
-                delete process.heavy[user][find];
+                process.heavy[user].splice(find,1);
             }
         }
         else {
             if (process.heavy[user][0] && process.onremovefunctions && process.onremovefunctions.heavy && process.onremovefunctions.heavy[process.heavy[user][0].type]) {
                 process.onremovefunctions.heavy[process.heavy[user][0].type](user);
             }
-            delete process.heavy[user][0];
+            process.heavy[user].splice(0,1);
         }
+    }
+    if (process.heavy[user].length == 0) {
+        delete process.heavy[user]
     }
 	if (process.readytosave == undefined) {
 		process.readytosave = {};
@@ -390,13 +405,14 @@ const getHeavyRestrictions = (user) => {
                     returnobject.touchlist = [];
                 }
                 // Users in a container can ONLY do stuff to OTHERS in that same container. 
-                Object.keys(process.heavy[user]).forEach((k) => {
-                    if (getHeavyList(process.heavy[user]).find((h) => h.type === heavy.type)) {
+                Object.keys(process.heavy).forEach((k) => {
+                    if (getHeavy(k, heavy.type)) {
                         returnobject.touchlist.push(k);
                     }
                 }) 
             }
         })
+        console.log(returnobject.touchlist);
         return returnobject;
     }
 }

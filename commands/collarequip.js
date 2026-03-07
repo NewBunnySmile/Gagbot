@@ -1,5 +1,5 @@
 const { SlashCommandBuilder, MessageFlags, TextDisplayBuilder } = require("discord.js");
-const { getHeavy, assignHeavy, commandsheavy, convertheavy, heavytypes, getBaseHeavy } = require("./../functions/heavyfunctions.js");
+const { getHeavy, assignHeavy, commandsheavy, convertheavy, heavytypes, getBaseHeavy, getHeavyBound } = require("./../functions/heavyfunctions.js");
 const { getCollar, getCollarPerm, canAccessCollar } = require("./../functions/collarfunctions.js");
 const { getChastity, assignChastity, getChastityName, getChastityBraName, } = require("./../functions/vibefunctions.js");
 const { getMittenName, assignMitten, getMitten, mittentypes, getBaseMitten } = require("./../functions/gagfunctions.js");

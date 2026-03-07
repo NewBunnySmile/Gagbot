@@ -1,10 +1,11 @@
 const { SlashCommandBuilder, MessageFlags } = require("discord.js");
 const { calculateTimeout } = require("./../functions/timefunctions.js");
-const { getHeavy, removeHeavy, convertheavy, getHeavyList, getBaseHeavy } = require("./../functions/heavyfunctions.js");
+const { getHeavy, removeHeavy, convertheavy, getHeavyList, getBaseHeavy, getHeavyBound } = require("./../functions/heavyfunctions.js");
 const { getPronouns } = require("./../functions/pronounfunctions.js");
 const { getConsent, handleConsent } = require("./../functions/interactivefunctions.js");
 const { getText, getTextGeneric } = require("./../functions/textfunctions.js");
 const { checkBondageRemoval, handleBondageRemoval } = require("../functions/interactivefunctions.js");
+const { default: didYouMean, ReturnTypeEnums } = require("didyoumean2");
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -41,7 +42,7 @@ module.exports = {
 	async execute(interaction) {
 		try {
 			let heavyuser = interaction.options.getUser("user") ? interaction.options.getUser("user") : interaction.user;
-            let heavytype = interaction.options.getString("type");
+            let heavytype = interaction.options.getString("type") ?? getHeavy(interaction.user.id)?.type;
 			// CHECK IF THEY CONSENTED! IF NOT, MAKE THEM CONSENT
 			if (!getConsent(interaction.user.id)?.mainconsent) {
 				await handleConsent(interaction, interaction.user.id);
@@ -53,7 +54,7 @@ module.exports = {
 					interactionuser: interaction.user,
 					targetuser: heavyuser,
 					c1: getHeavy(interaction.user.id)?.type, // heavy bondage type
-					c2: getHeavy(heavyuser.id, heavytype).displayname ??  getBaseHeavy(heavytype).name
+					c2: getHeavy(heavyuser.id, heavytype)?.displayname ?? getBaseHeavy(heavytype)?.name
 				},
 			};
 
@@ -87,7 +88,7 @@ module.exports = {
 					if (checkBondageRemoval(interaction.user.id, heavyuser.id, "heavy") == true) {
 						// Allowed immediately, lets go
 						interaction.reply(getText(data));
-						removeHeavy(heavyuser.id);
+						removeHeavy(heavyuser.id, heavytype);
 					} else {
 						// We need to ask first.
 						let datatogeneric = Object.assign({}, data.textdata);
@@ -97,7 +98,7 @@ module.exports = {
 							async (res) => {
 								await interaction.editReply(getTextGeneric("unbind_accept", datatogeneric));
 								await interaction.followUp(getText(data));
-								removeHeavy(heavyuser.id);
+								removeHeavy(heavyuser.id, heavytype);
 							},
 							async (rej) => {
 								await interaction.editReply(getTextGeneric("unbind_decline", datatogeneric));
