@@ -1544,8 +1544,8 @@ function calcStaticVibeIntensity(user) {
 function calcDenialCoefficient(user) {
 	const heavy = getHeavy(user);
 	const chastity = getChastity(user);
-	if (chastity) return (heavy ? heavyDenialCoefficient(heavy.typeval) : 0) / 2 + getCombinedTraits(user).denialCoefficient;
-	return heavy ? heavyDenialCoefficient(heavy.typeval) : 1;
+	if (chastity) return (heavy ? heavyDenialCoefficient(heavy.type) : 0) / 2 + getCombinedTraits(user).denialCoefficient;
+	return heavy ? heavyDenialCoefficient(heavy.type) : 1;
 }
 
 function calcFrustration(user) {

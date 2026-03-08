@@ -57,6 +57,12 @@ module.exports = {
 	async execute(interaction) {
 		try {
             let targetuser = interaction.options.getUser("user") ? interaction.options.getUser("user") : interaction.user;
+            let heavychoice = interaction.options.getString("type") ? interaction.options.getString("type") : "armbinder_latex";
+            if ((interaction.user.id == targetuser.id) && (getBaseHeavy(heavychoice).noself)) {
+                interaction.reply({ content: `You can't bind yourself with that item!`, flags: MessageFlags.Ephemeral })
+                blocked = true;
+                return;
+            }
 			// CHECK IF THEY CONSENTED! IF NOT, MAKE THEM CONSENT
 			if (!getConsent(interaction.user.id)?.mainconsent) {
 				await handleConsent(interaction, interaction.user.id);
@@ -67,7 +73,7 @@ module.exports = {
 				await handleConsent(interaction, interaction.user.id);
 				return;
 			}
-			let heavychoice = interaction.options.getString("type") ? interaction.options.getString("type") : "armbinder_latex";
+			
             let tags = getUserTags(targetuser.id);
             let i = getBaseHeavy(heavychoice)
             let blocked = false;

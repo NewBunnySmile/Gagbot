@@ -30,7 +30,7 @@ module.exports = {
 
 			let outopts = [];
 			if (heavybondage) {
-				outopts.push({ name: `Heavy Bondage: ${getHeavy(interaction.user.id).type}`, value: "heavy" });
+				outopts.push({ name: `Heavy Bondage: ${getHeavy(interaction.user.id).displayname}`, value: "heavy" });
 			}
 			if (gagbondage) {
 				outopts.push({ name: `Gag: ${convertGagText(getGagLast(interaction.user.id))}`, value: "gag" });
@@ -39,10 +39,10 @@ module.exports = {
 				outopts.push({ name: `Mittens${mittenbondage.mittenname ? `: ${getMittenName(interaction.user.id)}` : ""}`, value: "mitten" });
 			}
 			if (chastitybondage) {
-				outopts.push({ name: `Chastity${chastitybondage.chastitytype ? `: ${getChastityName(interaction.user.id)}` : ""}`, value: "chastity" });
+				outopts.push({ name: `Chastity${chastitybondage.chastitytype ? `: ${getChastityName(interaction.user.id)}` : " Belt"}`, value: "chastity" });
 			}
             if (chastitybrabondage) {
-				outopts.push({ name: `Chastity Bra${chastitybrabondage.chastitytype ? `: ${getChastityBraName(interaction.user.id)}` : ""}`, value: "chastitybra" });
+				outopts.push({ name: `Chastity Bra${chastitybrabondage.chastitytype ? `: ${getChastityBraName(interaction.user.id)}` : " Bra"}`, value: "chastitybra" });
 			}
 			if (headbondage.length > 0) {
 				outopts.push({ name: `Head Restraints`, value: "head" });
@@ -86,7 +86,7 @@ module.exports = {
 				textdata: {
 					interactionuser: interaction.user,
 					targetuser: interaction.user, // Doesn't really matter but we're adding to avoid a crash
-					c1: getHeavy(interaction.user.id)?.type, // heavy bondage type
+					c1: getHeavy(interaction.user.id)?.displayname, // heavy bondage type
 					c2: convertGagText(getGagLast(interaction.user.id)),
 					c3: getMittenName(interaction.user.id) ?? "mittens",
 					c4: getChastityName(interaction.user.id) ?? "chastity belt",
