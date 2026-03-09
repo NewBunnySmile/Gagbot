@@ -71,7 +71,7 @@ module.exports = {
 				textdata: {
 					interactionuser: interaction.user,
 					targetuser: headwearuser,
-					c1: getHeavy(interaction.user.id)?.type, // heavy bondage type
+					c1: getHeavy(interaction.user.id)?.displayname, // heavy bondage type
 					c2: getHeadwearName(headwearuser.id, headwearchoice),
 				},
 			};

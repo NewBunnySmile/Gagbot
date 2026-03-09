@@ -22,7 +22,7 @@ module.exports = {
 				textdata: {
 					interactionuser: interaction.user,
 					targetuser: interaction.user, // Not needed, but required for function parsing anyway.
-					c1: getHeavy(interaction.user.id)?.type, // heavy bondage type
+					c1: getHeavy(interaction.user.id)?.displayname, // heavy bondage type
 				},
 			};
 

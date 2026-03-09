@@ -76,7 +76,7 @@ module.exports = {
 				textdata: {
 					interactionuser: interaction.user,
 					targetuser: interaction.options.getUser("keyholder") ? interaction.options.getUser("keyholder") : interaction.user,
-					c1: getHeavy(interaction.user.id)?.type, // heavy bondage type
+					c1: getHeavy(interaction.user.id)?.displayname, // heavy bondage type
 				},
 			};
 
@@ -133,7 +133,7 @@ module.exports = {
 				textdata: {
 					interactionuser: interaction.user,
 					targetuser: await interaction.client.users.fetch(collarkeyholder), // To fetch the target user object
-					c1: getHeavy(interaction.user.id)?.type, // heavy bondage type
+					c1: getHeavy(interaction.user.id)?.displayname, // heavy bondage type
 					c2: getCollarName(interaction.user.id, choice_collartype) ?? "collar",
 				},
 			};

@@ -105,7 +105,7 @@ module.exports = {
 				textdata: {
 					interactionuser: interaction.user,
 					targetuser: gaggeduser,
-					c1: getHeavy(interaction.user.id)?.type, // heavy bondage type
+					c1: getHeavy(interaction.user.id)?.displayname, // heavy bondage type
 					c2: intensitytext, // gag tightness
 					c3: gagname, // New gag being put on the wearer
 					c4: oldgagname, // Old gag the wearer has on

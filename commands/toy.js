@@ -67,7 +67,7 @@ module.exports = {
 				textdata: {
 					interactionuser: interaction.user,
 					targetuser: toyuser,
-					c1: getHeavy(interaction.user.id)?.type, // heavy bondage type
+					c1: getHeavy(interaction.user.id)?.displayname, // heavy bondage type
 					c2: getBaseToy(toytype).toyname, // the chosen vibe type
 					c3: toyintensity,
 				},

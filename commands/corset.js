@@ -77,7 +77,7 @@ module.exports = {
 				textdata: {
 					interactionuser: interaction.user,
 					targetuser: corsetuser,
-					c1: getHeavy(interaction.user.id)?.type, // heavy bondage type
+					c1: getHeavy(interaction.user.id)?.displayname, // heavy bondage type
 					c2: tightness, // corset tightness
 					c3: getBaseCorset(current?.type)?.name ?? "Leather Corset", // current corset
 					c4: getBaseCorset(type)?.name, // new corset

@@ -14,10 +14,10 @@ const { getChastity } = require("../../functions/vibefunctions");
 exports.functiontick = async (userID) => {
     try {
         // Cancel until the user has said AT LEAST three things or has waited long enough. 
-        if (getUserVar(userID, "struggleCollarMsgs") < 3) { return }
+        if (getUserVar(userID, "struggleCollarMsgs") < 5) { return }
         if (getUserVar(userID, "struggleCollarDelay") >= Date.now()) { return }
 
-        let heavybondage = getHeavy(userID)?.type;
+        let heavybondage = getHeavy(userID)?.displayname;
         let gagbondage = getGagLast(userID);
         let mittenbondage = getMitten(userID);
         let chastitybondage = getChastity(userID);
@@ -42,7 +42,7 @@ exports.functiontick = async (userID) => {
             textdata: {
                 interactionuser: { id: userID },
                 targetuser: { id: userID }, // Doesn't really matter but we're adding to avoid a crash
-                c1: getHeavy(userID)?.type, // heavy bondage type
+                c1: getHeavy(userID)?.displayname, // heavy bondage type
                 c2: convertGagText(getGagLast(userID)),
                 c3: getMittenName(userID) ?? "mittens",
                 c4: getChastityName(userID) ?? "chastity belt",
@@ -239,8 +239,8 @@ exports.functiontick = async (userID) => {
             }
         }
 
-        // Wait between 2 and 7 minutes for another struggle. 
-        setUserVar(userID, "struggleCollarDelay", Date.now() + 120000 + Math.floor(Math.random() * 300000))
+        // Wait between 4 and 14 minutes for another struggle. 
+        setUserVar(userID, "struggleCollarDelay", Date.now() + 240000 + Math.floor(Math.random() * 600000))
         setUserVar(userID, "struggleCollarMsgs", 0); 
     } catch (err) {
         console.log(err);

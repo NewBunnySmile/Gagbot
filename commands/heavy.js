@@ -91,7 +91,7 @@ module.exports = {
 				textdata: {
 					interactionuser: interaction.user,
 					targetuser: targetuser,
-					c1: getHeavy(interaction.user.id)?.type, // heavy bondage type
+					c1: getHeavy(interaction.user.id)?.displayname, // heavy bondage type
 					c2: convertheavy(heavychoice), // New heavy bondage
                     c3: convertheavy(heavychoice) // Compatibility with original collarequiptexts
 				},
