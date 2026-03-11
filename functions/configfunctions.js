@@ -842,6 +842,39 @@ const configoptions = {
 				return false;
 			},
 		},
+        deferentialgagsubject: {
+			name: "Deferential Gag Subject",
+			desc: "Name while wearing deferential gag",
+			descmodal: "What subject should you use while deferential (pet, etc)?",
+			choices: [
+				{
+					name: "Set Name",
+					helptext: "Deferential subject set to: ",
+					helptextnone: "*No Deferential Name*",
+					select_function: (userID) => {
+						return false;
+					},
+					value: "None",
+					style: ButtonStyle.Primary,
+				},
+			],
+			customtext: (userID) => {
+				return `Your deferential name...`;
+			},
+			placeholder: (userID) => {
+				return `Your deferential name...`;
+			},
+            textvaluedisplay: (val) => {
+                return val;
+            },
+			menutype: "choice_textentry",
+			default: (userID) => {
+				return ``;
+			},
+			disabled: () => {
+				return false;
+			},
+		},
 	},
     Content: {
         "wearabletags-latex": {

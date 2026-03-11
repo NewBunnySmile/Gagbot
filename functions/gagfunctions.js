@@ -49,8 +49,8 @@ const setUpGags = () => {
 const gagtypesout = [{ name: "Ball Gag" }, { name: "Bast Gag" }, { name: "Bweh Gag" }, { name: "Cat Gag" }, { name: "Code Gag" }, { name: "Enchanted Dog Gag" }, { name: "Donald Gag" }, { name: "Good Sub Gag" }, { name: "Polite Sub Gag" }, { name: "Ring Gag" }, { name: "Silent Panel Gag" }, { name: "Stuff Gag" }, { name: "Tape Gag" }, { name: "UwU Gag" }, { name: "Enchanted Wolf Gag" }, { name: "L337 Gag" }, { name: "Enigma Gag" }];
 
 const mittentypes = [
-	{ name: "Kitty Paws", value: "mittens_kitty" },
-	{ name: "Oversized Fluffy Paw Mittens", value: "mittens_oversized_fluff" },
+	{ name: "Kitty Paws", value: "mittens_kitty", tags: ["pet"] },
+	{ name: "Oversized Fluffy Paw Mittens", value: "mittens_oversized_fluff", tags: ["pet"] },
 	{ name: "Pom Pom Mittens", value: "mittens_pompom" },
 	{ name: "Cyber Doll Mittens", value: "mittens_cyberdoll" },
 	{ name: "Leather Mittens", value: "mittens_leather", tags: ["leather"] },

@@ -382,7 +382,7 @@ const removeHeavy = (user, type) => {
             process.heavy[user].splice(0,1);
         }
     }
-    if (process.heavy[user].length == 0) {
+    if (process.heavy[user]?.length == 0) {
         delete process.heavy[user]
     }
 	if (process.readytosave == undefined) {
