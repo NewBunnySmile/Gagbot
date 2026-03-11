@@ -19,8 +19,8 @@ const garbleText = (text, parent, intensity, msg) => {
     let outtext = text;
 
     let replacementstring = "toy";
-    if (getPronouns(msg.author.id, "subject") == "he") { replacementstring = r.replace.replace("SUBJECT", "boy") }
-    if (getPronouns(msg.author.id, "subject") == "she") { replacementstring = r.replace.replace("SUBJECT", "girl") }
+    if (getPronouns(msg.author.id, "subject") == "he") { replacementstring = "boy" }
+    if (getPronouns(msg.author.id, "subject") == "she") { replacementstring = "girl" }
     if (getOption(msg.author.id, "deferentialgagsubject").length > 0) { replacementstring = getOption(msg.author.id, "deferentialgagsubject") }
 
     selfreplacements.forEach((r) => {
