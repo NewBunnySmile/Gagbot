@@ -28,21 +28,24 @@ const garbleText = (text, parent, intensity, msg) => {
         if (r.regex === "i") {
             // Find any "I" that starts at the beginning of a sentence. Mark it accordingly with ╪
             let regexpattern = new RegExp(`(?:^|(?:[.!?]\\s))\\b(I)\\b`, "ig");
-            outtext = outtext.replace(regexpattern, "Iqhwriuawujahrfkuwrhakuhncjkaszn")
             // Compromise library can be used here to solve this!
+            // I'm learning more about the shenanigans of this library than I ever expected. 
             let doc = nlp(outtext);
-            doc.replace("Iqhwriuawujahrfkuwrhakuhncjkaszn", `This ${replacementstring}`).update();
-            doc.replace("i", `this ${replacementstring}`).update();
-            console.log(doc.nouns());
-            console.log(doc.verbs());
-            doc.verbs().json().forEach((v) => {
-                if (v.text == v.verb.infinitive) {
-                    doc.replace(v.text, `${v.text}s`).update();
-                }
+            let matches = doc.match(`[<subject>i] #Adverb? [<verb>#Verb]`)
+            let start = false;
+            // try-catch detecting the start because this is pretty deep lol
+            try {
+                start = (matches.groups('subject').json({ offset: true })[0].offset.start == 0);
+            }
+            catch (err) { }
+            matches.groups('subject').replaceWith(`${start ? "T" : "t"}his ${replacementstring}`);
+            matches.forEach((m) => {
+                console.log(m.verbs().json());
+                console.log(m.verbs().conjugate())
+                console.log(m.verbs().toPresentTense())
             })
-            console.log(outtext);
-            console.log(doc.text());
-            outtext = doc.text();
+
+            outtext = doc.text()
         }
         else {
             // I did not know replaceAll could take a function. 
