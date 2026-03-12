@@ -245,12 +245,12 @@ const texts_collarequip = {
 				},
 				heavybondage: {
 					alreadyworn: [
-						`TARGET_TAG is already in bondage, wearing a VAR_C2!`,
+						`TARGET_TAG is already in bondage, wearing a VAR_C3!`,
 						{
 							only: (t) => {
-								return t.c2.endsWith("'s Lap");
+								return t.c3.endsWith("'s Lap");
 							},
-							text: `TARGET_TAG is already trapped in VAR_C2, and it would be rude to interrupt.`,
+							text: `TARGET_TAG is already trapped in VAR_C3, and it would be rude to interrupt.`,
 						},
 					],
 					allowed: [

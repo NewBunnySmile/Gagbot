@@ -60,7 +60,6 @@ module.exports = {
             let heavychoice = interaction.options.getString("type") ? interaction.options.getString("type") : "armbinder_latex";
             if ((interaction.user.id == targetuser.id) && (getBaseHeavy(heavychoice).noself)) {
                 interaction.reply({ content: `You can't bind yourself with that item!`, flags: MessageFlags.Ephemeral })
-                blocked = true;
                 return;
             }
 			// CHECK IF THEY CONSENTED! IF NOT, MAKE THEM CONSENT
@@ -92,14 +91,14 @@ module.exports = {
 					interactionuser: interaction.user,
 					targetuser: targetuser,
 					c1: getHeavy(interaction.user.id)?.displayname, // heavy bondage type
-					c2: convertheavy(heavychoice), // New heavy bondage
-                    c3: convertheavy(heavychoice) // Compatibility with original collarequiptexts
+					c2: i.name, // New heavy bondage
+                    c3: i.name // Compatibility with original collarequiptexts
 				},
 			};
 
 			// This SHOULD retrieve a custom name if any.
 			if (getBaseHeavy(heavychoice) && getBaseHeavy(heavychoice).namefunction) {
-				data = getBaseHeavy(heavychoice).namefunction(interaction, data);
+				data = await getBaseHeavy(heavychoice).namefunction(interaction, data);
 			}
 
 			if (data.textdata.c2 == undefined) {

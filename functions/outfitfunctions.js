@@ -1225,7 +1225,7 @@ async function getDisplayTexts(userID, inspectuserID) {
     }
     // ****************** 
 
-    // ****************** Shared Gasmask
+    // ****************** Shared Gasmask --- Can't currently test this because linked was disabled for now. 
     if (process.headwear && process.headwear[inspectuserID] && process.headwear[inspectuserID].sharedbreathhose) {
         bartext = `${bartext}\n\n${process.emojis.gasmask} Sharing Breath with: <@${process.headwear[inspectuserID].sharedbreathhose}>`
     } 
