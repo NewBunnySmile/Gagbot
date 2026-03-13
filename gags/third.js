@@ -50,18 +50,21 @@ const pregarble = (text, parent, intensity, msg) => {
                         start = (matches.groups('subject').json({ offset: true })[0].offset.start == 0);
                     }
                     catch (err) { }
-                    matches.groups('subject').replaceWith(`${start ? "T" : "t"}his ${replacementstring}`);
+                    matches.groups(`subject`).forEach((sub, i) => {
+                        sub.replaceWith(i == 0 ? `${start ? "T" : "t"}his ${replacementstring}` : `this ${replacementstring}`)
+                    })
                     matches.forEach((m) => {
                         let conjugations = m.verbs().conjugate();
-                        if (!modal) {
+                        console.log(m.verbs().first().text())
+                        if (!modal || !m.verbs().first().text().endsWith('s')) {
                             if (tense == "past") {
-                                m.verbs().toPastTense();
+                                m.sentences().toPastTense();
                             }
-                            if (tense == "present") {
-                                m.verbs().toPresentTense();
+                            else if (tense == "present") {
+                                m.sentences().toPresentTense();
                             }
-                            if (tense == "future") {
-                                m.verbs().toFutureTense();
+                            else if (tense == "future") {
+                                m.sentences().toFutureTense();
                             }
                             else {
                                 console.log("something broke");

@@ -764,7 +764,7 @@ const texts_headwear = {
                         only: (t) => {
                             return t.c2 == "Gasmask";
                         },
-                        text: `USER_TAG places a Gasmask over USER_THEIR face. USER_THEIR_CAP breathing starts to hiss through the filter as USER_THEY look through glass lenses. `,
+                        text: `USER_TAG places a Gasmask over USER_THEIR face. USER_THEIR_CAP breathing starts to hiss through the filter as USER_THEY lookUSER_S through glass lenses. `,
                     },
                     {
                         only: (t) => {
@@ -1863,7 +1863,7 @@ const texts_struggle = {
         `USER_TAG prods a controller USER_THEY had in USER_THEIR pocket. Which kind of controller? Clearly the best one. Simply ask, where is the X button?`,
         `USER_TAG pulls out a leash and giggles as USER_THEY fidget with the clicky bit. Who will the leash get secured to?`,
         `USER_TAG flops on a nearby chair. The chair is comfy. The chair offers so much softness... There is only... the chair...`,
-        `USER_TAG's eyes narrow as USER_THEY spot **The Book**. USER_THEIR_CAP thoughts race as USER_THEY strategize the best method with which to dispatch the creature.`,
+        `USER_TAG's eyes narrow as USER_THEY spotUSER_S **The Book**. USER_THEIR_CAP thoughts race as USER_THEY strategize the best method with which to dispatch the creature.`,
         `USER_TAG says a silent prayer to the Goddess of RAM, hoping for the prices to return to normal.`,
         `USER_TAG hums a song to USER_THEMSELF. What is the song? Well, this time, everyone should know it!`,
         `Surely it's not the silliest idea to lock USER_THEMSELF up and then mail the key so it arrives a week later. USER_TAG would never do something so silly like that!`,
@@ -3523,7 +3523,7 @@ const texts_unwear = {
 					},
 					{
 						only: (t) => {
-							return t.c2.includes("Eyeshadow");
+							return ((t.c2.includes("Eyeshadow")) || (t.c2.includes("Eyeliner")));
 						},
 						text: `USER_TAG uses makeup remover to wipe away USER_THEIR VAR_C2 from USER_THEIR eyes!`,
 					},
