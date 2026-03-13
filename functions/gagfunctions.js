@@ -342,6 +342,7 @@ const modifymessage = async (msg, threadId, messageonly) => {
 
 		processHeadwearEmoji(msg.author.id, msgTree, msgTreeMods, getOption(msg.author.id, "dollvisorname"))
         processHeadwearTruthgas(msg.author.id, msgTree, msgTreeMods)
+        await processPregarbleGags(msg, msgTree, msgTreeMods)       // Perform early garbles before arousal and corset effects. 
 
 		// See if this message can be skipped. Messages containing only emoji do NOT need to be processed,
 		// But only if NOT wearing a headwear that replaces it in previous step.
@@ -484,6 +485,24 @@ async function textGarbleGag(msg, msgTree, msgTreeMods) {
             }
 		});
 	}
+}
+
+async function processPregarbleGags(msg, msgTree, msgTreeMods) {
+    // Gags now
+	if (process.gags == undefined) {
+		process.gags = {};
+	}
+    if (process.gags[msg.author.id] && process.gags[msg.author.id].length > 0) {
+        // Go over each gag and if there's a gag file loaded for it, run the messagebegin, garbletext and messageend functions if they exist.
+		process.gags[msg.author.id].forEach(async (gag) => {
+            if (process.gagtypes && process.gagtypes[gag.gagtype]) {
+                if (process.gagtypes[gag.gagtype].pregarble) {
+                    await msgTree.callFunc(process.gagtypes[gag.gagtype].pregarble,true,"rawText",[gag.intensity ?? 5, msg])		// Run garble on all IC segments.
+                    msgTreeMods.modified = true;
+                }
+            }
+        })
+    }
 }
 
 async function sendTheMessage(msg, outtext, dollIDDisplay, threadID, dollProtocol, modified) {
