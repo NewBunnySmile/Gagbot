@@ -3,6 +3,7 @@ const { MessageAST } = require(`./../functions/message_ast.js`);
 const fs = require("fs");
 const path = require("path");
 
+/* // This can probably be retired - leaving here for reference
 const headweartypes = [
 	// Hoods
 	{ name: "Latex Hood (no eyes)", value: "hood_latexfull", tags: ["latex"], blockinspect: true, blockemote: true },
@@ -61,7 +62,7 @@ const headweartypes = [
 
 	// Misc
 	{ name: "Painted Goggles", value: "painted_goggles", blockinspect: true },
-];
+];*/
 
 const DOLLVISORS = ["doll_visor", "doll_visor_blind", "dollmaker_visor"];
 
@@ -70,9 +71,22 @@ const DOLLVISORS = ["doll_visor", "doll_visor_blind", "dollmaker_visor"];
  * { name: "Latex Armbinder", value: "armbinder_latex" }
  ********************/
 const loadHeadwearTypes = () => {
-	process.headtypes = headweartypes.map((item) => {
-		return { name: item.name, value: item.value };
-	});
+    // Grab all the command files from the commands directory
+    const headwearautocompletes = [];
+    const headweartypes = [];
+    const commandsPath = path.join(__dirname, "..", "headwear");
+    const commandFiles = fs.readdirSync(commandsPath).filter((file) => file.endsWith(".js"));
+
+    // Push the gag name over to the choice array.
+    for (const file of commandFiles) {
+        const head = require(`./../headwear/${file}`);
+        headweartypes[file.replace(".js", "")] = head;
+        if (!head.hidden) { headwearautocompletes.push({ name: head.name, value: file.replace(".js", "") }) };
+    }
+
+    process.headtypes = headweartypes;
+    if (process.autocompletes == undefined) { process.autocompletes = {} }
+    process.autocompletes.headtypes = headwearautocompletes;
 };
 
 const assignHeadwear = (userID, headwear, origbinder) => {
@@ -159,6 +173,9 @@ const deleteHeadwear = (userID, headwear) => {
 		return false;
 	}
 	if (headwear && process.headwear[userID].wornheadwear.includes(headwear) && !getLockedHeadgear(userID).includes(headwear)) {
+        if (process.headtypes[headwear] && process.headtypes[headwear].onUnlock) {
+            process.headtypes[headwear].onUnlock({ userID: userID });
+        }
 		process.headwear[userID].wornheadwear.splice(process.headwear[userID].wornheadwear.indexOf(headwear), 1);
 		if (process.headwear[userID].wornheadwear.length == 0) {
 			delete process.headwear[userID];
@@ -186,17 +203,9 @@ const getHeadwearName = (userID, headnname) => {
 	if (process.headwear == undefined) {
 		process.headwear = {};
 	}
-	let convertmittenarr = {};
-	for (let i = 0; i < headweartypes.length; i++) {
-		convertmittenarr[headweartypes[i].value] = headweartypes[i].name;
-	}
 	if (headnname) {
-		return convertmittenarr[headnname];
+		return getBaseHeadwear(headnname).name
 	}
-	/*
-    else if (process.headwear[userID]?.wornheadwear) {
-        return convertmittenarr[process.mitten[userID]?.mittenname]
-    }*/ // I honestly dont have a clean way to represent this.
 	else {
 		return undefined;
 	}
@@ -207,12 +216,8 @@ const getHeadwearName = (userID, headnname) => {
 // I didnt feel like doing some kind of .some condition checking.
 // Plz simplify.
 const getHeadwearBlocks = (headnname) => {
-	let convertmittenarr = {};
-	for (let i = 0; i < headweartypes.length; i++) {
-		convertmittenarr[headweartypes[i].value] = headweartypes[i];
-	}
 	if (headnname) {
-		return convertmittenarr[headnname];
+		return getBaseHeadwear[headnname]
 	} else {
 		return undefined;
 	}
@@ -238,7 +243,7 @@ const getHeadwearRestrictions = (userID) => {
 
 // Returns the base headwear object
 function getBaseHeadwear(type) {
-    return headweartypes.find((h) => h.value == type)
+    return process.headtypes[type];
 }
 
 
@@ -444,7 +449,6 @@ const processHeadwearTruthgas = (userID, msgTree, msgModified) => {
     msgTree.callFunc(truthgasopposites, true, undefined, [msgModified])
 };
 
-exports.headweartypes = headweartypes;
 exports.loadHeadwearTypes = loadHeadwearTypes;
 exports.assignHeadwear = assignHeadwear;
 exports.getHeadwear = getHeadwear;

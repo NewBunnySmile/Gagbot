@@ -1,6 +1,70 @@
-const { ModalBuilder, UserSelectMenuBuilder, LabelBuilder } = require("discord.js");
+const { ModalBuilder, UserSelectMenuBuilder, LabelBuilder, SectionBuilder, ButtonStyle, TextDisplayBuilder, ButtonBuilder, ActionRowBuilder } = require("discord.js");
 const { messageSendChannel } = require("../../functions/messagefunctions");
 const { getPronouns } = require("../../functions/pronounfunctions");
+
+// This is called and replaces the "equipping ___" in the chain
+exports.extraconfig = async (interaction, userid) => {
+    let currentbreathuserid = process.headwear[userid]?.sharedbreathhose ?? ``;
+    let components = [];
+
+    let userdescription = new TextDisplayBuilder().setContent(`Choose who to share ${(interaction.user.id == userid) ? "your" : `<@${userid}>'s`} breath with: `);
+
+    let userbit = new UserSelectMenuBuilder()
+        .setCustomId(`extraconfig_gasmasklinked_${interaction.user.id}`)
+        .setPlaceholder(`Select user...`)
+        .setMinValues(0)
+        .setMaxValues(1);
+
+    if (currentbreathuserid) {
+        userbit.setDefaultUsers(currentbreathuserid);
+    }
+
+    let usersection = new ActionRowBuilder().addComponents(userbit);
+
+    components.push(userdescription);
+    components.push(usersection);
+    
+    return components;
+}
+
+exports.extraconfigresponse = async (interaction, userid) => {
+    let wearerid = interaction.customId.split("_")[2]
+    let sharebreathuser = interaction.members.first().id
+    if (interaction.user.id == wearerid) {
+        // Handling our own breath
+        if (interaction.members.first().id == interaction.user.id) {
+            interaction.reply(`<@${interaction.user.id}> holds onto ${getPronouns(interaction.user.id, "possessiveDeterminer")} gasmask tube for now...`)
+        }
+        else {
+            if (process.headwear && process.headwear[sharebreathuser] && (process.headwear[sharebreathuser].sharedbreathhose == wearerid)) {
+                // The other person already shared a breath with them, acknowledge that. 
+                interaction.reply(`<@${interaction.user.id}> takes the breath hose from <@${sharebreathuser}> and connects it to ${getPronouns(interaction.user.id, "possessiveDeterminer")} gasmask, limiting both of their abilities to get fresh air!`)
+            }
+            else {
+                interaction.reply(`<@${interaction.user.id}> gives ${getPronouns(interaction.user.id, "possessiveDeterminer")} gasmask tube to <@${sharebreathuser}>!`)
+            }
+        }
+    }
+    else {
+        if (interaction.members.first().id == wearerid) {
+            interaction.reply(`<@${interaction.user.id}> gives <@${wearerid}>'s gasmask tube to ${getPronouns(wearerid, "object")} for now...`)
+        }
+        if (interaction.members.first().id == interaction.user.id) {
+            if (process.headwear && process.headwear[sharebreathuser] && (process.headwear[sharebreathuser].sharedbreathhose == wearerid)) {
+                interaction.reply(`<@${interaction.user.id}> grabs <@${wearerid}>'s gasmask tube and connects it up to ${getPronouns(interaction.user.id, "possessiveDeterminer")} gasmask, limiting their abilities to breathe freely!`)
+            }
+        }
+        if (process.headwear && process.headwear[sharebreathuser] && (process.headwear[sharebreathuser].sharedbreathhose == wearerid)) {
+            interaction.reply(`<@${interaction.user.id}> takes the breath hose from <@${sharebreathuser}> and connects it to <@${wearerid}>'s gasmask, limiting both of their abilities to get fresh air!`)
+        }
+        else {
+            interaction.reply(`<@${interaction.user.id}> gives <@${wearerid}>'s gasmask tube to <@${sharebreathuser}>!`)
+        }
+    }
+    if (process.headwear[wearerid]) {
+        process.headwear[wearerid].sharedbreathhose = sharebreathuser
+    }
+}
 
 exports.modal = async (interaction, userid) => {
     let modal = new ModalBuilder()

@@ -23,7 +23,7 @@ module.exports = {
                 let itemslocked = getLockedHeadgear(chosenuserid);
 
                 // Remove anything we're already wearing from the list
-                let sorted = process.headtypes.filter((f) => itemsworn.includes(f.value));
+                let sorted = process.autocompletes.headtypes.filter((f) => itemsworn.includes(f.value));
                 sorted = sorted.filter((f) => !itemslocked.includes(f.value));
                 await interaction.respond(sorted.slice(0, 10));
             }

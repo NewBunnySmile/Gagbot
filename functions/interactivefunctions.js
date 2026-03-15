@@ -6,18 +6,19 @@ const { getPronouns } = require("./../functions/pronounfunctions.js");
 const { collartypes, getCollarKeyholder, canAccessCollar, getCollar, getCollarTimelock, getCollarName } = require("./collarfunctions.js");
 const { getOption } = require("./../functions/configfunctions.js");
 const { getChastityKeyholder, getChastity, getChastityTimelock } = require("./../functions/vibefunctions.js");
-const { getHeavyBinder, convertheavy, heavytypes } = require("./../functions/heavyfunctions.js");
-const { getGagBinder, getMittenBinder, mittentypes, gagtypes, getMittenName } = require("./../functions/gagfunctions.js");
+const { getHeavyBinder, convertheavy, heavytypes, getHeavyList } = require("./../functions/heavyfunctions.js");
+const { getGagBinder, getMittenBinder, mittentypes, gagtypes, getMittenName, getGags, getMitten } = require("./../functions/gagfunctions.js");
 const { getCorsetBinder } = require("./../functions/corsetfunctions.js");
-const { getHeadwearBinder, headweartypes, getHeadwearName } = require("./../functions/headwearfunctions.js");
+const { getHeadwearBinder, headweartypes, getHeadwearName, getHeadwear } = require("./../functions/headwearfunctions.js");
 const { configoptions } = require("./configfunctions.js");
 const { canAccessChastity } = require("./vibefunctions.js");
-const { wearabletypes } = require("./wearablefunctions.js");
+const { wearabletypes, getWearable } = require("./wearablefunctions.js");
 const { getChastityName } = require("./vibefunctions.js");
 const { getChastityBra } = require("./vibefunctions.js");
 const { getChastityBraTimelock } = require("./vibefunctions.js");
 const { getChastityBraName } = require("./vibefunctions.js");
 const { getBaseChastity } = require("./chastityfunctions.js");
+const { getToys } = require("./toyfunctions.js");
 
 // Generates a consent button which the user will have to agree to.
 const consentMessage = (interaction, user) => {
@@ -1026,7 +1027,7 @@ function generateListTexts() {
         "Chastity Belt": Object.entries(process.chastitytypes).filter((f) => f[1].category == "Chastity Belt").map((f) => f[1]).sort((a, b) => a.name.localeCompare(b.name)).map((heavy) => ({ name: heavy.name, value: `` })),
         "Chastity Bra": Object.entries(process.chastitytypes).filter((f) => f[1].category == "Chastity Bra").map((f) => f[1]).sort((a, b) => a.name.localeCompare(b.name)).map((heavy) => ({ name: heavy.name, value: `` })),
         Corset: Object.entries(process.corsettypes).map((f) => f[1]).sort((a, b) => a.name.localeCompare(b.name)).map((heavy) => ({ name: heavy.name, value: `` })),
-        Mask: headweartypes.sort((a, b) => a.name.localeCompare(b.name)).map((heavy) => ({ name: heavy.name, value: heavy.blockinspect || heavy.blockemote ? `Restricts: ${heavy.blockinspect ? `Inspect, ` : ``}${heavy.blockemote ? `Emote, ` : ``}`.slice(0, -2) : `` })),
+        Mask: Object.entries(process.headtypes).filter((f) => !f[1].hidden).map((f) => f[1]).sort((a, b) => a.name.localeCompare(b.name)).map((heavy) => ({ name: heavy.name, value: heavy.blockinspect || heavy.blockemote ? `Restricts: ${heavy.blockinspect ? `Inspect, ` : ``}${heavy.blockemote ? `Emote, ` : ``}`.slice(0, -2) : `` })),
         Collar: collartypes.sort((a, b) => a.name.localeCompare(b.name)).map((heavy) => ({ name: heavy.name, value: "" })),
         Toys: Object.entries(process.toytypes).map((f) => f[1]).sort((a, b) => a.toyname.localeCompare(b.toyname)).map((heavy) => ({ name: heavy.toyname, value: heavy.category })),
         Wearable: wearabletypes.filter((f) => (f.name.length > 0)).sort((a, b) => a.name.localeCompare(b.name)).map((heavy) => ({ name: heavy.name, value: heavy.colorable ? `Colorable` : `` })),
@@ -1252,6 +1253,176 @@ async function generateEditMessageModal(messagecontent, messageid, channelid, hu
     return modal;
 }
 
+/*******
+ * Generate a config modal for extra things to configure on the item when worn.  
+ * - **(interaction) interaction**: Which interaction to respond to
+ * - **(string) userid**: Which user to retrieve this for
+ * - **(string) type**: (optional) Which item to output, if it exists
+ * - **(boolean) force**: (optional) Forcibly retrieve the config for an item, must have itemname
+ * 
+ * Returns undefined if nothing can be generated 
+*********/
+async function generateExtraConfig(interaction, userid, itemname, force) {
+    let interactionoutput = [];
+    if (itemname) {
+        if (force) {
+            if (process.extraconfigfunctions.gags && process.extraconfigfunctions.gags[itemname]) {
+                interactionoutput.push(await process.extraconfigfunctions.gags[itemname](interaction, userid, itemname));
+            }
+            if (process.extraconfigfunctions.headwear && process.extraconfigfunctions.headwear[itemname]) {
+                interactionoutput.push(await process.extraconfigfunctions.headwear[itemname](interaction, userid, itemname));
+            }
+            if (process.extraconfigfunctions.mitten && process.extraconfigfunctions.mitten[itemname]) {
+                interactionoutput.push(await process.extraconfigfunctions.mitten[itemname](interaction, userid, itemname));
+            }
+            if (process.extraconfigfunctions.heavy && process.extraconfigfunctions.heavy[itemname]) {
+                interactionoutput.push(await process.extraconfigfunctions.heavy[itemname](interaction, userid, itemname));
+            }
+            if (process.extraconfigfunctions.chastity && process.extraconfigfunctions.chastity[itemname]) {
+                interactionoutput.push(await process.extraconfigfunctions.chastity[itemname](interaction, userid, itemname));
+            }
+            if (process.extraconfigfunctions.chastitybra && process.extraconfigfunctions.chastitybra[itemname]) {
+                interactionoutput.push(await process.extraconfigfunctions.chastitybra[itemname](interaction, userid, itemname));
+            }
+            if (process.extraconfigfunctions.wearable && process.extraconfigfunctions.wearable[itemname]) {
+                interactionoutput.push(await process.extraconfigfunctions.wearable[itemname](interaction, userid, itemname));
+            }
+            if (process.extraconfigfunctions.toys && process.extraconfigfunctions.toys[itemname]) {
+                interactionoutput.push(await process.extraconfigfunctions.toys[itemname](interaction, userid, itemname));
+            }
+            if (process.extraconfigfunctions.collar && process.extraconfigfunctions.collar[itemname]) {
+                interactionoutput.push(await process.extraconfigfunctions.collar[itemname](interaction, userid, itemname));
+            }
+        }
+        else {
+            // Gags
+            getGags(userid).forEach(async (g) => {
+                if ((g.gagtype == itemname) && process.extraconfigfunctions.gags && process.extraconfigfunctions.gags[g.gagtype]) {
+                    interactionoutput.push(await process.extraconfigfunctions.gags[g.gagtype](interaction, userid, itemname));
+                }
+            });
+            // Headwear
+            getHeadwear(userid).forEach(async (h) => {
+                console.log(itemname)
+                if ((h == itemname) && process.extraconfigfunctions.headwear && process.extraconfigfunctions.headwear[h]) {
+                    interactionoutput.push(await process.extraconfigfunctions.headwear[h](interaction, userid, itemname));
+                }
+            });
+            // Mittens
+            if (getMitten(userid)) {
+                if ((getMitten(userid).mittenname == itemname) && process.extraconfigfunctions.mitten && process.extraconfigfunctions.mitten[getMitten(userid).mittenname]) {
+                    interactionoutput.push(await process.extraconfigfunctions.mitten[getMitten(userid).mittenname](interaction, userid, itemname));
+                }
+            }
+            // Heavy Bondage
+            if (getHeavyList(userid).length > 0) {
+                getHeavyList(userid).forEach(async (h) => {
+                    if ((h.type == itemname) && process.extraconfigfunctions.heavy && process.extraconfigfunctions.heavy[h.type]) {
+                        interactionoutput.push(await process.extraconfigfunctions.heavy[h.type](interaction, userid, itemname));
+                    }
+                })
+            }
+            // Chastity Belts
+            if (getChastity(userid)) {
+                if ((getChastity(userid).chastitytype == itemname) && process.extraconfigfunctions.chastity && process.extraconfigfunctions.chastity[getChastity(userid).chastitytype]) {
+                    interactionoutput.push(await process.extraconfigfunctions.chastity[getChastity(userid).chastitytype](interaction, userid, itemname));
+                }
+            }
+            // Chastity Bras
+            if (getChastityBra(userid)) {
+                if ((getChastityBra(userid).chastitytype == itemname) && process.extraconfigfunctions.chastitybra && process.extraconfigfunctions.chastitybra[getChastityBra(userid).chastitytype]) {
+                    interactionoutput.push(await process.extraconfigfunctions.chastitybra[getChastityBra(userid).chastitytype](interaction, userid, itemname));
+                }
+            }
+            // Wearables
+            getWearable(userid).forEach(async (h) => {
+                if ((h == itemname) && process.extraconfigfunctions.wearable && process.extraconfigfunctions.wearable[h]) {
+                    interactionoutput.push(await process.extraconfigfunctions.wearable[h](interaction, userid, itemname));
+                }
+            });
+            // Toys
+            getToys(userid).forEach(async (h) => {
+                if ((h.type == itemname) && process.extraconfigfunctions.toys && process.extraconfigfunctions.toys[h.type]) {
+                    interactionoutput.push(await process.extraconfigfunctions.toys[h.type](interaction, userid, itemname));
+                }
+            });
+            // Collars
+            if (getCollar(userid)) {
+                if ((getCollar(userid).collartype == itemname) && process.extraconfigfunctions.collar && process.extraconfigfunctions.collar[getCollar(userid).collartype]) {
+                    interactionoutput.push(await process.extraconfigfunctions.collar[getCollar(userid).collartype](interaction, userid, itemname));
+                }
+            }
+        }
+    }
+    else {
+        // Gags
+        getGags(userid).forEach(async (g) => {
+            if (process.extraconfigfunctions.gags && process.extraconfigfunctions.gags[g.gagtype]) {
+                interactionoutput.push(await process.extraconfigfunctions.gags[g.gagtype](interaction, userid, itemname));
+            }
+        });
+        // Headwear
+        getHeadwear(userid).forEach(async (h) => {
+            if (process.extraconfigfunctions.headwear && process.extraconfigfunctions.headwear[h]) {
+                interactionoutput.push(await process.extraconfigfunctions.headwear[h](interaction, userid, itemname));
+            }
+        });
+        // Mittens
+        if (getMitten(userid)) {
+            if (process.extraconfigfunctions.mitten && process.extraconfigfunctions.mitten[getMitten(userid).mittenname]) {
+                interactionoutput.push(await process.extraconfigfunctions.mitten[getMitten(userid).mittenname](interaction, userid, itemname));
+            }
+        }
+        // Heavy Bondage
+        if (getHeavyList(userid).length > 0) {
+            getHeavyList(userid).forEach(async (h) => {
+                if (process.extraconfigfunctions.heavy && process.extraconfigfunctions.heavy[h.type]) {
+                    interactionoutput.push(await process.extraconfigfunctions.heavy[h.type](interaction, userid, itemname));
+                }
+            })
+        }
+        // Chastity Belts
+        if (getChastity(userid)) {
+            if (process.extraconfigfunctions.chastity && process.extraconfigfunctions.chastity[getChastity(userid).chastitytype]) {
+                interactionoutput.push(await process.extraconfigfunctions.chastity[getChastity(userid).chastitytype](interaction, userid, itemname));
+            }
+        }
+        // Chastity Bras
+        if (getChastityBra(userid)) {
+            if (process.extraconfigfunctions.chastitybra && process.extraconfigfunctions.chastitybra[getChastityBra(userid).chastitytype]) {
+                interactionoutput.push(await process.extraconfigfunctions.chastitybra[getChastityBra(userid).chastitytype](interaction, userid, itemname));
+            }
+        }
+        // Wearables
+        getWearable(userid).forEach(async (h) => {
+            if (process.extraconfigfunctions.wearable && process.extraconfigfunctions.wearable[h]) {
+                interactionoutput.push(await process.extraconfigfunctions.wearable[h](interaction, userid, itemname));
+            }
+        });
+        // Toys
+        getToys(userid).forEach(async (h) => {
+            if (process.extraconfigfunctions.toys && process.extraconfigfunctions.toys[h.type]) {
+                interactionoutput.push(await process.extraconfigfunctions.toys[h.type](interaction, userid, itemname));
+            }
+        });
+        // Collars
+        if (getCollar(userid)) {
+            if (process.extraconfigfunctions.collar && process.extraconfigfunctions.collar[getCollar(userid).collartype]) {
+                interactionoutput.push(await process.extraconfigfunctions.collar[getCollar(userid).collartype](interaction, userid, itemname));
+            }
+        }
+    }
+    console.log(interactionoutput);
+    
+    if (interactionoutput.length <= 0) {
+        return undefined;
+    }
+    else {
+        // Flatten the top level component. This inherently spreads each output component given back
+        return { components: interactionoutput.flat(), flags: [MessageFlags.IsComponentsV2, MessageFlags.Ephemeral] }
+    }
+}
+
 exports.consentMessage = consentMessage;
 exports.getConsent = getConsent;
 exports.handleConsent = handleConsent;
@@ -1276,3 +1447,5 @@ exports.generateEditMessageModal = generateEditMessageModal;
 exports.assignMemeImages = assignMemeImages;
 
 exports.generateListTexts = generateListTexts;
+
+exports.generateExtraConfig = generateExtraConfig;

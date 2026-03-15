@@ -204,6 +204,8 @@ function importFileNames() {
     process.modalfunctions = {};
     process.modalexecutefunctions = {};
     process.onremovefunctions = {};
+    process.extraconfigfunctions = {};
+    process.extraconfigresponsefunctions = {};
 	let eventfunctionsfolders = fs.readdirSync(path.resolve(__dirname, "..", "eventfunctions"));
 	eventfunctionsfolders.forEach((f) => {
 		process.eventfunctions[f] = {};
@@ -211,6 +213,8 @@ function importFileNames() {
         process.modalfunctions[f] = {};
         process.modalexecutefunctions[f] = {};
         process.onremovefunctions[f] = {};
+        process.extraconfigfunctions[f] = {};
+        process.extraconfigresponsefunctions[f] = {};
 		let eventfunctionsfiles = fs.readdirSync(path.resolve(__dirname, "..", "eventfunctions", f));
 		eventfunctionsfiles.forEach((file) => {
 			let functionfile = require(path.resolve(__dirname, "..", "eventfunctions", f, file));
@@ -228,6 +232,12 @@ function importFileNames() {
             }
             if (typeof functionfile.functiononremove === "function") {
                 process.onremovefunctions[f][file.replace(".js","")] = functionfile.functiononremove;
+            }
+            if (typeof functionfile.extraconfig === "function") {
+                process.extraconfigfunctions[f][file.replace(".js","")] = functionfile.extraconfig;
+            }
+            if (typeof functionfile.extraconfigresponse === "function") {
+                process.extraconfigresponsefunctions[f][file.replace(".js","")] = functionfile.extraconfigresponse;
             }
 		});
 	});

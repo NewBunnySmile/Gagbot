@@ -382,6 +382,35 @@ client.on('interactionCreate', async (interaction) => {
                 let configfunc = require(`./commands/key.js`)
                 configfunc.interactionresponse(interaction); 
             }
+            else if (interaction.customId.startsWith("extraconfig_")) {
+                if (process.extraconfigresponsefunctions && process.extraconfigresponsefunctions.gags && process.extraconfigresponsefunctions.gags[interaction.customId.split("_")[1]]) {
+                    process.extraconfigresponsefunctions.gags[interaction.customId.split("_")[1]](interaction);
+                }
+                if (process.extraconfigresponsefunctions && process.extraconfigresponsefunctions.headwear && process.extraconfigresponsefunctions.headwear[interaction.customId.split("_")[1]]) {
+                    process.extraconfigresponsefunctions.headwear[interaction.customId.split("_")[1]](interaction);
+                }
+                if (process.extraconfigresponsefunctions && process.extraconfigresponsefunctions.mitten && process.extraconfigresponsefunctions.mitten[interaction.customId.split("_")[1]]) {
+                    process.extraconfigresponsefunctions.mitten[interaction.customId.split("_")[1]](interaction);
+                }
+                if (process.extraconfigresponsefunctions && process.extraconfigresponsefunctions.heavy && process.extraconfigresponsefunctions.heavy[interaction.customId.split("_")[1]]) {
+                    process.extraconfigresponsefunctions.heavy[interaction.customId.split("_")[1]](interaction);
+                }
+                if (process.extraconfigresponsefunctions && process.extraconfigresponsefunctions.chastity && process.extraconfigresponsefunctions.chastity[interaction.customId.split("_")[1]]) {
+                    process.extraconfigresponsefunctions.chastity[interaction.customId.split("_")[1]](interaction);
+                }
+                if (process.extraconfigresponsefunctions && process.extraconfigresponsefunctions.chastitybra && process.extraconfigresponsefunctions.chastitybra[interaction.customId.split("_")[1]]) {
+                    process.extraconfigresponsefunctions.chastitybra[interaction.customId.split("_")[1]](interaction);
+                }
+                if (process.extraconfigresponsefunctions && process.extraconfigresponsefunctions.wearable && process.extraconfigresponsefunctions.wearable[interaction.customId.split("_")[1]]) {
+                    process.extraconfigresponsefunctions.wearable[interaction.customId.split("_")[1]](interaction);
+                }
+                if (process.extraconfigresponsefunctions && process.extraconfigresponsefunctions.toys && process.extraconfigresponsefunctions.toys[interaction.customId.split("_")[1]]) {
+                    process.extraconfigresponsefunctions.toys[interaction.customId.split("_")[1]](interaction);
+                }
+                if (process.extraconfigresponsefunctions && process.extraconfigresponsefunctions.collar && process.extraconfigresponsefunctions.collar[interaction.customId.split("_")[1]]) {
+                    process.extraconfigresponsefunctions.collar[interaction.customId.split("_")[1]](interaction);
+                }
+            }
             const [key, ...args] = interaction.customId.split("-");
             componentHandlers.get(key)?.handle(interaction, ...args);
             return;

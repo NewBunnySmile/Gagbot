@@ -2,7 +2,7 @@ const { SlashCommandBuilder, MessageFlags, TextDisplayBuilder } = require("disco
 const { getMitten } = require("./../functions/gagfunctions.js");
 const { getHeavy, getHeavyBound } = require("./../functions/heavyfunctions.js");
 const { getPronouns } = require("./../functions/pronounfunctions.js");
-const { getConsent, handleConsent, handleMajorRestraint, handleExtremeRestraint } = require("./../functions/interactivefunctions.js");
+const { getConsent, handleConsent, handleMajorRestraint, handleExtremeRestraint, generateExtraConfig } = require("./../functions/interactivefunctions.js");
 const { getHeadwear, assignHeadwear, getHeadwearName, getBaseHeadwear } = require("../functions/headwearfunctions.js");
 const { getText } = require("./../functions/textfunctions.js");
 const { getCollar, getCollarPerm, canAccessCollar } = require("../functions/collarfunctions.js");
@@ -20,7 +20,7 @@ module.exports = {
             const focusedValue = interaction.options.getFocused();
             let chosenuserid = interaction.options.get("user")?.value ?? interaction.user.id; // Note we can only retrieve the user ID here!
             let itemsworn = getHeadwear(chosenuserid);
-            let autocompletes = process.headtypes.filter((f) => !itemsworn.includes(f.value));
+            let autocompletes = process.autocompletes.headtypes.filter((f) => !itemsworn.includes(f.value));
             let matches = didYouMean(focusedValue, autocompletes, {
                 matchPath: ['name'], 
                 returnType: ReturnTypeEnums.ALL_SORTED_MATCHES, // Returns any match meeting 20% of the input
@@ -171,13 +171,31 @@ module.exports = {
 						} else {
 							// Not wearing it!
 							data.noworn = true;
-							if (process.modalfunctions?.headwear && process.modalfunctions.headwear[headwearchoice]) {
-                                await interaction.showModal(await process.modalfunctions.headwear[headwearchoice](interaction, headwearuser.id))
-                                interaction.followUp(getText(data));
-                            }
-                            else {
-                                interaction.reply(getText(data));
-                            }
+                            await interaction.deferReply({ flags: MessageFlags.Ephemeral });
+                            await handleExtremeRestraint(interaction.user, targetuser, "mask", headwearchoice).then(
+                                async (success) => {
+                                    await interaction.followUp({ content: `Equipping ${getHeadwearName(headwearuser.id, headwearchoice)}`, flags: MessageFlags.Ephemeral })
+                                    let followupmessage = await generateExtraConfig(interaction, targetuser.id, headwearchoice, true)
+                                    if (followupmessage) { 
+                                        await interaction.followUp(followupmessage) 
+                                    };
+                                    await interaction.followUp(getText(data));
+                                    assignHeadwear(headwearuser.id, headwearchoice);
+                                },
+                                async (reject) => {
+                                    let nomessage = `You have rejected the ${getHeadwearName(headwearuser.id, headwearchoice)}.`;
+                                    if (reject == "Disabled") {
+                                        nomessage = `${getHeadwearName(headwearuser.id, headwearchoice)} is currently disabled in your extreme options.`;
+                                    }
+                                    if (reject == "Error") {
+                                        nomessage = `Something went wrong - Submit a bug report!`;
+                                    }
+                                    if (reject == "NoDM") {
+                                        nomessage = `Something went wrong sending a DM to you, or you have DMs from this server disabled. Cannot obtain consent for this restraint.`;
+                                    }
+                                    await interaction.followUp({ content: nomessage });
+                                },
+                            )
 							assignHeadwear(headwearuser.id, headwearchoice);
 						}
 					} else {
@@ -190,17 +208,15 @@ module.exports = {
                         }
                         else {
                             data.noworn = true;
-                            let canmodal = (process.modalfunctions?.headwear && process.modalfunctions.headwear[headwearchoice]);
-                            if (!canmodal) {
-                                await interaction.deferReply({ flags: MessageFlags.Ephemeral });
-                            }
-                            else {
-                                await interaction.showModal(await process.modalfunctions.headwear[headwearchoice](interaction, headwearuser.id))
-                            }
+                            await interaction.deferReply({ flags: MessageFlags.Ephemeral });
                             await handleMajorRestraint(interaction.user, targetuser, "mask", headwearchoice).then(async () => {
                                 await handleExtremeRestraint(interaction.user, targetuser, "mask", headwearchoice).then(
                                     async (success) => {
-                                        await interaction.followUp({ content: `Equipping ${getHeadwearName(headwearuser.id, headwearchoice)}`, withResponse: true, flags: MessageFlags.Ephemeral });
+                                        await interaction.followUp({ content: `Equipping ${getHeadwearName(headwearuser.id, headwearchoice)}`, flags: MessageFlags.Ephemeral })
+                                        let followupmessage = await generateExtraConfig(interaction, targetuser.id, headwearchoice, true)
+                                        if (followupmessage) { 
+                                            await interaction.followUp(followupmessage) 
+                                        };
                                         await interaction.followUp(getText(data));
                                         assignHeadwear(headwearuser.id, headwearchoice);
                                     },
