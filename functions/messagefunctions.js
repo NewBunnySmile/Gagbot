@@ -292,9 +292,11 @@ function getAlternateName(user) {
     }
 
     // Finally, if the outname is EXACTLY the same as the displayName we recieved, 
-    // or the user's display name can be found in the modified name return it
+    // or the user's display name can be found in the modified name,
+    // or the modified name can be found in the user's display name, return it
     if ((user.displayName.toLowerCase() == outname.toLowerCase()) || 
-        (outname.toLowerCase().includes(user.displayName.toLowerCase()))) { return outname }
+        (outname.toLowerCase().includes(user.displayName.toLowerCase())) ||
+        (user.displayName.toLowerCase().includes(outname.toLowerCase()))) { return outname }
 
     // Otherwise, we need to append the user's display name as we can
     let additionalpart = ``;
