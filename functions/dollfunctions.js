@@ -277,7 +277,7 @@ async function textGarbleDOLL(msg, modifiedmessage, outtextin) {
                 if (getOption(msg.author.id, "dollpunishwords")) {
                     getOption(msg.author.id, "dollpunishwords").forEach((r) => {
                         // Each of these is a regexp already, so adding them is easy!
-                        uniquedollprotocol.push({ regex: new RegExp(`\\b(?:\\w|\\d)*(${r})(?:\\w|\\d)*\\b`, "gi"), value: 2, type: "redact", string: r } )
+                        uniquedollprotocol.push({ regex: new RegExp(`\\b(${r})\\b`, "gi"), value: 2, type: "redact", string: r } )
                     })
                 }
 
