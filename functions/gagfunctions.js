@@ -543,6 +543,9 @@ async function processPregarbleGags(msg, msgTree, msgTreeMods) {
             if (process.gagtypes && process.gagtypes[gag.gagtype]) {
                 if (process.gagtypes[gag.gagtype].pregarble) {
                     await msgTree.callFunc(process.gagtypes[gag.gagtype].pregarble,true,"rawText",[gag.intensity ?? 5, msg])		// Run garble on all IC segments.
+                    if (msg.content != msgTree.toString()) {
+                        msgTreeMods.modified = true;
+                    }
                 }
             }
         })

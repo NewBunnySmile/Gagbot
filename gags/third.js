@@ -25,7 +25,6 @@ const pregarble = (text, parent, intensity, msg) => {
         if (getPronouns(msg.author.id, "subject") == "he") { replacementstring = "boy" }
         if (getPronouns(msg.author.id, "subject") == "she") { replacementstring = "girl" }
         if (getOption(msg.author.id, "deferentialgagsubject").length > 0) { replacementstring = getOption(msg.author.id, "deferentialgagsubject") }
-        console.log("garbling for text: " + text);
 
         // Set up sentence array. 
         let docin = nlp(outtext);
@@ -97,7 +96,6 @@ const pregarble = (text, parent, intensity, msg) => {
                 })
             }
         }
-        console.log(typeof docarray.join(" "))
         return docarray.join(" ");
     }
     catch (err) {
