@@ -97,6 +97,7 @@ const pregarble = (text, parent, intensity, msg) => {
                 })
             }
         }
+        console.log(typeof docarray.join(" "))
         return docarray.join(" ");
     }
     catch (err) {
