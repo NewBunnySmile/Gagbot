@@ -265,10 +265,10 @@ async function handleTouchEvent(user, target, type) {
                             process.recentlypromptedmajor[target.id] = Date.now() + 86400000
                         }
                         if (i.customId == "acceptButton") {
-                            mess.edit({ content: `Accepted - ${user} is allowed to ${type} you.`})
+                            mess.edit({ content: `Accepted - ${user} is allowed to ${type} you.`, components: [] })
                             res(true);
                         } else {
-                            mess.edit({ content: `Rejected - ${user} is NOT allowed to ${type} you.`})
+                            mess.edit({ content: `Rejected - ${user} is NOT allowed to ${type} you.`, components: [] })
                             rej(true);
                         }
                     });
@@ -276,9 +276,7 @@ async function handleTouchEvent(user, target, type) {
                     collector.on("end", async (collected) => {
                         // timed out
                         if (collected.length == 0) {
-                            await mess.delete().then(() => {
-                                i.reply(`Timed out - ${user} will not be permitted to touch you.`);
-                            });
+                            mess.edit({ content: `Timed out - ${user} will not be permitted to touch you.`, components: [] })
                             rej(true);
                         }
                     });
