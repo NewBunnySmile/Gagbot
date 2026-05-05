@@ -138,7 +138,7 @@ const heavytypes = [
     { name: "Bondage Exosuit", value: "exosuit_bondage", tags: ["metal"], denialCoefficient: 5, heavytags: ["arms", "legs"] },
 	{ name: "Sticky Glue", value: "stickyglue_bondage", tags: ["slime"], denialCoefficient: 5, heavytags: ["arms", "legs"] },
     { name: "Dolly", value: "dolly", tags: ["metal"], denialCoefficient: 3, heavytags: ["arms", "legs"] },
-    { name: "Costumer Mimic", value: "costumer_mimic", tags: ["confined", "latex"], denialCoefficient: 5, heavytags: ["arms", "legs"] },
+    { name: "Costumer Mimic", value: "costumer_mimic", tags: ["confined",], denialCoefficient: 5, heavytags: ["arms", "legs"] },
 	{ name: "Costumer Mimic (Latex)", value: "costumer_mimic_latex", tags: ["confined", "latex"], denialCoefficient: 5, heavytags: ["arms", "legs"] },
     { name: "Costumer Mimic (Chaos)", value: "costumer_mimic_chaos", tags: ["confined", "latex"], denialCoefficient: 5, heavytags: ["arms", "legs"] },
     { name: "Capture Sphere", value: "capture_sphere", tags: ["confined", "dimensional"], denialCoefficient: 3, heavytags: ["arms", "legs"] },
