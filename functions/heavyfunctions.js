@@ -100,6 +100,7 @@ const heavytypes = [
 	{ name: "Hogtie", value: "rope_hogtie", denialCoefficient: 3, heavytags: ["arms", "legs"] },
 	{ name: "Shrimp Tie", value: "rope_shrimp", denialCoefficient: 3, heavytags: ["arms", "legs"] },
 	{ name: "Frogtie", value: "rope_frogtie", denialCoefficient: 2.5, heavytags: ["legs"] },
+	{ name: "Hobble", value: "rope_hobble", denialCoefficient: 1.5, heavytags: ["legs"] },
 	{ name: "Rope Boxtie", value: "rope_boxtie", denialCoefficient: 2, heavytags: ["arms"] },
 	{ name: "Rope Armbinder", value: "rope_armbinder", denialCoefficient: 2, heavytags: ["arms"] },
 	{ name: "Reverse Prayer Tie", value: "rope_reversepray", denialCoefficient: 3.5, heavytags: ["arms"] },
