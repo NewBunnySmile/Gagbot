@@ -93,6 +93,8 @@ let processdatatoload = [
     { textname: "wearables.txt", processvar: "wearable", default: {}},
     { textname: "webhooks.txt", processvar: "webhookstoload", default: {}},
     { textname: "recordedmessages.txt", processvar: "recordedmessages", default: {}},
+    { textname: "delveuserdata.txt", processvar: "delveuserdata", default: {}},
+    { textname: "userstats.txt", processvar: "userstats", default: {}},
 ]
 
 processdatatoload.forEach((s) => {

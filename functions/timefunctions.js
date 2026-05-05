@@ -187,6 +187,14 @@ const saveFiles = () => {
 					filepath = `${process.GagbotSavedFileDirectory}/recordedmessages.txt`;
 					processvar = "recordedmessages";
 					break;
+                case "delveuserdata":
+					filepath = `${process.GagbotSavedFileDirectory}/delve.txt`;
+					processvar = "delveuserdata";
+					break;
+                case "userstats":
+					filepath = `${process.GagbotSavedFileDirectory}/userstats.txt`;
+					processvar = "userstats";
+					break;
 				default:
 					console.log(`Unknown save variable: ${k}`);
 			}

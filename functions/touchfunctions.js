@@ -76,7 +76,10 @@ function rollPatChance(user, target) {
 
     returnedobject.hit = (Math.random() <= hitaccuracy)
     if (returnedobject.hit) {
-        returnedobject.crit = (Math.random() <= critaccuracy)
+        let randomroll = Math.random();
+        returnedobject.triplecrit = (randomroll <= (critaccuracy * 0.05 * 0.05));
+        returnedobject.doublecrit = (randomroll <= (critaccuracy * 0.05));
+        returnedobject.crit = (randomroll <= critaccuracy)
         returnedobject.boundmiss = undefined;
         process.headpatcritchancebonus = 0.0;
     }

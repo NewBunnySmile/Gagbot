@@ -230,6 +230,10 @@ function setNextDelveRoom(user, choice) {
             floor: 0,
             tempbuffs: [],
         }
+        if (process.readytosave == undefined) {
+            process.readytosave = {};
+        }
+        process.readytosave.delveuserdata = true;
     }
     else {
         process.delveuserdata[user].floorarr.push(choice);
@@ -289,6 +293,10 @@ function setDelveFloorState(user, floor, prop, value) {
         if (process.delveuserdata[user].floordata == undefined) { process.delveuserdata[user].floordata = [] }
         if (process.delveuserdata[user].floordata[floor] == undefined) { process.delveuserdata[user].floordata[floor] = {} }
         process.delveuserdata[user].floordata[floor][prop] = value;
+        if (process.readytosave == undefined) {
+            process.readytosave = {};
+        }
+        process.readytosave.delveuserdata = true;
     }
 }
 

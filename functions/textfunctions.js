@@ -1898,8 +1898,8 @@ const texts_touch = {
                         `USER_TAG places a hand on TARGET_TAG's head, giggling to USER_THEMSELF as TARGET_THEY leanTARGET_S into the pat!`,
                         `Because TARGET_TAG is absolutely adorable, USER_TAG pats TARGET_THEIR head!`,
                         `USER_TAG places a single finger on TARGET_TAG's head... then adds more one by one before lowering USER_THEIR hand fully onto TARGET_THEIR head. **Pat.**`,
-                        `USER_TAG imagines USER_THEY USER_ISARE petting a pet as USER_THEY place USER_THEIR hand on TARGET_TAG's head.`,
-                        `USER_TAG places USER_THEIR hand on TARGET_TAG's head. TARGET_THEY_CAP nuzzles into USER_THEIR hand with zero thoughts!`,
+                        `USER_TAG imagines USER_THEY USER_ISARE petting a pet as USER_THEY placeUSER_S USER_THEIR hand on TARGET_TAG's head.`,
+                        `USER_TAG places USER_THEIR hand on TARGET_TAG's head. TARGET_THEY_CAP nuzzleTARGET_S into USER_THEIR hand with zero thoughts!`,
                         `USER_TAG considers pouncing on TARGET_TAG to tie TARGET_THEM up, but instead opts to pat TARGET_THEM. The bondage can wait for later!`
                     ]
                 }
