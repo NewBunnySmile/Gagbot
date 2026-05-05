@@ -94,6 +94,9 @@ function rollPatChance(user, target) {
     if (user == target) {
         statsAddCounter(target, "headpatsself");
     }
+    if (returnedobject.crit) { statsAddCounter(target, "headpatcrits") }
+    if (returnedobject.doublecrit) { statsAddCounter(target, "headpatdoublecrits") }
+    if (returnedobject.triplecrit) { statsAddCounter(target, "headpattriplecrits") }
 
     return returnedobject;
 }
