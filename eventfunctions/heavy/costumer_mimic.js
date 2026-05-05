@@ -14,6 +14,8 @@ const { addArousal } = require("../../functions/vibefunctions")
 //const { mimicCostumes } = require('./mimic/mimicCostumes.js')
 
 // File Containing Costumer Mimic Outfits - Wearables, Headwear, Mittens, Gags, Heavy. Only one Heavy item per outfit, and always at the end.
+
+// Validated 05/05/26
 const maid_outfit = [
     { category: "wearable", itemtowear: "garters", color: "White" },
     { category: "wearable", itemtowear: "stockings", color: "White" },
@@ -301,9 +303,9 @@ const dryad_outfit = [
 
 
 const mimicCostumes = {
-    maid_outfit: maid_outfit,
+    //maid_outfit: maid_outfit,
     //ponygirl_outfit: ponygirl_outfit,
-    //bunnygirl_outfit: bunnygirl_outfit,
+    bunnygirl_outfit: bunnygirl_outfit,
     //princess_outfit: princess_outfit,
     //lewd_princess_outfit: lewd_princess_outfit,
     //kitsune_outfit: kitsune_outfit,

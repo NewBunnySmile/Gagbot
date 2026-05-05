@@ -14,6 +14,7 @@ const heavytypes = [
 	{ name: "Black Hole Armbinder", value: "armbinder_blackhole", denialCoefficient: 3.5, heavytags: ["arms"] },
 	{ name: "Wolfbinder", value: "armbinder_wolf", denialCoefficient: 3, heavytags: ["arms"] },
 	{ name: "Wolf Queenbinder", value: "armbinder_wolfqueen", tags: ["leather"], denialCoefficient: 3, heavytags: ["arms"] },
+    { name: "Reverse-Prayer Binder", value: "armbinder_reversepray", denialCoefficient: 4.5, heavytags: ["arms"] },
     { name: "Rigid Arm Splints", value: "splints_arm", denialCoefficient: 10, heavytags: ["arms"] },
 
 	// Boxbinders
@@ -68,7 +69,7 @@ const heavytypes = [
 
 	// Static Restraints
 	{ name: "Display Stand", value: "displaystand", tags: ["metal"], denialCoefficient: 4, heavytags: ["arms", "legs"] },
-	{ name: "Stocks", value: "stocks", denialCoefficient: 4, heavytags: ["arms"] },
+	{ name: "Stocks", value: "stocks", denialCoefficient: 4, heavytags: ["legs"] },
 	{ name: "One Bar Prison", value: "one_bar_prison", tags: ["metal"], denialCoefficient: 1.5, heavytags: ["legs"] },
 	{ name: "Latex Encasement Stand", value: "encasementstand_latex", tags: ["latex"], denialCoefficient: 4, heavytags: ["arms", "legs"] },
 	{ name: "Wooden Horse", value: "wooden_horse", denialCoefficient: 3, heavytags: ["arms", "legs"] },
