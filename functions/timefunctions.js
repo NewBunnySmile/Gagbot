@@ -41,6 +41,28 @@ const parseTime = (text) => {
 	}
 };
 
+// Takes an input value in ms, outputs a human readable text string
+// I had Gemini write this, but code looks sound. 
+function parseDuration(ms) {
+  if (ms < 0) ms = -ms;
+  const time = {
+    month: Math.floor(ms / 2592000000),
+    week: Math.floor((ms % 2592000000) / 604800000),
+    day: Math.floor((ms % 604800000) / 86400000),
+    hour: Math.floor((ms % 86400000) / 3600000),
+    minute: Math.floor((ms % 3600000) / 60000),
+  };
+
+  const parts = [];
+  for (const [unit, value] of Object.entries(time)) {
+    if (value > 0) {
+      parts.push(`${value} ${unit}${value === 1 ? '' : 's'}`);
+    }
+  }
+
+  return parts.length > 0 ? parts.join(', ') : '0 minutes';
+}
+
 // Takes string input, returns an integer with number of ms for the setTimeout function
 const calculateTimeout = (text) => {
 	try {
@@ -188,7 +210,7 @@ const saveFiles = () => {
 					processvar = "recordedmessages";
 					break;
                 case "delveuserdata":
-					filepath = `${process.GagbotSavedFileDirectory}/delve.txt`;
+					filepath = `${process.GagbotSavedFileDirectory}/delveuserdata.txt`;
 					processvar = "delveuserdata";
 					break;
                 case "userstats":
@@ -410,6 +432,7 @@ async function removeOldMessages() {
 }
 
 exports.parseTime = parseTime;
+exports.parseDuration = parseDuration;
 exports.calculateTimeout = calculateTimeout;
 exports.getTimestringForZip = getTimestringForZip;
 exports.backupsAreAnnoying = backupsAreAnnoying;

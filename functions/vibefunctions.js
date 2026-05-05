@@ -204,7 +204,7 @@ const assignChastity = (user, keyholder, namedchastity, force = false) => {
     if (oldchastitybase) { oldchastitybase.onUnequip({ userID: user, keyholderID: keyholder }) }
 
     // Assign the new chastity belt to the user
-	process.chastity[user] = { keyholder: keyholder ? keyholder : "unlocked", timestamp: Date.now(), chastitytype: namedchastity };
+	process.chastity[user] = { keyholder: keyholder ? keyholder : "unlocked", timestamp: Date.now(), chastitytype: namedchastity, stateligible: true };
 
     // Call the on equip for the new chastity belt!
     newchastitybase.onEquip({ userID: user, keyholderID: keyholder })
@@ -233,6 +233,16 @@ const removeChastity = (user, keyholder, force = false) => {
 
 	chastitybase.onUnequip({ userID: user });
 
+    if (process.chastity[user].stateligible) {
+        if (process.userstats == undefined) { process.userstats = {} }
+        if (process.userstats[user] == undefined) { process.userstats[user] = {} }
+        process.userstats[user].chastitywornduration = (Date.now() - process.chastity[user].timestamp)
+        if (process.readytosave == undefined) {
+            process.readytosave = {};
+        }
+        process.readytosave.userstats = true;
+    }
+
 	delete process.chastity[user];
 	if (process.readytosave == undefined) {
 		process.readytosave = {};
@@ -258,7 +268,7 @@ const assignChastityBra = (user, keyholder, namedchastity, force = false) => {
     if (oldchastitybase) { oldchastitybase.onUnequip({ userID: user, keyholderID: keyholder }) }
 
     // Assign the new chastity belt to the user
-	process.chastitybra[user] = { keyholder: keyholder ? keyholder : "unlocked", timestamp: Date.now(), chastitytype: namedchastity };
+	process.chastitybra[user] = { keyholder: keyholder ? keyholder : "unlocked", timestamp: Date.now(), chastitytype: namedchastity, stateligible: true };
 
     // Call the on equip for the new chastity belt!
     newchastitybase.onEquip({ userID: user, keyholderID: keyholder })
@@ -286,6 +296,16 @@ const removeChastityBra = (user, keyholder, force = false) => {
 	if ((chastitybase && !chastitybase.canUnequip({ userID: user, keyholderID: keyholder })) && !force) return false;
 
 	chastitybase.onUnequip({ userID: user });
+
+    if (process.chastitybra[user].stateligible) {
+        if (process.userstats == undefined) { process.userstats = {} }
+        if (process.userstats[user] == undefined) { process.userstats[user] = {} }
+        process.userstats[user].chastitybrawornduration = (Date.now() - process.chastitybra[user].timestamp)
+        if (process.readytosave == undefined) {
+            process.readytosave = {};
+        }
+        process.readytosave.userstats = true;
+    }
 
 	delete process.chastitybra[user];
 	if (process.readytosave == undefined) {

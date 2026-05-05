@@ -1,3 +1,4 @@
+const { parseDuration } = require("./timefunctions");
 
 
 
@@ -56,38 +57,93 @@ function statsSetCounter(user, countername, value) {
  *********/
 function statsGeneratePage(user) {
     let statstogenerate = {
-        headpats: [
+        Restraints: [
+            {
+                name: "Gagged Messages Sent",
+                type: "counter",
+                stat: "gaggedmessages"
+            },
+            {
+                name: "Struggle Messages",
+                type: "counter",
+                stat: "strugglemessages"
+            },
+            {
+                name: "Longest Chastity Belt Worn",
+                type: "special",
+                special: (user) => {
+                    let maxduration = Math.max(statsGetCounter(user, "chastitywornduration") ?? 0, ((process.chastity[user]) ? Date.now() - process.chastity[user].timestamp : 0))
+                    console.log(maxduration);
+                    if (maxduration == 0) {
+                        return "Never Worn"
+                    }
+                    else {
+                        return parseDuration(maxduration);
+                    }
+                }
+            },
+            {
+                name: "Longest Chastity Bra Worn",
+                type: "special",
+                special: (user) => {
+                    let maxduration = Math.max(statsGetCounter(user, "chastitybrawornduration") ?? 0, ((process.chastitybra[user]) ? Date.now() - process.chastitybra[user].timestamp : 0))
+                    console.log(maxduration);
+                    if (maxduration == 0) {
+                        return "Never Worn"
+                    }
+                    else {
+                        return parseDuration(maxduration);
+                    }
+                }
+            }
+        ],
+        Headpats: [
             {
                 name: "Headpats Given",
+                type: "counter",
                 stat: "headpatsgiven"
             },
             {
                 name: "Headpats Received",
+                type: "counter",
                 stat: "headpatsreceived"
             },
             {
                 name: "Headpats on Self",
+                type: "counter",
                 stat: "headpatsself"
             },
             {
                 name: "Headpat Crits",
+                type: "counter",
                 stat: "headpatcrits"
             },
             {
                 name: "Headpat Double Crits",
+                type: "counter",
                 stat: "headpatdoublecrits"
             },
             {
                 name: "Headpat Triple Crits",
+                type: "counter",
                 stat: "headpattriplecrits"
             },
         ]
     }
 
-    let outtext = `### Headpats\n`
+    let outtext = ``
 
-    statstogenerate["headpats"].forEach((textstat) => {
-        outtext = `${outtext}-# • ${textstat.name}: **${statsGetCounter(user, textstat.stat) ?? 0}**\n`
+    Object.keys(statstogenerate).forEach((statgroup) => {
+        outtext = `${outtext}### ${statgroup}\n`
+
+        statstogenerate[statgroup].forEach((textstat) => {
+            if (textstat.type == "counter") {
+                outtext = `${outtext}-# • ${textstat.name}: **${statsGetCounter(user, textstat.stat) ?? 0}**\n`
+            }
+            else if (textstat.type == "special") {
+                outtext = `${outtext}-# • ${textstat.name}: **${textstat.special(user)}**\n`
+            }
+        })
     })
 
     return outtext;

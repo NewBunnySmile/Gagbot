@@ -215,6 +215,14 @@ for (const file of messagecontextcommandsFiles) {
 
 var gagged = {}
 
+// Modify all chastity belts and bras currently worn to add the stateligible state. 
+Object.keys(process.chastity).forEach((k) => {
+    process.chastity[k].stateligible = true
+})
+Object.keys(process.chastitybra).forEach((k) => {
+    process.chastitybra[k].stateligible = true
+})
+
 const client = new discord.Client({
     intents: [
         discord.GatewayIntentBits.Guilds,

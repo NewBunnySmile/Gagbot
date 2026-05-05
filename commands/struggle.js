@@ -285,6 +285,14 @@ module.exports = {
 				data.nostruggle = true;
 				interaction.reply(getText(data));
 			}
+            // Increment the struggle message counter
+            if (process.userstats == undefined) { process.userstats = {} }
+            if (process.userstats[interaction.user.id] == undefined) { process.userstats[interaction.user.id] = {} }
+            process.userstats[interaction.user.id].strugglemessages = (process.userstats[interaction.user.id].strugglemessages ?? 0) + 1;
+            if (process.readytosave == undefined) {
+                process.readytosave = {};
+            }
+            process.readytosave.userstats = true;
 		} catch (err) {
 			console.log(err);
 		}

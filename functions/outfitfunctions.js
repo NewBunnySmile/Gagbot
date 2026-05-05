@@ -187,6 +187,9 @@ function restoreOutfit(userID, storedobject) {
 			getChastity(userID);
 			if (!getHeavy(userID) && (canAccessChastity(userID, userID, true).access || !canAccessChastity(userID, userID, true).hasbelt)) {
 				process.chastity[userID] = storedobject.chastity;
+                if (process.chastity[userID].stateligible) {
+                    process.chastity[userID].stateligible = false;
+                }
 				if (process.readytosave == undefined) {
 					process.readytosave = {};
 				}
@@ -197,6 +200,9 @@ function restoreOutfit(userID, storedobject) {
 			getChastityBra(userID);
 			if (!getHeavy(userID) && (canAccessChastityBra(userID, userID, true).access || !canAccessChastityBra(userID, userID, true).hasbelt)) {
 				process.chastitybra[userID] = storedobject.chastitybra;
+                if (process.chastitybra[userID].stateligible) {
+                    process.chastitybra[userID].stateligible = false;
+                }
 				if (process.readytosave == undefined) {
 					process.readytosave = {};
 				}

@@ -577,6 +577,15 @@ async function sendTheMessage(msg, outtext, dollIDDisplay, threadID, dollProtoco
 			outtext = outtext.slice(0, 1999); // Seriously, STOP POSTING LONG MESSAGES
 		}
 
+        // Increment the gagged message counter
+        if (process.userstats == undefined) { process.userstats = {} }
+        if (process.userstats[msg.author.id] == undefined) { process.userstats[msg.author.id] = {} }
+        process.userstats[msg.author.id].gaggedmessages = (process.userstats[msg.author.id].gaggedmessages ?? 0) + 1;
+        if (process.readytosave == undefined) {
+            process.readytosave = {};
+        }
+        process.readytosave.userstats = true;
+
 		// Determine if an attachment was posted in the original message.
 		if (msg.attachments.size > 0) {
 			console.log(`IT HAS IMAGES LOL`);
