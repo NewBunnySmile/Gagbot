@@ -105,6 +105,15 @@ module.exports = {
                 return;
             }
 
+            // REFLECT
+            if (chastityuser.id == process.client.user.id) {
+                data.chastityreflect = true;
+                data.textdata.interactionuser = process.client.user;
+                data.textdata.targetuser = interaction.user;
+                interaction.reply({ content: `Gagbot recognizes what you're attempting to do. Cheeky.`, flags: MessageFlags.Ephemeral });
+                return;
+            }
+
             if (chastityuser.id == interaction.user.id) {
                 data.self = true;
             }
