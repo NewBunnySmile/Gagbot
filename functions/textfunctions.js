@@ -4464,7 +4464,13 @@ const getTextGeneric = (type, data_in) => {
             `USER_TAG is saying VAR_C1... Who knows what it means?`,
             `USER_TAG gently boops the VAR_C1 button!`,
             `In response, USER_TAG presses VAR_C1, of all the buttons!`,
-            `USER_TAG stares at the buttons on the floor before pressing the VAR_C1 one!`
+            `USER_TAG stares at the buttons on the floor before pressing the VAR_C1 one!`,
+            `USER_TAG looks over the buttons and the VAR_C1 one lights up!`,
+            `USER_TAG nods a moment before tapping the VAR_C1 fiercely!`,
+            `USER_TAG pretends the VAR_C1 button is a head and headpats it!`,
+            `USER_TAG opts against words and presses the VAR_C1 button!`,
+            `The VAR_C1 button lights up brilliantly as USER_TAG pushes it!`,
+            `Its an important conversation and USER_TAG wants to contribute by pressing... VAR_C1`
         ]
 	};
 
