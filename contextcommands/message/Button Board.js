@@ -12,6 +12,7 @@ module.exports = {
             let buttons = [
                 [ "💢", "❔", "❕", "💕", "✅"],
                 [ "🍔", "🔑", "🔒", "🔗", "🥽"],
+                [ "👀", "🥺", "💤", "💼", "☕︎" ]
             ]
             let buttonmap = buttons.map((ba) => {
                 return ba.map((bb) => {
