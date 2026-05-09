@@ -1,4 +1,4 @@
-const { ButtonStyle, ActionRowBuilder, SectionBuilder, StringSelectMenuBuilder, StringSelectMenuOptionBuilder, PermissionsBitField, MessageFlags, RoleSelectMenuBuilder, TextDisplayBuilder, ChannelSelectMenuBuilder, REST, Routes, ButtonBuilder, ModalBuilder, LabelBuilder, TextInputBuilder, TextInputStyle } = require("discord.js");
+const { ButtonStyle, ActionRowBuilder, SectionBuilder, StringSelectMenuBuilder, StringSelectMenuOptionBuilder, PermissionsBitField, MessageFlags, RoleSelectMenuBuilder, TextDisplayBuilder, ChannelSelectMenuBuilder, REST, Routes, ButtonBuilder, ModalBuilder, LabelBuilder, TextInputBuilder, TextInputStyle, UserSelectMenuBuilder } = require("discord.js");
 const fs = require("fs");
 const path = require("path");
 const https = require("https");
@@ -200,7 +200,40 @@ const configoptions = {
 			disabled: () => {
 				return false;
 			}, // if true, button is greyed out
-		}
+		},
+        allowedheadpats: {
+			name: "Headpat Exempt Users",
+			desc: "Set users which can headpat you regardless of your setting above",
+			descmodal: "Select up to 25 users which can headpat you at all times:",
+			choices: [
+				{
+					name: "Set Users",
+					helptext: "Users set to ",
+					helptextnone: "*No Users Set*",
+					select_function: (userID) => {
+						return false;
+					},
+					value: "None",
+					style: ButtonStyle.Primary,
+				},
+			],
+			customtext: (userID) => {
+				return `https://discord.gg/`;
+			},
+			placeholder: (userID) => {
+				return `https://discord.gg/`;
+			},
+            uservaluedisplay: (val) => {
+                return val;
+            },
+			menutype: "choice_userentry",
+			default: (userID) => {
+				return ``;
+			},
+			disabled: () => {
+				return false;
+			},
+		},
     },
 	Arousal: {
 		arousalsystem: {
@@ -2456,7 +2489,26 @@ function generateConfigModal(interaction, menuset = "General", page, statustext)
 					.addTextDisplayComponents((textdisplay) => textdisplay.setContent(`## ${configoptions[menuset][k].name}\n${configoptions[menuset][k].desc}\n-# ‎   ⤷ ${helpertext}`))
 					.setButtonAccessory((button) =>
 						button
-							.setCustomId(`config_tentrypageopt_${menuset}_${k}`)
+							.setCustomId(`config_tentrypageopt_${menuset}_${k}_${page}`)
+							.setLabel(configoptions[menuset][k].choices[0].name ?? "Undefined")
+							.setStyle(configoptions[menuset][k].choices[0].style ?? ButtonStyle.Danger)
+							.setDisabled(configoptions[menuset][k].disabled(interaction.user.id)),
+					);
+				pagecomponents.push(buttonsection);
+            } else if (configoptions[menuset][k].menutype == "choice_userentry") {
+                let userarr = getOption(interaction.user.id, k) ?? [];
+				let helpertext = `No Users`
+                if (userarr.length > 0) {
+                    helpertext = `${userarr.map((u) => `<@${u}>`).join(", ")}`;
+                }
+				if (getOption(interaction.user.id, k) == undefined) {
+					helpertext = `${configoptions[menuset][k].choices[0].helptextnone}`;
+				}
+				let buttonsection = new SectionBuilder()
+					.addTextDisplayComponents((textdisplay) => textdisplay.setContent(`## ${configoptions[menuset][k].name}\n${configoptions[menuset][k].desc}\n-# ‎   ⤷ ${helpertext}`))
+					.setButtonAccessory((button) =>
+						button
+							.setCustomId(`config_uentrypageopt_${menuset}_${k}_${page}`)
 							.setLabel(configoptions[menuset][k].choices[0].name ?? "Undefined")
 							.setStyle(configoptions[menuset][k].choices[0].style ?? ButtonStyle.Danger)
 							.setDisabled(configoptions[menuset][k].disabled(interaction.user.id)),
@@ -3214,7 +3266,7 @@ function generateTextEntryModal(interaction, data, optionval) {
 		timestamp: performance.now(), // If the interaction was at least 15 minutes ago (900000 ms), invalidate it.
 	};
 
-	const modal = new ModalBuilder().setCustomId(`config_setoptionmodal_${data.page}_${optionval}`).setTitle(`Enter Option...`);
+	const modal = new ModalBuilder().setCustomId(`config_setoptionmodal_${data.page}_${optionval}_${data.pagenum}`).setTitle(`Enter Option...`);
 
 	// Text part to tell the user what it is
 	/*let maintextpart = new TextDisplayBuilder()
@@ -3234,6 +3286,36 @@ function generateTextEntryModal(interaction, data, optionval) {
 	//modal.addTextDisplayComponents(maintext)
 
 	modal.addLabelComponents(labeltextentry);
+
+	return modal;
+}
+
+// Recieves an interaction, with desctext and the optionval referencing
+// the option name to pass into setOption. We will want to store this
+// interaction along with data. Data must supply at least title, page, and desctext props.
+function generateUserEntryModal(interaction, data, optionval) {
+	if (process.recentinteraction == undefined) {
+		process.recentinteraction = {};
+	}
+	process.recentinteraction[interaction.user.id] = {
+		interaction: interaction,
+		timestamp: performance.now(), // If the interaction was at least 15 minutes ago (900000 ms), invalidate it.
+	};
+
+	const modal = new ModalBuilder().setCustomId(`config_setoptionmodal_${data.page}_${optionval}_${data.pagenum}`).setTitle(`Enter Option...`);
+
+	// User Entry for the choice
+	const choiceuserentry = new UserSelectMenuBuilder()
+		.setCustomId("choiceinput")
+        .setMaxValues(25)
+		.setRequired(true);
+
+	const labeluserentry = new LabelBuilder().setLabel(`${data.title}`).setDescription(`${data.desctext}`).setUserSelectMenuComponent(choiceuserentry)
+
+	// Put it all together
+	//modal.addTextDisplayComponents(maintext)
+
+	modal.addLabelComponents(labeluserentry);
 
 	return modal;
 }
@@ -3271,6 +3353,7 @@ async function getAllJoinedGuilds(client) {
 
 exports.generateConfigModal = generateConfigModal;
 exports.generateTextEntryModal = generateTextEntryModal;
+exports.generateUserEntryModal = generateUserEntryModal;
 exports.configoptions = configoptions;
 exports.getOption = getOption;
 exports.setOption = setOption;

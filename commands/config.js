@@ -8,6 +8,7 @@ const { removeAllCommands } = require("../functions/configfunctions.js");
 const { initializeServerOptions } = require("../functions/configfunctions.js");
 const { setCommands, setBotOption, getBotOption, leaveServerOptions, createWebhook, deleteWebhook, generateTextEntryModal } = require("../functions/configfunctions.js");
 const { processTimedEvents } = require("../functions/timefunctions.js");
+const { generateUserEntryModal } = require("../functions/configfunctions.js");
 
 module.exports = {
 	data: new SlashCommandBuilder().setName("config").setDescription(`Configure settings...`),
@@ -99,16 +100,32 @@ module.exports = {
 			} else if (optionparts[1] == "tentrypageopt") {
 				// Frankly I hate arrays for this but lets break it down. All we need is to throw a modal at them
 				let buttonpressed = configoptions[optionparts[2]][optionparts[3]];
-				let data = { title: buttonpressed.name, desctext: buttonpressed.descmodal, placeholder: buttonpressed.placeholder, page: optionparts[2] };
+				let data = { title: buttonpressed.name, desctext: buttonpressed.descmodal, placeholder: buttonpressed.placeholder, page: optionparts[2], pagenum: optionparts[4] };
 				if (typeof buttonpressed.customtext == "function") {
 					data.desctext = data.desctext.replace("CUSTOMTEXT", buttonpressed.customtext(interaction.user.id));
 				}
 				if (typeof buttonpressed.placeholder == "function") {
 					data.placeholder = buttonpressed.placeholder(interaction.user.id);
 				}
+                if (!data.pagenum) { data.pagenum = 1 };
 
 				// Generate a new modal to give to the user and pass it along.
 				await interaction.showModal(generateTextEntryModal(interaction, data, optionparts[3]));
+            } else if (optionparts[1] == "uentrypageopt") {
+				// Frankly I hate arrays for this but lets break it down. All we need is to throw a modal at them
+                console.log(interaction)
+				let buttonpressed = configoptions[optionparts[2]][optionparts[3]];
+				let data = { title: buttonpressed.name, desctext: buttonpressed.descmodal, placeholder: buttonpressed.placeholder, page: optionparts[2], pagenum: optionparts[4] };
+				if (typeof buttonpressed.customtext == "function") {
+					data.desctext = data.desctext.replace("CUSTOMTEXT", buttonpressed.customtext(interaction.user.id));
+				}
+				if (typeof buttonpressed.placeholder == "function") {
+					data.placeholder = buttonpressed.placeholder(interaction.user.id);
+				}
+                if (!data.pagenum) { data.pagenum = 1 };
+
+				// Generate a new modal to give to the user and pass it along.
+				await interaction.showModal(generateUserEntryModal(interaction, data, optionparts[3]));
 			} else if (optionparts[1] == "refreshcmdButton") {
 				await setCommands(interaction, interaction.guildId);
 
@@ -223,20 +240,21 @@ module.exports = {
 		}
 	},
 	async modalexecute(interaction) {
-		console.log(interaction);
-		let choiceinput = interaction.fields.getTextInputValue("choiceinput");
+		let choiceinput;
 		let optionparts = interaction.customId.split("_");
 		if (optionparts[3] == "dollvisorname") {
+            choiceinput = interaction.fields.getTextInputValue("choiceinput");
 			setOption(interaction.user.id, optionparts[3], choiceinput.slice(0, 30));
 			await interaction.reply({ content: `Updated your Doll Visor designation to ${choiceinput.slice(0, 30)}`, flags: MessageFlags.Ephemeral });
 			if (process.recentinteraction) {
 				if (process.recentinteraction[interaction.user.id]?.timestamp + 895000 > performance.now()) {
-					await process.recentinteraction[interaction.user.id].interaction.editReply(await generateConfigModal(process.recentinteraction[interaction.user.id].interaction, optionparts[2], 1));
+					await process.recentinteraction[interaction.user.id].interaction.editReply(await generateConfigModal(process.recentinteraction[interaction.user.id].interaction, optionparts[2], optionparts[4]));
 				}
 				delete process.recentinteraction[interaction.user.id];
 			}
 		}
         if (optionparts[3] == "dollpunishwords") {
+            choiceinput = interaction.fields.getTextInputValue("choiceinput");
             let punishwordsseparated = choiceinput.split(",")
             let punishmentarr = [];
             punishwordsseparated.forEach((w) => {
@@ -254,32 +272,35 @@ module.exports = {
             await interaction.reply({ content: `Updated your punishment words to the following:\n- ${punishwordsseparated.join("\n- ")}`, flags: MessageFlags.Ephemeral });
 			if (process.recentinteraction) {
 				if (process.recentinteraction[interaction.user.id]?.timestamp + 895000 > performance.now()) {
-					await process.recentinteraction[interaction.user.id].interaction.editReply(await generateConfigModal(process.recentinteraction[interaction.user.id].interaction, optionparts[2], 1));
+					await process.recentinteraction[interaction.user.id].interaction.editReply(await generateConfigModal(process.recentinteraction[interaction.user.id].interaction, optionparts[2], optionparts[4]));
 				}
 				delete process.recentinteraction[interaction.user.id];
 			}
         }
         if (optionparts[3] == "engravedcollarname") {
+            choiceinput = interaction.fields.getTextInputValue("choiceinput");
 			setOption(interaction.user.id, optionparts[3], choiceinput.slice(0, 30));
 			await interaction.reply({ content: `Updated your Engraved Collar tag to ${choiceinput.slice(0, 30)}`, flags: MessageFlags.Ephemeral });
 			if (process.recentinteraction) {
 				if (process.recentinteraction[interaction.user.id]?.timestamp + 895000 > performance.now()) {
-					await process.recentinteraction[interaction.user.id].interaction.editReply(await generateConfigModal(process.recentinteraction[interaction.user.id].interaction, optionparts[2], 1));
+					await process.recentinteraction[interaction.user.id].interaction.editReply(await generateConfigModal(process.recentinteraction[interaction.user.id].interaction, optionparts[2], optionparts[4]));
 				}
 				delete process.recentinteraction[interaction.user.id];
 			}
 		}
         if (optionparts[3] == "deferentialgagsubject") {
+            choiceinput = interaction.fields.getTextInputValue("choiceinput");
 			setOption(interaction.user.id, optionparts[3], choiceinput.slice(0, 30));
 			await interaction.reply({ content: `Updated your Deferential Gag subject to ${choiceinput.slice(0, 30)}`, flags: MessageFlags.Ephemeral });
 			if (process.recentinteraction) {
 				if (process.recentinteraction[interaction.user.id]?.timestamp + 895000 > performance.now()) {
-					await process.recentinteraction[interaction.user.id].interaction.editReply(await generateConfigModal(process.recentinteraction[interaction.user.id].interaction, optionparts[2], 1));
+					await process.recentinteraction[interaction.user.id].interaction.editReply(await generateConfigModal(process.recentinteraction[interaction.user.id].interaction, optionparts[2], optionparts[4]));
 				}
 				delete process.recentinteraction[interaction.user.id];
 			}
 		}
         if (optionparts[3] == "profilelink") {
+            choiceinput = interaction.fields.getTextInputValue("choiceinput");
             if (choiceinput && choiceinput.length > 0) {
                 setOption(interaction.user.id, optionparts[3], choiceinput);
                 await interaction.reply({ content: `Updated your profile link to ${choiceinput}`, flags: MessageFlags.Ephemeral });
@@ -290,12 +311,13 @@ module.exports = {
             }
 			if (process.recentinteraction) {
 				if (process.recentinteraction[interaction.user.id]?.timestamp + 895000 > performance.now()) {
-					await process.recentinteraction[interaction.user.id].interaction.editReply(await generateConfigModal(process.recentinteraction[interaction.user.id].interaction, optionparts[2], 1));
+					await process.recentinteraction[interaction.user.id].interaction.editReply(await generateConfigModal(process.recentinteraction[interaction.user.id].interaction, optionparts[2], optionparts[4]));
 				}
 				delete process.recentinteraction[interaction.user.id];
 			}
 		}
         if (optionparts[3] == "kinklistlink") {
+            choiceinput = interaction.fields.getTextInputValue("choiceinput");
             if (choiceinput && choiceinput.length > 0) {
                 setOption(interaction.user.id, optionparts[3], choiceinput);
                 await interaction.reply({ content: `Updated your kink list link to ${choiceinput}`, flags: MessageFlags.Ephemeral });
@@ -306,10 +328,25 @@ module.exports = {
             }
 			if (process.recentinteraction) {
 				if (process.recentinteraction[interaction.user.id]?.timestamp + 895000 > performance.now()) {
-					await process.recentinteraction[interaction.user.id].interaction.editReply(await generateConfigModal(process.recentinteraction[interaction.user.id].interaction, optionparts[2], 1));
+					await process.recentinteraction[interaction.user.id].interaction.editReply(await generateConfigModal(process.recentinteraction[interaction.user.id].interaction, optionparts[2], optionparts[4]));
 				}
 				delete process.recentinteraction[interaction.user.id];
 			}
 		}
+        if (optionparts[3] == "allowedheadpats") {
+            choiceinput = interaction.fields.getSelectedUsers("choiceinput");
+            let choiceusers = Array.from(choiceinput) ?? [];
+            if (choiceusers.length > 0) {
+                choiceusers = choiceusers.map((a) => a[0]).sort()
+            }
+            setOption(interaction.user.id, optionparts[3], choiceusers);
+            await interaction.reply({ content: `Updated allowed users to headpat you to ${choiceusers.map((a) => { return `<@${a}>`}).join(", ")}`, flags: MessageFlags.Ephemeral });
+            if (process.recentinteraction) {
+				if (process.recentinteraction[interaction.user.id]?.timestamp + 895000 > performance.now()) {
+					await process.recentinteraction[interaction.user.id].interaction.editReply(await generateConfigModal(process.recentinteraction[interaction.user.id].interaction, optionparts[2], optionparts[4]));
+				}
+				delete process.recentinteraction[interaction.user.id];
+			}
+        }
 	},
 };
