@@ -361,6 +361,10 @@ client.on('interactionCreate', async (interaction) => {
                 let configfunc = require(`./commands/list.js`)
                 configfunc.interactionresponse(interaction);  
             }
+            else if (interaction.customId.startsWith("scoreboard_")) {
+                let configfunc = require(`./commands/scoreboard.js`)
+                configfunc.interactionresponse(interaction);  
+            }
             else if (interaction.customId.startsWith("outfitter_")) {
                 let configfunc = require(`./commands/outfit.js`)
                 configfunc.interactionresponse(interaction);  
