@@ -3599,24 +3599,40 @@ const texts_unwear = {
 	heavy: {
 		self: {
 			single: {
-				worn: [`Try as USER_THEY might, USER_TAG can't wriggle out of USER_THEIR VAR_C2 right now in USER_THEIR bondage.`],
+				worn: [
+                    `Try as USER_THEY might, USER_TAG can't wriggle out of USER_THEIR VAR_C2 right now in USER_THEIR bondage.`,
+                    `USER_TAG wants to slip USER_THEIR VAR_C2 off of USER_THEIR body, but USER_THEIR bondage makes that a challenge...`,
+                    `If only USER_TAG wasn't tied up, maybe USER_THEY could take USER_THEIR VAR_C2 off...`,
+                ],
 				// Ephemeral
 				noworn: [`You aren't wearing a VAR_C2, but you couldn't remove it anyway!`],
 			},
 			multiple: {
-				worn: [`Try as USER_THEY might, USER_TAG can't really take off USER_THEIR clothes while USER_THEY USER_ISARE tied up.`],
+				worn: [
+                    `Try as USER_THEY might, USER_TAG can't really take off USER_THEIR clothes while USER_THEY USER_ISARE tied up.`,
+                    `USER_TAG is tied up, so despite USER_THEIR efforts to squirm out of USER_THEIR clothes, they all remain pretty secure on USER_THEIR body.`,
+                    `USER_TAG runs USER_THEIR fingers all over USER_THEIR body to take off USER_THEIR clothes... in USER_THEIR head. USER_THEIR_CAP bondage doesn't permit anything else, afterall.`,
+                ],
 				// Ephemeral
 				noworn: [`You aren't wearing any clothes, but you couldn't remove them anyway!`],
 			},
 		},
 		other: {
 			single: {
-				worn: [`Despite all of USER_THEIR enthusiasm, USER_TAG is unable to take off TARGET_TAG's VAR_C2 without USER_THEIR arms.`],
+				worn: [
+                    `Despite all of USER_THEIR enthusiasm, USER_TAG is unable to take off TARGET_TAG's VAR_C2 without USER_THEIR arms.`,
+                    `USER_TAG wiggles in USER_THEIR bondage, eager to help TARGET_TAG out of TARGET_THEIR VAR_C2!`,
+                    `USER_TAG would love nothing more than to take the VAR_C2 off of TARGET_TAG, but USER_THEY USER_ISARE bound tightly!`
+                ],
 				// Ephemeral
 				noworn: [`TARGET_TAG isn't wearing a VAR_C2, but you couldn't remove it anyway!`],
 			},
 			multiple: {
-				worn: [`Despite all of USER_THEIR enthusiasm, USER_TAG is unable to undress TARGET_TAG without USER_THEIR arms.`],
+				worn: [
+                    `Despite all of USER_THEIR enthusiasm, USER_TAG is unable to undress TARGET_TAG without USER_THEIR arms.`,
+                    `USER_TAG imagines TARGET_TAG is a manniquin and USER_THEY USER_ISARE undressing TARGET_THEM. It's all imagination though since USER_THEY USER_ISARE bound.`,
+                    `USER_TAG does USER_THEIR best impression of taking off TARGET_TAG's clothes. It's not very effective though. `
+                ],
 				// Ephemeral
 				noworn: [`TARGET_TAG isn't wearing any clothes, but you couldn't remove them anyway!`],
 			},
@@ -3627,6 +3643,9 @@ const texts_unwear = {
 			single: {
 				worn: [
 					`USER_TAG slowly slips out of USER_THEIR VAR_C2, folding it and putting it away for future wear!`,
+                    `USER_TAG pulls off USER_THEIR VAR_C2, setting it aside to store in USER_THEIR closet later!`,
+                    `USER_TAG slinks off USER_THEIR VAR_C2! It's time for a wardrobe change!`,
+                    `USER_TAG carefully slides the VAR_C2 off of USER_THEIR body and sets it on the floor!`,
 					{
 						only: (t) => {
 							return t.c2.includes("Lipstick");
