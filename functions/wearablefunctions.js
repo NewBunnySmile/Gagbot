@@ -14,8 +14,8 @@ let wearabletypes = [
 	{ name: "Vampire Fangs", value: "fangs_vampire", category: "Body Part" },
 	{ name: "Halo", value: "halo", category: "Body Part", colorable: true, uniqueColors: ["Angelic", "Ghostly", "Ethereal", "Holy Light", "Cyber"] },
     { name: "Eyes", value: "eyes", category: "Body Part", colorable: true, uniqueColors: ["Starry", "Stellar", "Cosmic", "Fiery", "Verdant", "Angelic", "Cybernetic", "Snake", "Cat", "Demon", "Synthetic"],  },
-    { name: "Shell", value: "eyes", category: "Body Part", colorable: true, uniqueColors: ["Porcelain", "Cybernetic", "Titanium", "Molten"], forbiddenColors: ["Black", "Red", "Purple", "Green", "Orange", "Red", "Pink", "White", "Yellow", "Cyan", "Aqua", "Blue", "Indigo", "Gray", "Brown"] },
-    { name: "Frame", value: "eyes", category: "Body Part", colorable: true, uniqueColors: ["Porcelain", "Cybernetic", "Titanium", "Molten"], forbiddenColors: ["Black", "Red", "Purple", "Green", "Orange", "Red", "Pink", "White", "Yellow", "Cyan", "Aqua", "Blue", "Indigo", "Gray", "Brown"] },
+    { name: "Shell", value: "wearshell", category: "Body Part", colorable: true, uniqueColors: ["Porcelain", "Cybernetic", "Titanium", "Molten"], forbiddenColors: ["Black", "Red", "Purple", "Green", "Orange", "Red", "Pink", "White", "Yellow", "Cyan", "Aqua", "Blue", "Indigo", "Gray", "Brown"] },
+    { name: "Frame", value: "wearframe", category: "Body Part", colorable: true, uniqueColors: ["Porcelain", "Cybernetic", "Titanium", "Molten"], forbiddenColors: ["Black", "Red", "Purple", "Green", "Orange", "Red", "Pink", "White", "Yellow", "Cyan", "Aqua", "Blue", "Indigo", "Gray", "Brown"] },
     
 	// Hats
 	{ name: "Stylish Hat", value: "stylish_hat", category: "Hat", colorable: true },
