@@ -3635,13 +3635,13 @@ const texts_unwear = {
 					},
 					{
 						only: (t) => {
-							return t.c2.includes("Kissmark");
+							return (t.c2.includes("Kissmark") || t.c2.includes("Blush") || t.c2.includes("Foundation"));
 						},
 						text: `USER_TAG uses makeup remover to wipe away USER_THEIR VAR_C2!`,
 					},
 					{
 						only: (t) => {
-							return ((t.c2.includes("Eyeshadow")) || (t.c2.includes("Eyeliner")));
+							return (t.c2.includes("Eyeshadow") || t.c2.includes("Eyeliner") || t.c2.includes("Mascara"));
 						},
 						text: `USER_TAG uses makeup remover to wipe away USER_THEIR VAR_C2 from USER_THEIR eyes!`,
 					},
@@ -3705,6 +3705,30 @@ const texts_unwear = {
 						},
 						text: `USER_TAG removes USER_THEIR VAR_C2 to go incognito!`,
 					},
+                    {
+						only: (t) => {
+							return t.c2.endsWith("Eyes");
+						},
+						text: `USER_TAG closes USER_THEIR eyes for a moment and then opens them again, now back to normal!`,
+					},
+                    {
+						only: (t) => {
+							return t.c2.includes("Fangs");
+						},
+						text: `USER_TAG scrunches USER_THEIR face a moment before USER_THEIR VAR_C2 retract!`,
+					},
+                    {
+                        only: (t) => {
+                            return (t.c2.includes("Piercing") || t.c2.includes("Nose Ring"));
+                        },
+                        text: `USER_TAG carefully undoes retainer on USER_THEIR VAR_C2 and slides it out!`,
+                    },
+                    {
+                        only: (t) => {
+                            return t.c2.includes("Earrings");
+                        },
+                        text: `USER_TAG carefully unclasps USER_THEIR VAR_C2 and slides them out of USER_THEIR ears!`,
+                    },
 				],
 				// Ephemeral
 				noworn: [`You aren't currently wearing a VAR_C2!`],
@@ -3719,6 +3743,9 @@ const texts_unwear = {
 			single: {
 				worn: [
 					`Slowly, USER_TAG runs USER_THEIR fingers over TARGET_TAG, sensually pulling off TARGET_THEIR VAR_C2 and setting it aside.`,
+                    `USER_TAG dances USER_THEIR fingers over TARGET_TAG, under the VAR_C2 and slipping it off of TARGET_THEIR body.`,
+                    `USER_TAG has decided that TARGET_TAG has worn TARGET_THEIR VAR_C2 long enough and takes it off of TARGET_THEM.`,
+                    `USER_TAG gingerly slips the VAR_C2 off of TARGET_TAG and folds it up before setting it aside.`,
 					{
 						only: (t) => {
 							return t.c2.includes("Lipstick");
@@ -3727,13 +3754,13 @@ const texts_unwear = {
 					},
 					{
 						only: (t) => {
-							return t.c2.includes("Kissmark");
+							return (t.c2.includes("Kissmark") || t.c2.includes("Blush") || t.c2.includes("Foundation"));
 						},
 						text: `USER_TAG uses makeup remover to wipe away TARGET_TAG's VAR_C2!`,
 					},
 					{
 						only: (t) => {
-							return t.c2.includes("Eyeshadow");
+							return (t.c2.includes("Eyeshadow") || t.c2.includes("Eyeliner") || t.c2.includes("Mascara"));
 						},
 						text: `USER_TAG uses makeup remover to wipe away TARGET_TAG's VAR_C2 from TARGET_THEIR eyes!`,
 					},
@@ -3797,6 +3824,30 @@ const texts_unwear = {
 						},
 						text: `USER_TAG removes TARGET_TAG's VAR_C2!`,
 					},
+                    {
+						only: (t) => {
+							return t.c2.endsWith("Eyes");
+						},
+						text: `USER_TAG runs USER_THEIR hand over TARGET_TAG's eyes and they return to normal again!`,
+					},
+                    {
+						only: (t) => {
+							return t.c2.includes("Fangs");
+						},
+						text: `USER_TAG gently pushes against TARGET_TAG's gums, causing TARGET_THEIR VAR_C2 to retract!`,
+					},
+                    {
+                        only: (t) => {
+                            return (t.c2.includes("Piercing") || t.c2.includes("Nose Ring"));
+                        },
+                        text: `USER_TAG carefully undoes retainer on TARGET_TAG's VAR_C2 and slides it out!`,
+                    },
+                    {
+                        only: (t) => {
+                            return t.c2.includes("Earrings");
+                        },
+                        text: `USER_TAG carefully unclasps TARGET_TAG's VAR_C2 and slides them out of TARGET_THEIR ears!`,
+                    },
 				],
 				// Ephemeral
 				noworn: [`TARGET_TAG isn't currently wearing a VAR_C2!`],
@@ -3928,9 +3979,13 @@ const texts_wear = {
 			worn: [`You are already wearing a VAR_C2!`],
 			noworn: [
 				`USER_TAG picks up a beautiful VAR_C2 and puts it on! It sits snugly on USER_THEM!`,
+                `USER_TAG decides to put a VAR_C2 on USER_THEMSELF! It fit really well!`,
+                `USER_TAG slips a VAR_C2 on! It seems like it was made just right for USER_THEM!`,
+                `USER_TAG carefully digs through USER_THEIR closet to find a VAR_C2 and put it on!`,
+                `USER_TAG decides that today is the perfect day to wear a VAR_C2!`,
 				{
 					only: (t) => {
-						return t.c2.includes("Lipstick");
+						return (t.c2.includes("Lipstick") || t.c2.includes("Blush") || t.c2.includes("Foundation"));
 					},
 					text: `USER_TAG pulls out a makeup bag and applies VAR_C2 to USER_THEMSELF!`,
 				},
@@ -3942,7 +3997,7 @@ const texts_wear = {
 				},
 				{
 					only: (t) => {
-						return t.c2.includes("Eyeshadow");
+						return (t.c2.includes("Eyeshadow") || t.c2.includes("Eyeliner") || t.c2.includes("Mascara"));
 					},
 					text: `USER_TAG pulls out a makeup bag and applies VAR_C2 to USER_THEIR eyes!`,
 				},
@@ -4018,6 +4073,30 @@ const texts_wear = {
 					},
 					text: `USER_TAG eases into a VAR_C2, carefully smoothing out the wrinkles on USER_THEMSELF! Squeak squeak!`,
 				},
+                {
+					only: (t) => {
+						return t.c2.endsWith("Eyes");
+					},
+					text: `USER_TAG closes USER_THEIR eyes for a moment and opens them again to reveal a pair of VAR_C2!`,
+				},
+                {
+					only: (t) => {
+						return t.c2.includes("Fangs");
+					},
+					text: `USER_TAG opens USER_THEIR mouth, flexing it a moment before baring a set of VAR_C2!`,
+				},
+                {
+					only: (t) => {
+						return (t.c2.includes("Piercing") || t.c2.includes("Nose Ring"));
+					},
+					text: `USER_TAG enchants a needle and gently pierces USER_THEMSELF with a VAR_C2!`,
+				},
+                {
+                    only: (t) => {
+                        return t.c2.includes("Earrings");
+                    },
+                    text: `USER_TAG takes a pair of beautiful VAR_C2 and puts them on USER_THEIR ears!`,
+                },
 			],
 		},
 		other: {
@@ -4025,9 +4104,12 @@ const texts_wear = {
 			worn: [`You are already wearing a VAR_C2!`],
 			noworn: [
 				`USER_TAG helps TARGET_TAG into a VAR_C2, ensuring it all fits snugly!`,
+                `USER_TAG puts a VAR_C2 on TARGET_TAG, smoothing out all the wrinkles!`,
+                `USER_TAG slips a VAR_C2 onto TARGET_TAG's body! It seems to fit just right!`,
+                `USER_TAG thinks a VAR_C2 would look fantastic on TARGET_TAG, and so USER_THEY helpUSER_S TARGET_THEM into it!`,
 				{
 					only: (t) => {
-						return t.c2.includes("Lipstick");
+						return (t.c2.includes("Lipstick") || t.c2.includes("Blush") || t.c2.includes("Foundation"));
 					},
 					text: `USER_TAG pulls out a makeup bag and applies VAR_C2 to TARGET_TAG!`,
 				},
@@ -4045,7 +4127,7 @@ const texts_wear = {
 				},
 				{
 					only: (t) => {
-						return t.c2.includes("Eyeshadow");
+						return (t.c2.includes("Eyeshadow") || t.c2.includes("Eyeliner") || t.c2.includes("Mascara"));
 					},
 					text: `USER_TAG pulls out a makeup bag and applies VAR_C2 to TARGET_TAG's eyes!`,
 				},
@@ -4115,6 +4197,30 @@ const texts_wear = {
 					},
 					text: `USER_TAG helps TARGET_TAG into a VAR_C2, carefully smoothing out the wrinkles! Squeak squeak!`,
 				},
+                {
+					only: (t) => {
+						return t.c2.endsWith("Eyes");
+					},
+					text: `USER_TAG passes a hand over TARGET_TAG's eyes and the transform into a pair of VAR_C2!`,
+				},
+                {
+					only: (t) => {
+						return t.c2.includes("Fangs");
+					},
+					text: `USER_TAG opens TARGET_TAG's mouth, massaging the gums a moment to tickle out a set of VAR_C2!`,
+				},
+                {
+					only: (t) => {
+						return (t.c2.includes("Piercing") || t.c2.includes("Nose Ring"));
+					},
+					text: `Using a needle with unparalleled precision, USER_TAG gently pierces TARGET_TAG with a VAR_C2!`,
+				},
+                {
+                    only: (t) => {
+                        return t.c2.includes("Earrings");
+                    },
+                    text: `USER_TAG takes a pair of beautiful VAR_C2 and puts them on TARGET_TAG's ears!`,
+                },
 			],
 		},
 	},
