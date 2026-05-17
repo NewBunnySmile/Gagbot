@@ -1,43 +1,37 @@
-const { SlashCommandBuilder, MessageFlags, TextDisplayBuilder } = require("discord.js");
-const { getHeavy, getHeavyBound } = require("./../functions/heavyfunctions.js");
-const { getCollar, assignCollar, collartypes, getCollarName, getBaseCollar, canAccessCollar } = require("./../functions/collarfunctions.js");
-const { getPronouns } = require("./../functions/pronounfunctions.js");
-const { getConsent, handleConsent, collarPermModal } = require("./../functions/interactivefunctions.js");
-const { getText } = require("./../functions/textfunctions.js");
-const { getOption } = require("../functions/configfunctions.js");
-const { getUserTags } = require("../functions/configfunctions.js");
-const { rollPatChance, handleTouchEvent } = require("../functions/touchfunctions.js");
+const { ContextMenuCommandBuilder, ApplicationCommandType, MessageFlags } = require('discord.js');
+const { handleConsent, getConsent } = require('../../functions/interactivefunctions');
+const { handleTouchEvent, rollPatChance } = require('../../functions/touchfunctions');
+const { getPronouns } = require('../../functions/pronounfunctions');
+const { getText } = require('../../functions/textfunctions');
 
 module.exports = {
-	data: new SlashCommandBuilder()
-		.setName("headpat")
-		.setDescription("Attempt to pat someone's head")
-        .setNSFW(true)
-		.addUserOption((opt) => opt.setName("user").setDescription("Who to headpat?")),
-	async execute(interaction) {
-		try {
-            let targetuser = interaction.options.getUser("user") ?? interaction.user;
-			// CHECK IF THEY CONSENTED! IF NOT, MAKE THEM CONSENT
-			if (!getConsent(targetuser.id)?.mainconsent) {
-				await handleConsent(interaction, targetuser.id);
-				return;
-			}
-			// CHECK IF THEY CONSENTED! IF NOT, MAKE THEM CONSENT
-			if (!getConsent(interaction.user.id)?.mainconsent) {
-				await handleConsent(interaction, interaction.user.id);
-				return;
-			}
-			// Build data tree:
-			let data = {
-				textarray: "texts_touch",
-				textdata: {
-					interactionuser: interaction.user,
-					targetuser: targetuser,
-					//c1: getHeavy(interaction.user.id)?.displayname, // heavy bondage type
-					//c2: getMittenName(interaction.user.id, chosenmittens) ?? "Standard Mittens",
-				},
-			};
-
+    data: new ContextMenuCommandBuilder()
+        .setName('Headpat')
+        .setType(ApplicationCommandType.User), // This command will appear when right-clicking a user
+    async execute(interaction) {
+        try {
+            console.log(interaction);
+            let targetuser = await interaction.guild.members.fetch(interaction.targetId)
+            // CHECK IF THEY CONSENTED! IF NOT, MAKE THEM CONSENT
+            if (!getConsent(targetuser.id)?.mainconsent) {
+                await handleConsent(interaction, targetuser.id);
+                return;
+            }
+            // CHECK IF THEY CONSENTED! IF NOT, MAKE THEM CONSENT
+            if (!getConsent(interaction.user.id)?.mainconsent) {
+                await handleConsent(interaction, interaction.user.id);
+                return;
+            }
+            // Build data tree:
+            let data = {
+                textarray: "texts_touch",
+                textdata: {
+                    interactionuser: interaction.user,
+                    targetuser: targetuser,
+                    //c1: getHeavy(interaction.user.id)?.displayname, // heavy bondage type
+                    //c2: getMittenName(interaction.user.id, chosenmittens) ?? "Standard Mittens",
+                },
+            };
             await interaction.deferReply({ flags: MessageFlags.Ephemeral });
             await handleTouchEvent(interaction.user, targetuser, "headpat").then(
                 async (success) => {
@@ -95,9 +89,9 @@ module.exports = {
                     }
                     await interaction.followUp({ content: nomessage });
                 },
-            );
-		} catch (err) {
-			console.log(err);
-		}
-	},
-};
+            )
+        } catch (err) {
+            console.log(err);
+        }
+    },
+}
