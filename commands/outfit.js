@@ -41,7 +41,17 @@ module.exports = {
     },
 	async execute(interaction) {
 		try {
-			interaction.reply(await generateOutfitModal(interaction.user.id, "restore", 1, "0000000000"));
+            let subcommand = interaction.options.getSubcommand();
+            if (subcommand == "menu") {
+                await interaction.reply(await generateOutfitModal(interaction.user.id, "restore", 1, "0000000000"));
+            }
+            else if (subcommand == "restore") {
+                let outfitslot = interaction.options.getInteger("slot")
+                if ((outfitslot > -1) && (outfitslot < 20)) {
+                    restoreOutfit(interaction.user.id, getOutfits(interaction.user.id)[outfitslot]);
+                    await interaction.reply({ content: `Reloading Outfit in slot ${outfitslot + 1}...`, flags: MessageFlags.Ephemeral })
+                }
+            }
 		} catch (err) {
 			console.log(err);
 		}
