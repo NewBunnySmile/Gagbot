@@ -1,7 +1,7 @@
 const fs = require("fs");
 const path = require("path");
 const https = require("https");
-const { SlashCommandBuilder, UserSelectMenuBuilder, MessageFlags, TextInputBuilder, TextInputStyle, ModalBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, LabelBuilder, StringSelectMenuBuilder, StringSelectMenuOptionBuilder, TextDisplayBuilder, ComponentType, SectionBuilder } = require("discord.js");
+const { SlashCommandBuilder, UserSelectMenuBuilder, MessageFlags, TextInputBuilder, TextInputStyle, ModalBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, LabelBuilder, StringSelectMenuBuilder, StringSelectMenuOptionBuilder, TextDisplayBuilder, ComponentType, SectionBuilder, CheckboxGroupBuilder, User } = require("discord.js");
 const { getPronouns } = require("./../functions/pronounfunctions.js");
 const { collartypes, getCollarKeyholder, canAccessCollar, getCollar, getCollarTimelock, getCollarName } = require("./collarfunctions.js");
 const { getOption } = require("./../functions/configfunctions.js");
@@ -90,7 +90,7 @@ const collarPermModal = (interaction, keyholder, freeuse, collartype) => {
 	let restrictionWarningText = new TextDisplayBuilder();
 	let othertext = "others";
 	let warningText = `# WARNING 
-This restraint is intended to allow **others** to use /chastity, /mittens and /heavy on you!`;
+This restraint is intended to allow **others** to use **/mitten**, **/chastity**, **/heavy** and **/mask** on you without prompting for consent!`;
 	let keyholderpermissionstext = ``;
 	let freeusetext = ``;
 	if (keyholder == interaction.user && !freeuse) {
@@ -110,98 +110,60 @@ This restraint is intended to allow **others** to use /chastity, /mittens and /h
 		keyholderpermissionstext = `**(Public Access)** You have chosen ${keyholder} to be your keyholder, and will allow ${getPronouns(keyholder.id, "object")} to play with you, in addition to everyone else as public access.`;
 		othertext = getPronouns(keyholder.id, "object");
 	}
-	warningText = `${warningText}\n\n${keyholderpermissionstext}\n\nCollars may result in unintended situations such as someone holding your chastity key other than you, or you becoming unable to remove restraints because of heavy bondage. __**Use with caution!**__`;
+	warningText = `${warningText}\n\nCollars may result in unintended situations such as someone holding your chastity key other than you, or you becoming unable to remove restraints because of heavy bondage.\n\n-# **NOTE:** Extreme Restraints will still prompt as selected in **/config**`;
 
 	restrictionWarningText.setContent(warningText);
 
-	const restrictionsInputmitten = new StringSelectMenuBuilder().setCustomId("mitten").setPlaceholder("Select Permission").setRequired(true).addOptions(
-		new StringSelectMenuOptionBuilder()
-			// Label displayed to user
-			.setLabel("Yes")
-			// Description of option
-			.setDescription("Allows the use of /mitten on you")
-			// Value returned to you in modal submission
-			.setValue("mitten_yes"),
-		new StringSelectMenuOptionBuilder()
-			// Label displayed to user
-			.setLabel("No")
-			// Description of option
-			.setDescription("Disallows the use of /mitten on you")
-			// Value returned to you in modal submission
-			.setValue("mitten_no"),
-	);
+    let keyholderselector = new UserSelectMenuBuilder()
+        .setCustomId(`keyholderselection`)
+        .setPlaceholder(`Designate a keyholder...`)
+        .setMinValues(1)
+        .setMaxValues(1)
 
-	const restrictionsInputchastity = new StringSelectMenuBuilder().setCustomId("chastity").setPlaceholder("Select Permission").setRequired(true).addOptions(
-		new StringSelectMenuOptionBuilder()
-			// Label displayed to user
-			.setLabel("Yes")
-			// Description of option
-			.setDescription("Allows the use of /chastity on you")
-			// Value returned to you in modal submission
-			.setValue("chastity_yes"),
-		new StringSelectMenuOptionBuilder()
-			// Label displayed to user
-			.setLabel("No")
-			// Description of option
-			.setDescription("Disallows the use of /chastity on you")
-			// Value returned to you in modal submission
-			.setValue("chastity_no"),
-	);
+    if (keyholder != undefined) {
+        keyholderselector.setDefaultUsers(keyholder.id);
+    }
 
-	const restrictionsInputheavy = new StringSelectMenuBuilder().setCustomId("heavy").setPlaceholder("Select Permission").setRequired(true).addOptions(
-		new StringSelectMenuOptionBuilder()
-			// Label displayed to user
-			.setLabel("Yes")
-			// Description of option
-			.setDescription("Allows the use of /heavy on you")
-			// Value returned to you in modal submission
-			.setValue("heavy_yes"),
-		new StringSelectMenuOptionBuilder()
-			// Label displayed to user
-			.setLabel("No")
-			// Description of option
-			.setDescription("Disallows the use of /heavy on you")
-			// Value returned to you in modal submission
-			.setValue("heavy_no"),
-	);
+    const keyholderuserlabel = new LabelBuilder().setLabel(`Select a keyholder`).setDescription(`Only this user can unlock your collar.`).setUserSelectMenuComponent(keyholderselector)
 
-	const restrictionsInputmask = new StringSelectMenuBuilder().setCustomId("mask").setPlaceholder("Select Permission").setRequired(true).addOptions(
-		new StringSelectMenuOptionBuilder()
-			// Label displayed to user
-			.setLabel("Yes")
-			// Description of option
-			.setDescription("Allows the use of /mask on you")
-			// Value returned to you in modal submission
-			.setValue("mask_yes"),
-		new StringSelectMenuOptionBuilder()
-			// Label displayed to user
-			.setLabel("No")
-			// Description of option
-			.setDescription("Disallows the use of /mask on you")
-			// Value returned to you in modal submission
-			.setValue("mask_no"),
-	);
+    let checkboxGroup = new CheckboxGroupBuilder()
+        .setCustomId('permissionscheckboxgroup')
+        .setOptions([
+            { label: `Mittens`, value: 'mitten', description: "Allows the use of /mitten on you" },
+            { label: `Chastity`, value: 'chastity', description: "Allows the use of /chastity on you" },
+            { label: `Heavy`, value: 'heavy', description: "Allows the use of /heavy on you" },
+            { label: `Mask`, value: 'mask', description: "Allows the use of /mask on you" },
+        ])
+        .setRequired(false)
+        .setMinValues(0)
 
-	const restrictionsLabelmitten = new LabelBuilder().setLabel(`Allow ${othertext} to mitten you?`).setStringSelectMenuComponent(restrictionsInputmitten);
+    const restrictionscheckboxlabel = new LabelBuilder().setLabel(`Select Actions`).setDescription(`The keyholder will be able to do these without prompting.`).setCheckboxGroupComponent(checkboxGroup)
 
-	const restrictionsLabelchastity = new LabelBuilder().setLabel(`Allow ${othertext} to put you in chastity?`).setStringSelectMenuComponent(restrictionsInputchastity);
+    // If they have the option for public access enabled
+    let freeuseselector = new StringSelectMenuBuilder()
+        .setCustomId(`freeuseselection`)
+        .setPlaceholder(`Select...`)
+        .addOptions(
+            new StringSelectMenuOptionBuilder().setLabel('Yes').setValue('freeuse_yes'),
+            new StringSelectMenuOptionBuilder().setLabel('No').setValue('freeuse_no')
+        )
+        .setRequired(false);
 
-	const restrictionsLabelheavy = new LabelBuilder().setLabel(`Allow ${othertext} to put you in heavy bondage?`).setStringSelectMenuComponent(restrictionsInputheavy);
+    const freeuselabel = new LabelBuilder().setLabel(`Select Public Access`).setDescription(`Allow anyone to perform these actions (Free Use):`).setStringSelectMenuComponent(freeuseselector)
 
-	const restrictionsLabelmask = new LabelBuilder().setLabel(`Allow ${othertext} to put headgear on you?`).setStringSelectMenuComponent(restrictionsInputmask);
-
-	// Gee Golly Discord I would FUCKING LOVE if I could add just... ONE,
-	// just one more label element. But no. That would be too easy. Fuck. You.
-	/*const isfreeuselabel = new LabelBuilder()
-        .setLabel(`(Optional) Public access to your collar?`)
-        .setStringSelectMenuComponent(isfreeuse)*/
-
-	/*const collarchoiceLabel = new LabelBuilder()
-        .setLabel(`(Optional) What specific collar to wear?`)
-        .setStringSelectMenuComponent(collarchoice)*/
+    // If they don't, create a text label for that.
+    let freeusenotenabled = new TextDisplayBuilder().setContent(`*You do not have **Public Access** enabled in **/config** and cannot set your collar to Free Use.*`)
 
 	// Add labels to modal
-	modal.addTextDisplayComponents(restrictionWarningText).addLabelComponents(restrictionsLabelmitten, restrictionsLabelchastity, restrictionsLabelheavy, restrictionsLabelmask);
+	modal.addTextDisplayComponents(restrictionWarningText).addLabelComponents(keyholderuserlabel, restrictionscheckboxlabel)
+
+    if (getOption(interaction.user.id, "publicaccess") != "enabled") {
+        // They have NOT enabled free use. 
+        modal.addTextDisplayComponents(freeusenotenabled)
+    }
+    else {
+        modal.addLabelComponents(freeuselabel);
+    }
 
 	return modal;
 };

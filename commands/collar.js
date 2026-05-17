@@ -12,8 +12,8 @@ module.exports = {
 	data: new SlashCommandBuilder()
 		.setName("collar")
 		.setDescription(`Put a collar on, allowing others to /chastity, /heavy and /mitten you`)
-		.addUserOption((opt) => opt.setName("keyholder").setDescription("Who can do anything to you?"))
-		.addBooleanOption((opt) => opt.setName("freeuse").setDescription("Allow public access (Free Use?"))
+		//.addUserOption((opt) => opt.setName("keyholder").setDescription("Who can do anything to you?"))
+		//.addBooleanOption((opt) => opt.setName("freeuse").setDescription("Allow public access (Free Use?"))
 		.addStringOption((opt) => opt.setName("type").setDescription("What kind of collar to wear...").setAutocomplete(true)),
 	async autoComplete(interaction) {
 		try {
@@ -56,19 +56,19 @@ module.exports = {
 				await handleConsent(interaction, interaction.user.id);
 				return;
 			}
-			let collarkeyholder = interaction.options.getUser("keyholder") ?? interaction.user;
+			//let collarkeyholder = interaction.options.getUser("keyholder") ?? interaction.user;
 			let collarselected = interaction.options.getString("type");
-			let freeuse = interaction.options.getBoolean("freeuse");
+			//let freeuse = interaction.options.getBoolean("freeuse");
 
 			// Check if they have free use enabled and it's allowed
 			// If not, tell them to strongly consider what they're doing and review /config
-			if (freeuse && getOption(interaction.user.id, "publicaccess") != "enabled") {
-				await interaction.reply({
-					content: `You have not enabled Free Use. **Please strongly consider what you are doing.**\n\nFree use access will allow ***anyone*** to utilize mittens, chastity, hoods and heavy bondage on you. **You will be unable to say no to specific restraints or specific people by design.**\n\nYou should assume that you *will* become helpless and stuck with this option, including becoming unable to take off the collar. Only enable it if you understand what you're doing. If you do, this can be adjusted in **/config**.`,
-					flags: MessageFlags.Ephemeral,
-				});
-				return;
-			}
+			//if (freeuse && getOption(interaction.user.id, "publicaccess") != "enabled") {
+			//	await interaction.reply({
+			//		content: `You have not enabled Free Use. **Please strongly consider what you are doing.**\n\nFree use access will allow ***anyone*** to utilize mittens, chastity, hoods and heavy bondage on you. **You will be unable to say no to specific restraints or specific people by design.**\n\nYou should assume that you *will* become helpless and stuck with this option, including becoming unable to take off the collar. Only enable it if you understand what you're doing. If you do, this can be adjusted in **/config**.`,
+			//		flags: MessageFlags.Ephemeral,
+			//	});
+			//	return;
+			//}
 
 			// Build data tree:
 			let data = {
@@ -102,25 +102,27 @@ module.exports = {
             if (process.recentinteractions == undefined) { process.recentinteractions = {} }
             process.recentinteractions[interaction.user.id] = interaction;
 
-			if (collarkeyholder && collarkeyholder.id != undefined) {
+            await interaction.showModal(collarPermModal(interaction, interaction.user, false, collarselected));
+			/*if (collarkeyholder && collarkeyholder.id != undefined) {
 				//interaction.deferReply();
-				await interaction.showModal(collarPermModal(interaction, collarkeyholder, freeuse, collarselected));
+				await interaction.showModal(collarPermModal(interaction, interaction.user, false, collarselected));
 			} else {
 				//interaction.deferReply();
-				await interaction.showModal(collarPermModal(interaction, interaction.user, freeuse, collarselected));
-			}
+				await interaction.showModal(collarPermModal(interaction, interaction.user, false, collarselected));
+			}*/
 		} catch (err) {
 			console.log(err);
 		}
 	},
 	async modalexecute(interaction) {
 		try {
-			let collarkeyholder = interaction.customId.split("_")[1]; // Note this is THE ID, we need to adjust our code
-			let collarkeyholderonly = interaction.customId.split("_")[2]; // t or f
-			let choice_mitten = interaction.fields.getStringSelectValues("mitten") == "mitten_yes" ? true : false;
-			let choice_chastity = interaction.fields.getStringSelectValues("chastity") == "chastity_yes" ? true : false;
-			let choice_heavy = interaction.fields.getStringSelectValues("heavy") == "heavy_yes" ? true : false;
-			let choice_mask = interaction.fields.getStringSelectValues("mask") == "mask_yes" ? true : false;
+			let collarkeyholder = interaction.fields.getField("keyholderselection").members.first().user.id
+			let collarkeyholderonly = !(interaction.fields.fields.has("freeuseselection") && interaction.fields.getStringSelectValues("freeuseselection") && interaction.fields.getStringSelectValues("freeuseselection").includes("freeuse_yes"))
+            let checkboxselectedValues = interaction.fields.getCheckboxGroup('permissionscheckboxgroup')
+			let choice_mitten = checkboxselectedValues.includes("mitten")
+			let choice_chastity = checkboxselectedValues.includes("chastity")
+			let choice_heavy = checkboxselectedValues.includes("heavy")
+			let choice_mask = checkboxselectedValues.includes("mask")
 			// lol consistency with naming scheme is hard
 			let choice_collartype = interaction.customId.split("_")[3].length > 0 ? `${interaction.customId.split("_")[3]}_${interaction.customId.split("_")[4]}` : undefined;
             if (choice_collartype.endsWith("_undefined")) { // This is an ugly workaround
@@ -156,7 +158,7 @@ module.exports = {
 				data.noheavy = true;
 				if (collarkeyholder == interaction.user.id) {
 					data.self = true;
-					if (collarkeyholderonly == "t") {
+					if (collarkeyholderonly) {
 						data.nofreeuse = true;
 						if (choice_collartype) {
 							// Custom named collar declared
@@ -190,7 +192,7 @@ module.exports = {
 					}
 				} else if (collarkeyholder != interaction.user.id) {
 					data.other = true;
-					if (collarkeyholderonly == "t") {
+					if (collarkeyholderonly) {
 						data.nofreeuse = true;
 						if (choice_collartype) {
 							// Custom named collar declared
