@@ -61,7 +61,7 @@ async function emitEvent(type, userid, data, delay = 0) {
 	if (process.wearable) {
         getWearable(userid).forEach((h) => {
             if (process.eventfunctions && process.eventfunctions.wearable && process.eventfunctions.wearable[h] && process.eventfunctions.wearable[h][type]) {
-                process.eventfunctions.wearable[h][type](userid, type);
+                process.eventfunctions.wearable[h][type](userid, data);
             }
         });
 	}
@@ -69,7 +69,7 @@ async function emitEvent(type, userid, data, delay = 0) {
     if (process.toys) {
         getToys(userid).forEach((h) => {
             if (process.eventfunctions && process.eventfunctions.toys && process.eventfunctions.toys[h.type] && process.eventfunctions.toys[h.type][type]) {
-                process.eventfunctions.toys[h.type][type](userid, type);
+                process.eventfunctions.toys[h.type][type](userid, data);
             }
         });
 	}
