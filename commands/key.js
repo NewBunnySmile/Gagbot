@@ -120,25 +120,70 @@ module.exports = {
 				// Iterate over every member, ensuring that they are cached using the await command.
 				// I hate this code. It feels sloppy.
 				ownedclonedchastitykeys.forEach(async (m) => {
-					await interaction.guild.members.fetch(m.split("_")[0]);
+                    try {
+                        await interaction.guild.members.fetch(m.split("_")[0]);
+                    }
+                    catch(err) {
+                        console.log("Unknown member when fetching " + m.split("_")[0])
+                    }
 				});
 				ownedclonedchastitybrakeys.forEach(async (m) => {
-					await interaction.guild.members.fetch(m.split("_")[0]);
+					try {
+                        await interaction.guild.members.fetch(m.split("_")[0]);
+                    }
+                    catch(err) {
+                        console.log("Unknown member when fetching " + m.split("_")[0])
+                    }
 				});
 				ownedclonedcollarkeys.forEach(async (m) => {
-					await interaction.guild.members.fetch(m.split("_")[0]);
+					try {
+                        await interaction.guild.members.fetch(m.split("_")[0]);
+                    }
+                    catch(err) {
+                        console.log("Unknown member when fetching " + m.split("_")[0])
+                    }
 				});
 				clonedchastitykeys.forEach(async (m) => {
-					await interaction.guild.members.fetch(m.split("_")[0]);
-					await interaction.guild.members.fetch(m.split("_")[1]);
+					try {
+                        await interaction.guild.members.fetch(m.split("_")[0]);
+                    }
+                    catch(err) {
+                        console.log("Unknown member when fetching " + m.split("_")[0])
+                    }
+                    try {
+                        await interaction.guild.members.fetch(m.split("_")[1]);
+                    }
+                    catch(err) {
+                        console.log("Unknown member when fetching " + m.split("_")[1])
+                    }
 				});
 				clonedchastitybrakeys.forEach(async (m) => {
-					await interaction.guild.members.fetch(m.split("_")[0]);
-					await interaction.guild.members.fetch(m.split("_")[1]);
+					try {
+                        await interaction.guild.members.fetch(m.split("_")[0]);
+                    }
+                    catch(err) {
+                        console.log("Unknown member when fetching " + m.split("_")[0])
+                    }
+					try {
+                        await interaction.guild.members.fetch(m.split("_")[1]);
+                    }
+                    catch(err) {
+                        console.log("Unknown member when fetching " + m.split("_")[1])
+                    }
 				});
 				clonedcollarkeys.forEach(async (m) => {
-					await interaction.guild.members.fetch(m.split("_")[0]);
-					await interaction.guild.members.fetch(m.split("_")[1]);
+					try {
+                        await interaction.guild.members.fetch(m.split("_")[0]);
+                    }
+                    catch(err) {
+                        console.log("Unknown member when fetching " + m.split("_")[0])
+                    }
+					try {
+                        await interaction.guild.members.fetch(m.split("_")[1]);
+                    }
+                    catch(err) {
+                        console.log("Unknown member when fetching " + m.split("_")[1])
+                    }
 				});
 
 				// Unfortunately, we will still get undefined for names the FIRST time this is invoked.
