@@ -34,7 +34,7 @@ async function emitEvent(type, userid, data, delay = 0) {
 	// Headwear
 	if (process.headwear) {
         getHeadwear(userid).forEach((h) => {
-            if (process.eventfunctions && process.eventfunctions.headwear && process.eventfunctions.headwear[h][type]) {
+            if (process.eventfunctions && process.eventfunctions.headwear && process.eventfunctions.headwear[h] && process.eventfunctions.headwear[h][type]) {
                 process.eventfunctions.headwear[h][type](userid, data);
             }
         });

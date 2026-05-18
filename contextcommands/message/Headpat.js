@@ -50,7 +50,6 @@ module.exports = {
                         }
                     }
                     if (targetuser) {
-                        console.log(targetuser)
                         // CHECK IF THEY CONSENTED! IF NOT, MAKE THEM CONSENT
                         if (!getConsent(targetuser.id)?.mainconsent) {
                             await handleConsent(interaction, targetuser.id);
