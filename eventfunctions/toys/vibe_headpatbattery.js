@@ -7,14 +7,14 @@ const { getTextGeneric } = require("../../functions/textfunctions");
 const { getUserVar, setUserVar } = require("../../functions/usercontext");
 
 // Successful headpats will recharge the battery on the recipient's vibe by 5%. Each minute drains 2%. 
-function headpatfunction(recipient, headpatter, returnedobject) {
+function headpatfunction(recipient, data) {
     let newcharge = (getUserVar(recipient, "headpatvibecharge") ?? 0.0)
-    if (returnedobject.hit) {
+    if (data.returnedobject.hit) {
         if (newcharge == 0.0) {
             messageSendChannel(`The headpat gives enough charge to start up a vibrator...`, process.recentmessages[recipient])
         }
         newcharge = newcharge + (0.05 * getOption(recipient, "headpatrestraintpotency"))
-        if (returnedobject.crit) {
+        if (data.returnedobject.crit) {
             newcharge = newcharge + (0.05 * getOption(recipient, "headpatrestraintpotency")) // double charge for crits
         }
     }
