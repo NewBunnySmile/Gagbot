@@ -22,7 +22,7 @@ function headpatfunction(recipient, data) {
 }
 
 // Update battery
-async function functiontick(userid) {
+async function tick(userid) {
     let newcharge = 0.0
     if (getUserVar(userid, "headpatvibecharge")) {
         newcharge = getUserVar(userid, "headpatvibecharge") - 0.02 * (getBotOption("bot-timetickrate") / 60000)
@@ -36,5 +36,5 @@ async function functiontick(userid) {
     setUserVar(userid, "headpatvibecharge", newcharge);
 }
 
-exports.functiontick = functiontick;
+exports.tick = tick;
 exports.headpatfunction = headpatfunction;
