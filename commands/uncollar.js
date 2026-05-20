@@ -1,6 +1,6 @@
 const { SlashCommandBuilder, MessageFlags } = require("discord.js");
 const { getHeavy, getHeavyBound } = require("./../functions/heavyfunctions.js");
-const { getCollar, removeCollar, canAccessCollar } = require("./../functions/collarfunctions.js");
+const { getCollar, removeCollar, canAccessCollar, getCollarName } = require("./../functions/collarfunctions.js");
 const { getPronouns } = require("./../functions/pronounfunctions.js");
 const { getConsent, handleConsent } = require("./../functions/interactivefunctions.js");
 const { getText } = require("./../functions/textfunctions.js");
@@ -21,6 +21,7 @@ module.exports = {
 					interactionuser: interaction.user,
 					targetuser: collaruser,
 					c1: getHeavy(interaction.user.id)?.displayname, // heavy bondage type
+                    c2: getCollarName(interaction.user.id, getCollar(interaction.user.id)?.collartype) ?? "collar"
 				},
 			};
 

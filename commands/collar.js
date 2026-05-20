@@ -78,6 +78,7 @@ module.exports = {
 					interactionuser: interaction.user,
 					targetuser: interaction.options.getUser("keyholder") ? interaction.options.getUser("keyholder") : interaction.user,
 					c1: getHeavy(interaction.user.id)?.displayname, // heavy bondage type
+                    c2: getCollarName(interaction.user.id, getCollar(interaction.user.id)?.collartype) ?? "collar"
 				},
 			};
 

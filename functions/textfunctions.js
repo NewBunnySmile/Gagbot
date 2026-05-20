@@ -125,14 +125,74 @@ const texts_collar = {
 	heavy: { collar: [`USER_TAG crinks USER_THEIR neck, trying to adjust USER_THEIR collar, but USER_THEIR VAR_C1 makes it impossible to adjust!`], nocollar: [`USER_TAG shifts USER_THEIR cheek on a collar, yearning to put it on, but USER_THEIR VAR_C1 makes it incredibly difficult to put on!`] },
 	noheavy: {
 		self: {
-			nofreeuse: { namedcollar: [`USER_TAG puts a VAR_C2 on USER_THEIR neck, clicking a lock on the lockable buckle and hiding the key.`], nonamedcollar: [`USER_TAG puts a collar on USER_THEIR neck, clicking a lock on the lockable buckle and hiding the key.`] },
-			freeuse: { namedcollar: [`USER_TAG puts a VAR_C2 on USER_THEIR neck, clicking a lock on the lockable buckle and hiding the key. A little tag hangs off the collar with "Free Use!" written on it!`], nonamedcollar: [`USER_TAG puts a collar on USER_THEIR neck, clicking a lock on the lockable buckle and hiding the key. A little tag hangs off the collar with "Free Use!" written on it!`] },
+			nofreeuse: { 
+                namedcollar: [
+                    `USER_TAG puts a VAR_C2 on USER_THEIR neck, clicking a lock on the lockable buckle and hiding the key.`,
+                    {
+                        only: (t) => {
+                            return t.c2.includes("Handcuff Amulet");
+                        },
+                        text: `USER_TAG pulls out a shiny necklace with handcuff charm hanging off of it. USER_THEY_CAP putUSER_S it on around USER_THEIR neck and adjusts it for fit.`,
+                    },
+                ], 
+                nonamedcollar: [
+                    `USER_TAG puts a collar on USER_THEIR neck, clicking a lock on the lockable buckle and hiding the key.`
+                ] 
+            },
+			freeuse: { 
+                namedcollar: [
+                    `USER_TAG puts a VAR_C2 on USER_THEIR neck, clicking a lock on the lockable buckle and hiding the key. A little tag hangs off the collar with "Free Use!" written on it!`,
+                    {
+                        only: (t) => {
+                            return t.c2.includes("Handcuff Amulet");
+                        },
+                        text: `USER_TAG pulls out a shiny necklace with handcuff charm hanging off of it. USER_THEY_CAP putUSER_S it on around USER_THEIR neck and adjusts it for fit. A clip-on tag with "Use me! <3" written hangs from it.`,
+                    },
+                ], 
+                nonamedcollar: [
+                    `USER_TAG puts a collar on USER_THEIR neck, clicking a lock on the lockable buckle and hiding the key. A little tag hangs off the collar with "Free Use!" written on it!`
+                ] 
+            },
 		},
 		other: {
-			nofreeuse: { namedcollar: [`USER_TAG puts a VAR_C2 on USER_THEIR neck, clicking a lock on the lockable buckle and then handing the key to TARGET_TAG.`], nonamedcollar: [`USER_TAG puts a collar on USER_THEIR neck, clicking a lock on the lockable buckle and then handing the key to TARGET_TAG.`] },
-			freeuse: { namedcollar: [`USER_TAG puts a VAR_C2 on USER_THEIR neck, clicking a lock on the lockable buckle and then handing the key to TARGET_TAG. A little tag hangs off the collar with "Free Use!" written on it!`], nonamedcollar: [`USER_TAG puts a collar on USER_THEIR neck, clicking a lock on the lockable buckle and then handing the key to TARGET_TAG. A little tag hangs off the collar with "Free Use!" written on it!`] },
+			nofreeuse: { 
+                namedcollar: [
+                    `USER_TAG puts a VAR_C2 on USER_THEIR neck, clicking a lock on the lockable buckle and then handing the key to TARGET_TAG.`,
+                    {
+                        only: (t) => {
+                            return t.c2.includes("Handcuff Amulet");
+                        },
+                        text: `USER_TAG pulls out a shiny necklace with handcuff charm hanging off of it. USER_THEY_CAP putUSER_S it on around USER_THEIR neck and adjusts it for fit. USER_THEY_CAP smileUSER_S to TARGET_TAG with a silent promise not to remove it until given permission to.`,
+                    },
+                ], 
+                nonamedcollar: [
+                    `USER_TAG puts a collar on USER_THEIR neck, clicking a lock on the lockable buckle and then handing the key to TARGET_TAG.`
+                ] 
+            },
+			freeuse: { 
+                namedcollar: [
+                    `USER_TAG puts a VAR_C2 on USER_THEIR neck, clicking a lock on the lockable buckle and then handing the key to TARGET_TAG. A little tag hangs off the collar with "Free Use!" written on it!`,
+                    {
+                        only: (t) => {
+                            return t.c2.includes("Handcuff Amulet");
+                        },
+                        text: `USER_TAG pulls out a shiny necklace with handcuff charm hanging off of it. USER_THEY_CAP putUSER_S it on around USER_THEIR neck and adjusts it for fit. A clip-on tag with "Use me! <3" written hangs from it. USER_THEY_CAP smileUSER_S to TARGET_TAG with a silent promise not to remove the VAR_C2 until given permission to.`,
+                    },
+                ], 
+                nonamedcollar: [
+                    `USER_TAG puts a collar on USER_THEIR neck, clicking a lock on the lockable buckle and then handing the key to TARGET_TAG. A little tag hangs off the collar with "Free Use!" written on it!`
+                ] 
+            },
 		},
-		alreadycollared: [`You already have a collar on!`],
+		alreadycollared: [
+            `You already have a collar on!`,
+            {
+                only: (t) => {
+                    return t.c2.includes("Handcuff Amulet");
+                },
+                text: `You're already wearing a neck ornament!`,
+            },
+        ],
 	},
 };
 
@@ -2827,30 +2887,81 @@ const texts_unchastity = {
 const texts_uncollar = {
 	heavy: {
 		self: {
-			collar: [`USER_TAG crinks USER_THEIR neck, trying to take off USER_THEIR collar, but without USER_THEIR arms due to USER_THEIR VAR_C1, USER_THEY can't!`],
+			collar: [
+                `USER_TAG crinks USER_THEIR neck, trying to take off USER_THEIR collar, but without USER_THEIR arms due to USER_THEIR VAR_C1, USER_THEY can't!`,
+                {
+                    only: (t) => {
+                        return t.c2.includes("Handcuff Amulet");
+                    },
+                    text: `USER_TAG tries to wriggle USER_THEIR upper shoulders, but makes no progress at actually unclasping USER_THEIR necklace.`,
+                },
+            ],
 			// Ephemeral
 			nocollar: [`You aren't wearing a collar, but you wouldn't be able to take it off even if you were!`],
 		},
 		other: {
-			collar: [`USER_TAG wriggles towards TARGET_TAG, trying to take off TARGET_THEIR collar, but USER_THEY needUSER_S arms to unlock and undo the buckle!`],
+			collar: [
+                `USER_TAG wriggles towards TARGET_TAG, trying to take off TARGET_THEIR collar, but USER_THEY needUSER_S arms to unlock and undo the buckle!`,
+                {
+                    only: (t) => {
+                        return t.c2.includes("Handcuff Amulet");
+                    },
+                    text: `USER_TAG tries to roll towards TARGET_TAG to help undo the amulet around TARGET_TAG's neck, but unfortunately can't do too much without USER_THEIR arms.`,
+                },
+            ],
 			// Ephemeral
 			nocollar: [`TARGET_TAG is not wearing a collar, but you wouldn't be able to take it off anyway!`],
 		},
 	},
 	noheavy: {
 		self: {
-			collar: { key: [`USER_TAG leans forward to let USER_THEIR hair fall forward, then puts a key in the tiny lock and unlocks USER_THEIR collar, undoing the buckle and putting it away!`], nokey: [`USER_TAG tugs at USER_THEIR collar, trying to adjust and maybe take it off, but without the key USER_THEY can't really take it off!`] },
+			collar: { 
+                key: [
+                    `USER_TAG leans forward to let USER_THEIR hair fall forward, then puts a key in the tiny lock and unlocks USER_THEIR collar, undoing the buckle and putting it away!`,
+                    {
+                        only: (t) => {
+                            return t.c2.includes("Handcuff Amulet");
+                        },
+                        text: `USER_TAG reaches up behind USER_THEIR neck and undoes the clasp holding USER_THEIR VAR_C2 around USER_THEIR neck. It gently falls into USER_THEIR other hand and USER_THEY putUSER_S it away.`,
+                    },
+                ], 
+                nokey: [
+                    `USER_TAG tugs at USER_THEIR collar, trying to adjust and maybe take it off, but without the key USER_THEY can't really take it off!`,
+                    {
+                        only: (t) => {
+                            return t.c2.includes("Handcuff Amulet");
+                        },
+                        text: `USER_TAG runs USER_THEIR fingers along USER_THEIR VAR_C2, but since USER_THEY promised not to remove it without permission, USER_THEY decideUSER_S to keep it on.`,
+                    },
+                ] 
+            },
 			// Ephemeral
 			nocollar: [`You're not wearing a collar!`],
 		},
 		other: {
 			collar: {
-				key: [`USER_TAG puts a key in TARGET_TAG's collar, unlocking it and undoing the strap around TARGET_THEIR neck.`],
+				key: [
+                    `USER_TAG puts a key in TARGET_TAG's collar, unlocking it and undoing the strap around TARGET_THEIR neck.`,
+                    {
+                        only: (t) => {
+                            return t.c2.includes("Handcuff Amulet");
+                        },
+                        text: `USER_TAG carefully undoes the clasp on TARGET_TAG's amulet and presents it to TARGET_THEM to put away.`,
+                    },
+                ],
 				nokey: {
 					// Ephemeral
 					nokeyholderonly: [`TARGET_TAG's collar is unlocked, but it would be impolite to take it off!`],
 					// Ephemeral
-					keyholderonly: [`You don't have the key for TARGET_TAG's collar!`],
+					keyholderonly: [
+                        `You don't have the key for TARGET_TAG's collar!`,
+                        {
+                            only: (t) => {
+                                return t.c2.includes("Handcuff Amulet");
+                            },
+                            text: `TARGET_TAG hasn't promised TARGET_THEIR necklace to you!`,
+                        },
+                    ],
 				},
 			},
 			// Ephemeral

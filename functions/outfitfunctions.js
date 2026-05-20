@@ -862,7 +862,7 @@ async function inspectModal(userID, inspectuserIDin, menu, page) {
             if (collarkeyaccess == 2) {
                 collartimelockedtext = "Timelocked (Sealed)";
             }
-            wearingtext = `${wearingtext}\n${process.emojis.collar} Collar: **${collarname}**`
+            wearingtext = `${wearingtext}\n${process.emojis.collar} ${(getCollar(inspectuserID)?.collartype === "handcuffamulet") ? "Neck Ornament" : "Collar"}: **${collarname}**`
             if (!headwearrestrictions.canInspect) {
                 wearingtext = `${wearingtext}\n-# ‎   ⤷ ${collarlockemoji} **Blind!**`
             }
@@ -1035,7 +1035,7 @@ async function inspectModal(userID, inspectuserIDin, menu, page) {
             if (collarkeyaccess == 2) {
                 collartimelockedtext = "Timelocked (Sealed)";
             }
-            keyedrestraints = `${keyedrestraints}\n\n${process.emojis.collar} Collar: **${collarname}**`
+            keyedrestraints = `${keyedrestraints}\n\n${process.emojis.collar} ${(getCollar(inspectuserID)?.collartype === "handcuffamulet") ? "Neck Ornament" : "Collar"}: **${collarname}**`
             if (!headwearrestrictions.canInspect) {
                 keyedrestraints = `${keyedrestraints}\n-# ‎   ⤷ ${collarlockemoji} **Blind!**`
             }
