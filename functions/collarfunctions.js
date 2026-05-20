@@ -480,6 +480,10 @@ const addAdditionalCollarEffect = (user, type) => {
         if (getCollar(user)) {
             if (!process.collar[user].additionalcollars) { process.collar[user].additionalcollars = [] }
             process.collar[user].additionalcollars.push(type)
+            if (process.readytosave == undefined) {
+                process.readytosave = {};
+            }
+            process.readytosave.collar = true;
         }
     }
     catch (err) {
@@ -502,6 +506,10 @@ const removeAdditionalCollarEffect = (user, type) => {
             if (process.collar[user].additionalcollars && process.collar[user].additionalcollars.length == 0) {
                 delete process.collar[user].additionalcollars;
             }
+            if (process.readytosave == undefined) {
+                process.readytosave = {};
+            }
+            process.readytosave.collar = true;
         }
     }
     catch (err) {
