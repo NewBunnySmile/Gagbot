@@ -21,7 +21,7 @@ module.exports = {
 					interactionuser: interaction.user,
 					targetuser: collaruser,
 					c1: getHeavy(interaction.user.id)?.displayname, // heavy bondage type
-                    c2: getCollarName(interaction.user.id, getCollar(interaction.user.id)?.collartype) ?? "collar"
+                    c2: getCollarName(collaruser.id, getCollar(collaruser.id)?.collartype) ?? "collar"
 				},
 			};
 
