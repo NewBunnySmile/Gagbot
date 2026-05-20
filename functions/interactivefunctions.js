@@ -705,6 +705,9 @@ async function handleExtremeRestraint(user, target, type, restraint) {
 
 		let restraintfullname = ``;
 		switch (type) {
+            case "collar":
+                restraintfullname = getCollarName(user, restraint);
+                break;
 			case "heavy":
 				restraintfullname = convertheavy(restraint);
 				break;
