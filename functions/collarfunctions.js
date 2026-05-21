@@ -27,6 +27,7 @@ const collartypes = [
     { name: "Struggle Collar", value: "collar_struggle", special: true },
     { name: "Engraved Collar", value: "collarengraved", special: true },
     { name: "Collar of Headpat Vulnerability", value: "collarheadpatvuln", special: true },
+    { name: "Horny Shock Collar", value: "hornyshockcollar", special: true },
     { name: "Handcuff Amulet", value: "handcuffamulet" }
 ];
 

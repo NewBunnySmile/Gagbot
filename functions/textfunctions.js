@@ -3,7 +3,7 @@ const { getWearable } = require("./wearablefunctions.js");
 const { getChastity, getChastityBra, getArousal } = require("./vibefunctions.js");
 const { getHeadwearRestrictions } = require("./headwearfunctions.js");
 const { getUserTags } = require("./configfunctions.js");
-const { getHeavy } = require("./heavyfunctions.js");
+const { getHeavy, getHeavyRestrictions } = require("./heavyfunctions.js");
 const { getCollar } = require("./collarfunctions.js");
 
 const texts_chastity = {
@@ -1163,6 +1163,12 @@ const texts_heavy = {
                     },
                     {
                         only: (t) => {
+                            return t.c3.includes("Lockdown Virus");
+                        },
+                        text: `USER_TAG uses a tablet to upload a malicious zero-day code to TARGET_TAG! TARGET_THEIR_CAP joints seize up instantly as the Daemon takes hold of TARGET_THEIR OS!`,
+                    },
+                    {
+                        only: (t) => {
                             return t.c3.includes("Binding Circle");
                         },
                         text: `USER_TAG inscribes an intricate set of runes and circles on the floor near TARGET_TAG, creating a VAR_C3 that traps TARGET_THEM inside!`,
@@ -1558,6 +1564,12 @@ const texts_struggle = {
 			},
 			text: `USER_TAG struggles against the tentacles of the VAR_C1 to no avail! It seems USER_THEY will be trapped inside until it has finished with USER_THEM!`,
 		},
+        {
+            only: (t) => {
+                return t.c3.includes("Lockdown Virus");
+            },
+            text: `USER_TAG attempts to assert override commands to move a muscle servo in USER_THEIR body! The Daemon's control remains absolute.`,
+        },
 		{
 			only: (t) => {
 				return t.c1.endsWith("'s Lap");
@@ -3457,7 +3469,7 @@ const texts_unheavy = {
                 },
                 {
                     only: (t) => {
-                        return t.c2.includes("Shadow Hands");
+                        return t.c2.includes("Lockdown Virus");
                     },
                     text: `USER_TAG taps a button on a tablet to suspend the VAR_C2 upload to TARGET_TAG. TARGET_THEIR_CAP motor functions return swiftly!`,
                 },

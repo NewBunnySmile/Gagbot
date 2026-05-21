@@ -16,6 +16,7 @@ const { getToys } = require("./toyfunctions.js");
 const { logConsole } = require("./logfunctions.js");
 const { getBaseChastity } = require("./chastityfunctions.js");
 const { getHeadwear } = require("./headwearfunctions.js");
+const { convertPronounsText } = require("./pronounfunctions.js");
 
 // NOTE: canUnequip is currently checked in functions that remove/assign chastity and those functions return if it succeeded, but the text responses are not yet updated
 // probably makes more sense to make custom text responses for the belts/bras that use this that explain why it failed
@@ -1242,13 +1243,16 @@ function stutterText(msg, text, intensity, arousedtexts) {
 	let stuttered = false;
 	let usermod = getOption(msg.author.id, "arousaleffectpotency") ?? 1.0;
 	let overcorrected = 3;
-	console.log(intensity);
+    let shockable = (process.collar && process.collar[msg.author.id] && ((process.collar[msg.author.id].collartype == "hornyshockcollar") || (process.collar[msg.author.id].additionalcollars && process.collar[msg.author.id].additionalcollars.includes("hornyshockcollar"))))
+	let shocked = false;
+    let shockchance = (getArousal(msg.author.id) / 100) * 0.25
 	// js is a disaster sometimes. And Im a terrible coder.
 	if (isNaN(usermod) || usermod > 2.0 || usermod < 0.33) {
 		usermod == 1.0;
 	}
 	for (let i = 0; i < newtextparts.length; i++) {
 		let parttomodify = newtextparts[i];
+        let doshock = false;
 		// If this is a discord username, use the clean version of the username.
 		// This will require an async.
 		if (/<@!?(\d+)>/.test(parttomodify)) {
@@ -1346,9 +1350,46 @@ function stutterText(msg, text, intensity, arousedtexts) {
 		if (formattingeaten.includes(newtextparts[i])) {
 			outtext = `${outtext} ${newtextparts[i]}`;
 		} else {
-			outtext = `${outtext} ${modifiedpart}`;
+            if (shockable && !shocked && (Math.random() < shockchance) && (i > 0)) {
+                shocked = true;
+            }
+            else if (!shocked) {
+                outtext = `${outtext} ${modifiedpart}`;
+            }
 		}
 	}
+    if (shocked) {
+        // This is a circular if we try to use the text array, so this is a workaround. 
+        // I made mistakes when I originally set up these ___functions.js files. 
+        let shocks = [
+            `- owk-\n\n*USER_TAG yelps in pain as USER_THEIR speech is cut short!*`,
+            `- g-aaa-\n\n*USER_TAG grits USER_THEIR teeth as the collar triggers a shock!*`,
+            `- guh-\n\n*USER_TAG's breath seizes up in USER_THEIR throat as the collar shocks USER_THEM!*`,
+            `--\n\n*USER_TAG's face flushes red as the shock registers how horny USER_THEY USER_ISARE!*`,
+            {
+                required: (t) => {
+                    return getHeavyRestrictions(t.interactionuser.id).touchself;
+                },
+                text: `- guh-\n\n*USER_TAG's grabs USER_THEIR collar with tears as it shocks USER_THEM!*`,
+            },
+            {
+                required: (t) => {
+                    return getHeavyRestrictions(t.interactionuser.id).touchself;
+                },
+                text: `- oww-\n\n*USER_TAG tries to slip a finger under USER_THEIR collar as it stings USER_THEM!*`,
+            },
+        ]
+        let texts = [];
+        shocks.forEach((t) => {
+            if (typeof t === "function" && t.required({ interactionuser: msg.member, targetuser: msg.member })) {
+                texts.push(t.text)
+            }
+            else {
+                texts.push(t)
+            }
+        })
+        outtext = `${outtext}${convertPronounsText(texts[Math.floor(texts.length * Math.random())], { interactionuser: msg.member, targetuser: msg.member })}`
+    }
 
 	return { text: outtext.slice(1), stuttered: stuttered }; // Remove starting space;
 }
