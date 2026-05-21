@@ -7,7 +7,7 @@ const nlpSpeech = require("compromise-speech");
 nlp.extend(nlpSpeech);
 
 const { SlashCommandBuilder, ComponentType, ButtonBuilder, ActionRowBuilder, ButtonStyle, MessageFlags } = require("discord.js");
-const { getHeavy, heavyDenialCoefficient } = require("./heavyfunctions.js");
+const { getHeavy, heavyDenialCoefficient, getHeavyRestrictions } = require("./heavyfunctions.js");
 const { arousedtexts } = require("../vibes/aroused/aroused_texts.js");
 const { config } = require("./configfunctions.js");
 const { getOption, getBotOption } = require(`./configfunctions.js`);
@@ -1381,14 +1381,18 @@ function stutterText(msg, text, intensity, arousedtexts) {
         ]
         let texts = [];
         shocks.forEach((t) => {
-            if (typeof t === "function" && t.required({ interactionuser: msg.member, targetuser: msg.member })) {
+            if (typeof t != "string" && t.required({ interactionuser: msg.member, targetuser: msg.member })) {
                 texts.push(t.text)
             }
             else {
                 texts.push(t)
             }
         })
-        outtext = `${outtext}${convertPronounsText(texts[Math.floor(texts.length * Math.random())], { interactionuser: msg.member, targetuser: msg.member })}`
+        let chosentext = texts[Math.floor(texts.length * Math.random())];
+        console.log(texts)
+        console.log(chosentext);
+        addArousal(msg.author.id, 4.0);
+        outtext = `${outtext}${convertPronounsText(chosentext, { interactionuser: msg.member, targetuser: msg.member })}`
     }
 
 	return { text: outtext.slice(1), stuttered: stuttered }; // Remove starting space;
