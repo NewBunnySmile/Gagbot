@@ -591,6 +591,10 @@ async function appendCollarEffects(msg, outtext, msgTreeMods) {
             `*USER_TAG grits USER_THEIR teeth as the collar triggers a shock!*`,
             `*USER_TAG's breath seizes up in USER_THEIR throat as the collar shocks USER_THEM!*`,
             `*USER_TAG's face flushes red as the shock registers how horny USER_THEY USER_ISARE!*`,
+            `*USER_TAG tries to speak but stops forming words as the collar gives USER_THEM a warning shock!*`,
+            `*Tears run down USER_TAG's face as USER_THEIR speech is interrupted!*`,
+            `*USER_TAG's words trail off and USER_THEY squint USER_THEIR eyes shut!`,
+            `*USER_TAG eeps when the collar gives USER_THEM a tiny shock!`,
             {
                 required: (t) => {
                     return getHeavyRestrictions(t.interactionuser.id).touchself;

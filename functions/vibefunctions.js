@@ -1366,6 +1366,12 @@ function stutterText(msg, text, intensity, arousedtexts) {
             `- g-aaa-`,
             `- guh-`,
             `--`,
+            `- eep-`,
+            `- aa-a-`,
+            `- o-- owwwwwww-`,
+            `- gll-`,
+            `- yeh-`,
+            `- grmmmm-`
         ]
         let texts = [];
         shocks.forEach((t) => {
