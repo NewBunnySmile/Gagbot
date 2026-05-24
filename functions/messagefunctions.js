@@ -348,6 +348,25 @@ function getAlternateName(user) {
     return `${outname}${additionalpart}`.slice(0,32)
 }
 
+/**********
+ * Get the combined profile picture of the user, if their original one matches the one we have on file
+ * 
+ * 
+ **********/
+function getPFP(userobject) {
+
+}
+
+/*********
+ * Create a combined profile picture for the user to use on the webhook
+ * 
+ * 
+ *********/
+function createPFP(userobject, avatarURL, decorationURL, force = false) {
+
+}
+
+
 exports.splitMessage = splitMessage;
 
 exports.messageSend = messageSend;
