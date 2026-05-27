@@ -2115,7 +2115,7 @@ const texts_touch = {
                         `USER_TAG waves USER_THEIR hands to pat TARGET_TAG, but unfortunately TARGET_THEY TARGET_ISARE in a different container. Or castle. One of the two!`,
                         `USER_TAG probably forgot that USER_THEY USER_ISARE in a container right now, so reaching TARGET_TAG is a challenging prospect.`,
                         `USER_TAG imagines patting TARGET_TAG since USER_THEY USER_ISARE in a container. Oh well.`,
-                        `TARGET_TAG looks like TARGET_THEY want a headpat, from over there. Sadly, TARGET_THEY aren't in the same container as USER_TAG so TARGET_THEIR head remains unpatted.`
+                        `TARGET_TAG looks like TARGET_THEY want a headpat, from over there. Sadly, TARGET_THEY TARGET_ISARE not in the same container as USER_TAG so TARGET_THEIR head remains unpatted.`
                     ],
                     "blind": [
                         `USER_TAG waves USER_THEIR hands around in the dark, trying to feel USER_THEIR way to TARGET_TAG to pat TARGET_THEIR head. Unfortunately, TARGET_THEY just can't be found!`,
