@@ -295,6 +295,78 @@ const configoptions = {
 				return false;
 			},
 		},
+        receiveshocks: {
+			name: "Recieve Shocks",
+			desc: "Who is allowed to trigger remote shocks on you?",
+			choices: [
+				{
+					name: "Everyone",
+					helptext: "Everyone is allowed to shock you",
+					select_function: (userID) => { return true },
+					value: "everyonenoprompt",
+					style: ButtonStyle.Secondary,
+				},
+				{
+					name: "Collar Access",
+					helptext: "Anyone with access to your collar is allowed to shock you",
+					select_function: (userID) => { return true },
+					value: "collaraccess",
+					style: ButtonStyle.Secondary,
+				},
+				{
+					name: "Keyholders",
+					helptext: "Only Keyholders can shock you",
+					select_function: (userID) => { return true },
+					value: "keyholdernoprompt",
+					style: ButtonStyle.Secondary,
+				},
+                {
+					name: "Nobody",
+					helptext: "Nobody can shock you",
+					select_function: (userID) => { return true },
+					value: "nobody",
+					style: ButtonStyle.Danger,
+				},
+			],
+			menutype: "choice",
+			default: "collaraccess",
+			disabled: () => {
+				return false;
+			}, // if true, button is greyed out
+		},
+        allowedshocks: {
+			name: "Shock Exempt Users",
+			desc: "Set users which can always shock you while wearing a remote controlled shock collar, regardless of the setting above",
+			descmodal: "Select up to 25 users which can shock you at all times:",
+			choices: [
+				{
+					name: "Set Users",
+					helptext: "Users set to ",
+					helptextnone: "*No Users Set*",
+					select_function: (userID) => {
+						return false;
+					},
+					value: "None",
+					style: ButtonStyle.Primary,
+				},
+			],
+			customtext: (userID) => {
+				return `https://discord.gg/`;
+			},
+			placeholder: (userID) => {
+				return `https://discord.gg/`;
+			},
+            uservaluedisplay: (val) => {
+                return val;
+            },
+			menutype: "choice_userentry",
+			default: (userID) => {
+				return ``;
+			},
+			disabled: () => {
+				return false;
+			},
+		},
     },
 	Arousal: {
 		arousalsystem: {
@@ -913,7 +985,7 @@ const configoptions = {
 			},
 		},
 	},
-	Misc: {
+	"Restraint Options": {
 		dollvisorname: {
 			name: "Doll Visor Name",
 			desc: "Set a custom name for Doll Visor name tags.",
@@ -3108,7 +3180,7 @@ function getOption(userID, option) {
 		initializeOptions(userID);
 	}
 	if (process.configs.users[userID][option] == undefined) {
-		let pages = ["Me", "Arousal", "General", "Misc", "Extreme", "Content"];
+		let pages = ["Me", "Arousal", "General", "Restraint Options", "Extreme", "Content"];
 		pages.forEach((p) => {
 			let optionspages = Object.keys(configoptions[p]);
 			optionspages.forEach((k) => {
@@ -3156,7 +3228,7 @@ function getAllSelectedOption(option) {
 }
 
 function initializeOptions(userID) {
-	let pages = ["Me", "Arousal", "General", "Misc", "Extreme", "Content"];
+	let pages = ["Me", "Arousal", "General", "Restraint Options", "Extreme", "Content"];
 	pages.forEach((p) => {
 		let optionspages = Object.keys(configoptions[p]);
 		optionspages.forEach((k) => {

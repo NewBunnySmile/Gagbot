@@ -1,5 +1,5 @@
 const { ButtonBuilder, ButtonStyle, ActionRowBuilder, ComponentType } = require("discord.js");
-const { getCollar, getOtherKeysCollar, getClonedCollarKey } = require("./collarfunctions");
+const { getCollar, getOtherKeysCollar, getClonedCollarKey, canAccessCollar } = require("./collarfunctions");
 const { getOption } = require("./configfunctions");
 const { getGags, getMitten } = require("./gagfunctions");
 const { getHeadwearRestrictions, getHeadwear } = require("./headwearfunctions");
@@ -186,8 +186,15 @@ function doHeadpatFunctions(headpatter, recipient, returnedobject) {
 	}
 }
 
-// Prompts the target to touch them
-async function handleTouchEvent(user, target, type) {
+/********
+ * Returns a Promise where Resolve allowed the action and Reject disallowed the action. Checks the relevant config variable under "type" and DMs the recipient for permission if necessary.
+ * 
+ * - (user ID) user - The person performing the action
+ * - (user ID) target - The person receiving the action
+ * - (string) type - The type of action being performed ("headpat", "shock", etc)
+ * - (boolean) noprompt? - If true, skips DMing and immediately rejects if no suitable user
+ ********/
+async function handleTouchEvent(user, target, type, noprompt = false) {
 	return new Promise(async (res, rej) => {
 		let hasOption = getOption(target.id, `receive${type}`);
         if (user.id === target.id) { 
@@ -238,11 +245,27 @@ async function handleTouchEvent(user, target, type) {
                 return;
             }
         }
+        if (hasOption === "collaraccess") {
+            if (canAccessCollar(target, user).access) {
+                res(true)
+                return;
+            }
+            else {
+                rej("Blocked")
+                return;
+            }
+        }
 		if (hasOption === "nobody") {
             // NOPE
 			rej("Blocked");
 			return;
 		} 
+
+        // If this is a touch event which does NOT handle prompts, go away. 
+        if (noprompt) {
+            rej("Blocked")
+            return;
+        }
 
         /*if (process.recentlypromptedmajor && process.recentlypromptedmajor[target.id] && process.recentlypromptedmajor[target.id] > Date.now()) {
             rej("Cooldown")
