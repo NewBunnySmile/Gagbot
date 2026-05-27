@@ -9,11 +9,17 @@ const { getUserVar, setUserVar } = require("../../functions/usercontext");
 function headpatfunction(recipient, data) {
     const critheadpatmessages = [
         `The headpat felt so good that it left <@${recipient}> stunned for a few moments! One could capitalize on this opportunity to further bind ${getPronouns(recipient, "object")}!`,
-        `<@${recipient}>'s eyes are a bit hazy as ${getPronouns(recipient, "subject")} is lost in thought after that headpat. ${getPronouns(recipient, "subject", true)} could probably easily be bound right now...`
+        `<@${recipient}>'s eyes are a bit hazy as ${getPronouns(recipient, "subject")} is lost in thought after that headpat. ${getPronouns(recipient, "subject", true)} could easily be bound right now...`,
+        `Unexpectedly, <@${recipient}>'s movements look a little sluggish. Now would be the best time to combo ${getPronouns(recipient, "object")} with bondage!`,
+        `<@${recipient}> sighs in delight at receiving that amazing headpat, blissfully unaware of anyone who might want to bind ${getPronouns(recipient, "object")} super tightly!`,
+        `<@${recipient}> lowers ${getPronouns(recipient, "possessiveDeterminer")} guard as that headpat was in just the perfect place! ${getPronouns(recipient, "subject", true)} probably won't say no to some bondage!`
     ]
     if (data.returnedobject && data.returnedobject.crit && !getUserVar(recipient, "headpatvulntimer")) {
         try {
-            messageSendChannel(critheadpatmessages[Math.floor(Math.random() * critheadpatmessages.length)], process.recentmessages[recipient])
+            // Delay by 3 seconds to attempt to arrange the order
+            setTimeout(() => {
+                messageSendChannel(critheadpatmessages[Math.floor(Math.random() * critheadpatmessages.length)], process.recentmessages[recipient])
+            }, 3000);
         }
         catch (err) {
             console.log(err)
