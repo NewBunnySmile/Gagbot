@@ -292,6 +292,10 @@ const heavyDenialCoefficient = (type) => {
  * - **(string) customname** defaults to default heavy name
  **************/
 const assignHeavy = (user, type, origbinder, customname) => {
+    let namedcontainerowner;
+    if ((type === "dominants_lap") || (type === "engulfing_slime")) {
+        namedcontainerowner = origbinder;
+    }
 	if (process.heavy == undefined) {
 		process.heavy = {};
 	}
@@ -303,12 +307,14 @@ const assignHeavy = (user, type, origbinder, customname) => {
         if (existingheavy) {
             existingheavy.origbinder = origbinder;
             existingheavy.displayname = customname ?? getHeavyName(type);
+            existingheavy.namedcontainerowner = namedcontainerowner;
         }
         else {
             process.heavy[user].push({
                 type: type,
                 origbinder: origbinder,
-                displayname: customname ?? getHeavyName(type)
+                displayname: customname ?? getHeavyName(type),
+                namedcontainerowner: namedcontainerowner
             })
         }
     }
@@ -316,7 +322,8 @@ const assignHeavy = (user, type, origbinder, customname) => {
         process.heavy[user].push({
             type: type,
             origbinder: origbinder,
-            displayname: customname ?? getHeavyName(type)
+            displayname: customname ?? getHeavyName(type),
+            namedcontainerowner: namedcontainerowner
         })
     }
 
@@ -514,6 +521,8 @@ const getHeavyRestrictions = (user) => {
                         returnobject.touchlist.push(k);
                     }
                 }) 
+                // Users in a named container can do things to the owner of that named container
+                if (heavy.namedcontainerowner) { returnobject.touchlist.push(heavy.namedcontainerowner) }
             }
         })
         console.log(returnobject.touchlist);
