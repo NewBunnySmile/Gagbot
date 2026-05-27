@@ -347,7 +347,7 @@ module.exports = {
             choiceinput = interaction.fields.getTextInputValue("choiceinput");
             if (choiceinput && choiceinput.length > 0) {
                 setOption(interaction.user.id, optionparts[3], choiceinput);
-                await interaction.reply({ content: `Updated your preferred titles to ${choiceinput}`, flags: MessageFlags.Ephemeral });
+                await interaction.reply({ content: `Updated your preferred title to ${choiceinput}`, flags: MessageFlags.Ephemeral });
             }
             else {
                 setOption(interaction.user.id, optionparts[3], ``);
@@ -375,7 +375,7 @@ module.exports = {
 				delete process.recentinteraction[interaction.user.id];
 			}
         }
-        if (optionparts[3] == "allowedshocks") {
+        if (optionparts[3] == "allowedshock") {
             choiceinput = interaction.fields.getSelectedUsers("choiceinput");
             let choiceusers = Array.from(choiceinput) ?? [];
             if (choiceusers.length > 0) {
