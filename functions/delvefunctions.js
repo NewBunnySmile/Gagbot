@@ -1,6 +1,6 @@
 // Function space for Delves, the function for players to have stats and encounters. 
 
-const { ContainerBuilder, ButtonBuilder, ButtonStyle, MessageFlags } = require("discord.js")
+const { ContainerBuilder, ButtonBuilder, ButtonStyle, MessageFlags, TextDisplayBuilder, ActionRowBuilder, StringSelectMenuOptionBuilder, StringSelectMenuBuilder } = require("discord.js")
 const { getHeadwear, getBaseHeadwear } = require("./headwearfunctions")
 const { getHeavyRestrictions, assignHeavy, getHeavy } = require("./heavyfunctions")
 const { addArousal, assignChastity, getChastity } = require("./vibefunctions")
@@ -774,13 +774,26 @@ function delveModalStats(user) {
  * (interaction) interaction - the interaction received
  *******/
 async function handleDelveSlashCommand(interaction) {
-    let currfloor = getCurrentFloor(interaction.user.id);
-    if (currfloor === undefined) {
-        // They are NOT on a delve right now. We should have one generated. 
-        setNextDelveRoom(interaction.user.id);
+    let subc = interaction.options.getSubcommand();
+    if (subc == "run") {
+        let currfloor = getCurrentFloor(interaction.user.id);
+        if (currfloor === undefined) {
+            // They are NOT on a delve right now. We should have one generated. 
+            setNextDelveRoom(interaction.user.id);
+        }
+        console.log(getCurrentFloor(interaction.user.id))
+        interaction.reply(await generateDelveModal(interaction.user.id, getCurrentFloor(interaction.user.id)))
     }
-    console.log(getCurrentFloor(interaction.user.id))
-    interaction.reply(await generateDelveModal(interaction.user.id, getCurrentFloor(interaction.user.id)))
+    else if (subc == "inventory") {
+        interaction.reply(`The Inventory command has not been implemented yet.`)
+    }
+    else if (subc == "stats") {
+        interaction.reply(await generateDelveStatModal(interaction))
+    }
+    else {
+        console.log("No suitable subcommand found - " + subc);
+        interaction.reply(`There was an error with the subcommand run. Please let Enraa know.`)
+    }
 }
 
 /*******
@@ -802,7 +815,7 @@ function getDelvePlayerStats(user) {
             dominance: 6,
             submissive: 6,
             rigger: 6,
-            rope_bunny: 6,
+            ropebunny: 6,
             // Affinity
             latex: 6,
             leather: 6,
@@ -900,6 +913,104 @@ async function handleDelveInteraction(interaction) {
             interaction.editReply(await generateDelveModal(interaction.user.id, parseInt(buttonfloor) + 1))
         }
     }
+}
+
+/********
+ * Generates a Delve Stat selection Modal
+ * 
+ * - (interaction object) interaction - The interaction to respond to
+ ********/
+async function generateDelveStatModal(interaction, menu) {
+    let pagecomponents = [];
+    let currstats = getDelvePlayerStats(interaction.user.id);
+    let unallocatedtext = (currstats.unallocated > 0) ? `\n**Unallocated Points:** ${currstats.unallocated}` : ""
+    let maintextdisplay = `## Delve Stats\n**Player:** <@${interaction.user.id}>\n**Level:** ${currstats.level}${unallocatedtext}\n`
+    let maintd = new TextDisplayBuilder().setContent(maintextdisplay)
+    pagecomponents.push(maintd);
+
+    let statsections = {
+        Main: [
+            { name: "Strength", statname: "strength", desc: "Main stat that dictates your ability to perform actions involving strength, such as moving boulders and opening doors with force. More points will increase the likelihood of success." },
+            { name: "Dexterity", statname: "dexterity", desc: "Main stat that dictates your ability to perform actions involving agility and precision, such as dodging projectiles or contorting through tight spaces. More points will increase the likelihood of success." },
+            { name: "Intelligence", statname: "intelligence", desc: "Main stat that dictates your ability to perform actions involving spellcasting and puzzle-solving, such as powering up ancient doors or burning plants. More points will increase the likelihood of success." },
+            { name: "Stamina", statname: "stamina", desc: "Main stat that dictates your ability to endure the trials of the dungeon. More points will increase your starting Resolve and influence some events." },
+        ],
+        Kink: [
+            { name: "Dominance", statname: "dominance", desc: "Kink stat dictating your ability to assert control. More points may allow you to convince some denizens to obey you instead in events involving accepting bondage." },
+            { name: "Submissive", statname: "submissive", desc: "Kink stat dictating your ability to submit to commands. More points may reduce the resolve loss (or even cause you to *gain* it in some cases!) with events involving accepting bondage from denizens." },
+            { name: "Rigger", statname: "rigger", desc: "Kink stat dictating your ability to tie others up. More points may allow you to counter denizens with bondage or allow you to solve certain puzzles involving tying them up." },
+            { name: "Rope Bunny", statname: "ropebunny", desc: "Kink stat dictating your ability to be tied up. More points may reduce resolve loss when tied up from traps or other automated forms of bondage." },
+        ],
+        Affinity: [
+            { name: "Latex", statname: "latex", desc: "Affinity stat dictating your affinity and love for Latex. More points may reduce resolve loss when affected by Latex or slime related bondage, or allow you to solve some puzzles with Latex instead." },
+            { name: "Leather", statname: "leather", desc: "Affinity stat dictating your affinity and love for Leather. More points may reduce resolve loss when affected by Leather bondage, or allow you to solve some puzzles with Leather instead." },
+            { name: "Metal", statname: "metal", desc: "Affinity stat dictating your affinity and love for Metal. More points may reduce resolve loss when affected by Metal or cybernetic bondage, or allow you to solve some puzzles with Metal instead." },
+            { name: "Magic", statname: "magic", desc: "Affinity stat dictating your affinity and love for Magic. More points may reduce resolve loss when affected by magical bondage, or allow you to solve some puzzles with Magic instead." },
+        ]
+    }
+
+    if (menu == "Overview") {
+        let overviewstats = ``
+        Object.keys(statsections).forEach((k) => {
+            overviewstats = `${overviewstats}\n## ${k}`
+            statsections[k].forEach((stat) => {
+                overviewstats = `${overviewstats}\n-# **${stat.name}**: ${currstats[stat.statname]}`
+            })
+        })
+        let overviewtd = new TextDisplayBuilder().setContent(overviewstats);
+        pagecomponents.push(overviewtd);
+    }
+    else {
+        if (menu == undefined) { menu = "Main" }
+
+        statsections[menu].forEach((stats) => {
+            pagecomponents.push(new TextDisplayBuilder().setContent(`**${stats.name}** - ${stats.desc}`));
+            let buttons = [
+                // -5
+                new ButtonBuilder()
+                    .setCustomId(`delve_decrease_${stats.statname}_5`)
+                    .setLabel("-5")
+                    .setStyle(ButtonStyle.Secondary)
+                    .setDisabled(parseInt(currstats[stats.statname]) <= 5),
+                // -1
+                new ButtonBuilder()
+                    .setCustomId(`delve_decrease_${stats.statname}_1`)
+                    .setLabel("-1")
+                    .setStyle(ButtonStyle.Secondary)
+                    .setDisabled(parseInt(currstats[stats.statname]) <= 1),
+                // Current Level
+                new ButtonBuilder()
+                    .setCustomId(`delve_currstatname_${stats.statname}`)
+                    .setLabel(`${stats.name}: ${currstats[stats.statname]}`)
+                    .setStyle(ButtonStyle.Primary)
+                    .setDisabled(true),
+                // +1
+                new ButtonBuilder()
+                    .setCustomId(`delve_increase_${stats.statname}_1`)
+                    .setLabel("+1")
+                    .setStyle(ButtonStyle.Secondary)
+                    .setDisabled(parseInt(currstats[stats.statname]) >= 20),
+                // +5
+                new ButtonBuilder()
+                    .setCustomId(`delve_increase_${stats.statname}_5`)
+                    .setLabel("+1")
+                    .setStyle(ButtonStyle.Secondary)
+                    .setDisabled(parseInt(currstats[stats.statname]) >= 16)
+            ]
+            pagecomponents.push(new ActionRowBuilder().addComponents(...buttons))
+        })
+    }
+
+    // Menu Selector
+    let menupageoptions = new StringSelectMenuBuilder().setCustomId("delvestats_menuselector");
+    menupageoptions.addOptions(new StringSelectMenuOptionBuilder().setLabel("Overview").setValue(`delve_select_Overview`))
+    Object.keys(statsections).forEach((k) => {
+        menupageoptions.addOptions(new StringSelectMenuOptionBuilder().setLabel(k).setValue(`delvestats_select_${k}`))
+    })
+    menupageoptions.setPlaceholder(menu ?? "Main");
+    pagecomponents.push(new ActionRowBuilder().addComponents(menupageoptions));
+
+    return { components: pagecomponents, flags: [MessageFlags.IsComponentsV2, MessageFlags.Ephemeral] }
 }
 
 exports.handleDelveSlashCommand = handleDelveSlashCommand;

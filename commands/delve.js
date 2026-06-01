@@ -15,6 +15,11 @@ module.exports = {
             subcommand
                 .setName("inventory")
                 .setDescription("View your Delve Inventory")
+        )
+        .addSubcommand((subcommand) => 
+            subcommand
+                .setName("stats")
+                .setDescription("View your Delve Stats")
         ),
 	async execute(interaction) {
 		try {
