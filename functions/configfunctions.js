@@ -400,6 +400,38 @@ const configoptions = {
 				return false;
 			},
 		},
+        shocktone: {
+            name: "Shock Tone",
+            desc: "When receiving shocks, should the tone of the message be playful or painful? This will affect shocks received from any collar.",
+            choices: [
+				{
+					name: "Playful",
+					helptext: "Playful, teasing shock messages",
+					select_function: (userID) => { return true },
+					value: "playful",
+					style: ButtonStyle.Secondary,
+				},
+				{
+					name: "Painful",
+					helptext: `Painful shocks intended for masochistic recipients`,
+					select_function: (userID) => { return true },
+					value: "painful",
+					style: ButtonStyle.Secondary,
+				},
+                {
+					name: "Both",
+					helptext: `Randomly selects the tone when shocked`,
+					select_function: (userID) => { return true },
+					value: "both",
+					style: ButtonStyle.Secondary,
+				},
+			],
+			menutype: "choice",
+			default: "playful",
+			disabled: () => {
+				return false;
+			}, // if true, button is greyed out
+        },
         shockermodel: {
 			name: "External Shocker",
 			desc: "Which Shock API to use? Choices include Pishock",

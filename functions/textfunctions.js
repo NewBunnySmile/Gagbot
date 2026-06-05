@@ -5233,9 +5233,17 @@ const getTextGeneric = (type, data_in) => {
                 text: `USER_TAG tries USER_THEIR very best to tap a button despite USER_THEIR blindfolded eyes. Hopefully VAR_C1 is exactly what USER_THEY meant to say.`,
             },
         ],
-        remotecontrolshock_self: [
+        remotecontrolshock_self_playful: [
             `USER_TAG presses a button and gasps in delight as USER_THEIR collar gives a telltale sound and an adrenaline inducing shock!`,
             `USER_TAG twists USER_THEIR body at the sensation as USER_THEY pressUSER_S the button on USER_THEIR shock collar!`,
+            {
+                required: (t) => {
+                    !process.gags[t.interactionuser.id]
+                },
+                text: `USER_TAG bites USER_THEIR lip `
+            }
+        ],
+        remotecontrolshock_self_painful: [
             `Letting out a small gasp, USER_TAG presses the big red button on the remote control to give a nasty shock!`,
             {
                 required: (t) => {
@@ -5250,10 +5258,12 @@ const getTextGeneric = (type, data_in) => {
                 text: `USER_TAG must *really* enjoy the pain as USER_THEY decideUSER_S to press the button on USER_THEIR shock collar remote!`,
             },
         ],
-        remotecontrolshock_other: [
-            `USER_TAG grins deviously as USER_THEY press a shiny red button on a remote. Immediately, TARGET_TAG yelps in pain as TARGET_THEIR collar delivers a nasty shock!`,
+        remotecontrolshock_other_playful: [
             `TARGET_TAG is suddenly interrupted as USER_TAG presses a button, causing TARGET_THEM to tear up slightly, even though the shock really didn't hurt that much...`,
-            `USER_TAG pulls out a remote and presses the flashing red button on it, causing TARGET_TAG to "eep!" as it buzzes a moderate shock to TARGET_THEM!`,
+            `USER_TAG pulls out a remote and presses the flashing red button on it, causing TARGET_TAG to "eep!" as it buzzes a small shock to TARGET_THEM!`,
+        ],
+        remotecontrolshock_other_painful: [
+            `USER_TAG grins deviously as USER_THEY press a shiny red button on a remote. Immediately, TARGET_TAG yelps in pain as TARGET_THEIR collar delivers a nasty shock!`,
             `The remote's red button starts flashing, so USER_TAG decides to click it as one does with such buttons. TARGET_TAG gasps and a tear falls down TARGET_THEIR cheek as TARGET_THEIR collar shocks TARGET_THEM!`,
             {
                 required: (t) => {
@@ -5261,7 +5271,7 @@ const getTextGeneric = (type, data_in) => {
                 },
                 text: `USER_TAG, the sadist USER_THEY USER_ISARE, presses the shiny red button a few times! TARGET_TAG writhes under the torrent of shocks!`,
             },
-        ]
+        ],
 	};
     if (Array.isArray(generics[type])) {
         // Within the array, we want to handle the following cases:

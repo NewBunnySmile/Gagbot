@@ -587,30 +587,46 @@ async function appendCollarEffects(msg, outtext, msgTreeMods) {
 
     // If they were shocked, then give a shocked message. 
     if (msgTreeMods.shocked) {
-        let shocks = [
-            `*USER_TAG yelps in pain as USER_THEIR speech is cut short!*`,
-            `*USER_TAG grits USER_THEIR teeth as the collar triggers a shock!*`,
-            `*USER_TAG's breath seizes up in USER_THEIR throat as the collar shocks USER_THEM!*`,
-            `*USER_TAG's face flushes red as the shock registers how horny USER_THEY USER_ISARE!*`,
-            `*USER_TAG tries to speak but stops forming words as the collar gives USER_THEM a warning shock!*`,
-            `*Tears run down USER_TAG's face as USER_THEIR speech is interrupted!*`,
-            `*USER_TAG's words trail off and USER_THEY squintUSER_S USER_THEIR eyes shut!*`,
-            `*USER_TAG eeps when the collar gives USER_THEM a tiny shock!*`,
-            {
-                required: (t) => {
-                    return getHeavyRestrictions(t.interactionuser.id).touchself;
+        // Figure out the tone to shock the user with
+        let tone = getOption(msg.author.id, "shocktone") ?? "playful";
+        if (tone == "both") {
+            if (Math.random() > 0.5) { 
+                tone = "playful" 
+            }
+            else { 
+                tone = "painful" 
+            };
+        }
+        let shocks = {
+            playful: [
+                `*USER_TAG's face flushes red as the shock registers how horny USER_THEY USER_ISARE!*`,
+                `*USER_TAG tries to speak but stops forming words as the collar gives USER_THEM a warning shock!*`,
+                `*USER_TAG eeps when the collar gives USER_THEM a tiny shock!*`,
+                {
+                    required: (t) => {
+                        return getHeavyRestrictions(t.interactionuser.id).touchself;
+                    },
+                    text: `*USER_TAG tries to slip a finger under USER_THEIR collar as it stings USER_THEM!*`,
                 },
-                text: `*USER_TAG's grabs USER_THEIR collar with tears as it shocks USER_THEM!*`,
-            },
-            {
-                required: (t) => {
-                    return getHeavyRestrictions(t.interactionuser.id).touchself;
+                `*USER_TAG meeps as USER_THEIR collar gives a barely audible crackle, derailing USER_THEIR train of thought.*`,
+                `*USER_TAG's speech is cut short as a tiny sting chides USER_THEM for being so horny...*`
+            ],
+            painful: [
+                `*USER_TAG yelps in pain as USER_THEIR speech is cut short!*`,
+                `*USER_TAG's breath seizes up in USER_THEIR throat as the collar shocks USER_THEM!*`,
+                `*USER_TAG grits USER_THEIR teeth as the collar triggers a shock!*`,
+                `*Tears run down USER_TAG's face as USER_THEIR speech is interrupted!*`,
+                `*USER_TAG's words trail off and USER_THEY squintUSER_S USER_THEIR eyes shut!*`,
+                {
+                    required: (t) => {
+                        return getHeavyRestrictions(t.interactionuser.id).touchself;
+                    },
+                    text: `*USER_TAG's grabs USER_THEIR collar with tears as it shocks USER_THEM!*`,
                 },
-                text: `*USER_TAG tries to slip a finger under USER_THEIR collar as it stings USER_THEM!*`,
-            },
-        ]
+            ]
+        }
         let texts = [];
-        shocks.forEach((t) => {
+        shocks[tone].forEach((t) => {
             if (typeof t != "string" && t.required({ interactionuser: msg.member, targetuser: msg.member })) {
                 texts.push(t.text)
             }

@@ -35,6 +35,16 @@ module.exports = {
                 targetuser: { id: targetuser.id },
                 c1: getCollarName(targetuser.id, getCollar(targetuser.id)?.collartype) ?? "collar"
             }
+            // Figure out the tone to shock the user with
+            let tone = getOption(targetuser.id, "shocktone") ?? "playful";
+            if (tone == "both") {
+                if (Math.random() > 0.5) { 
+                    tone = "playful" 
+                }
+                else { 
+                    tone = "painful" 
+                };
+            }
 
             if (targetuser.id != interaction.user.id) {
                 if (!getCollar(targetuser.id)) {
@@ -48,7 +58,7 @@ module.exports = {
                 await handleTouchEvent(interaction.user, targetuser, "shock", true).then(
                     async (success) => {
                         addArousal(targetuser.id, (2.0 + Math.random() * 6.0)); // Add 2-8 arousal.
-                        await interaction.reply({ content: getTextGeneric("remotecontrolshock_other", data) })
+                        await interaction.reply({ content: getTextGeneric(`remotecontrolshock_other_${tone}`, data) })
                         statsAddCounter(targetuser.id, "timesshocked");
                         shockUser(targetuser.id)
                     },
@@ -71,7 +81,7 @@ module.exports = {
                     return;
                 }
                 addArousal(targetuser.id, (2.0 + Math.random() * 6.0)); // Add 2-8 arousal.
-                await interaction.reply({ content: getTextGeneric("remotecontrolshock_self", data) })
+                await interaction.reply({ content: getTextGeneric(`remotecontrolshock_self_${tone}`, data) })
                 statsAddCounter(targetuser.id, "timesshocked");
                 statsAddCounter(targetuser.id, "timesshockedself");
                 shockUser(targetuser.id)

@@ -16,6 +16,16 @@ module.exports = {
                 targetuser: { id: interaction.targetId },
                 c1: getCollarName(interaction.targetId, getCollar(interaction.targetId)?.collartype) ?? "collar"
             }
+            // Figure out the tone to shock the user with
+            let tone = getOption(targetuser.id, "shocktone") ?? "playful";
+            if (tone == "both") {
+                if (Math.random() > 0.5) { 
+                    tone = "playful" 
+                }
+                else { 
+                    tone = "painful" 
+                };
+            }
             if (interaction.targetId != interaction.user.id) {
                 if (!getCollar(interaction.targetId)) {
                     await interaction.reply({ content: `<@${interaction.targetId}> isn't wearing a collar.`, flags: MessageFlags.Ephemeral })
@@ -28,7 +38,7 @@ module.exports = {
                 await handleTouchEvent({ id: interaction.user.id }, { id: interaction.targetId }, "shock", true).then(
                     async (success) => {
                         addArousal(interaction.targetId, (2.0 + Math.random() * 6.0)); // Add 2-8 arousal.
-                        await interaction.reply({ content: getTextGeneric("remotecontrolshock_other", data) })
+                        await interaction.reply({ content: getTextGeneric(`remotecontrolshock_other_${tone}`, data) })
                         statsAddCounter(interaction.targetId, "timesshocked");
                         shockUser(interaction.targetId);
                     },
@@ -51,7 +61,7 @@ module.exports = {
                     return;
                 }
                 addArousal(interaction.targetId, (2.0 + Math.random() * 6.0)); // Add 2-8 arousal.
-                await interaction.reply({ content: getTextGeneric("remotecontrolshock_self", data) })
+                await interaction.reply({ content: getTextGeneric(`remotecontrolshock_self_${tone}`, data) })
                 statsAddCounter(interaction.targetId, "timesshocked");
                 statsAddCounter(interaction.targetId, "timesshockedself");
                 shockUser(interaction.targetId);
