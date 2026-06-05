@@ -295,7 +295,7 @@ const configoptions = {
 				return false;
 			}, // if true, button is greyed out
 		},
-        allowedheadpats: {
+        allowedheadpat: {
 			name: "Headpat Exempt Users",
 			desc: "Set users who can headpat you regardless of your setting above",
 			descmodal: "Select up to 25 users which can headpat you at all times:",
