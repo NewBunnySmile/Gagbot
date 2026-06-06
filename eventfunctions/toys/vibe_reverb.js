@@ -43,7 +43,7 @@ function msgfunction(userid, data) {
     return;
 }
 
-async function functiontick(userID) {
+async function tick(userID) {
     // Decay Intensity every Decay Period until 0
     if (getUserVar(userID, "reverbDecayTime") < Date.now() && getUserVar(userID, "reverbDecayTime") != undefined)
     {
@@ -114,5 +114,5 @@ function volumetest(message) {
     return intensityMod;
 }
 
-exports.functiontick = functiontick;
+exports.tick = tick;
 exports.msgfunction = msgfunction;

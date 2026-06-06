@@ -17,12 +17,12 @@ function msgfunction(userid, data) {
     return;
 }
 
-async function functiontick(userID) {
+async function tick(userID) {
     if (getUserVar(userID, "motionplugtime") < Date.now()) {
         console.log(`Ending Motion Sensitive plug for ${userID}`)
         setUserVar(userID, "motionplugtime", undefined)
     }
 }
 
-exports.functiontick = functiontick;
+exports.tick = tick;
 exports.msgfunction = msgfunction;

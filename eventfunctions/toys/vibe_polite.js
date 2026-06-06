@@ -68,12 +68,12 @@ function msgfunction(userid, data) {
 	}
 }
 
-async function functiontick(userID) {
+async function tick(userID) {
     if (getUserVar(userID, "politeSubVibeTime") < Date.now()) {
         console.log(`Ending polite vibe for ${userID}`)
         setUserVar(userID, "politeSubVibeTime", undefined)
     }
 }
 
-exports.functiontick = functiontick;
+exports.tick = tick;
 exports.msgfunction = msgfunction;
