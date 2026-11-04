@@ -7,6 +7,9 @@ const { getChastity } = require("./getters/chastity/getChastity");
 const { getChastityBra } = require("./getters/chastity/getChastityBra");
 const { traceFirstParam } = require("./other/TESTS/traceFirstParam");
 const { statsAddCounter } = require("./setters/config/statsAddCounter");
+const { convertPronounsText } = require("./other/convertPronounsText");
+const { getMitten } = require("./getters/mitten/getMitten");
+const { getHeavyRestrictions } = require("./getters/heavy/getHeavyRestrictions");
 
 // Load the game files! 
 function loadGames() {
@@ -248,5 +251,109 @@ async function gambaDeathrollHandle(interaction) {
     }
 }
 
+/****** 
+ * Generate an initial gamba Rock Paper Scissors message!
+ * 
+ * - (interaction) interaction - The message interaction that initiated this request
+ * ---
+ * ##### Returns a message string which can be passed directly into an interaction reply
+ *******/
+async function gambaRPSStart(interaction) {
+    if (getHeavyRestrictions(interaction.guildId, interaction.user.id) && !getHeavyRestrictions(interaction.guildId, interaction.user.id).touchself) {
+        return (convertPronounsText(`<@${interaction.user.id}> tries to shake USER_THEIR hand for Rock Paper Scissors, but USER_THEY USER_ISARE a bit tied up at the moment...`, { interactionuser: interaction.user, targetuser: interaction.user, serverID: interaction.guildId }))
+    }
+
+    let mittenhand = (getMitten(interaction.guildId, interaction.user.id)) ? "mitten" : "hand"
+
+    let text1 = new TextDisplayBuilder().setContent(convertPronounsText(`<@${interaction.user.id}> starts shaking USER_THEIR ${mittenhand}, inviting someone to challenge USER_THEM to Rock Paper Scissors!`, { interactionuser: interaction.user, targetuser: interaction.user, serverID: interaction.guildId }))
+
+    let separator = new SeparatorBuilder().setDivider(true).setSpacing(SeparatorSpacingSize.Small);
+
+    let text2 = new TextDisplayBuilder().setContent(`-# Click a button to play...`);
+
+    let rollbuttonrow = new ActionRowBuilder().addComponents(
+        new ButtonBuilder()
+            .setStyle(ButtonStyle.Primary)
+            .setLabel("Rock")
+            .setCustomId("gamba_RPS_rock"),
+        new ButtonBuilder()
+            .setStyle(ButtonStyle.Primary)
+            .setLabel("Paper")
+            .setCustomId("gamba_RPS_paper"),
+        new ButtonBuilder()
+            .setStyle(ButtonStyle.Primary)
+            .setLabel("Scissors")
+            .setCustomId("gamba_RPS_scissors"),
+    )
+
+    return { components: [text1, separator, text2, rollbuttonrow], flags: MessageFlags.IsComponentsV2 }
+}
+
+/****** 
+ * Handle a Rock Paper Scissors game! We will update the interaction with the results immediately.
+ * 
+ * - (interaction) interaction - The message interaction that initiated this request
+ * ---
+ * ##### Updates the message or replies to the user that they aren't allowed
+ *******/
+async function gambaRPSHandle(interaction) {
+    console.log(interaction.message.components[0].content);
+    console.log(interaction);
+    if (!process.RPSvars) { process.RPSvars = {} }
+
+    // We can't rock paper scissors ourselves!
+    if (interaction.message.components[0].content && interaction.message.components[0].content.startsWith(`<${interaction.user.id}>`)) {
+        interaction.reply({ content: `You can't Rock Paper Scissors yourself!`, flags: MessageFlags.Ephemeral });
+        return;
+    }
+    else if (!process.RPSvars[interaction.message.id]) {
+        let text1 = new TextDisplayBuilder().setContent(`This Rock Paper Scissors game expired...`)
+        interaction.update({ components: [text1], flags: MessageFlags.IsComponentsV2 })
+    }
+    else {
+        let theirchoice = process.RPSvars[interaction.message.id];
+        let ourchoice = interaction.customId.split("_")[2];
+        let winlose = "tie";
+        let emojis = {
+            rock: "🪨",
+            paper: "📄",
+            scissors: "✂️"
+        }
+        // Rock -> Scissors, Scissors -> Paper, Paper -> Rock
+        if (theirchoice == "rock") {
+            if (ourchoice == "scissors") {
+                winlose = "lose"
+            }
+            else if (ourchoice == "paper") {
+                winlose = "win"
+            }
+        }
+        else if (theirchoice == "scissors") {
+            if (ourchoice == "paper") {
+                winlose = "lose"
+            }
+            else if (ourchoice == "rock") {
+                winlose = "win"
+            }
+        }
+        else if (theirchoice == "paper") {
+            if (ourchoice == "rock") {
+                winlose = "lose"
+            }
+            else if (ourchoice == "scissors") {
+                winlose = "win"
+            }
+        }
+        let battletext = `${interaction.message.components[0].content.slice(0, 22)}chooses **${emojis[theirchoice]}${theirchoice}** --- <@${interaction.user.id}> chooses **${emojis[ourchoice]}${ourchoice}**!`
+        let wintext = "It was a tie!"
+        if (winlose == "lose") { wintext = `${interaction.message.components[0].content.slice(0, 22)} wins!` }
+        else if (winlose == "win") { wintext = `<@${interaction.user.id}> wins! (en)` }
+        let text1 = new TextDisplayBuilder().setContent(`${battletext}\n\n${wintext}`)
+        interaction.update({ components: [text1], flags: MessageFlags.IsComponentsV2 })
+    }
+}
+
 exports.gambaDeathrollStart = gambaDeathrollStart;
 exports.gambaDeathrollHandle = gambaDeathrollHandle;
+exports.gambaRPSStart = gambaRPSStart;
+exports.gambaRPSHandle = gambaRPSHandle;
