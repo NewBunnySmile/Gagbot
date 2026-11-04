@@ -302,7 +302,7 @@ async function gambaRPSHandle(interaction) {
     if (!process.RPSvars) { process.RPSvars = {} }
 
     // We can't rock paper scissors ourselves!
-    if (interaction.message.components[0].content && interaction.message.components[0].content.startsWith(`<${interaction.user.id}>`)) {
+    if (interaction.message.components[0].content && interaction.message.components[0].content.startsWith(`<@${interaction.user.id}>`)) {
         interaction.reply({ content: `You can't Rock Paper Scissors yourself!`, flags: MessageFlags.Ephemeral });
         return;
     }
@@ -347,7 +347,7 @@ async function gambaRPSHandle(interaction) {
         let battletext = `${interaction.message.components[0].content.slice(0, 22)}chooses **${emojis[theirchoice]}${theirchoice}** --- <@${interaction.user.id}> chooses **${emojis[ourchoice]}${ourchoice}**!`
         let wintext = "It was a tie!"
         if (winlose == "lose") { wintext = `${interaction.message.components[0].content.slice(0, 22)} wins!` }
-        else if (winlose == "win") { wintext = `<@${interaction.user.id}> wins! (en)` }
+        else if (winlose == "win") { wintext = `<@${interaction.user.id}> wins!` }
         let text1 = new TextDisplayBuilder().setContent(`${battletext}\n\n${wintext}`)
         interaction.update({ components: [text1], flags: MessageFlags.IsComponentsV2 })
     }
