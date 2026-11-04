@@ -312,7 +312,7 @@ async function gambaRPSHandle(interaction) {
     }
     else {
         let theirchoice = process.RPSvars[interaction.message.id];
-        let ourchoice = (getMitten(interaction.guildId, interaction.user.id)) ? "mitten" : interaction.customId.split("_")[2];
+        let ourchoice = (getMitten(interaction.guildId, interaction.user.id)) ? "rock" : interaction.customId.split("_")[2];
         let winlose = "tie";
         let emojis = {
             rock: "🪨",

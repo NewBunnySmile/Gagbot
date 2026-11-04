@@ -24,8 +24,7 @@ module.exports = {
                        .setChoices(
                             { name: "Rock", value: "rock" },
                             { name: "Paper", value: "paper" },
-                            { name: "Scissors", value: "scissors" },
-                            { name: "Random", value: "random" }
+                            { name: "Scissors", value: "scissors" }
                         )
                         .setRequired(true)
                 )
